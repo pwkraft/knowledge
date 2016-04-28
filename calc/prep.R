@@ -2,8 +2,8 @@
 ### Text as Data - Final Project  ###
 ### Laura Buchanan, Patrick Kraft ###
 ### ============================= ###
-## This file prepares the survey data of the 2008 and 2012 ANES for subsequent analyses
-
+## prepares the survey data of the 2008 and 2012 ANES for subsequent analyses
+## prepares open-ended responses (selecting variables, spell checking etc.)
 
 
 ### load raw data
@@ -16,11 +16,13 @@ raw2012 <- read.dta13("../data/anes_timeseries_2012.dta", convert.factors = F)
 #raw2008 <- read.dta13("../data/anes_timeseries_2008.dta", convert.factors = F)
 
 
-
-### 2012 data
+### 2012 survey data
 
 ## respondent id
 anes2012 <- data.frame(id=raw2012$caseid)
+
+## interview mode (1=FTF, 2=online)
+anes2012$mode <- raw2012$mode
 
 ## political knowledge (office recognition, post-election)
 anes2012$polknow_office <- with(raw2012, recode(ofcrec_speaker_correct, "lo:-1=NA")
@@ -95,9 +97,51 @@ anes2012$female <- raw2012$gender_respondent_x - 1
 anes2012$black <- as.numeric(recode(raw2012$dem_raceeth_x, "lo:0 = NA") == 2)
 
 ## spanish speaking respondent
-anes2012spanish <- as.numeric(raw2012$profile_spanishsurv == 1 |
+anes2012$spanish <- as.numeric(raw2012$profile_spanishsurv == 1 |
                               raw2012$admin_pre_lang_start == 2 |
                               raw2012$admin_post_lang_start == 2)
+
+
+### 2012 open-ended responses
+
+## read original open-ended responses (downloaded from anes website)
+anes2012pre <- read.csv("../data/anes2012TS_pre.csv", as.is = T) %>%
+  select(caseid, candlik_likewhatdpc, candlik_dislwhatdpc, candlik_likewhatrpc, candlik_dislwhatrpc
+         , ptylik_lwhatdp, ptylik_dwhatdp, ptylik_lwhatrp, ptylik_dwhatrp)
+anes2012post <- read.csv("../data/anes2012TS_post.csv", as.is = T) %>%
+  select(caseid, mip_prob1, mip_prob2, mip_prob3, mip_mostprob)
+anes2012opend <- merge(anes2012pre, anes2012post)
+
+## minor pre-processing
+anes2012spell <- apply(anes2012opend[,-1], 2, function(x){
+  x <- gsub("//",". ", x , fixed = T)
+  x <- gsub("\\s+"," ", x)
+  x <- gsub("\\.+",".", x)
+  return(x)
+})
+
+## num-lock issue
+# maybe look into this later
+
+## fix words without whitespace
+# maybe look into this later
+
+## spell-checking
+write.table(anes2012spell, file = "../data/anes2012TS_combined.csv"
+            , sep = ",", col.names = F, row.names = F)
+spell <- aspell("../data/anes2012TS_combined.csv") %>%
+  filter(Suggestions!="NULL")
+
+## replace incorrect words
+for(i in 1:nrow(spell)){
+  anes2012spell[spell$Line[i],] <- gsub(spell$Original[i], unlist(spell$Suggestions[i])[1]
+                                , anes2012spell[spell$Line[i],])
+}
+
+## save output
+anes2012spell <- data.frame(caseid = anes2012opend$caseid, anes2012spell)
+save(anes2012, anes2012opend, anes2012spell, file = "../data/anes.Rdata")
+
 
 
 
