@@ -12,6 +12,9 @@ rm(list = ls())
 library(car)
 library(dplyr)
 library(readstata13)
+if(sessionInfo()$platform == "x86_64-pc-linux-gnu (64-bit)"){
+  setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
+} else {setwd('/Users/Laura/Desktop/knowledge/data')}
 raw2012 <- read.dta13("../data/anes_timeseries_2012.dta", convert.factors = F)
 #raw2008 <- read.dta13("../data/anes_timeseries_2008.dta", convert.factors = F)
 
@@ -19,7 +22,7 @@ raw2012 <- read.dta13("../data/anes_timeseries_2012.dta", convert.factors = F)
 ### 2012 survey data
 
 ## respondent id
-anes2012 <- data.frame(id=raw2012$caseid)
+anes2012 <- data.frame(caseid=raw2012$caseid)
 
 ## interview mode (1=FTF, 2=online)
 anes2012$mode <- raw2012$mode
@@ -51,6 +54,9 @@ anes2012$intpost <- 5 - recode(raw2012$iwrobspost_intell, "lo:-1=NA")
 anes2012$educ <- as.numeric(raw2012$dem_edugroup_x >= 4)
 anes2012$educ[raw2012$raw2012$dem_edugroup_x < 0] <- NA
 
+## education (continuous)
+anes2012$educ_cont <- recode(raw2012$dem_edugroup_x, "lo:0=NA") - 1
+
 ## political media exposure
 anes2012$polmedia <- with(raw2012, recode(prmedia_wkinews, "lo:-4=NA; -1=0")
                           + recode(prmedia_wktvnws, "lo:-4=NA; -1=0")
@@ -77,10 +83,23 @@ anes2012$ideol_lib <- as.numeric(anes2012$ideol=="Liberal")
 anes2012$ideol_con <- as.numeric(anes2012$ideol=="Conservative")
 
 ## ideology (continuous)
-anes2012$ideol_ct <- recode(raw2012$libcpre_self, "lo:0=NA")
+anes2012$ideol_ct <- recode(raw2012$libcpre_self, "lo:0=NA") - 4
 
 ## strength of ideology
-anes2012$ideol_str <- abs(recode(raw2012$libcpre_self, "lo:0=NA") - 4)
+anes2012$ideol_str <- abs(anes2012$ideol_ct)
+
+## party identification (factor/dummies)
+anes2012$pid <- factor(recode(raw2012$pid_x
+                              , "1:2=1; c(3,4,5)=2; 6:7=3; else=NA")
+                       , labels = c("Democrat","Independent","Republican"))
+anes2012$pid_dem <- as.numeric(dat$pid=="Democrat")
+anes2012$pid_rep <- as.numeric(dat$pid=="Republican")
+
+## pid continuous
+anes2012$pid_cont <- recode(raw2012$pid_x, "lo:0=NA") - 4
+
+## strength of partisanship
+anes2012$pid_str <- abs(anes2012$pid_cont)
 
 ## religiosity (church attendance)
 anes2012$relig <- 5 - recode(raw2012$relig_churchoft, "lo:0 = NA")
@@ -114,6 +133,8 @@ anes2012opend <- merge(anes2012pre, anes2012post)
 
 ## minor pre-processing
 anes2012spell <- apply(anes2012opend[,-1], 2, function(x){
+  x <- gsub("-1 Inapplicable","", x)
+  x <- gsub("#(43042)","", x, fixed = T)
   x <- gsub("//",". ", x , fixed = T)
   x <- gsub("\\s+"," ", x)
   x <- gsub("\\.+",".", x)
@@ -135,16 +156,27 @@ spell <- aspell("../data/anes2012TS_combined.csv") %>%
 ## replace incorrect words
 for(i in 1:nrow(spell)){
   anes2012spell[spell$Line[i],] <- gsub(spell$Original[i], unlist(spell$Suggestions[i])[1]
-                                , anes2012spell[spell$Line[i],])
+                                        , anes2012spell[spell$Line[i],])
 }
+anes2012spell <- data.frame(caseid = anes2012opend$caseid, anes2012spell,stringsAsFactors = F)
 
-## save output
-anes2012spell <- data.frame(caseid = anes2012opend$caseid, anes2012spell)
+
+### add meta information about responses
+
+## overall response length
+anes2012$wc <- apply(anes2012spell[,-1], 1, function(x){
+  length(unlist(strsplit(x,"\\s+")))
+})
+anes2012$lwc <- log(anes2012$wc)
+
+## number of items answered
+anes2012$nitem <- apply(anes2012spell[,-1] != "", 1, sum, na.rm = T)
+anes2012$pitem <- anes2012$nitem/ncol(anes2012spell[,-1])
+anes2012$litem <- log(anes2012$nitem)
+
+
+### save output
+
 save(anes2012, anes2012opend, anes2012spell, file = "../data/anes.Rdata")
-
-
-
-
-### 2008 data
 
 
