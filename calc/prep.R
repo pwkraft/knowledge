@@ -98,6 +98,9 @@ anes2012$pid_rep <- as.numeric(dat$pid=="Republican")
 ## pid continuous
 anes2012$pid_cont <- recode(raw2012$pid_x, "lo:0=NA") - 4
 
+## interaction: pid * education
+anes2012$educ_pid <- anes2012$educ_cont * anes2012$pid_cont
+
 ## strength of partisanship
 anes2012$pid_str <- abs(anes2012$pid_cont)
 
@@ -131,13 +134,17 @@ anes2012post <- read.csv("../data/anes2012TS_post.csv", as.is = T) %>%
   select(caseid, mip_prob1, mip_prob2, mip_prob3, mip_mostprob)
 anes2012opend <- merge(anes2012pre, anes2012post)
 
+## optional: onlt select likes/dislikes
+anes2012opend <- anes2012pre
+
 ## minor pre-processing
+table(anes2012opend[,4]%in%c("no"))
 anes2012spell <- apply(anes2012opend[,-1], 2, function(x){
-  x <- gsub("-1 Inapplicable","", x)
-  x <- gsub("#(43042)","", x, fixed = T)
-  x <- gsub("//",". ", x , fixed = T)
+  x <- gsub("//"," ", x , fixed = T)
+  x <- gsub("[[:punct:]]"," ", x)
   x <- gsub("\\s+"," ", x)
-  x <- gsub("\\.+",".", x)
+  x <- gsub("(^\\s+|\\s+$)","", x)
+  x[x %in% c("-1 Inapplicable","-7 Refused","N/A","no","none","#(43042)","i am")] <- ""
   return(x)
 })
 
@@ -173,6 +180,16 @@ anes2012$lwc <- log(anes2012$wc)
 anes2012$nitem <- apply(anes2012spell[,-1] != "", 1, sum, na.rm = T)
 anes2012$pitem <- anes2012$nitem/ncol(anes2012spell[,-1])
 anes2012$litem <- log(anes2012$nitem)
+
+## diversity in item response
+anes2012$ditem <- apply(anes2012spell[,-1], 1, function(x){
+  iwc <- unlist(lapply(strsplit(x,"\\s+"), length))
+  p <- iwc/sum(iwc)
+  plp <- p * log2(p)
+  plp[is.na(plp)] <- 0
+  entrop <- - sum(plp)
+  return(entrop)
+})
 
 
 ### save output

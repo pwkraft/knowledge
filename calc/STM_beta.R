@@ -24,21 +24,24 @@ load("../data/anes.Rdata")
 
 ### prepare data
 
-## select meta data, remove spanish + missing, etc.
-data <- anes2012 %>% select(caseid, age, educ_cont, pid_cont) %>%
-  mutate(educ_pid = educ_cont * pid_cont
-         , resp = apply(anes2012spell[,-1],1,paste,collapse=' ')) %>%
-  filter(anes2012$spanish == 0 & anes2012$wc != 0) %>% na.omit()
+## combine regular survey and open-ended data, remove spanish and empty responses
+meta <- c("age", "educ_cont", "pid_cont", "educ_pid")
+data <- anes2012 %>% mutate(resp = apply(anes2012spell[,-1],1,paste,collapse=' ')) %>%
+  filter(spanish == 0 & wc != 0)
+
+## remove missings on metadata
+data <- data[apply(!is.na(data[,meta]),1,prod)==1,]
 
 ## process for stm
-processed <- textProcessor(data$resp, metadata = select(data, -resp, -caseid))
+processed <- textProcessor(data$resp, metadata = data[,meta])
 out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
 
 # quick fit
-#stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta), K=20, init.type = "Spectral")
+stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+               , K=60, init.type = "Spectral")
 
-# slow, smart fit  
-stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta), K=0, init.type = "Spectral")
+# slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
+#stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta), K=0, init.type = "Spectral")
 
 # Graphical display of estimated topic proportions 
 #plot.STM(stm_fit, type = "summary")
@@ -47,17 +50,14 @@ stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta), K=0, 
 topic_words <- labelTopics(stm_fit)
 
 
-# probably fits and tranform for diversity score  
+# probably fits and transform for diversity score  
 doc_topic_prob <- stm_fit$theta
-doc_topic_prob_log2 <- log2(doc_topic_prob)
 
 # topic diversity score
-doc_topic_diversity <- doc_topic_prob * doc_topic_prob_log2
-doc_topic_diversity <- -1 * rowSums(doc_topic_diversity, na.rm = FALSE, dims = 1)
+data$topic_diversity <- -1 * rowSums(doc_topic_prob * log2(doc_topic_prob))
 
 # weighted topic diversity score, by length
-doc_wc <- anes2012$wc[anes2012$caseid %in% data$caseid]
-doc_topic_diversity_len_weight <- doc_topic_diversity / (log(doc_wc) + 1)
+data$topic_diversity_length <- with(data, (topic_diversity + 1) * (lwc + 1))
 
 # threshold topic probability scores
 doc_topic_prob_sparse <- doc_topic_prob
@@ -67,22 +67,19 @@ doc_topic_prob_binary[doc_topic_prob_binary < 0.1] <- 0
 doc_topic_prob_binary[doc_topic_prob_binary > 0.1] <- 1
 
 # count over thresholded prob scores
-doc_topic_thresh_sum <- rowSums(doc_topic_prob_sparse, na.rm = FALSE, dims = 1)
-doc_topic_thresh_count <- rowSums(doc_topic_prob_binary, na.rm=FALSE, dims = 1)
+data$topic_thresh_sum <- rowSums(doc_topic_prob_sparse)
+data$topic_thresh_count <- rowSums(doc_topic_prob_binary)
 
-# knowledge metrics
-know1 <- anes2012$polknow_office[anes2012$caseid %in% data$caseid]
-know2 <- anes2012$polknow_factual[anes2012$caseid %in% data$caseid]
-know3 <- anes2012$polknow_majority[anes2012$caseid %in% data$caseid]
-know4 <- anes2012$polknow_evalpre[anes2012$caseid %in% data$caseid]
-know5 <- anes2012$polknow_evalpost[anes2012$caseid %in% data$caseid]
-
-
+# weighted by item count + diversity
+data$topic_diversity_length_litem <- with(data, (topic_diversity + 1) * (lwc + 1) * (litem + 1))
+data$doc_topic_diversity_len_weight_ditem <- with(data, (topic_diversity + 1) * (lwc + 1) * (ditem + 1))
 
 # correlation matrix
-corrm <- cor(cbind(know1,know2,know3,know4,know5
-          ,doc_wc,doc_topic_diversity,doc_topic_diversity_len_weight
-          ,doc_topic_thresh_sum,doc_topic_thresh_count)
+corrm <- cor(data[,c("polknow_office", "polknow_factual", "polknow_majority", "polknow_evalpre"
+                  , "polknow_evalpost", "intpre", "intpost", "educ_cont", "polmedia", "poldisc"
+                  , "wc", "lwc", "nitem", "pitem", "litem", "ditem", "topic_diversity"
+                  , "topic_diversity_length", "topic_thresh_sum", "topic_thresh_count"
+                  , "topic_diversity_length_litem", "doc_topic_diversity_len_weight_ditem")]
          ,use="pairwise.complete.obs", method = "pearson")
 
 corrplot(corrm,method="square")
