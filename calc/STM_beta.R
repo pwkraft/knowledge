@@ -72,14 +72,14 @@ data$topic_thresh_count <- rowSums(doc_topic_prob_binary)
 
 # weighted by item count + diversity
 data$topic_diversity_length_litem <- with(data, (topic_diversity + 1) * (lwc + 1) * (litem + 1))
-data$doc_topic_diversity_len_weight_ditem <- with(data, (topic_diversity + 1) * (lwc + 1) * (ditem + 1))
+data$topic_diversity_length_ditem <- with(data, (topic_diversity + 1) * (lwc + 1) * (ditem + 1))
 
 # correlation matrix
 corrm <- cor(data[,c("polknow_office", "polknow_factual", "polknow_majority", "polknow_evalpre"
                   , "polknow_evalpost", "intpre", "intpost", "educ_cont", "polmedia", "poldisc"
                   , "wc", "lwc", "nitem", "pitem", "litem", "ditem", "topic_diversity"
                   , "topic_diversity_length", "topic_thresh_sum", "topic_thresh_count"
-                  , "topic_diversity_length_litem", "doc_topic_diversity_len_weight_ditem")]
+                  , "topic_diversity_length_litem", "topic_diversity_length_ditem")]
          ,use="pairwise.complete.obs", method = "pearson")
 
 corrplot(corrm,method="square")
