@@ -14,6 +14,7 @@ library(quanteda)
 library(stm)
 library(foreign)
 library(corrplot)
+library(ggplot2)
 
 if(sessionInfo()$platform == "x86_64-pc-linux-gnu (64-bit)"){
   setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
@@ -85,5 +86,15 @@ corrplot(corrm,method="square")
 
 ## the diversity measure is still a bit problematic since it's high for individuals with few words
 
+## histogram/density of dv
+ggplot(data, aes(topic_diversity_length_ditem, ..density..)) + geom_histogram(fill='grey') + geom_density() + theme_classic() + 
+  theme(panel.border = element_rect(fill=NA))
 
+## alternative dvs:
+ggplot(data, aes(topic_diversity, ..density..)) + geom_histogram(fill='grey') + geom_density() + theme_classic() + 
+  theme(panel.border = element_rect(fill=NA))
+ggplot(data, aes(topic_diversity_length, ..density..)) + geom_histogram(fill='grey') + geom_density() + theme_classic() + 
+  theme(panel.border = element_rect(fill=NA))
+ggplot(data, aes(topic_diversity_length_litem, ..density..)) + geom_histogram(fill='grey') + geom_density() + theme_classic() + 
+  theme(panel.border = element_rect(fill=NA))
 
