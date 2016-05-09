@@ -15,54 +15,91 @@
 \date{today}
 
 \title{Don't Just Ask Me for Facts!\\
-\large{Measuring Political Sophistication with Open-Ended Responses}}
+\large{Measuring Political Sophistication using Open-Ended Responses}}
 \date{\today}
+
+% sans serif font
+\renewcommand{\familydefault}{\sfdefault}
 
 
 \begin{document}
-\maketitle
-\doublespacing
+\maketitle\doublespacing\thispagestyle{empty}
+
 \begin{abstract}
-...
+There is a broad consensus among scholars of political science and public opinion that the American electorate is not well informed about politics. Interestingly however, there is no agreement in the discipline about \textit{how to measure} how little citizens actually know. While many studies rely on simple factual political knowledge questions to assess sophistication, others have criticized this approach from methodological and theoretical perspectives. We propose a new measure of political sophistication based on open-ended survey responses about individual preferences and evaluations of the most important problem facing the country. We presents results from the 2012 American National Election Study (ANES) and show that ...
 
 \vspace{\baselineskip}
-\noindent \textbf{Keywords:} ...
+\noindent \textbf{Keywords:} political sophistication, measurement, open-ended responses, structural topic models \\
+
+\noindent \textbf{Word Count:} ...
 \end{abstract}
-\newpage
+\newpage\setcounter{page}{1}
+
 
 
 \section{Introduction}
 
-On of the most fundamental concepts in the study of political attitudes and behavior is political sophistication and knowledge \citep{converse1964nature,carpini1996americans}. However, its measurement has been subject to re-occurring scholarly debate \citep[e.g.][]{mondak2000reconsidering,mondak2001asked,debell2013harder}. Many analyses exclusively rely on individual levels of political information measured by factual knowledge questions. However, recent research points to important differences between types of knowledge questions that have previously been disregarded \citep{barabas2014question}. Furthermore, scholars argued that the conceptualization of political sophistication should take into account how people structure their attitudes and beliefs, rather than just focusing on pure levels of information \citep[e.g.][]{luskin1987measuring}. As such, measuring sophistication solely based on answers to political trivia may misclassify respondents who cannot recall these facts, but do indeed have a coherent network of political ideas.
+On of the fundamental concepts in the study of political attitudes and behavior is political sophistication and knowledge \citep{converse1964nature,carpini1996americans}. While most scholars emphasized how little people know about politics, the question of how to assess individual knowledge has been subject to re-occurring scholarly debate \citep[e.g.][]{mondak2000reconsidering,mondak2001asked,sturgis2008experiment,debell2013harder,pietryka2013analysis}. Many analyses exclusively rely on individual levels of political information measured by factual knowledge questions. However, recent research points to important differences between types of knowledge questions that have previously been disregarded \citep{barabas2014question}. Furthermore, scholars argued that factual political knowledge as measured in many surveys may not be theoretically relevant \citep{lupia2006elitism} and the conceptualization of political sophistication should rather take into account how people structure their attitudes and beliefs \citep[e.g.][]{luskin1987measuring}. As such, measuring sophistication solely based on answers to political trivia may misclassify respondents who cannot recall these facts, but do indeed have a coherent framework of political ideas.
 
-The paper proposed here examines alternative measures of political sophistication based on individual responses to open-ended likes and dislikes questions in the 2012 American National Election Survey (ANES). For this portion of the survey, respondents write freely about what they like and dislike about the Republican and Democratic parties and presidential candidates. We leverage recent advances in text analysis to make inferences about the respondents' levels of political sophistication and belief constraint by focusing on how they describe their attitudes towards different political actors. More specifically, we consider the lexical complexity and readability of responses, as well as the diversity in topics raised by respondents based on structural topic models \citep{roberts2014structural}, in order to assess the degree to which political attitudes are structured and expressed in a more complex manner. We suspect that the diversity in topics a respondent mentions in their answers, or the detail with which they speak about the topics they mention, will covary with the other political knowledge measures available in the data. We therefore compare the text-based measures to common factual knowledge items as well as the interviewer assessment of the respondent's political knowledge as benchmarks.
+We propose an alternative measure of political sophistication based on individual responses to open-ended questions about attitudes towards major parties and presidential candidates. We make inferences about the respondents' level of political sophistication and belief constraint by focusing on \textit{how} respondents describe their preferences and beliefs. More specifically, we consider the diversity in topics raised by respondents based on structural topic models \citep{roberts2014structural} as well as other characteristics of individual open-ended responses, in order to assess the degree to which political attitudes are structured and expressed in a more complex manner. We suspect that the diversity in topics a respondent discusses, or the detail with which they speak about the topics they mention, will covary with other political knowledge measures. We therefore compare the text-based measures to common factual knowledge items as well as the interviewer assessment of the respondent's political knowledge as benchmarks.
+% revise last part depending on evaluation method etc.
 
-All responses from a single participant will be considered a single document.  First, we will find the topics present over the entire corpus, starting with a simple off-the-shelf baseline model, and improve performance as we learn the “knobs” of topic models as they are covered in class.  Then, for each document, we will measure the diversity in estimated topic proportions. This will be our first measure. Second, we will look at the length of the document. Third, we will look at document length relative to the number of topics. We suspect that the first measure will correlate with political knowledge, displaying a wide spectrum of political insight. The second measure will act like something of a control or baseline; can we simply predict political knowledge by the length of response? Finally, the third measure may help us gain insight into potential cases where a respondent focuses on very few topics, but has a wealth of insight into the topics they choose to mention.  
+Overall, we hope to show that our measure of political sophistication can provide novel insights compared to conventional knowledge measures, since it is conceptually closer to the actual structure and constraint of political belief systems \citet[see for example][]{tetlock1983cognitive,luskin1987measuring}. Furthermore, developing valid measures of political sophistication based on open-ended responses will provide new opportunities for comparisons of political knowledge across time and contexts.
 
-The dataset is available from American National Election Studies. For his PhD, Patrick has cleaned this data to some degree, using an implementation of the Aspell spell checking algorithm in \texttt{R} to correct for misspellings. The dataset may be further cleaned in two different ways. First, we may account for “eloquence” of the respondents, using readability or type-to-token ratio of the responses. We would like to capture political intelligence specifically, rather than general intelligence. Similarly, we may correct for education level, which is also available in the data.  Second, we may create a list of ``talking points'' that could possibly turn up in the responses. We suspect that specific phrasing could suggest that a respondent is parroting a political message, rather than comprehending and reframing the message in their own words. This may be too difficult a task to complete for this project, but a good first pass try would include finding common n-grams, up to n = 6, and use a web search to determine whether these are known slogans.  Respondents would then be ``punished'' if they primarily use these slogans, as that suggests that they do not have a deep political knowledge.  
 
-To assess the performance of our model, we will compare our results to the other political knowledge scores, perhaps using a method such as the Adjusted Rand Index. An evaluation such as this will be useful, because we can check, first, if our method is performing better than chance, and, if so, is it performing poorly, well, or excellently. However, we will also take a qualitative look at the performance our model, to determine if we are able to find cases of political knowledge not captured in the standard measure of political knowledge.  
+\section{Political Knowledge and Sophistication}
+% 1: defining political participation in the literature
+% 2: measuring political sophistication, previous approaches
+% 3: issues with previous approaches, critiques
 
-Overall, we hope to gain important insights about individual political sophistication conceptualized as the structure and constraint of political beliefs (for example, in line with Tetlock's \citeyear{tetlock1983cognitive} notion of integrative complexity) by taking into account open-ended survey responses. Furthermore, developing valid measures of political sophistication based on open-ended responses will provide new opportunities for comparisons of political knowledge across time and contexts.
+In his seminal study, \citet{converse1964nature} examined the degree to which citizens hold constrained belief systems about politics. In the paper, belief systems are defined as ``a configuration of ideas and attitudes in which the elements are bound together by some form of constraint or functional interdependence'' \citep[207]{converse1964nature}. The analyses showed that the majority of the electorate does not hold structured and constrained belief systems, understand abstract ideological concepts, or hold stable issue positions. 
 
-\section{Theoretical Framework}
+This pessimistic finding regarding the competence of the US electorate has been confirmed in multiple subsequent analyses. \citet{carpini1996americans} showed that large parts of the American electorate are not sufficiently informed about politics. Furthermore, there are systematic differences in political attitudes and behavior between citizens who are well informed compared to those who are not. Such a finding is problematic from a normative perspectives, since it indicates that differences in levels of information can result in unequal representation in the political system \citep[see also][]{althaus1998information,kuklinski2000misinformation,gilens2001political}.
 
-\subsection{Political Knowledge and Sophistication}
-% review of previous approaches etc., should be rather short
+However, rather than relying on the degree to which individuals hold constrained belief systems, \citet{carpini1996americans}, but conceptualized political knowledge as awareness of key democratic values, which was measured using factual knowledge questions. A broad range of studies focused on similar measures of awareness and factual knowledge as indicators of sophistication \citep[e.g.][]{gomez2001political}. Most prominently, \citet{zaller1992nature}
 
-\subsection{Open-Ended Responses}
+However, even though most articles argue based on the structure of belief systems rather than basic knowledge, they just look at awareness. For example, Zaller...
 
-\subsection{Hypotheses}
+Definition Zaller, political awareness, look at pieces of factual information, cite some studies that have relied on knowledge questions
 
-\section{Empirical Results}
+But: there are issues with these knowledge questions, discuss Mondak, Prior etc.
 
-\subsection{Data Overview}
+Another example could be \citet{lupia1994shortcuts}, since it shows that factual knowledge might be less important as long as people can make inferences about positions etc. \citep[see also][]{lupia2006elitism}.
 
-\subsection{Specification of Topic Model}
+Also from a theoretical perspective, we might want to look at the structure of belief systems instead, discuss Luskin and Tetlock
 
-\subsection{Performance Evaluation}
 
-\section{Conclusion}
+\section{Open-Ended Responses}
+% 1: how are open-ended responses administered
+% 2: potential issues of open-ended responses
+% 3: how can open-ended respones be beneficial? they are closer to the definition of political sophistication that we are interested in!
+
+
+
+
+\section{Measurement Approach}
+% 1: describe measure and how it relates to theoretical conceptualization of sophistication
+% 2: derive validation of new measure
+
+\section{Hypotheses and Validation Strategy}
+% 1: correlation with other knowledge measures
+% 2: replicate common findings
+% 3: increase consistency b/w policy attitudes
+
+
+\section{Data and Methods}
+
+\section{Descriptive Results}
+
+\section{Validation Performance}
+
+\paragraph{Ideas for evaluation:}
+\begin{itemize}\singlespacing
+\item Increase in consistency b/w policy attitudes \citep[e.g.][]{prior2014visual}
+\item replicate common findings, e.g. gender gap in political knowledge \citep[e.g.][]{barabas2014question}
+\end{itemize}
+
+\section{Discussion and Conclusion}
 
 
 \clearpage

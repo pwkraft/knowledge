@@ -2,7 +2,7 @@
 ### Text as Data - Final Project  ###
 ### Laura Buchanan, Patrick Kraft ###
 ### ============================= ###
-## This file models the 2008 and 2012 ANES with STM
+## This file models the 2012 ANES with STM
 
 
 ### load raw data
@@ -36,21 +36,20 @@ data <- data[apply(!is.na(data[,meta]),1,prod)==1,]
 processed <- textProcessor(data$resp, metadata = data[,meta])
 out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
 
-# quick fit
+## quick fit
+# stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+#                , K=60, init.type = "Spectral")
+
+## slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-               , K=60, init.type = "Spectral")
+               , K=0, init.type = "Spectral")
 
-# slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
-#stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta), K=0, init.type = "Spectral")
-
-# Graphical display of estimated topic proportions 
-#plot.STM(stm_fit, type = "summary")
-#plot.STM(stm_fit, type = "perspectives", topics = c(18,20))
-
+## Graphical display of estimated topic proportions 
+plot.STM(stm_fit, type = "summary")
+plot.STM(stm_fit, type = "perspectives", topics = c(18,20))
 topic_words <- labelTopics(stm_fit)
 
-
-# probably fits and transform for diversity score  
+# probability fits and transform for diversity score  
 doc_topic_prob <- stm_fit$theta
 
 # topic diversity score
@@ -84,6 +83,7 @@ corrm <- cor(data[,c("polknow_office", "polknow_factual", "polknow_majority", "p
 
 corrplot(corrm,method="square")
 
+## the diversity measure is still a bit problematic since it's high for individuals with few words
 
 
 

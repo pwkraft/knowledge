@@ -196,4 +196,3 @@ anes2012$ditem <- apply(anes2012spell[,-1], 1, function(x){
 
 save(anes2012, anes2012opend, anes2012spell, file = "../data/anes.Rdata")
 
-
