@@ -4,6 +4,8 @@
 ### ============================= ###
 ## prepares the survey data of the 2008 and 2012 ANES for subsequent analyses
 ## prepares open-ended responses (selecting variables, spell checking etc.)
+## fits structural topic model for open-ended responses
+## creates diversity measures
 
 
 ### load raw data
@@ -11,15 +13,16 @@
 rm(list = ls())
 library(car)
 library(dplyr)
+library(quanteda)
+library(stm)
 library(readstata13)
 if(sessionInfo()$platform == "x86_64-pc-linux-gnu (64-bit)"){
   setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 } else {setwd('/Users/Laura/Desktop/knowledge/data')}
 raw2012 <- read.dta13("../data/anes_timeseries_2012.dta", convert.factors = F)
-#raw2008 <- read.dta13("../data/anes_timeseries_2008.dta", convert.factors = F)
 
 
-### 2012 survey data
+### 2012 regular survey data
 
 ## respondent id
 anes2012 <- data.frame(caseid=raw2012$caseid)
@@ -134,7 +137,7 @@ anes2012post <- read.csv("../data/anes2012TS_post.csv", as.is = T) %>%
   select(caseid, mip_prob1, mip_prob2, mip_prob3, mip_mostprob)
 anes2012opend <- merge(anes2012pre, anes2012post)
 
-## optional: onlt select likes/dislikes
+## optional: only select likes/dislikes
 anes2012opend <- anes2012pre
 
 ## minor pre-processing
@@ -192,7 +195,59 @@ anes2012$ditem <- apply(anes2012spell[,-1], 1, function(x){
 })
 
 
+### fit structural topic model
+
+### prepare data
+
+## combine regular survey and open-ended data, remove spanish and empty responses
+meta <- c("age", "educ_cont", "pid_cont", "educ_pid")
+data <- anes2012 %>% mutate(resp = apply(anes2012spell[,-1],1,paste,collapse=' ')) %>%
+  filter(spanish == 0 & wc != 0)
+
+## remove missings on metadata
+data <- data[apply(!is.na(data[,meta]),1,prod)==1,]
+
+## process for stm
+processed <- textProcessor(data$resp, metadata = data[,meta])
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+
+## quick fit (60 topics)
+# stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+#                , K=60, init.type = "Spectral")
+
+## slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
+stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+               , K=0, init.type = "Spectral")
+
+
+### create new sophistication measures
+
+## probability fits and transform for diversity score  
+doc_topic_prob <- stm_fit$theta
+
+## topic diversity score
+data$topic_diversity <- -1 * rowSums(doc_topic_prob * log2(doc_topic_prob))
+
+## weighted topic diversity score, by length
+data$topic_diversity_length <- with(data, (topic_diversity + 1) * (lwc + 1))
+
+## threshold topic probability scores
+doc_topic_prob_sparse <- doc_topic_prob
+doc_topic_prob_sparse[doc_topic_prob_sparse < 0.1] <- 0
+doc_topic_prob_binary <- doc_topic_prob
+doc_topic_prob_binary[doc_topic_prob_binary < 0.1] <- 0
+doc_topic_prob_binary[doc_topic_prob_binary > 0.1] <- 1
+
+## count over thresholded prob scores
+data$topic_thresh_sum <- rowSums(doc_topic_prob_sparse)
+data$topic_thresh_count <- rowSums(doc_topic_prob_binary)
+
+## weighted by item count + diversity
+data$topic_diversity_length_litem <- with(data, (topic_diversity + 1) * (lwc + 1) * (litem + 1))
+data$topic_diversity_length_ditem <- with(data, (topic_diversity + 1) * (lwc + 1) * (ditem + 1))
+
+
 ### save output
 
-save(anes2012, anes2012opend, anes2012spell, file = "../data/anes.Rdata")
-
+save(anes2012, anes2012open, anes2012spell, data, meta, processed, out, stm_fit
+     , file="../data/anes.Rdata")
