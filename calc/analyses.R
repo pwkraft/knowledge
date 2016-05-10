@@ -49,3 +49,17 @@ ggplot(data, aes(topic_diversity_length, ..density..)) + geom_histogram(fill='gr
 ggplot(data, aes(topic_diversity_length_litem, ..density..)) + geom_histogram(fill='grey') + geom_density() + theme_classic() + 
   theme(panel.border = element_rect(fill=NA))
 
+### test some models
+m1 <- NULL
+m1[[1]] <- lm(topic_diversity_length_ditem ~ polmedia + poldisc + educ_cont + female + age + black + relig + ideol_ct + pid_cont + mode, data = data)
+m1[[2]] <- lm(polknow_office ~ polmedia + poldisc + educ_cont + female + age + black + relig + ideol_ct + pid_cont + mode, data = data)
+m1[[3]] <- lm(polknow_factual ~ polmedia + poldisc + educ_cont + female + age + black + relig + ideol_ct + pid_cont + mode, data = data)
+m1[[4]] <- lm(polknow_majority ~ polmedia + poldisc + educ_cont + female + age + black + relig + ideol_ct + pid_cont + mode, data = data)
+m1[[5]] <- lm(polknow_evalpre ~ polmedia + poldisc + educ_cont + female + age + black + relig + ideol_ct + pid_cont, data = data)
+m1[[6]] <- lm(polknow_evalpost ~ polmedia + poldisc + educ_cont + female + age + black + relig + ideol_ct + pid_cont, data = data)
+
+lapply(m1, summary)
+
+
+"polknow_office", "", "", ""
+, ""
