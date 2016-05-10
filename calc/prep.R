@@ -249,5 +249,5 @@ data$topic_diversity_length_ditem <- with(data, (topic_diversity + 1) * (lwc + 1
 
 ### save output
 
-save(anes2012, anes2012open, anes2012spell, data, meta, processed, out, stm_fit
+save(anes2012, anes2012opend, anes2012spell, data, meta, processed, out, stm_fit
      , file="../data/anes.Rdata")
