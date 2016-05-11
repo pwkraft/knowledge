@@ -25,7 +25,7 @@ plot.STM(stm_fit, type = "perspectives", topics = c(18,20))
 topic_words <- labelTopics(stm_fit)
 
 
-# correlation matrix
+# old correlation matrix
 corrm <- cor(data[,c("polknow_office", "polknow_factual", "polknow_majority", "polknow_evalpre"
                   , "polknow_evalpost", "intpre", "intpost", "educ_cont", "polmedia", "poldisc"
                   , "wc", "lwc", "nitem", "pitem", "litem", "ditem", "topic_diversity"
@@ -35,19 +35,71 @@ corrm <- cor(data[,c("polknow_office", "polknow_factual", "polknow_majority", "p
 
 corrplot(corrm,method="square")
 
-## the diversity measure is still a bit problematic since it's high for individuals with few words
 
-## histogram/density of dv
-ggplot(data, aes(topic_diversity_length_ditem, ..density..)) + geom_histogram(fill='grey') + geom_density() + theme_classic() + 
-  theme(panel.border = element_rect(fill=NA))
 
-## alternative dvs:
-ggplot(data, aes(topic_diversity, ..density..)) + geom_histogram(fill='grey') + geom_density() + theme_classic() + 
-  theme(panel.border = element_rect(fill=NA))
-ggplot(data, aes(topic_diversity_length, ..density..)) + geom_histogram(fill='grey') + geom_density() + theme_classic() + 
-  theme(panel.border = element_rect(fill=NA))
-ggplot(data, aes(topic_diversity_length_litem, ..density..)) + geom_histogram(fill='grey') + geom_density() + theme_classic() + 
-  theme(panel.border = element_rect(fill=NA))
+
+#######
+#code for correlation matrix plot
+#######
+
+
+
+corrm <- cor(data[,c("polknow_office", "polknow_factual", "polknow_majority", "polknow_evalpre"
+                     , "polknow_evalpost", "intpre", "intpost", "educ_cont"
+                     , "lwc",  "ditem", "topic_diversity"
+                     , "topic_diversity_length_ditem")]
+             ,use="pairwise.complete.obs", method = "pearson")
+
+corrplot(corrm,method="square")
+
+
+
+########
+# code for word count plots
+########
+
+## histogram/density of lwc
+lwc_mean = mean(data$lwc)
+
+ggplot(data, aes(lwc, ..density..)) + geom_histogram(binwidth = 0.25, fill='grey') + geom_density() + theme_classic() + 
+  theme(panel.border = element_rect(fill=NA)) + geom_vline(xintercept = lwc_mean, colour="red", linetype = "longdash") + theme(axis.title.x=element_blank()) +
+  theme(axis.title.y=element_blank())
+
+## histogram/density of wc
+wc_mean = mean(data$wc)
+
+ggplot(data, aes(wc, ..density..)) + geom_histogram(binwidth = 10, fill='grey') + geom_density() + theme_classic() + 
+  theme(panel.border = element_rect(fill=NA)) + geom_vline(xintercept = wc_mean, colour="red", linetype = "longdash") + theme(axis.title.x=element_blank()) +
+  theme(axis.title.y=element_blank())
+
+
+
+########
+# code for diversity measures
+########
+
+## histogram/density of topic_diversity
+diversity_mean = mean(data$topic_diversity)
+
+ggplot(data, aes(topic_diversity, ..density..)) + geom_histogram(binwidth = 0.25,fill='grey') + geom_density() + theme_classic() + 
+  theme(panel.border = element_rect(fill=NA)) + geom_vline(xintercept = diversity_mean, colour="red", linetype = "longdash") + theme(axis.title.x=element_blank()) +
+  theme(axis.title.y=element_blank())
+
+## histogram/density of ditem
+ditem_mean = mean(data$ditem)
+
+ggplot(data, aes(ditem, ..density..)) + geom_histogram(binwidth = 0.25,fill='grey') + geom_density() + theme_classic() + 
+  theme(panel.border = element_rect(fill=NA)) + geom_vline(xintercept = ditem_mean, colour="red", linetype = "longdash") + theme(axis.title.x=element_blank()) +
+  theme(axis.title.y=element_blank())
+
+
+## histogram/density of weighted 
+topic_diversity_length_ditem_mean = mean(data$topic_diversity_length_ditem)
+
+ggplot(data, aes(topic_diversity_length_ditem, ..density..)) + geom_histogram(binwidth = 10,fill='grey') + geom_density() + theme_classic() + 
+  theme(panel.border = element_rect(fill=NA)) + geom_vline(xintercept = topic_diversity_length_ditem_mean, colour="red", linetype = "longdash") + theme(axis.title.x=element_blank()) +
+  theme(axis.title.y=element_blank())
+
 
 ### example texts
 
