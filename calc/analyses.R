@@ -69,9 +69,11 @@ ggplot(data, aes(lwc, ..density..)) + geom_histogram(binwidth = 0.25, fill='grey
 ## histogram/density of wc
 wc_mean = mean(data$wc)
 
-ggplot(data, aes(wc, ..density..)) + geom_histogram(binwidth = 10, fill='grey') + geom_density() + theme_classic() + 
-  theme(panel.border = element_rect(fill=NA)) + geom_vline(xintercept = wc_mean, colour="red", linetype = "longdash") + theme(axis.title.x=element_blank()) +
-  theme(axis.title.y=element_blank())
+ggplot(data, aes(wc)) + geom_histogram(fill = "grey", binwidth = 5) + theme_classic(base_size = 8) + 
+  theme(panel.border = element_rect(fill=NA)) + 
+  geom_vline(xintercept = wc_mean, colour="red", linetype = "longdash") +
+  ylab("Number of Respondents") + xlab("Word Count")
+ggsave("../fig/wc.pdf",width=5, height=2)
 
 
 
