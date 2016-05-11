@@ -102,7 +102,7 @@ Of course, the measurement strategy derived here makes strong implicit assumptio
 
 We use survey data from the 2012 American National Election Study in order to demonstrate and validate  our measure of political sophistication. The dataset consists of 5914 adults (2054 of which participated in face-to-face interviews while the remaining 3860 participated in a representative online survey). While both samples differ slightly with regards to the inclusion of some specific variables, we will mostly rely on the pooled dataset purpose of our analysis.
 
-The knowledge measure is based on open-ended questions in which respondents were asked to list anything in particular that they like/dislike about the Democratic/Republican party as well as anything that might make them vote/not vote for either of the Presidential candidates and were probed by the interviewer asking ``anything else?'' until the respondent answered no. All open-ended responses were pre-processed by correcting spelling errors using an implementation of the Aspell spell checking algorithm in \texttt{R} (\url{www.aspell.net}), and deleting individuals who responded in Spanish (228 individuals). 
+The sophistication measure is based on open-ended questions in which respondents were asked to list anything in particular that they like/dislike about the Democratic/Republican party as well as anything that might make them vote/not vote for either of the Presidential candidates and were probed by the interviewer asking ``anything else?'' until the respondent answered no. All open-ended responses were pre-processed by correcting spelling errors using an implementation of the Aspell spell checking algorithm in \texttt{R} (\url{www.aspell.net}), and deleting individuals who responded in Spanish (228 individuals). 
 
 As discussed above, we consider three different aspects of the open-ended responses to capture the distinct dimensions of political sophistication discussed above: size, range, and constraint of the political belief system. The \textbf{size} of the belief system is measured as the word count for each individual over all prompts:
 \begin{equation}
@@ -151,20 +151,20 @@ Education Level 	 & (1) Less than high school credential&Political Knowledge: Ed
 \caption{Methods: Feature Extraction}\label{tab:featextr}
 \end{table}
 
-Furthermore, the analyses outlined below will include several control variables such as media usage, frequency of political discussions, gender, age, race, religiosity, ideology, party identification, and interview mode (face-to-face vs. online).
+Furthermore, the analyses outlined below will include several control variables such as media exposure, frequency of political discussions, gender, age, race, religiosity, ideology, party identification, and interview mode (face-to-face vs. online).
 	
 
 \section{Descriptive Results}
-% histogram of response length could be useful
-% histogram of individual aspects
-% show examples of high and low scoring political knowledge
-% distribution of knowledge measure
-% correlation plot with other knowledge measures (including individual aspects)
+% histogram of response length could be useful -> optional
+% histogram of individual aspects -> done
+% show examples of high and low scoring political knowledge -> appendix
+% distribution of knowledge measure -> done
+% correlation plot with other knowledge measures (including individual aspects) -> done
 
 
 \begin{figure}
 \includegraphics[width=\textwidth]{../fig/diversity_distributions.png}
-\caption{Diversity Distributions and Knowledge Measure}
+\caption{Diversity Distributions and Sophistication Measure}
 \end{figure}
 
 \begin{figure}
@@ -177,6 +177,11 @@ The lower triangle of the Pearson correlation matrix between all 8 political kno
 \section{Validation Performance}
 % replicate common findings, e.g. gender gap in political knowledge \citep[e.g.][]{barabas2014question}
 % Increase in consistency b/w policy attitudes \citep[e.g.][]{prior2014visual}
+
+\begin{figure}
+\includegraphics{../fig/models.pdf}
+\caption{Comparing Determinants of Political Sophistication}
+\end{figure}
 
 
 \section{Discussion and Conclusion}
@@ -196,37 +201,36 @@ The lower triangle of the Pearson correlation matrix between all 8 political kno
  & Minimum & Maximum \\ 
   \hline
 Case ID & 4258 & 1905 \\ 
-  Obama (likes) &  & He s more likely to continue to support bio medical research as president I think he s stronger on domestic issues funding domestic programs less likely to be influenced by corporate lobby as President has shown not to be less likely to make poor decisions regarding our occupation of other countries which we can ill afford he d be inclined to support education and infrastructure and more likely to support seeking alternative energy sources \\ 
-  Obama (dislikes) &  & I don t think that he is a realist with regards to the terrorist threats he s attempted to be too diplomatic with his foreign policy with regard to terrorism and terrorist threats He s a very good politician and that s sort of a detriment his 1st term he tried too much to work across the aisle and did t realize the how steadfast and polarized the opposition was I would like to see more strength in his resolve of his views he was too willing to compromise his beliefs to get things done I don t necessarily agree with the way he s handling his support of Israel could be more openly supportive than he is \\ 
-  Romney (likes) &  & He has consistently been openly supportive of Israel and the Israeli state Israel is right to exist in that region I believe that his experience in economics and investment probably did prepare him to be an efficient leader and someone who knows a lot about economic policy He seems like a nice family man politically I can t think of a lot more than that \\ 
-  Romney (dislikes) &  & I don t trust him at all I think he s an out of touch wealthy politician who would say anything to get elected and has been caught on tape essentially admitting in so many words that he is a racist He chose Paul Ryan as a running mate that decision in and of itself was enough to make me know I don t want to vote for him He fundamentally believes that more than 50 percent percent of this country are shiftless layabouts who arena t interested in working That s obviously the view of someone whose mind is out of touch with what s going on in this country He s a misogynist \\ 
-  Democratic party (likes) & Compassion & They generally are supportive of domestic spending specifically on research and technology and education They tend to lean toward a more reserved approach to foreign policy less aggressive they tend to be people who are more empathetic and care for their fellow man which is mostly good \\ 
-  Democratic party (dislikes) &  & They tend to be faster to raise taxes They have a tendency toward extreme idealism That can be dangerous because not everyone wants to be or can be saved by entitlement programs \\ 
-  Republican party (likes) &  & They have adopted this systematic approach towards the support of Israel Their logic and reason behind it are poor but I agree with the sup post Fiscal conservatism in theory is a good thing It s good to make smart decisions about spending and not frivolously spend money The stance to support small businesses is encouraging but a disingenuous party platform \\ 
-  Republican party (dislikes) &  & I think the modern Republican party has been hijacked by Christian conservatives who set policy based on their religious beliefs In addition a wave of back lash political support in opposition to Obama spawned this tea party movement which is just an anti entitlement anti gay pro guns and God grassroots campaign that has taken over \\ 
+  Obama (likes) & -1 Inapplicable & He's more likely to continue to support biomedical research as president, I think he's stronger on domestic issues, funding domestic programs, less likely to be influenced by corporate lobby, as President has shown not to be, less likely to make poor decisions regarding our occupation of other countries which we can ill afford, he'd be inclined to support education and infrastructure and more likely to support seeking alternative energy sources \\ 
+  Obama (dislikes) & -1 Inapplicable & I don't think that he is a realist with regards to the terrorist threats, he's attempted to be too diplomatic with his foreign policy with regard to terrorism and terrorist threats, He's a very good politician and that's sort of a detriment, his 1st termhe tried too much to work 'across the aisle' and didn't realize the how steadfast and polarized the opposition was, I would like to see more strength in his resolve of his views, he was too willing to compromise his beliefs to get things done, I don't necessarily agree with the way he's handling his support of Israel, could be more openly supportive than he is \\ 
+  Romney (likes) & -1 Inapplicable & He has consistently been openly supportive of Israel and the Israeli state.  Israel is right to exist in that region.  I believe that his experience in economics and investment probably did prepare him to be an efficient leader and someone who knows a lot about economic policy. He seems like a nice family man, politically I can't think of a lot more than that. \\ 
+  Romney (dislikes) & -1 Inapplicable & I don't trust him at all. I think he's an out of touch wealthy politician who would say anything to get elected and has been caught on tape essentially admitting in so many words that he is a racist. He chose Paul Ryan as a running mate, that decision inand of itself was enough to make me know I don't want to vote for him. He fundamentally believes that more than 50 percent  percent of this country are shiftless layabouts who aren't interested in working.  That's obviously the view of someone whose mind is out of touch with what's going on in this country. He's a misogynist. \\ 
+  Democratic party (likes) & Compassion & They generally are supportive of domestic spending, specifically on research and technology, and education. They tend to lean toward a more reserved approach to foreign policy, less aggressive, they tend to be people who are more emphathetic and care fortheir fellow man, which is mostly good \\ 
+  Democratic party (dislikes) & -1 Inapplicable & They tend to be faster to raise taxes. They have a tendency toward extreme idealism.  That can be dangerous because not everyone wants to be or can be saved by entitlement programs. \\ 
+  Republican party (likes) & -1 Inapplicable & They have adopted this systematic approach towards the support of Israel. Their logic and reason behind it are poor, but I agree with the suppost. Fiscal conservatism, in theory, is a good thing. It's good to make smart decisions about spending and not frivilously spend money.  The stance to support small businesses is encouraging, but a disingenuous party platform. \\ 
+  Republican party (dislikes) & -1 Inapplicable & I think the modern Republican party has been hijacked by Christian conservatives who set policy based on their religious beliefs.  In addition, a wave of back lash political support in opposition to Obama spawned this tea party movement, which is just ananti-entitlement, anti-gay, pro-guns and God grassroots campaign that has taken over. \\ 
    \hline
-   
-   \caption{Example of open-ended responses for minimum and maximum score of political sophistication measure (among all responses)}
+   \caption{Example of open-ended responses for minimum and maximum score of political sophistication measure (among all responses). Note that these are the raw responses without any pre-processing (such as spell-checking, removal of terms like ``-1 Inapplicable'', removal of punctuation, stemming, etc.)}
 \end{longtable}
 
 \newpage
 % latex table generated in R 3.3.0 by xtable 1.8-2 package
 % Wed May 11 10:25:59 2016
 \begin{longtable}[ht]{p{4cm}p{6cm}p{6cm}}
-  \hline
- & Minimum & Maximum \\ 
-  \hline
-Case ID & 3093 & 4115 \\ 
-  Obama (likes) &  & i think he has done well so far \\ 
-  Obama (dislikes) & Shady He left his spot in Illinois and someone is in prison for trying to sell it Wonder how he got it Probably the same way he got the Nobel Who s in charger of USDA school program Who is surgeon General How they get there What are their true credentials prior to current positions Reeks & way things are going with education \\ 
-  Romney (likes) &  & his health policy outlooks but it also hinders itself as well his pro life opinion \\ 
-  Romney (dislikes) &  & personality a lot of his policies \\ 
-  Democratic party (likes) &  & i like their ideas they are for the people \\ 
-  Democratic party (dislikes) & They care about the stupidest stuff & sometimes i wonder if progress can occur \\ 
-  Republican party (likes) &  & my religious beliefs of Christianity tend to follow many of their thoughts \\ 
-  Republican party (dislikes) & Stewards for the rich and big business & sometimes they don t make sense or have just never been the right mix to make me want to vote for them \\ 
    \hline
-  \caption{Example of open-ended responses for minimum and maximum score of political sophistication measure (only responses between total length of 50 and 100 words)}
+  & Minimum & Maximum \\ 
+   \hline
+ Case ID & 3093 & 4115 \\ 
+   Obama (likes) & -1 Inapplicable & i think he has done well so far \\ 
+   Obama (dislikes) & Shady. He left his spot in Illinois and someone is in prison for trying to sell it. Wonder how he got it. Probably the same way he got the Nobel. Who's in charger of USDA school program? Who is surgeon General? How they get there? What are their true credentials prior to current positions? Reeks. & way things are going with education \\ 
+   Romney (likes) & -1 Inapplicable & his health policy outlooks, but it also hinders itself as well. his pro-life opinion \\ 
+   Romney (dislikes) & -1 Inapplicable & personality a lot of his policies \\ 
+   Democratic party (likes) & -1 Inapplicable & i like their ideas they are for the people \\ 
+   Democratic party (dislikes) & They care about the stupidest stuff & sometimes i wonder if progress can occur \\ 
+   Republican party (likes) & -1 Inapplicable & my religous beliefs of Christianity tend to follow many of their thoughts \\ 
+   Republican party (dislikes) & Stewards for the rich and big business & soemtimes they don't make sense or have just never been 'the right mix' to make me want to vote for them \\ 
+    \hline
+  \caption{Example of open-ended responses for minimum and maximum score of political sophistication measure (only responses between total length of 50 and 100 words). Note that these are the raw responses without any pre-processing (such as spell-checking, removal of terms like ``-1 Inapplicable'', removal of punctuation, stemming, etc.)}
   \label{tab:ex1}
 \end{longtable}
 

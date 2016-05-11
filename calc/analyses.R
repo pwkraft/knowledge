@@ -102,20 +102,22 @@ ggplot(data, aes(topic_diversity_length_ditem, ..density..)) + geom_histogram(bi
   theme(axis.title.y=element_blank())
 
 
-### example texts
+########
+# code to get response samples
+########
 
 ## max and min
 varnames <- c("Case ID","Obama (likes)","Obama (dislikes)","Romney (likes)","Romney (dislikes)"
               ,"Democratic party (likes)","Democratic party (dislikes)"
               ,"Republican party (likes)","Republican party (dislikes)")
-tab_ex1 <- t(rbind(anes2012spell[anes2012opend$caseid == with(data, caseid[topic_diversity_length_ditem==min(topic_diversity_length_ditem)]),]
-                 , anes2012spell[anes2012opend$caseid == with(data, caseid[topic_diversity_length_ditem==max(topic_diversity_length_ditem)]),]))
+tab_ex1 <- t(rbind(anes2012opend[anes2012opend$caseid == with(data, caseid[topic_diversity_length_ditem==min(topic_diversity_length_ditem)]),]
+                 , anes2012opend[anes2012opend$caseid == with(data, caseid[topic_diversity_length_ditem==max(topic_diversity_length_ditem)]),]))
 rownames(tab_ex1) <- varnames
 colnames(tab_ex1) <- c("Minimum","Maximum")
 xtable(tab_ex1)
 
-tab_ex2 <- t(rbind(anes2012spell[anes2012opend$caseid == with(filter(data,wc>50 & wc<100), caseid[topic_diversity_length_ditem==min(topic_diversity_length_ditem)]),]
-                   , anes2012spell[anes2012opend$caseid == with(filter(data,wc>50 & wc<100), caseid[topic_diversity_length_ditem==max(topic_diversity_length_ditem)]),]))
+tab_ex2 <- t(rbind(anes2012opend[anes2012opend$caseid == with(filter(data,wc>50 & wc<100), caseid[topic_diversity_length_ditem==min(topic_diversity_length_ditem)]),]
+                   , anes2012opend[anes2012opend$caseid == with(filter(data,wc>50 & wc<100), caseid[topic_diversity_length_ditem==max(topic_diversity_length_ditem)]),]))
 rownames(tab_ex2) <- varnames
 colnames(tab_ex2) <- c("Minimum","Maximum")
 xtable(tab_ex2)
@@ -123,7 +125,11 @@ xtable(tab_ex2)
 arrange(data, topic_diversity_length_ditem) %>% filter(wc>50 & wc<100) %>% select(resp) %>% head()
 arrange(data, topic_diversity_length_ditem) %>% filter(wc>50 & wc<100) %>% select(resp) %>% tail()
 
-### test some models
+
+########
+# code to test common findings
+########
+
 m1 <- NULL
 m1[[1]] <- lm(topic_diversity_length_ditem ~ polmedia + poldisc + educ_cont + female + age + black + relig + ideol_ct + pid_cont + mode, data = data)
 m1[[2]] <- lm(polknow_office ~ polmedia + poldisc + educ_cont + female + age + black + relig + ideol_ct + pid_cont + mode, data = data)
@@ -133,3 +139,36 @@ m1[[5]] <- lm(polknow_evalpre ~ polmedia + poldisc + educ_cont + female + age + 
 m1[[6]] <- lm(polknow_evalpost ~ polmedia + poldisc + educ_cont + female + age + black + relig + ideol_ct + pid_cont, data = data)
 
 lapply(m1, summary)
+
+dvnames <- c("Text-based Sophistication Measure","Office Recognition","Factual Knowledge"
+             ,"Majorities in Congress","Interviewer Evaluation (pre)"
+             ,"Interviewer Evaluation (post)")
+ivnames <- c("Intercept","Media exposure", "Political discussions", "Education"
+             , "Gender (Female)", "Age", "Race (Black)", "Religiosity"
+             , "Ideology", "Party Identification", "Survey Mode (Online)")
+
+# prepare dataframe for plotting (sloppy code)
+dfplot <- data.frame()
+for(i in 1:length(m1)){
+  tmp <- data.frame(summary(m1[[i]])$coefficients[,1:2])
+  tmp$iv <- rownames(tmp)
+  tmp$ivnames <- ivnames[1:nrow(tmp)]
+  tmp$dv <- dvnames[i]
+  rownames(tmp) <- NULL
+  dfplot <- rbind(dfplot, tmp)
+  rm(tmp)
+}
+
+# create factor variables, remove intercept for plotting
+dfplot$ivnames <- factor(dfplot$ivnames, levels = rev(ivnames))
+dfplot$dv <- factor(dfplot$dv, levels = dvnames)
+dfplot <- dfplot[dfplot$ivnames!="Intercept",]
+
+ggplot(dfplot, aes(y=ivnames, x=Estimate
+                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
+  geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free",ncol=2) +
+  theme_classic(base_size = 8) + theme(panel.border = element_rect(fill=NA)) + 
+  geom_vline(xintercept = 0, color="grey", linetype = "longdash") + 
+  ylab("Independent Variables")
+ggsave("../fig/models.pdf",height=5,width=7)
+
