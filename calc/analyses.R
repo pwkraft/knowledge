@@ -11,6 +11,7 @@ library(quanteda)
 library(stm)
 library(corrplot)
 library(ggplot2)
+library(xtable)
 
 if(sessionInfo()$platform == "x86_64-pc-linux-gnu (64-bit)"){
   setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
@@ -104,11 +105,23 @@ ggplot(data, aes(topic_diversity_length_ditem, ..density..)) + geom_histogram(bi
 ### example texts
 
 ## max and min
-data$resp[data$topic_diversity_length_ditem==min(data$topic_diversity_length_ditem)]
-data$resp[data$topic_diversity_length_ditem==max(data$topic_diversity_length_ditem)]
+varnames <- c("Case ID","Obama (likes)","Obama (dislikes)","Romney (likes)","Romney (dislikes)"
+              ,"Democratic party (likes)","Democratic party (dislikes)"
+              ,"Republican party (likes)","Republican party (dislikes)")
+tab_ex1 <- t(rbind(anes2012spell[anes2012opend$caseid == with(data, caseid[topic_diversity_length_ditem==min(topic_diversity_length_ditem)]),]
+                 , anes2012spell[anes2012opend$caseid == with(data, caseid[topic_diversity_length_ditem==max(topic_diversity_length_ditem)]),]))
+rownames(tab_ex1) <- varnames
+colnames(tab_ex1) <- c("Minimum","Maximum")
+xtable(tab_ex1)
 
-arrange(data, topic_diversity_length_ditem) %>% filter(wc>20 & wc<50) %>% select(resp) %>% head()
-arrange(data, topic_diversity_length_ditem) %>% filter(wc>20 & wc<50) %>% select(resp) %>% tail()
+tab_ex2 <- t(rbind(anes2012spell[anes2012opend$caseid == with(filter(data,wc>50 & wc<100), caseid[topic_diversity_length_ditem==min(topic_diversity_length_ditem)]),]
+                   , anes2012spell[anes2012opend$caseid == with(filter(data,wc>50 & wc<100), caseid[topic_diversity_length_ditem==max(topic_diversity_length_ditem)]),]))
+rownames(tab_ex2) <- varnames
+colnames(tab_ex2) <- c("Minimum","Maximum")
+xtable(tab_ex2)
+
+arrange(data, topic_diversity_length_ditem) %>% filter(wc>50 & wc<100) %>% select(resp) %>% head()
+arrange(data, topic_diversity_length_ditem) %>% filter(wc>50 & wc<100) %>% select(resp) %>% tail()
 
 ### test some models
 m1 <- NULL

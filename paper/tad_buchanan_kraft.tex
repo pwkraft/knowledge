@@ -1,5 +1,5 @@
 \documentclass[12pt]{article}
-\usepackage[margin = .75in]{geometry}
+\usepackage[margin = .7in]{geometry}
 \usepackage[USenglish]{babel}
 \usepackage{natbib}
 \usepackage{graphicx}
@@ -9,6 +9,7 @@
 \usepackage{lscape}
 \usepackage{dcolumn}
 \usepackage{xcolor}
+\usepackage{longtable}
 \usepackage[colorlinks=true,citecolor=red!50!black,urlcolor=blue!50!black,linkcolor=red!50!black]{hyperref}
 
 \author{Laura Buchanan\footnote{\href{mailto:lcb402@nyu.edu}{lcb402@nyu.edu}} \and Patrick Kraft\footnote{\href{mailto:pk1622@nyu.edu}{pk1622@nyu.edu}}}
@@ -171,12 +172,9 @@ Furthermore, the analyses outlined below will include several control variables 
 \caption{Correlation Plot of Knowledge Measures}
 \end{figure}
 
+The lower triangle of the Pearson correlation matrix between all 8 political knowledge measures and all 4 calculated diversity measures is plotted below(?).  The bold black box highlights the correlations between the political knowledge measures and the calculated diversity measures.  Our first observation is that political knowledge measures are modestly to strongly correlated with on another.  This finding is interesting; while if confirms that these measures do covary to some degree, they are not all capturing the same types of knowledge, as might be expected.  Next, we see that Topic Diversity has low negative correlation with all other measures.  This suggests that topic diversity alone, in this context, is not an appropriate measure of political knowledge.  We also see the Response Diversity and the composite final diversity metric have stronger correlations with the political knowledge measures than log(Response Word Count), suggesting that these two diversity measures are not strictly due to the length of the open-ended responses.  Finally, we see that our final composite diversity score correlates across other political knowledge measures on the same order of magnitude as Factual Knowledge and Majorities in Congress, yet don’t not have especially high correlation with either.  This is evidence that our composite diversity score is worthy of consideration among standard political knowledge measures, and captures independent information.    
+
 \section{Validation Performance}
-% replicate common findings
-% increase consistency b/w policy attitudes
-
-
-\paragraph{Ideas for evaluation:}
 % replicate common findings, e.g. gender gap in political knowledge \citep[e.g.][]{barabas2014question}
 % Increase in consistency b/w policy attitudes \citep[e.g.][]{prior2014visual}
 
@@ -188,5 +186,48 @@ Furthermore, the analyses outlined below will include several control variables 
 \bibliographystyle{apsr2006}
 \bibliography{lit}
 
+\clearpage
+\section*{Appendix: Samples of Open-Ended Responses for High/Low Sophistication}
+
+% latex table generated in R 3.3.0 by xtable 1.8-2 package
+% Wed May 11 10:13:17 2016
+\begin{longtable}[ht]{p{1.4cm}lp{12cm}}
+  \hline
+ & Minimum & Maximum \\ 
+  \hline
+Case ID & 4258 & 1905 \\ 
+  Obama (likes) &  & He s more likely to continue to support bio medical research as president I think he s stronger on domestic issues funding domestic programs less likely to be influenced by corporate lobby as President has shown not to be less likely to make poor decisions regarding our occupation of other countries which we can ill afford he d be inclined to support education and infrastructure and more likely to support seeking alternative energy sources \\ 
+  Obama (dislikes) &  & I don t think that he is a realist with regards to the terrorist threats he s attempted to be too diplomatic with his foreign policy with regard to terrorism and terrorist threats He s a very good politician and that s sort of a detriment his 1st term he tried too much to work across the aisle and did t realize the how steadfast and polarized the opposition was I would like to see more strength in his resolve of his views he was too willing to compromise his beliefs to get things done I don t necessarily agree with the way he s handling his support of Israel could be more openly supportive than he is \\ 
+  Romney (likes) &  & He has consistently been openly supportive of Israel and the Israeli state Israel is right to exist in that region I believe that his experience in economics and investment probably did prepare him to be an efficient leader and someone who knows a lot about economic policy He seems like a nice family man politically I can t think of a lot more than that \\ 
+  Romney (dislikes) &  & I don t trust him at all I think he s an out of touch wealthy politician who would say anything to get elected and has been caught on tape essentially admitting in so many words that he is a racist He chose Paul Ryan as a running mate that decision in and of itself was enough to make me know I don t want to vote for him He fundamentally believes that more than 50 percent percent of this country are shiftless layabouts who arena t interested in working That s obviously the view of someone whose mind is out of touch with what s going on in this country He s a misogynist \\ 
+  Democratic party (likes) & Compassion & They generally are supportive of domestic spending specifically on research and technology and education They tend to lean toward a more reserved approach to foreign policy less aggressive they tend to be people who are more empathetic and care for their fellow man which is mostly good \\ 
+  Democratic party (dislikes) &  & They tend to be faster to raise taxes They have a tendency toward extreme idealism That can be dangerous because not everyone wants to be or can be saved by entitlement programs \\ 
+  Republican party (likes) &  & They have adopted this systematic approach towards the support of Israel Their logic and reason behind it are poor but I agree with the sup post Fiscal conservatism in theory is a good thing It s good to make smart decisions about spending and not frivolously spend money The stance to support small businesses is encouraging but a disingenuous party platform \\ 
+  Republican party (dislikes) &  & I think the modern Republican party has been hijacked by Christian conservatives who set policy based on their religious beliefs In addition a wave of back lash political support in opposition to Obama spawned this tea party movement which is just an anti entitlement anti gay pro guns and God grassroots campaign that has taken over \\ 
+   \hline
+   
+   \caption{Example of open-ended responses for minimum and maximum score of political sophistication measure (among all responses)}
+\end{longtable}
+
+\newpage
+% latex table generated in R 3.3.0 by xtable 1.8-2 package
+% Wed May 11 10:25:59 2016
+\begin{longtable}[ht]{p{4cm}p{6cm}p{6cm}}
+  \hline
+ & Minimum & Maximum \\ 
+  \hline
+Case ID & 3093 & 4115 \\ 
+  Obama (likes) &  & i think he has done well so far \\ 
+  Obama (dislikes) & Shady He left his spot in Illinois and someone is in prison for trying to sell it Wonder how he got it Probably the same way he got the Nobel Who s in charger of USDA school program Who is surgeon General How they get there What are their true credentials prior to current positions Reeks & way things are going with education \\ 
+  Romney (likes) &  & his health policy outlooks but it also hinders itself as well his pro life opinion \\ 
+  Romney (dislikes) &  & personality a lot of his policies \\ 
+  Democratic party (likes) &  & i like their ideas they are for the people \\ 
+  Democratic party (dislikes) & They care about the stupidest stuff & sometimes i wonder if progress can occur \\ 
+  Republican party (likes) &  & my religious beliefs of Christianity tend to follow many of their thoughts \\ 
+  Republican party (dislikes) & Stewards for the rich and big business & sometimes they don t make sense or have just never been the right mix to make me want to vote for them \\ 
+   \hline
+  \caption{Example of open-ended responses for minimum and maximum score of political sophistication measure (only responses between total length of 50 and 100 words)}
+  \label{tab:ex1}
+\end{longtable}
 
 \end{document}
