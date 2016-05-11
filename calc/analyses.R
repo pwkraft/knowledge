@@ -59,7 +59,3 @@ m1[[5]] <- lm(polknow_evalpre ~ polmedia + poldisc + educ_cont + female + age + 
 m1[[6]] <- lm(polknow_evalpost ~ polmedia + poldisc + educ_cont + female + age + black + relig + ideol_ct + pid_cont, data = data)
 
 lapply(m1, summary)
-
-
-"polknow_office", "", "", ""
-, ""

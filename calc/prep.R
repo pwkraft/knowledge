@@ -141,13 +141,13 @@ anes2012opend <- merge(anes2012pre, anes2012post)
 anes2012opend <- anes2012pre
 
 ## minor pre-processing
-table(anes2012opend[,4]%in%c("no"))
 anes2012spell <- apply(anes2012opend[,-1], 2, function(x){
+  x <- gsub("(^\\s+|\\s+$)","", x)
+  x[x %in% c("-1 Inapplicable","-7 Refused","N/A","no","none","#(43042)","i am","Nome")] <- ""
   x <- gsub("//"," ", x , fixed = T)
   x <- gsub("[[:punct:]]"," ", x)
   x <- gsub("\\s+"," ", x)
   x <- gsub("(^\\s+|\\s+$)","", x)
-  x[x %in% c("-1 Inapplicable","-7 Refused","N/A","no","none","#(43042)","i am")] <- ""
   return(x)
 })
 
