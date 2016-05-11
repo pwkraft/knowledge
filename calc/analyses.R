@@ -128,8 +128,8 @@ rownames(tab_ex2) <- varnames
 colnames(tab_ex2) <- c("Minimum","Maximum")
 xtable(tab_ex2)
 
-arrange(data, topic_diversity_length_ditem) %>% filter(wc>50 & wc<100) %>% select(resp) %>% head()
-arrange(data, topic_diversity_length_ditem) %>% filter(wc>50 & wc<100) %>% select(resp) %>% tail()
+arrange(data, topic_diversity_length_ditem) %>% filter(wc>50 & wc<100) %>% select(resp, topic_diversity_length_ditem) %>% head()
+arrange(data, topic_diversity_length_ditem) %>% filter(wc>50 & wc<100) %>% select(resp, topic_diversity_length_ditem) %>% tail()
 
 
 ########
