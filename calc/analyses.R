@@ -49,6 +49,15 @@ ggplot(data, aes(topic_diversity_length, ..density..)) + geom_histogram(fill='gr
 ggplot(data, aes(topic_diversity_length_litem, ..density..)) + geom_histogram(fill='grey') + geom_density() + theme_classic() + 
   theme(panel.border = element_rect(fill=NA))
 
+### example texts
+
+## max and min
+data$resp[data$topic_diversity_length_ditem==min(data$topic_diversity_length_ditem)]
+data$resp[data$topic_diversity_length_ditem==max(data$topic_diversity_length_ditem)]
+
+arrange(data, topic_diversity_length_ditem) %>% filter(wc>20 & wc<50) %>% select(resp) %>% head()
+arrange(data, topic_diversity_length_ditem) %>% filter(wc>20 & wc<50) %>% select(resp) %>% tail()
+
 ### test some models
 m1 <- NULL
 m1[[1]] <- lm(topic_diversity_length_ditem ~ polmedia + poldisc + educ_cont + female + age + black + relig + ideol_ct + pid_cont + mode, data = data)

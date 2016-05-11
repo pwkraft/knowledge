@@ -204,12 +204,20 @@ meta <- c("age", "educ_cont", "pid_cont", "educ_pid")
 data <- anes2012 %>% mutate(resp = apply(anes2012spell[,-1],1,paste,collapse=' ')) %>%
   filter(spanish == 0 & wc != 0)
 
+## remove additional whitespaces
+data$resp <- gsub("\\s+"," ", data$resp)
+data$resp <- gsub("(^\\s+|\\s+$)","", data$resp)
+
 ## remove missings on metadata
 data <- data[apply(!is.na(data[,meta]),1,prod)==1,]
 
 ## process for stm
 processed <- textProcessor(data$resp, metadata = data[,meta])
 out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+
+## remove discarded observations from data
+data <- data[-processed$docs.removed,]
+data <- data[-out$docs.removed,]
 
 ## quick fit (60 topics)
 # stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
