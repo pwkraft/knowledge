@@ -43,7 +43,7 @@ anes2012$polknow_factual <- with(raw2012, (preknow_prestimes==2) + (preknow_size
 
 ## political knowledge (majorities in congress, post-election)
 anes2012$polknow_majority <- with(raw2012, (recode(raw2012$knowl_housemaj, "c(-6,-7)=NA")==2)
-                                  + (recode(raw2012$knowl_housemaj, "c(-6,-7)=NA")==1))
+                                  + (recode(raw2012$knowl_senmaj, "c(-6,-7)=NA")==1))
 
 ## political knowledge (interviewer evaluation, only in F2F part!)
 anes2012$polknow_evalpre <- 5 - recode(raw2012$iwrobspre_levinfo, "lo:-1=NA")

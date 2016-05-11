@@ -101,19 +101,57 @@ Of course, the measurement strategy derived here makes strong implicit assumptio
 
 We use survey data from the 2012 American National Election Study in order to demonstrate and validate  our measure of political sophistication. The dataset consists of 5914 adults (2054 of which participated in face-to-face interviews while the remaining 3860 participated in a representative online survey). While both samples differ slightly with regards to the inclusion of some specific variables, we will mostly rely on the pooled dataset purpose of our analysis.
 
-The knowledge measure is based on open-ended questions in which respondents were asked to list anything in particular that they like/dislike about the Democratic/Republican party as well as anything that might make them vote/not vote for either of the Presidential candidates and were probed by the interviewer asking ``anything else?'' until the respondent answered no. All open-ended responses were pre-processed by correcting spelling errors using an implementation of the Aspell spell checking algorithm in \texttt{R} (\url{www.aspell.net}), and deleting individuals who responded in Spanish (228 individuals).
+The knowledge measure is based on open-ended questions in which respondents were asked to list anything in particular that they like/dislike about the Democratic/Republican party as well as anything that might make them vote/not vote for either of the Presidential candidates and were probed by the interviewer asking ``anything else?'' until the respondent answered no. All open-ended responses were pre-processed by correcting spelling errors using an implementation of the Aspell spell checking algorithm in \texttt{R} (\url{www.aspell.net}), and deleting individuals who responded in Spanish (228 individuals). 
 
+As discussed above, we consider three different aspects of the open-ended responses to capture the distinct dimensions of political sophistication discussed above: size, range, and constraint of the political belief system. The \textbf{size} of the belief system is measured as the word count for each individual over all prompts:
+\begin{equation}
+\text{size}_i = \log\left(\sum_J n_{ij}\right),
+\end{equation}
+where $n_{ij}$ is the number of words in the response of individual $i$ in response to question $j$. $J$ denotes the set of all likes/dislikes items. We use the log of the count linearize the distribution of responses.
 
- One way to to measure this may be 
-to consider the number of items the respondent chooses to answer.  
-However, in the ANES data, respondents who took the survey online 
-were far more likely to enter an answer for all questions than 
-respondents who complete the survey with an interviewer.  Therefore, 
-we to look at the length of the collection of responses for each 
-individual, rather than the number of items answered.  
+The \textbf{range} of the belief system is captured as the diversity in topics raised by each respondents. We conceptualize diversity as the Shannon-entropy of topic proportions \citep{shannon1948mathematical,munger2016elites}:\footnote{The structural topic model was estimated using the \texttt{stm} package in R \citep{roberts2014structural}. The number of topics was selected using the algorithm of \citet{lee2014low} and the model was estimated via spectral initialization to address the issue of multi-modality \citep[see][for details]{roberts2014stm}. We used measures for age, education, party identification, as well as an interaction between education and party identification as covariates for topic prevalence. This variable selection is equivalent to the procedure model specification described in \citet{roberts2014structural}. We estimated a total number of 72 topics. While we cannot discuss the topics in detail due to limited space, it is worth noting that the results reported hereafter are robust for model specifications with fewer numbers of topics.}
+\begin{equation}
+\text{range}_i = −\sum_K \theta_{ik} \log_2(\theta_{ik}),
+\end{equation}
+where $\theta_{ik}$ denotes the predicted proportion of topic $k$ in the collection of responses by individual $i$. The variable ranges from 0 (entire response focuses on single topic), to $\log_2(k=72)$ (every topic has the same proportion).
 
-cor(data$nitem,data$wc)
+We use the same logic to measure the diversity in opinions raised across item (as a proxy for constraint/interconnectedness of cognitions):
+\begin{equation}
+\text{constraint}_i = −\sum_J p_{ij} \log_2(p_{ij}),
+\end{equation}
+where $p_{ij}=\tfrac{n_{ij}}{\sum_J n_{ij}}$ is the proportion of words in the response of individual $i$ to question $j$ relative to the overall size of the individuals' response.
 
+The three measures are then united to a composite metric of political sophistication. We decided to combined the measures in a multiplicative rather than an additive fashion, because sophistication can be seen as \textit{conjunctive} \citep[see][]{luskin1987measuring}: the separate elements are only effective in combination and are not simple substitutes of each other:
+\begin{equation}
+\text{sophistication}_i = (\text{size}_i + 1) * (\text{range}_i + 1) * (\text{constraint}_i + 1).
+\end{equation}
+Note that we added $+1$ to each term in order to assure that the minimum of each individual variable is 1 rather than 0. This way, we are still able to capture variation in sophistication if one of the elements is at its minimum.
+
+We consider a number of conventional political knowledge measures for comparison with our metrics. The variables are summarized in Table~\ref{tab:featextr}. The first three measures are based on additive scales indicating the number of correct responses. The interviewer evaluation (only available in face-to-face sample) is based on a five-point scale that was recorded after the interview (pre-election and post-election wave).
+
+\begin{table}\onehalfspacing\footnotesize
+\begin{tabular}{p{5.5cm}p{5.5cm}p{5.5cm}}
+\hline
+Canonical Political Knowledge Metric &	Abridged Sample Questions &	Name in Figures \\
+\hline
+Knowledge of Office Recognition  	  & Who is the Speaker of the House? Who is the Vice President? &  Political Knowledge: Office Recognition \\ 
+Knowledge of U.S. Political Facts 	 & How many times can someone be elected president? What is the size of the federal deficit? & Political Knowledge: Factual Knowledge\\
+Knowledge of Majorities in Congress & What party has the most members in the U.S Senate? & Political Knowledge: Majorities in Congress\\
+Pre-Interview Political Knowledge Interviewer Evaluation & --- & Political Knowledge: Knowledge Pre Evaluation\\
+Post-Interview Political Knowledge Interviewer Evaluation & --- & Political Knowledge: Knowledge Pre Evaluation\\
+Pre-Interview Intelligence Interviewer Evaluation & --- & Political Knowledge: Intelligence Pre Evaluation\\
+Post-Interview Intelligence Interviewer Evaluation & --- & Political Knowledge: Intelligence Pre Evaluation\\
+Education Level 	 & (1) Less than high school credential&Political Knowledge: Education Level \\
+&(2) High School credential&\\
+&...&\\
+&(5) Graduate School & \\
+\hline 
+\end{tabular} 
+\caption{Methods: Feature Extraction}\label{tab:featextr}
+\end{table}
+
+Furthermore, the analyses outlined below will include several control variables such as media usage, frequency of political discussions, gender, age, race, religiosity, ideology, party identification, and interview mode (face-to-face vs. online).
+	
 
 \section{Descriptive Results}
 % histogram of response length could be useful
@@ -124,9 +162,8 @@ cor(data$nitem,data$wc)
 
 
 \section{Validation Performance}
-% 1: correlation with other knowledge measures (corrplot)
-% 2: replicate common findings
-% 3: increase consistency b/w policy attitudes
+% replicate common findings
+% increase consistency b/w policy attitudes
 
 
 \paragraph{Ideas for evaluation:}
