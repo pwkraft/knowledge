@@ -90,7 +90,7 @@ The size of the political belief system can simply be captured as the overall le
 
 The range of cognitions over categories could be measured as the diversity in topics raised in individual responses. If individuals hold more diverse cognitions towards political actors, we should observe that they address a wider range of topics in their responses, rather than focusing on an isolated issue to describe their preferences.
 
-The last dimension, the degree of constraint or interconnectedness of cognitions, is more difficult to capture in an automated way based on characteristics of an open-ended response. While we cannot directly measure the interconnectedness of cognitions, we argue that the diversity in response length between items could be used as a possible proxy. In order to see why this is the case, consider two hypothetical individuals who possess a belief system of similar size and range. Accordingly, we would expect that their open-ended responses should be of similar overall length and have a comparable degree of diversity in topics. Now, suppose that for one individual, the belief system is highly interconnected, and for the other individual it is not. Holding the overall length and topic diversity of their set of responses constant, higher interconnectedness allows individuals to spread their response topics more homogeneously across items. In other words, if considerations were not interconnected, then responding to likes as well as dislikes (for party/candidates of in/out-party), would require an increase in the overall length and diversity of the response. As such, distributing responses across different items can be seen as a proxy for interconnectedness of cognitions.
+The last dimension, the degree of constraint or interconnectedness of cognitions, is more difficult to capture in an automated way based on characteristics of an open-ended response. While we cannot directly measure the interconnectedness of cognitions, we argue that the diversity in response length between items could be used as a possible proxy. In order to see why this is the case, consider two hypothetical individuals who possess a belief system of similar size and range. Accordingly, we would expect that their open-ended responses should be of similar overall length and have a comparable degree of diversity in topics. Now, suppose that for one individual, the belief system is highly interconnected, and for the other individual it is not. Holding the overall length and topic diversity of their set of responses constant, higher interconnectedness allows individuals to spread their response topics more homogeneously across items. In other words, if considerations were not interconnected, then responding to likes as well as dislikes (for party/candidates of in/out-party), would require an increase in the overall length and diversity of the response. As such, distributing responses across different items indicates a higher diversity in opinions and can therefore be seen as a proxy for interconnectedness of cognitions.
 
 Of course, the measurement strategy derived here makes strong implicit assumptions about the nature of political belief systems. However, the sole purpose of this short discussion was to suggest potential links between the theoretical construct and measurable characteristics of open-ended responses. Ultimately, it is an empirical question, as to whether these characteristics provide valid measures of political sophistication. Before we turn to the issue of validation, we will discuss the data and methods used in the analyses in more detail.
 
@@ -106,29 +106,25 @@ The sophistication measure is based on open-ended questions in which respondents
 
 As discussed above, we consider three different aspects of the open-ended responses to capture the distinct dimensions of political sophistication discussed above: size, range, and constraint of the political belief system. The \textbf{size} of the belief system is measured as the word count for each individual over all prompts:
 \begin{equation}
-\text{size}_i = \log\left(\sum_J n_{ij}\right),
+\text{size}_i = \log\left(\sum_{j=1}^J n_{ij}\right),
 \end{equation}
-where $n_{ij}$ is the number of words in the response of individual $i$ in response to question $j$. $J$ denotes the set of all likes/dislikes items. We use the log of the count linearize the distribution of responses.
-
-The \textbf{range} of the belief system is captured as the diversity in topics raised by each respondents. We conceptualize diversity as the Shannon-entropy of topic proportions \citep{shannon1948mathematical,munger2016elites}:\footnote{The structural topic model was estimated using the \texttt{stm} package in R \citep{roberts2014structural}. The number of topics was selected using the algorithm of \citet{lee2014low} and the model was estimated via spectral initialization to address the issue of multi-modality \citep[see][for details]{roberts2014stm}. We used measures for age, education, party identification, as well as an interaction between education and party identification as covariates for topic prevalence. This variable selection is equivalent to the procedure model specification described in \citet{roberts2014structural}. We estimated a total number of 72 topics. While we cannot discuss the topics in detail due to limited space, it is worth noting that the results reported hereafter are robust for model specifications with fewer numbers of topics.}
+where $n_{ij}$ is the number of words in the response of individual $i$ in response to question $j$. $J$ denotes the set of all likes/dislikes items. We use the log of the count linearize the distribution of responses. The \textbf{range} of the belief system is captured as the diversity in topics raised by each respondents. We conceptualize diversity as the Shannon-entropy of topic proportions \citep{shannon1948mathematical,munger2016elites}:\footnote{The structural topic model was estimated using the \texttt{stm} package in R \citep{roberts2014structural}. The number of topics was selected using the algorithm of \citet{lee2014low} and the model was estimated via spectral initialization to address the issue of multi-modality \citep[see][for details]{roberts2014stm}. We used measures for age, education, party identification, as well as an interaction between education and party identification as covariates for topic prevalence. This variable selection is equivalent to the procedure model specification described in \citet{roberts2014structural}. We estimated a total number of 72 topics. While we cannot discuss the topics in detail due to limited space, it is worth noting that the results reported hereafter are robust for model specifications with fewer numbers of topics.}
 \begin{equation}
-\text{range}_i = −\sum_K \theta_{ik} \log_2(\theta_{ik}),
+\text{range}_i = −\sum_{k=1}^K \theta_{ik} \log_2(\theta_{ik}),
 \end{equation}
-where $\theta_{ik}$ denotes the predicted proportion of topic $k$ in the collection of responses by individual $i$. The variable ranges from 0 (entire response focuses on single topic), to $\log_2(k=72)$ (every topic has the same proportion).
-
-We use the same logic to measure the diversity in opinions raised across item (as a proxy for constraint/interconnectedness of cognitions):
+where $\theta_{ik}$ denotes the predicted proportion of topic $k$ in the collection of responses by individual $i$. The variable ranges from 0 (entire response focuses on single topic), to $\log_2(K=72)$ (every topic has the same proportion). As a proxy for \textbf{constraint}, we rely on the same logic and measure the diversity in opinions raised across item by computing the Shannon-entropy of the proportions of response lengths for each likes/dislikes question:
 \begin{equation}
-\text{constraint}_i = −\sum_J p_{ij} \log_2(p_{ij}),
+\text{constraint}_i = −\sum_{j=1}^J p_{ij} \log_2(p_{ij}),
 \end{equation}
-where $p_{ij}=\tfrac{n_{ij}}{\sum_J n_{ij}}$ is the proportion of words in the response of individual $i$ to question $j$ relative to the overall size of the individuals' response.
+where $p_{ij}=\tfrac{n_{ij}}{\sum_{j=1}^J n_{ij}}$ is the proportion of words in the response of individual $i$ to question $j$ relative to the overall size of the individuals' response. Again, the variable ranges from 0 (only one question was answered) to $\log_2(J=8)$ (all questions were answered with the same word length per answer).
 
-The three measures are then united to a composite metric of political sophistication. We decided to combined the measures in a multiplicative rather than an additive fashion, because sophistication can be seen as \textit{conjunctive} \citep[see][]{luskin1987measuring}: the separate elements are only effective in combination and are not simple substitutes of each other:
+Together, the three measures form a composite metric of political sophistication. We decided to combine the measures in a multiplicative rather than an additive fashion, because sophistication can be seen as \textit{conjunctive} \citep[see][]{luskin1987measuring}. In other words, the separate elements are only effective in combination and are not simple substitutes of each other:
 \begin{equation}
 \text{sophistication}_i = (\text{size}_i + 1) * (\text{range}_i + 1) * (\text{constraint}_i + 1).
 \end{equation}
 Note that we added $+1$ to each term in order to assure that the minimum of each individual variable is 1 rather than 0. This way, we are still able to capture variation in sophistication if one of the elements is at its minimum.
 
-We consider a number of conventional political knowledge measures for comparison with our metrics. The variables are summarized in Table~\ref{tab:featextr}. The first three measures are based on additive scales indicating the number of correct responses. The interviewer evaluation (only available in face-to-face sample) is based on a five-point scale that was recorded after the interview (pre-election and post-election wave).
+We consider a number of conventional political knowledge measures for comparison with our metrics. The variables are summarized in Table~\ref{tab:featextr}. The first three measures are based on additive scales indicating the number of correct responses. The interviewer evaluation (only available in face-to-face sample) is based on a five-point scale that was recorded after the interviews (pre-election and post-election wave).
 
 \begin{table}\onehalfspacing\footnotesize
 \begin{tabular}{p{5.5cm}p{5.5cm}p{5.5cm}}
@@ -161,36 +157,45 @@ Furthermore, the analyses outlined below will include several control variables 
 % distribution of knowledge measure -> done
 % correlation plot with other knowledge measures (including individual aspects) -> done
 
+As a first step, we will examine the characteristics of open-ended responses our measure of political sophistication is composed of. Figure~\ref{fig:wc} displays the word count as well as the logged word count of the collection of open-ended responses for each individual.
 
-\begin{figure}\centering
-\includegraphics{../fig/wc.pdf}
-\caption{Distribution of Response Lengths}
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{../fig/wc.pdf}
+\caption{Distribution of Response Lengths}\label{fig:wc}
 \end{figure}
 
-\begin{figure}
+The distribution of raw word count is highly skewed. Most respondents only provide very brief statements when they describe their attitudes towards political parties and candidates. The mean response length to all 8 questions is about 75 words, so an average response to a single question consisted of less than 10 words. (omitting respondents who did not provide any information)
+
+Figure~\ref{fig:diversity} presents histograms of the remaining two diversity measures as well as the composite index of political sophistication. Diversity across topics (left panel) is skewed and overall relatively large. Only few respondents appeared to focus on a very selective number of topics. As we will further discuss below, this finding can be partly attributed to the way topic proportions are estimated in the structural topic model. The distribution of response diversity (or opinion/item diversity, see middle panel), on the other hand, indicates that a large proportion of respondents only answered on open-ended question, which leads to a response diversity of 0.
+\begin{figure}[h]
 \includegraphics[width=\textwidth]{../fig/diversity_distributions.png}
-\caption{Diversity Distributions and Sophistication Measure}
+\caption{Diversity Distributions and Sophistication Measure}\label{fig:diversity}
 \end{figure}
+Looking at the histogram on the right in Figure~\ref{fig:diversity}, we can see that the combined measure of sophistication is approximately normally distributed and captures a large amount of variance between individuals. In the following section we will examine whether this variance is conceptually meaningful.
 
-\begin{figure}
-\includegraphics[width=\textwidth]{../fig/corr_fixed_data.png}
-\caption{Correlation Plot of Knowledge Measures}
-\end{figure}
-
-The lower triangle of the Pearson correlation matrix between all 8 political knowledge measures and all 4 calculated diversity measures is plotted below(?).  The bold black box highlights the correlations between the political knowledge measures and the calculated diversity measures.  Our first observation is that political knowledge measures are modestly to strongly correlated with on another.  This finding is interesting; while if confirms that these measures do covary to some degree, they are not all capturing the same types of knowledge, as might be expected.  Next, we see that Topic Diversity has low negative correlation with all other measures.  This suggests that topic diversity alone, in this context, is not an appropriate measure of political knowledge.  We also see the Response Diversity and the composite final diversity metric have stronger correlations with the political knowledge measures than log(Response Word Count), suggesting that these two diversity measures are not strictly due to the length of the open-ended responses.  Finally, we see that our final composite diversity score correlates across other political knowledge measures on the same order of magnitude as Factual Knowledge and Majorities in Congress, yet don’t not have especially high correlation with either.  This is evidence that our composite diversity score is worthy of consideration among standard political knowledge measures, and captures independent information.    
 
 \section{Validation Performance}
 % replicate common findings, e.g. gender gap in political knowledge \citep[e.g.][]{barabas2014question}
 % Increase in consistency b/w policy attitudes \citep[e.g.][]{prior2014visual}
 
-\begin{figure}
+As a first step, we want to compare our measure with conventional knowledge indices. Figure~\ref{fig:corr} displays a correlation matrix of traditional measures as well as the individual open-ended response characteristics and the composite measure of sophistication.
+
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{../fig/corr_fixed_data.png}
+\caption{Correlation Plot of Knowledge Measures}\label{fig:corr}
+\end{figure}
+
+The bold black box highlights the correlations between the political knowledge measures and the calculated diversity measures.  Our first observation is that political knowledge measures are modestly to strongly correlated with on another.  This finding is interesting; while if confirms that these measures do covary to some degree, they are not all capturing the same types of knowledge, as might be expected.  Next, we see that Topic Diversity has low negative correlation with all other measures.  This suggests that topic diversity alone, in this context, is not an appropriate measure of political knowledge.  We also see the Response Diversity and the composite final diversity metric have stronger correlations with the political knowledge measures than log(Response Word Count), suggesting that these two diversity measures are not strictly due to the length of the open-ended responses.  Finally, we see that our final composite diversity score correlates across other political knowledge measures on the same order of magnitude as Factual Knowledge and Majorities in Congress, yet don’t not have especially high correlation with either.  This is evidence that our composite diversity score is worthy of consideration among standard political knowledge measures, and captures independent information.    
+
+
+\begin{figure}[h]
 \includegraphics[width=\textwidth]{../fig/models.pdf}
 \caption{Comparing Determinants of Political Sophistication}
 \end{figure}
 
 
 \section{Discussion and Conclusion}
-
+% lot's of potential extensions, think about standardizing the measure to make it more comparable across contexts
 
 \clearpage\singlespacing\footnotesize
 \bibliographystyle{apsr2006}

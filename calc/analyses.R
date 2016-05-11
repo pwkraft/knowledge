@@ -12,6 +12,7 @@ library(stm)
 library(corrplot)
 library(ggplot2)
 library(xtable)
+library(gridExtra)
 
 if(sessionInfo()$platform == "x86_64-pc-linux-gnu (64-bit)"){
   setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
@@ -62,18 +63,21 @@ corrplot(corrm,method="square")
 ## histogram/density of lwc
 lwc_mean = mean(data$lwc)
 
-ggplot(data, aes(lwc, ..density..)) + geom_histogram(binwidth = 0.25, fill='grey') + geom_density() + theme_classic() + 
-  theme(panel.border = element_rect(fill=NA)) + geom_vline(xintercept = lwc_mean, colour="red", linetype = "longdash") + theme(axis.title.x=element_blank()) +
-  theme(axis.title.y=element_blank())
+p1 <- ggplot(data, aes(lwc, ..density..)) + geom_histogram(binwidth = 0.25, fill='grey') + geom_density() + theme_classic(base_size = 8) + 
+  theme(panel.border = element_rect(fill=NA)) + geom_vline(xintercept = lwc_mean, colour="red", linetype = 3) + 
+  ylab("Density") + xlab("log(Word Count)")
 
 ## histogram/density of wc
 wc_mean = mean(data$wc)
 
-ggplot(data, aes(wc)) + geom_histogram(fill = "grey", binwidth = 5) + theme_classic(base_size = 8) + 
+p2 <- ggplot(data, aes(wc)) + geom_histogram(fill = "grey", binwidth = 25) + theme_classic(base_size = 8) + 
   theme(panel.border = element_rect(fill=NA)) + 
-  geom_vline(xintercept = wc_mean, colour="red", linetype = "longdash") +
+  geom_vline(xintercept = wc_mean, colour="red", linetype = 3) +
   ylab("Number of Respondents") + xlab("Word Count")
-ggsave("../fig/wc.pdf",width=5, height=2)
+
+pdf("../fig/wc.pdf",width=7, height=2)
+grid.arrange(p2, p1, ncol=2)
+dev.off()
 
 
 
