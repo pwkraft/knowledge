@@ -172,7 +172,7 @@ dfplot <- dfplot[dfplot$ivnames!="Intercept",]
 
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
-  geom_vline(xintercept = 0, color="grey", linetype = "longdash") + 
+  geom_vline(xintercept = 0, color="grey") + 
   geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free",ncol=2) +
   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill=NA)) + 
   ylab("Independent Variables")
