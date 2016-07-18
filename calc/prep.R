@@ -1,7 +1,7 @@
-### ============================= ###
-### Text as Data - Final Project  ###
-### Laura Buchanan, Patrick Kraft ###
-### ============================= ###
+### ============================================================= ###
+### Measuring Political Sophistication using Open-ended Responses ###
+### Patrick Kraft                                                 ###
+### ============================================================= ###
 ## prepares the survey data of the 2008 and 2012 ANES for subsequent analyses
 ## prepares open-ended responses (selecting variables, spell checking etc.)
 ## fits structural topic model for open-ended responses
@@ -16,9 +16,8 @@ library(dplyr)
 library(quanteda)
 library(stm)
 library(readstata13)
-if(sessionInfo()$platform == "x86_64-pc-linux-gnu (64-bit)"){
-  setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
-} else {setwd('/Users/Laura/Desktop/knowledge/data')}
+library(ineq)
+setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 raw2012 <- read.dta13("../data/anes_timeseries_2012.dta", convert.factors = F)
 
 
@@ -31,43 +30,45 @@ anes2012 <- data.frame(caseid=raw2012$caseid)
 anes2012$mode <- raw2012$mode
 
 ## political knowledge (office recognition, post-election)
-anes2012$polknow_office <- with(raw2012, recode(ofcrec_speaker_correct, "lo:-1=NA")
+anes2012$polknow_office <- with(raw2012, (recode(ofcrec_speaker_correct, "lo:-1=NA")
                                 + recode(ofcrec_vp_correct, "lo:-1=NA")
                                 + recode(ofcrec_pmuk_correct, "lo:-1=NA")
-                                + recode(ofcrec_cj_correct, "lo:-1=NA"))
+                                + recode(ofcrec_cj_correct, "lo:-1=NA"))/4)
 
 ## political knowledge (factual knowledge questions, pre-election)
-anes2012$polknow_factual <- with(raw2012, (preknow_prestimes==2) + (preknow_sizedef==1)
+anes2012$polknow_factual <- with(raw2012, ((preknow_prestimes==2) + (preknow_sizedef==1)
                                  + (preknow_senterm==6) + (preknow_medicare==1)
-                                 + (preknow_leastsp==1))
+                                 + (preknow_leastsp==1))/5)
 
 ## political knowledge (majorities in congress, post-election)
-anes2012$polknow_majority <- with(raw2012, (recode(raw2012$knowl_housemaj, "c(-6,-7)=NA")==2)
-                                  + (recode(raw2012$knowl_senmaj, "c(-6,-7)=NA")==1))
+anes2012$polknow_majority <- with(raw2012, ((recode(raw2012$knowl_housemaj, "c(-6,-7)=NA")==2)
+                                  + (recode(raw2012$knowl_senmaj, "c(-6,-7)=NA")==1))/2)
 
 ## political knowledge (interviewer evaluation, only in F2F part!)
-anes2012$polknow_evalpre <- 5 - recode(raw2012$iwrobspre_levinfo, "lo:-1=NA")
-anes2012$polknow_evalpost <- 5 - recode(raw2012$iwrobspost_levinfo, "lo:-1=NA")
+anes2012$polknow_evalpre <- (5 - recode(raw2012$iwrobspre_levinfo, "lo:-1=NA"))/4
+anes2012$polknow_evalpost <- (5 - recode(raw2012$iwrobspost_levinfo, "lo:-1=NA"))/4
+anes2012$polknow_eval <- (anes2012$polknow_evalpre + anes2012$polknow_evalpost)/2
 
 ## intelligence (interviewer evaluation, only in F2F part!)
-anes2012$intpre <- 5 - recode(raw2012$iwrobspre_intell, "lo:-1=NA")
-anes2012$intpost <- 5 - recode(raw2012$iwrobspost_intell, "lo:-1=NA")
+anes2012$intpre <- (5 - recode(raw2012$iwrobspre_intell, "lo:-1=NA"))/4
+anes2012$intpost <- (5 - recode(raw2012$iwrobspost_intell, "lo:-1=NA"))/4
+anes2012$int <- (anes2012$intpre + anes2012$intpost)/2
 
 ## education (bachelor degree)
 anes2012$educ <- as.numeric(raw2012$dem_edugroup_x >= 4)
 anes2012$educ[raw2012$raw2012$dem_edugroup_x < 0] <- NA
 
 ## education (continuous)
-anes2012$educ_cont <- recode(raw2012$dem_edugroup_x, "lo:0=NA") - 1
+anes2012$educ_cont <- (recode(raw2012$dem_edugroup_x, "lo:0=NA") - 1)/4
 
 ## political media exposure
 anes2012$polmedia <- with(raw2012, recode(prmedia_wkinews, "lo:-4=NA; -1=0")
                           + recode(prmedia_wktvnws, "lo:-4=NA; -1=0")
                           + recode(prmedia_wkpaprnws, "lo:-4=NA; -1=0")
-                          + recode(prmedia_wkrdnws, "lo:-4=NA; -1=0")) / 4
+                          + recode(prmedia_wkrdnws, "lo:-4=NA; -1=0")) / 28
 
 ## political discussion
-anes2012$poldisc <- recode(raw2012$discuss_discpstwk, "lo:-1 = NA")
+anes2012$poldisc <- recode(raw2012$discuss_discpstwk, "lo:-1 = NA")/7
 anes2012$poldisc[raw2012$discuss_disc>1] <- 0
 
 ## voted in previous election
@@ -85,8 +86,8 @@ anes2012$ideol <- factor(recode(raw2012$libcpre_self, "1:3=1; 4=2; 5:7=3; else=N
 anes2012$ideol_lib <- as.numeric(anes2012$ideol=="Liberal")
 anes2012$ideol_con <- as.numeric(anes2012$ideol=="Conservative")
 
-## ideology (continuous)
-anes2012$ideol_ct <- recode(raw2012$libcpre_self, "lo:0=NA") - 4
+## ideology (continuous, -1 to 1)
+anes2012$ideol_ct <- (recode(raw2012$libcpre_self, "lo:0=NA") - 4)/3
 
 ## strength of ideology
 anes2012$ideol_str <- abs(anes2012$ideol_ct)
@@ -99,7 +100,7 @@ anes2012$pid_dem <- as.numeric(dat$pid=="Democrat")
 anes2012$pid_rep <- as.numeric(dat$pid=="Republican")
 
 ## pid continuous
-anes2012$pid_cont <- recode(raw2012$pid_x, "lo:0=NA") - 4
+anes2012$pid_cont <- (recode(raw2012$pid_x, "lo:0=NA") - 4)/3
 
 ## interaction: pid * education
 anes2012$educ_pid <- anes2012$educ_cont * anes2012$pid_cont
@@ -108,9 +109,9 @@ anes2012$educ_pid <- anes2012$educ_cont * anes2012$pid_cont
 anes2012$pid_str <- abs(anes2012$pid_cont)
 
 ## religiosity (church attendance)
-anes2012$relig <- 5 - recode(raw2012$relig_churchoft, "lo:0 = NA")
+anes2012$relig <- (5 - recode(raw2012$relig_churchoft, "lo:0 = NA"))/5
 anes2012$relig[raw2012$relig_church != 1] <- 0
-anes2012$relig[raw2012$relig_churchwk == 2] <- 5
+anes2012$relig[raw2012$relig_churchwk == 2] <- 1
 
 ## age
 anes2012$age <- recode(raw2012$dem_age_r_x, "c(-2,-9,-8) = NA")
@@ -125,6 +126,16 @@ anes2012$black <- as.numeric(recode(raw2012$dem_raceeth_x, "lo:0 = NA") == 2)
 anes2012$spanish <- as.numeric(raw2012$profile_spanishsurv == 1 |
                               raw2012$admin_pre_lang_start == 2 |
                               raw2012$admin_post_lang_start == 2)
+
+## Pro-redistribution attitude: (new scale: 0-1)
+## Services and spending tradeoff placement (1-7, max = increase spending)
+## Standard of living (1-7, max = gov't should let each person get ahead on their own)
+anes2012$redist <- (recode(raw2012$spsrvpr_ssself, "lo:0 = NA") - recode(raw2012$guarpr_self, "lo:0 = NA") + 6)/12
+
+## Support tax increases (new scale: 0-1)
+## favor tax on millionaires
+## raising personal inc tax for over 250K inc to reduce deficit
+anes2012$tax <- ((-recode(raw2012$milln_milltax_x, "lo:0 = NA") + 7)/3 + recode(raw2012$budget_rdef250k, "lo:0 = NA; 1=2; 2=0; 3=1"))/4
 
 
 ### 2012 open-ended responses
@@ -177,21 +188,15 @@ anes2012spell <- data.frame(caseid = anes2012opend$caseid, anes2012spell,strings
 anes2012$wc <- apply(anes2012spell[,-1], 1, function(x){
   length(unlist(strsplit(x,"\\s+")))
 })
-anes2012$lwc <- log(anes2012$wc)
+anes2012$lwc <- log(anes2012$wc)/max(log(anes2012$wc))
 
 ## number of items answered
 anes2012$nitem <- apply(anes2012spell[,-1] != "", 1, sum, na.rm = T)
-anes2012$pitem <- anes2012$nitem/ncol(anes2012spell[,-1])
-anes2012$litem <- log(anes2012$nitem)
 
 ## diversity in item response
 anes2012$ditem <- apply(anes2012spell[,-1], 1, function(x){
   iwc <- unlist(lapply(strsplit(x,"\\s+"), length))
-  p <- iwc/sum(iwc)
-  plp <- p * log2(p)
-  plp[is.na(plp)] <- 0
-  entrop <- - sum(plp)
-  return(entrop)
+  1 - ineq(iwc,type="Gini")
 })
 
 
@@ -234,25 +239,11 @@ stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
 doc_topic_prob <- stm_fit$theta
 
 ## topic diversity score
-data$topic_diversity <- -1 * rowSums(doc_topic_prob * log2(doc_topic_prob))
+data$topic_diversity <- apply(doc_topic_prob, 1, function(x) 1 - ineq(x,type="Gini"))
 
-## weighted topic diversity score, by length
-data$topic_diversity_length <- with(data, (topic_diversity + 1) * (lwc + 1))
-
-## threshold topic probability scores
-doc_topic_prob_sparse <- doc_topic_prob
-doc_topic_prob_sparse[doc_topic_prob_sparse < 0.1] <- 0
-doc_topic_prob_binary <- doc_topic_prob
-doc_topic_prob_binary[doc_topic_prob_binary < 0.1] <- 0
-doc_topic_prob_binary[doc_topic_prob_binary > 0.1] <- 1
-
-## count over thresholded prob scores
-data$topic_thresh_sum <- rowSums(doc_topic_prob_sparse)
-data$topic_thresh_count <- rowSums(doc_topic_prob_binary)
-
-## weighted by item count + diversity
-data$topic_diversity_length_litem <- with(data, (topic_diversity + 1) * (lwc + 1) * (litem + 1))
-data$topic_diversity_length_ditem <- with(data, (topic_diversity + 1) * (lwc + 1) * (ditem + 1))
+## text-based sophistication measures
+data$polknow_text <- with(data, topic_diversity * lwc * ditem)
+data$polknow_text_mean <- with(data, (topic_diversity + lwc + ditem)/3)
 
 
 ### save output
