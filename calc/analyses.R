@@ -192,14 +192,14 @@ dfplot$iv <- gsub(":","_", tmp)
 dfplot$ivname <- factor(recode(dfplot$iv, "'tax'='Support Tax Increase'
                         ; 'polknow_text'='Sophistication (Text)'
                         ; 'tax_polknow_text'='Tax X Soph. (Text)'
-                        ; 'polknow_factual'='Factual Knowlede'
+                        ; 'polknow_factual'='Factual Knowledge'
                         ; 'tax_polknow_factual'='Tax X Factual Know.'")
                         , levels = c("Tax X Factual Know.","Tax X Soph. (Text)"
-                                     , "Factual Knowlede", "Sophistication (Text)"
+                                     , "Factual Knowledge", "Sophistication (Text)"
                                      , "Support Tax Increase"))
-dfplot$model <- factor(c(rep("Text-based Sophistication",3),rep("Factual Knowlede",3),rep("Both Measures",5)
-                  ,rep("Text-based Sophistication",3),rep("Factual Knowlede",3),rep("Both Measures",5))
-                  , levels = c("Text-based Sophistication","Factual Knowlede","Both Measures"))
+dfplot$model <- factor(c(rep("Text-based Sophistication",3),rep("Factual Knowledge",3),rep("Both Measures",5)
+                  ,rep("Text-based Sophistication",3),rep("Factual Knowledge",3),rep("Both Measures",5))
+                  , levels = c("Text-based Sophistication","Factual Knowledge","Both Measures"))
 dfplot$cont <- c(rep("No Controls",11),rep("Including Controls",11))
 
 # create factor variables, remove intercept for plotting
