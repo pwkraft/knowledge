@@ -17,8 +17,9 @@ library(quanteda)
 library(stm)
 library(readstata13)
 library(ineq)
-setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
-raw2012 <- read.dta13("../data/anes_timeseries_2012.dta", convert.factors = F)
+setwd("/data/Dropbox/Uni/Projects/2016/knowledge/")
+datasrc <- "/data/Dropbox/Uni/Data/anes2012/"
+raw2012 <- read.dta13(paste0(datasrc,"anes_timeseries_2012.dta"), convert.factors = F)
 
 
 ### 2012 regular survey data
@@ -141,10 +142,10 @@ anes2012$tax <- ((-recode(raw2012$milln_milltax_x, "lo:0 = NA") + 7)/3 + recode(
 ### 2012 open-ended responses
 
 ## read original open-ended responses (downloaded from anes website)
-anes2012pre <- read.csv("../data/anes2012TS_pre.csv", as.is = T) %>%
+anes2012pre <- read.csv(paste0(datasrc,"anes2012TS_pre.csv"), as.is = T) %>%
   select(caseid, candlik_likewhatdpc, candlik_dislwhatdpc, candlik_likewhatrpc, candlik_dislwhatrpc
          , ptylik_lwhatdp, ptylik_dwhatdp, ptylik_lwhatrp, ptylik_dwhatrp)
-anes2012post <- read.csv("../data/anes2012TS_post.csv", as.is = T) %>%
+anes2012post <- read.csv(paste0(datasrc,"anes2012TS_post.csv"), as.is = T) %>%
   select(caseid, mip_prob1, mip_prob2, mip_prob3, mip_mostprob)
 anes2012opend <- merge(anes2012pre, anes2012post)
 
@@ -171,7 +172,7 @@ anes2012spell <- apply(anes2012opend[,-1], 2, function(x){
 ## spell-checking
 write.table(anes2012spell, file = "../data/anes2012TS_combined.csv"
             , sep = ",", col.names = F, row.names = F)
-spell <- aspell("../data/anes2012TS_combined.csv") %>%
+spell <- aspell("out/anes2012TS_combined.csv") %>%
   filter(Suggestions!="NULL")
 
 ## replace incorrect words
@@ -249,4 +250,4 @@ data$polknow_text_mean <- with(data, (topic_diversity + lwc + ditem)/3)
 ### save output
 
 save(anes2012, anes2012opend, anes2012spell, data, meta, processed, out, stm_fit
-     , file="../data/anes.Rdata")
+     , file="out/anes.Rdata")
