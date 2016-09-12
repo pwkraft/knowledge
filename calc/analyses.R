@@ -15,12 +15,12 @@ library(xtable)
 library(gridExtra)
 library(GGally)
 library(dplyr)
+library(pmisc)
 
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
 ## load data and stm results
 load("../data/anes.Rdata")
-source("sim.R")
 #load("../data/anes_old.Rdata")
 
 ## Graphical display of estimated topic proportions 
@@ -161,6 +161,7 @@ ggplot(dfplot, aes(y=ivnames, x=Estimate
   geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free",ncol=1) +
   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill=NA), axis.title=element_blank())
 ggsave("../fig/models.pdf",height=6,width=3)
+ggsave("../fig/models.png",height=6,width=3,dpi=300)
 
 
 ########
