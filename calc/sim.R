@@ -66,6 +66,7 @@ sim <- function(models, iv, robust=F, ci=c(0.025,0.975)){
       unique(models[[i]]@misc$Lower)
     } else stop("Model type not supported")
     
+    skip <- F
     if(nrow(iv)==2){
       ## calculate first differences
       evs <- evs[,2] - evs[,1]
@@ -73,16 +74,26 @@ sim <- function(models, iv, robust=F, ci=c(0.025,0.975)){
       ## calculate difference-in-difference
       evs <- (evs[,2] - evs[,1]) - (evs[,4] - evs[,3])
     } else {
-      warning("Check number of scenarios")
+      ## compute predicted values for each step
+      warning("Check number of scenarios - STILL TESTING")
+      res <- data.frame(mean = apply(evs, 2, mean)
+                        , cilo = apply(evs, 2, quantile, ci[1])
+                        , cihi = apply(evs, 2, quantile, ci[2])
+                        , dv = as.factor(colnames(models[[i]]$model)[1])
+                        , iv = as.factor(paste(colnames(iv), collapse = "_")))
+      out <- rbind(out, res)
+      skip <- T
     }
     
-    ## generate output table
-    res <- data.frame(mean = mean(evs)
-                      , cilo = quantile(evs, ci[1])
-                      , cihi = quantile(evs, ci[2])
-                      , dv = as.factor(colnames(models[[i]]$model)[1])
-                      , iv = as.factor(paste(colnames(iv), collapse = "_")))
-    out <- rbind(out, res)
+    if(!skip){
+      ## generate output table
+      res <- data.frame(mean = mean(evs)
+                        , cilo = quantile(evs, ci[1])
+                        , cihi = quantile(evs, ci[2])
+                        , dv = as.factor(colnames(models[[i]]$model)[1])
+                        , iv = as.factor(paste(colnames(iv), collapse = "_")))
+      out <- rbind(out, res)
+    }
   }
   
   ## return output table
