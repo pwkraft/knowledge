@@ -20,7 +20,7 @@ library(pmisc)
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
 ## load data and stm results
-load("../data/anes.Rdata")
+load("anes.Rdata")
 #load("../data/anes_old.Rdata")
 
 ## Graphical display of estimated topic proportions 

@@ -186,6 +186,7 @@ anes2012$tax <- ((-recode(raw2012$milln_milltax_x, "lo:0 = NA") + 7)/3 + recode(
 
 
 ### 2012 open-ended responses
+### MORE WORK ON PRE-PROCESSING NEEDED, check all steps, spell checking, stopword removal etc.
 
 ## read original open-ended responses (downloaded from anes website)
 anes2012pre <- read.csv(paste0(datasrc,"anes2012TS_openends.csv"), as.is = T) %>%
