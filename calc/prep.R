@@ -72,14 +72,53 @@ anes2012$polmedia <- with(raw2012, recode(prmedia_wkinews, "lo:-4=NA; -1=0")
 anes2012$poldisc <- recode(raw2012$discuss_discpstwk, "lo:-1 = NA")/7
 anes2012$poldisc[raw2012$discuss_disc>1] <- 0
 
+## political interest (pay attention to politics)
+anes2012$polint_att <- 5 - recode(raw2012$interest_attention, "lo:-1 = NA")/4
+
+## political interest (following campaign)
+anes2012$polint_cam <- 3 - recode(raw2012$interest_following, "lo:-1 = NA")/2
+
+## overall political interest
+anes2012$polint <- with(anes2012, (polint_att + polint_cam)/2)
+
+## internal efficacy
+anes2012$effic_int <- with(raw2012, recode(effic_complicstd, "lo:-8=NA; -1=1") - 1
+                           + recode(effic_complicrev, "lo:-8=NA; -1=1") - 1
+                           - recode(effic_undstd, "lo:-8=NA; -1=5") + 5
+                           - recode(effic_undrev, "lo:-8=NA; -1=5") + 5
+                           ) / 8
+
+## external efficacy
+anes2012$effic_ext <- with(raw2012, recode(effic_carestd, "lo:-8=NA; -1=1") - 1
+                           - recode(effic_carerev, "lo:-8=NA; -1=5") + 5
+                           + recode(effic_saystd, "lo:-8=NA; -1=1") - 1
+                           - recode(effic_sayrev, "lo:-8=NA; -1=5") + 5
+                           ) / 8
+
+## overall efficacy
+anes2012$effic <- with(anes2012, (effic_int + effic_ext)/2)
+
 ## voted in previous election
 anes2012$pastvote <- recode(raw2012$interest_voted2008, "c(2,5)=0; lo:-1=NA")
 
 ## voted in current election
 anes2012$vote <- recode(raw2012$rvote2012_x, "2=0; lo:-1=NA")
 
-## intends to vote for democratic presidential candianes2012e
-anes2012$vote_dem <- recode(raw2012$prevote_intpreswho, "lo:0=NA; 2=0; c(5,7)=NA")
+## participated in protest march / rally
+anes2012$protest <- recode(raw2012$dhsinvolv_march, "c(2,5)=0; lo:-1=NA")
+
+## letter to congressman/senator
+anes2012$letter <- recode(raw2012$dhsinvolv_contact1, "2=0; lo:-1=NA")
+
+## signed a petition
+anes2012$petition <- as.numeric((recode(raw2012$dhsinvolv_netpetition, "c(2,5)=0; lo:-1=NA") +
+                                   recode(raw2012$dhsinvolv_petition, "c(2,5)=0; lo:-1=NA")) > 0)
+
+## wear a campaign button
+anes2012$button <- recode(raw2012$mobilpo_sign, "c(2,5)=0; lo:-1=NA")
+
+## additive index protest behavior
+anes2012$part <- with(anes2012, as.numeric((protest + petition + button)>0))
 
 ## ideology (factor/dummies)
 anes2012$ideol <- factor(recode(raw2012$libcpre_self, "1:3=1; 4=2; 5:7=3; else=NA")
@@ -128,6 +167,13 @@ anes2012$spanish <- as.numeric(raw2012$profile_spanishsurv == 1 |
                               raw2012$admin_pre_lang_start == 2 |
                               raw2012$admin_post_lang_start == 2)
 
+## wordsum literacy test
+anes2012$wordsum <- with(raw2012, (wordsum_setb == 5) + (wordsum_setd == 3)
+                         + (wordsum_sete == 1) + (wordsum_setf == 3)
+                         + (wordsum_setg == 5) + (wordsum_seth == 4)
+                         + (wordsum_setj == 1) + (wordsum_setk == 1)
+                         + (wordsum_setl == 4) + (wordsum_seto == 2))/10
+
 ## Pro-redistribution attitude: (new scale: 0-1)
 ## Services and spending tradeoff placement (1-7, max = increase spending)
 ## Standard of living (1-7, max = gov't should let each person get ahead on their own)
@@ -142,26 +188,26 @@ anes2012$tax <- ((-recode(raw2012$milln_milltax_x, "lo:0 = NA") + 7)/3 + recode(
 ### 2012 open-ended responses
 
 ## read original open-ended responses (downloaded from anes website)
-anes2012pre <- read.csv(paste0(datasrc,"anes2012TS_pre.csv"), as.is = T) %>%
+anes2012pre <- read.csv(paste0(datasrc,"anes2012TS_openends.csv"), as.is = T) %>%
   select(caseid, candlik_likewhatdpc, candlik_dislwhatdpc, candlik_likewhatrpc, candlik_dislwhatrpc
          , ptylik_lwhatdp, ptylik_dwhatdp, ptylik_lwhatrp, ptylik_dwhatrp)
-anes2012post <- read.csv(paste0(datasrc,"anes2012TS_post.csv"), as.is = T) %>%
-  select(caseid, mip_prob1, mip_prob2, mip_prob3, mip_mostprob)
-anes2012opend <- merge(anes2012pre, anes2012post)
+#anes2012post <- read.csv(paste0(datasrc,"anes2012TS_post.csv"), as.is = T) %>%
+#  select(caseid, mip_prob1, mip_prob2, mip_prob3, mip_mostprob)
+#anes2012opend <- merge(anes2012pre, anes2012post)
 
 ## optional: only select likes/dislikes
 anes2012opend <- anes2012pre
 
 ## minor pre-processing
 anes2012spell <- apply(anes2012opend[,-1], 2, function(x){
-  x <- gsub("(^\\s+|\\s+$)","", x)
-  x[x %in% c("-1 Inapplicable","-7 Refused","N/A","no","none","#(43042)","i am","Nome")] <- ""
-  x <- gsub("//"," ", x , fixed = T)
-  x <- gsub("[[:punct:]]"," ", x)
-  x <- gsub("\\s+"," ", x)
-  x <- gsub("(^\\s+|\\s+$)","", x)
-  return(x)
+    x <- gsub("(^\\s+|\\s+$)","", x)
+    x[x %in% c("-1 Inapplicable","-7 Refused","N/A","no","none","#(43042)","i am","Nome")] <- ""
+    x <- gsub("//"," ", x , fixed = T)
+    x <- gsub("\\s+"," ", x)
+    x <- gsub("(^\\s+|\\s+$)","", x)
+    return(x)
 })
+
 
 ## num-lock issue
 # maybe look into this later
@@ -218,7 +264,8 @@ data$resp <- gsub("(^\\s+|\\s+$)","", data$resp)
 data <- data[apply(!is.na(data[,meta]),1,prod)==1,]
 
 ## process for stm
-processed <- textProcessor(data$resp, metadata = data[,meta])
+processed <- textProcessor(data$resp, metadata = data[,meta]
+                           , customstopwords = c("dont", "just", "hes", "that"))
 out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
 
 ## remove discarded observations from data
