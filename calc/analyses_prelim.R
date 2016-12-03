@@ -36,9 +36,9 @@ plot_default <- theme_classic(base_size=8) + theme(panel.border = element_rect(f
 datcor <- data[,c("polknow_factual", "polknow_office", "polknow_majority","polknow_text")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
-pdf("../fig/corplot.pdf",width=3, height=3)
+pdf("../fig/corplot.pdf",width=4, height=4)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), axisLabels="none") + 
-  theme_classic() + theme(panel.border = element_rect(fill=NA))
+  plot_default
 dev.off()
 
 
@@ -57,10 +57,10 @@ plot_df$Variable <- factor(plot_df$Variable, labels = c("Text-based sophisticati
                                                         , "Office Recognition", "Majorities in Congress"))
 plot_means <- plot_df %>% group_by(Variable, Gender) %>% summarize_each("mean")
 
-ggplot(plot_df, aes(x=Knowledge, lty=Gender)) + plot_default + 
+ggplot(plot_df, aes(x=Knowledge, col=Gender)) + plot_default + 
   geom_density() + facet_wrap(~Variable, scale="free") + 
   xlab("Value on knowledge measure") + ylab("Density") +
-  geom_vline(aes(xintercept = Knowledge, linetype = Gender), data=plot_means)
+  geom_vline(aes(xintercept = Knowledge, col = Gender), data=plot_means)
 ggsave("../fig/densities.pdf", width=6, height=3.5)
 
 
@@ -102,7 +102,7 @@ ggplot(dfplot, aes(y=ivnames, x=Estimate
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") +
   geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=2) +
   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill=NA), axis.title=element_blank())
-ggsave("../fig/determinants.pdf",width=6,height=3.5)
+ggsave("../fig/determinants.pdf",width=5,height=3.5)
 
 
 ########
@@ -125,42 +125,68 @@ res <- rbind(data.frame(sim(m2, iv=data.frame(female = 0, polmedia=seq(0,1,lengt
                           ,value=seq(0,1,length=10),Variable="Political Discussion",Gender="Female"))
 res$dvlab <- factor(res$dv, labels = dvnames)
 
-ggplot(res, aes(x=value, y=mean, lty=Gender,ymin=cilo,ymax=cihi)) + plot_default +
-  geom_line() + geom_errorbar(col="grey", width=0.01) + 
+ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi)) + plot_default +
+  geom_errorbar(alpha=.5, width=0.01) + geom_line() + 
   facet_grid(dvlab~Variable, scale="free_y") +
   ylab("Expected sophistication") + xlab("Value of independent variable")
-ggsave("../fig/closing.pdf",width=6,height=4.5)
+ggsave("../fig/closing.pdf",width=5,height=4.5)
 
 
 ########
 # sophistication as an independent variable
 ########
 
-summary(lm(effic_int ~ polknow_text*female + educ + age + black + relig + mode, data = data))
-summary(lm(effic_int ~ polknow_factual*female + educ + age + black + relig + mode, data = data))
-summary(lm(effic_int ~ polknow_office*female + educ + age + black + relig + mode, data = data))
-summary(lm(effic_int ~ polknow_majority*female + educ + age + black + relig + mode, data = data))
+m3a <- m3b <- m3c <- m3d <- NULL
+m3a[[1]] <- lm(effic_int ~ polknow_text*female + educ + age + black + relig + mode, data = data)
+m3a[[2]] <- lm(effic_ext ~ polknow_text*female + educ + age + black + relig + mode, data = data)
+m3a[[3]] <- lm(part ~ polknow_text*female + educ + age + black + relig + mode, data = data)
+m3a[[4]] <- glm(vote ~ polknow_text*female + educ + age + black + relig + mode, data = data, family=binomial("logit"))
+m3b[[1]] <- lm(effic_int ~ polknow_factual*female + educ + age + black + relig + mode, data = data)
+m3b[[2]] <- lm(effic_ext ~ polknow_factual*female + educ + age + black + relig + mode, data = data)
+m3b[[3]] <- lm(part ~ polknow_factual*female + educ + age + black + relig + mode, data = data)
+m3b[[4]] <- glm(vote ~ polknow_factual*female + educ + age + black + relig + mode, data = data, family=binomial("logit"))
+m3c[[1]] <- lm(effic_int ~ polknow_office*female + educ + age + black + relig + mode, data = data)
+m3c[[2]] <- lm(effic_ext ~ polknow_office*female + educ + age + black + relig + mode, data = data)
+m3c[[3]] <- lm(part ~ polknow_office*female + educ + age + black + relig + mode, data = data)
+m3c[[4]] <- glm(vote ~ polknow_office*female + educ + age + black + relig + mode, data = data, family=binomial("logit"))
+m3d[[1]] <- lm(effic_int ~ polknow_majority*female + educ + age + black + relig + mode, data = data)
+m3d[[2]] <- lm(effic_ext ~ polknow_majority*female + educ + age + black + relig + mode, data = data)
+m3d[[3]] <- lm(part ~ polknow_majority*female + educ + age + black + relig + mode, data = data)
+m3d[[4]] <- glm(vote ~ polknow_majority*female + educ + age + black + relig + mode, data = data, family=binomial("logit"))
 
-summary(lm(effic_ext ~ polknow_text*female + educ + age + black + relig + mode, data = data))
-summary(lm(effic_ext ~ polknow_factual*female + educ + age + black + relig + mode, data = data))
-summary(lm(effic_ext ~ polknow_office*female + educ + age + black + relig + mode, data = data))
-summary(lm(effic_ext ~ polknow_majority*female + educ + age + black + relig + mode, data = data))
+res <- rbind(data.frame(sim(m3a, iv=data.frame(female = 0, polknow_text=seq(0,max(data$polknow_text),length=10)))
+                        , value=seq(0,max(data$polknow_text),length=10), Gender="Male"
+                        , Variable="Text-based Sophistication")
+             , data.frame(sim(m3a, iv=data.frame(female = 1, polknow_text=seq(0,max(data$polknow_text),length=10)))
+                          , value=seq(0,max(data$polknow_text),length=10), Gender="Female"
+                          , Variable="Text-based Sophistication")
+             , data.frame(sim(m3b, iv=data.frame(female = 0, polknow_factual=seq(0,1,length=6)))
+                          , value=seq(0,1,length=6), Gender="Male"
+                          , Variable="Factual Knowledge")
+             , data.frame(sim(m3b, iv=data.frame(female = 1, polknow_factual=seq(0,1,length=6)))
+                          , value=seq(0,1,length=6), Gender="Female"
+                          , Variable="Factual Knowledge")
+             , data.frame(sim(m3c, iv=data.frame(female = 0, polknow_office=seq(0,1,length=5)))
+                          , value=seq(0,1,length=5), Gender="Male"
+                          , Variable="Office Recognition")
+             , data.frame(sim(m3c, iv=data.frame(female = 1, polknow_office=seq(0,1,length=5)))
+                          , value=seq(0,1,length=5), Gender="Female"
+                          , Variable="Office Recognition")
+             , data.frame(sim(m3d, iv=data.frame(female = 0, polknow_majority=seq(0,1,length=3)))
+                          , value=seq(0,1,length=3), Gender="Male"
+                          , Variable="Majorities in Congress")
+             , data.frame(sim(m3d, iv=data.frame(female = 1, polknow_majority=seq(0,1,length=3)))
+                          , value=seq(0,1,length=3), Gender="Female"
+                          , Variable="Majorities in Congress"))
+res$dvlab <- factor(res$dv, labels = c("Internal Efficacy","External Efficacy"
+                                       ,"Non-conv. Participation","Turnout"))
 
-summary(lm(part ~ polknow_text*female + educ + age + black + relig + mode, data = data))
-summary(lm(part ~ polknow_factual*female + educ + age + black + relig + mode, data = data))
-summary(lm(part ~ polknow_office*female + educ + age + black + relig + mode, data = data))
-summary(lm(part ~ polknow_majority*female + educ + age + black + relig + mode, data = data))
+ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi)) + plot_default +
+  geom_errorbar(alpha=.5, width=0.01) + geom_line() + 
+  facet_grid(dvlab~Variable, scale="free") +
+  ylab("Expected value of dependent variable") + xlab("Value of sophistication measure")
+ggsave("../fig/sopheff.pdf",width=7,height=5)
 
-summary(glm(vote ~ polknow_text*female + educ + age + black + relig + mode, data = data, family=binomial("logit")))
-summary(glm(vote ~ polknow_factual*female + educ + age + black + relig + mode, data = data, family=binomial("logit")))
-summary(glm(vote ~ polknow_office*female + educ + age + black + relig + mode, data = data, family=binomial("logit")))
-summary(glm(vote ~ polknow_majority*female + educ + age + black + relig + mode, data = data, family=binomial("logit")))
-
-
-
-###########################
-# old analyses
-###########################
 
 
 
