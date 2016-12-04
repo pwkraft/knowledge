@@ -14,7 +14,7 @@
 \usepackage{booktabs}
 \usepackage[colorlinks=true,citecolor=red!50!black,urlcolor=blue!50!black,linkcolor=red!50!black]{hyperref}
 
-\author{Patrick Kraft\footnote{\href{mailto:patrick.kraft@stonybrook.edu}{patrick.kraft@stonybrook.edu}; A previous version of this paper was in collaboration with Laura Buchanan, Data Science NYU}}
+\author{Patrick Kraft\footnote{Ph.D. Candidate, Stony Brook University, \href{mailto:patrick.kraft@stonybrook.edu}{patrick.kraft@stonybrook.edu}. A previous version of this paper was in collaboration with Laura Buchanan, Data Science NYU}}
 \date{today}
 
 \title{Women Also Know Stuff\\
@@ -29,14 +29,10 @@
 \maketitle\doublespacing\thispagestyle{empty}
 
 \begin{abstract}
-This paper proposes a measure of political sophistication based on the complexity of individual open-ended survey responses. The measure behaves similarly to conventional metrics, but the gender gap frequently reported in previous studies disappears.
-
-
-There is a broad consensus among scholars of political science and public opinion that the American electorate is not well informed about politics. However, there is no agreement in the discipline about \textit{how to measure} how little citizens actually know. While many studies rely on simple factual political knowledge questions to assess political sophistication, others have criticized this approach from methodological and theoretical perspectives, claiming it does not provide a valid measure of the concept of interest. Using data from the 2012 American National Election Study (ANES), I propose an alternative measure of political sophistication based on open-ended survey responses about political preferences. The text-based metric captures aspects of sophistication unaccounted for when using conventional knowledge indices and is conceptually closer to theoretical approaches that emphasize the importance of the structure and complexity of belief systems.
+This paper proposes a new measurement approach to assess individual political sophistication in opinion surveys. Rather than examining responses to factual knowledge questions, I analyze the complexity in how individuals describe their political beliefs in open-ended responses. This text-based metric captures aspects of sophistication unaccounted for when using conventional knowledge indices and is conceptually closer to theoretical approaches that emphasize the importance of the structure and complexity of belief systems. Overall, the measure behaves similarly to conventional factual knowledge scores. Contrary to previous research, however, there is no evidence for a gender gap in political sophistication. While women might score lower than men on factual knowledge about political institutions and elites, there are no differences in the complexity of expressed political attitudes. The paper proceeds to show how the new measure can improve our understanding of gender differences in political learning as well as the consequences of political sophistication.
 
 \vspace{\baselineskip}
-\noindent \textbf{Keywords:} political sophistication, measurement, open-ended responses, structural topic models \\
-% Text Analysis, Political Sophistication, open-ended responses, Gender
+\noindent \textbf{Keywords:} political sophistication, gender gap, measurement, open-ended responses, text analysis \\
 
 \end{abstract}
 \newpage\setcounter{page}{1}
@@ -44,29 +40,128 @@ There is a broad consensus among scholars of political science and public opinio
 
 \section*{Introduction}
 
-Studies frequently found that on average, women appear to be less informed about politics than men. However, recent research raised theoretical as well as methodological concerns regarding conventional measures of political knowledge. Indeed, Mondak and Anderson (2004) argued that at least part of the gender gap in sophistication can be attributed to the fact that women are less likely to guess than men when facing a factual knowledge question for which they do not know an immediate answer. This paper proposes an alternative measure of political sophistication based on the the complexity of open-ended survey responses. More specifically, I examine the overall response length, topic diversity, and opinion diversity when individuals describe their political attitudes and beliefs. Overall, the measure behaves similarly to conventional factual knowledge scores as well as interviewer assessments. Contrary to previous research, however, there is no evidence for a gender gap in political sophistication. While women might score lower than men on factual knowledge about political institutions and elites, there are no differences in the complexity of expressed political attitudes. More generally, the results suggest that developing valid measures of political sophistication based on open-ended responses can provide new opportunities to examine political knowledge across time and contexts. 
-
 One fundamental concept in the study of political attitudes and behavior is political sophistication and knowledge \citep{converse1964nature,carpini1996americans}. While most scholars emphasize how little people know about politics, how to assess individual knowledge has been subject to re-occurring scholarly debate \citep[e.g.][]{mondak2000reconsidering,mondak2001asked,sturgis2008experiment,debell2013harder,pietryka2013analysis}. Many analyses exclusively rely on individual levels of political knowledge measured by correctness of factual knowledge questions. However, recent research points to important differences between types of knowledge questions that have previously been disregarded \citep{barabas2014question}. Furthermore, scholars argue that factual political knowledge, as measured in many surveys, may not be theoretically relevant \citep{lupia2006elitism} and we should rather focus on how people structure their attitudes and beliefs \citep[e.g.][]{luskin1987measuring}. As such, measuring sophistication solely based on answers to political trivia may misclassify respondents who cannot recall these facts, but do indeed have a coherent cognitive framework of political ideas.
 
-I propose an alternative measure of political sophistication based on an individual's responses to open-ended political preference questions. With this measure, inferences about the respondents' level of political sophistication and belief constraints are based on \textsl{how} respondents describe their preferences and beliefs. More specifically, the approach takes into account the diversity in topics raised by respondents \citep[measured using structural topic models][]{roberts2014structural}, as well as the overall response length and diversity between opinions. The goal is to assess how political attitudes are structured and expressed in a more complex manner than discernible from correctness on a factual questionnaire. Such a text-based measure aims to be conceptually closer to the structure and constraint of political belief systems 
-\citep[see for example][]{tetlock1983cognitive,luskin1987measuring} than fact based knowledge items can capture. Overall, I hope to show that the new sophistication measure solves some of the issues related to conventional knowledge measures and provides new opportunities for comparisons of political knowledge across time and contexts.
+One example for such potential misclassifications is the question of gender differences in sophistication. A frequent finding on the basis of conventional knowledge measures is that on average, women appear to be less informed about politics than men. Indeed, many previous scholar suggested that these differences might be rooted in the conceptual and methodological issues related to the measurement of sophistication. For example, \citet{mondak2004knowledge} argued that at least part of the gender gap in sophistication can be attributed to the fact that women are less likely to guess than men when facing a factual knowledge question for which they do not know an immediate answer.
 
-\section*{The Gender Gap in Political Knowledge}
+This paper proposes an alternative measure of political sophistication based on the the complexity of open-ended survey responses. As such, inferences about the respondents' level of political sophistication are based on \textsl{how} respondents describe their preferences and beliefs. More specifically, the approach takes into account the diversity in topics raised by respondents \citep[measured using structural topic models, c.f.,][]{roberts2014structural}, as well as the overall response length and opinion diversity. The goal is to assess whether political attitudes are expressed in a more complex manner --- a question that is not directly discernible from factual knowledge items. Such a text-based measure is therefore conceptually closer to the structure and constraint of political belief systems 
+\citep[see for example][]{tetlock1983cognitive,luskin1987measuring}. 
 
-Literature review, previous explanations
+Overall, the measure behaves similarly to conventional factual knowledge scores. Contrary to previous research, however, there is no evidence for a gender gap in political sophistication. While women might score lower than men on factual knowledge about political institutions and elites, there are no differences in the complexity of expressed political attitudes. Furthermore, the text-based measure sheds new light on political learning and the consequences of sophistication. While media exposure and political discussions seem to be ineffective to decrease the knowledge gap between men and women (indeed, higher media exposure even increases the gender gap), I find that both variables tend to reduce observed gender differences in sophistication. Compared to conventional metrics, the text-based sophistication measure is further shown to be a stronger predictor of internal efficacy, political engagement, and turnout. More generally, the results suggest that developing valid measures of political sophistication based on open-ended responses can provide new opportunities to examine political knowledge across time and contexts. 
+
+
+\section*{Political Sophistication and the Gender Gap}
+% 1: defining political participation in the literature
+% 2: measuring political sophistication, previous approaches
+% 3: issues with previous approaches, criticism
+
+\noindent \textbf{Literature review, discuss previous explanations of gender gap:}
+\begin{itemize}\singlespacing
+\item Measurement issues \citep[e.g.][]{mondak2004knowledge}
+\item Gender-relevant knowledge \citep[e.g.][]{dolan2011women}
+\item Gender gap can be decreased given sufficient information \citep[e.g.][]{jerit2017revisiting}
+\end{itemize}
+
+\noindent \textbf{General issues related to measurement (from old version):}
+\begin{itemize}\singlespacing
+   \item Biases due to guessing \citep[e.g.][]{mondak2004knowledge}
+   \item Partial knowledge \citep[e.g.][]{debell2013harder}.
+   \item Conditional on motivation \citep[e.g.][]{prior2008money}
+   \item Ignores important aspects such as visual cues \citep{prior2014visual}
+   \item Convolutes different types of knowledge \citep{barabas2014question}
+   \item Not relevant for participation \citep{lupia2006elitism}
+   \item Does not capture belief system constraint \citep{luskin1987measuring,tetlock1983cognitive}
+\end{itemize}
+
+In his seminal study, \citet{converse1964nature} examined to what degree citizens hold constrained belief systems about politics. Belief systems are thereby defined as ``a configuration of ideas and attitudes in which the elements are bound together by some form of constraint or functional interdependence'' \citep[207]{converse1964nature}. The analyses showed that the majority of the electorate does not hold structured and constrained belief systems, understand abstract ideological concepts, or hold stable issue positions. 
+
+This pessimistic view regarding the competence of the US electorate has been supported in multiple subsequent analyses. \citet{carpini1996americans} show that large parts of the American electorate are not sufficiently informed about politics and there are systematic differences in political attitudes and behavior between citizens who are well informed compared to those who are not. These findings are problematic from a normative perspective, since they indicate that differences in political information can result in unequal representation in the political system \citep[see also][]{althaus1998information,kuklinski2000misinformation,gilens2001political}. However, rather than relying on the degree to which individuals hold constrained belief systems, \citet{carpini1996americans}, conceptualized knowledge as the awareness of key democratic values, using factual knowledge questions \citep[see also][]{carpini1993measuring}. Many studies focus on similar factual knowledge measures \citep[e.g.][]{zaller1991information,jacoby1995structure,gomez2001political}.  \citet{zaller1992nature} argued for the measurement of political awareness using tests of neutral factual information about politics, since they ``more directly than any of the alternative measures, capture what has actually gotten into people’s minds'' \citep[21]{zaller1992nature}. However, other research casts doubt on this assertion, both from methodological as well as theoretical perspectives.
+
+From a methodological perspective, many studies raised issues related to the validity of factual knowledge questions as a measure of political sophistication. One problem  are potential biases due to guessing \citep{mondak2000reconsidering,mondak2001developing,mondak2001asked,miller2008experimenting}. Knowledge items that offer a ``Don't Know'' option convolute two very distinct concepts: the individual information level and the propensity to guess. Based on this argument, \citet{mondak2004knowledge} show that conventional knowledge measures overestimate the gender gap in political knowledge due to male respondents being more likely to guess if they are not fully informed \citep[see also][]{pietryka2013analysis}. Their recommendation was to rely on closed rather than open-ended knowledge questions, and omitting ``Don't Know'' response options \citep[but see][]{sturgis2008experiment,luskin2011don}. Other scholars further criticized open-ended factual knowledge questions due to problematic coding rules, which do not capture partial knowledge \citep{krosnick2008problems,gibson2009knowing,debell2013harder}.
+
+Focusing factual political knowledge has also been criticized on theoretical grounds. \citet{lupia2006elitism} argued that the information asked for in the item batteries has no clear relevance to political participation. Instead, researchers should concentrate on heuristics that directly help citizens to make competent political decisions \citep[see also][]{lupia1994shortcuts}. Responses to factual knowledge questions have further been shown to be conditional on the respondents' motivation, partisanship, and monetary incentives \citep{prior2008money,bullock2015partisan,prior2015you}. Conventional items also differ with regard to the dimension of political knowledge they measure \citep{barabas2014question} and ignore important aspects such as visual cues \citep{prior2014visual}.
 
 
 \section*{Measuring Sophistication in Open-Ended Survey Responses}
+% 1: describe measure and how it relates to theoretical conceptualization of sophistication (see Luskin's definition)
+% 2: how are open-ended responses administered, potential issues
+% 3: conclusion: coding open-ended responses gets us closer to the definition of political sophistication that we are actually interested in!
+
+Overall, prior research suggests that the conventional item batteries have problematic measurement properties. More importantly, some authors raise doubts whether factual political knowledge actually captures the phenomena of interest. \citet{converse1964nature} focused on the level of constraint in political beliefs rather than isolated pieces of factual information. Other scholars, \citet{tetlock1983cognitive}, used \textsl{integrative complexity} to describe the integration of considerations related to an issue. It is important to note that here, sophistication is not based on the content (or accuracy) of related considerations but rather on its \textsl{structure}. \citet{luskin1987measuring} also defined political sophistication based on the structure of individual belief systems, arguing that belief systems can vary on three separate dimensions: (1) their \textsl{size} -- i.e. the number of cognitions, (2) their \textsl{range} -- i.e. the dispersion of cognition over categories, and (3) their \textsl{constraint} -- i.e. the extent to which cognitions are interconnected in a meaningful way. Political sophistication, in turn, is seen as the conjunction of these dimensions: ``A person is politically sophisticated to the extent to which his or her [political belief system] is large, wide-ranging, and highly constrained.'' \citep[860]{luskin1987measuring}.
+
+Such a conceptualization of political sophistication seems more useful from a theoretical perspective than simple tests of factual information. If that is the case, why do most studies in the area focus exclusively on knowledge questions? One answer to this question is the fact that they are relatively easy to implement and do not require large amounts of resources. Factual political knowledge is simply much easier to assess (albeit not perfectly) than the structure of political belief systems. Indeed, \citet{tetlock1983cognitive} had to rely on manual coding of policy statements of US senators to assess their degree of integrative complexity. Manual coding procedures become infeasible with large text datasets (such as in large surveys). Advances in automated text analyses, however, can provide us with the necessary tools to develop a measure of political sophistication that captures the theoretical arguments put forward by \citet{converse1964nature}, \citet{tetlock1983cognitive} and \citet{luskin1987measuring}, without human coders. In the following, I derive and explore such a measure based on open-ended survey responses.
+
+The dimensions laid out by \citet{luskin1987measuring} --- size, range, and constraint of political belief systems --- can be measured directly by examining how individuals describe their political attitudes and beliefs. More specifically, I consider individual responses to open-ended questions where respondents described aspects that they liked and disliked about both major political parties and presidential candidates before the 2012 US election. There are a total number of 8 open-ended responses where individuals describe their beliefs and attitudes towards political actors. Table~\ref{tab:measure} summarizes how different characteristics of open-ended responses match aspects of political sophistication discussed previously.
+
+\begin{table}[h]
+\begin{tabularx}{\textwidth}{lX}
+\hline 
+Dimension of political belief system & Characteristic of open-ended response \\
+\hline
+Size (number of cognitions) & Overall length of responses \\
+Range (dispersion of cognitions over categories) & Diversity in topics raised in responses \\
+Constraint (interconnectedness of cognitions) & Diversity in response length between items \\
+\hline
+\end{tabularx}
+\caption{Dimensions of political belief system as aspects of political sophistication and their measure in open-ended responses \citep[c.f.][]{luskin1987measuring}.}\label{tab:measure}
+\end{table}
+
+The \textsl{size} of the political belief system can be captured as the overall length of individual responses. If people possess a larger number of considerations related to political parties and candidates, then this should be reflected in the  overall collection of their responses.
+
+The \textsl{range} of cognitions over categories can be measured as the diversity in topics raised in individual responses. If individuals hold more diverse cognitions towards political actors, I expect to observe a wider range of topics in their responses.
+
+The last dimension, the degree of \textsl{constraint} or interconnectedness of cognitions, is more difficult to capture. I argue that the diversity in responses to different items directed at different attitude objects could be used as a possible proxy. Consider two individuals who possess a belief system of similar size and range. I expect that their open-ended responses should be of similar overall length and have a comparable degree of diversity in topics. Now, suppose that for one individual, the belief system is highly interconnected, and for the other individual it is not. Holding the overall length and topic diversity of their set of responses constant, higher interconnectedness allows homogeneous spread of topics across items. In other words, if considerations were not interconnected, then responding to likes and dislikes (for party/candidates of in/out-party), would require an increase in the overall length and diversity of the response. As such, distributing responses across different items indicates a higher diversity in opinions and can therefore be seen as a proxy for interconnectedness of cognitions.
+
+Of course, the measurement strategy derived here makes strong implicit assumptions about the nature of political belief systems. However, the purpose of this discussion is to suggest potential links between the theoretical construct and measurable characteristics of open-ended responses. Ultimately it is an empirical question whether these characteristics provide valid measures of political sophistication. Before we turn to the issue of validation, I discuss the data and methods used in the analyses.
+
+
+\section*{Data and Methods}
+% describe dataset and open-ended responses
+% describe measure for each dimension as well as composite measure of sophistication
+
+
+The following analyses are based on the 2012 American National Election Study (ANES), which consists of a survey of 5914 adults. 2054 participated in face-to-face interviews while the remaining 3860 participated online. While these samples differ slightly with regard to the inclusion of some variables, I rely on the pooled dataset for the purpose of the present analyses. The sophistication measure is based on open-ended questions in which respondents were asked to list anything in particular that they like/dislike about the Democratic/Republican party as well as anything that might make them vote/not vote for either of the Presidential candidates. They were probed by the interviewer asking ``anything else?'' until the respondent answered no. Open-ended responses were pre-processed using an implementation of the Aspell spell-checking algorithm in \texttt{R} (\url{www.aspell.net}), and dropping individuals who responded in Spanish (228 individuals). 
+
+As discussed above, I consider three aspects of the open-ended responses to capture distinct dimensions of political sophistication: size, range, and constraint of the political belief system. The \textbf{size} of the belief system is measured as the word count for each individual over all prompts:
+\begin{equation}
+\text{size}_i = \dfrac{\log\left(\sum_{j=1}^J n_{ij}\right)}{\max\left[\log\left(\sum_{j=1}^J n_{ij}\right)\right]},
+\end{equation}
+where $n_{ij}$ is the number of words in the response of individual $i$ in response to question $j$. $J$ denotes the set of all likes/dislikes items. I use the log of the count normalize the distribution of responses and divide it by the maximal response length in the data such that the resulting measure ranges from 0 to 1.
+
+The \textbf{range} of the belief system is captured as the diversity in topics raised by each respondents. I conceptualize diversity based on the relative mean absolute difference topic proportions:\footnote{The structural topic model was estimated using the \texttt{stm} package in R \citep{roberts2014structural}. The number of topics was selected using the algorithm of \citet{lee2014low} and the model was estimated via spectral initialization to address the issue of multi-modality \citep[see][for details]{roberts2014stm}. I used measures for age, education, party identification, as well as an interaction between education and party identification as covariates for topic prevalence. This variable selection is equivalent to the procedure model specification described in \citet{roberts2014structural}. I estimated a total number of 72 topics. The results reported hereafter are robust for model specifications with fewer numbers of topics.}
+\begin{equation}
+\text{range}_i = 1-\dfrac{\sum_{k_1=1}^K\sum_{k_2=1}^K |\theta_{ik_1} - \theta_{ik_2}|}{2\sum_{k_1=1}^K\sum_{k_2=1}^K \theta_{ik_1}},
+\end{equation}
+where $\theta_{ik}$ denotes the predicted proportion of topic $k$ in the collection of responses by individual $i$. The variable ranges from 0 (response focuses on single topic), to 1 (every topic has the same proportion). Mathematically, this conceptualization is equivalent to the Gini-coefficient, which measures the degree of inequality in income distributions (although the direction has been reversed such that a value of 1 implies an equal distribution).
+
+As a proxy for \textbf{constraint}, I measure the diversity in opinions raised across items based on the relative mean absolute difference of proportions of response lengths for each
+likes/dislikes question:
+\begin{equation}
+\text{constraint}_i = 1-\dfrac{\sum_{j_1=1}^J\sum_{j_2=1}^J |p_{ij_1} - p_{ij_2}|}{2\sum_{j_1=1}^J\sum_{j_2=1}^J p_{ij_1}},
+\end{equation}
+where $p_{ij}=\tfrac{n_{ij}}{\sum_{j=1}^J n_{ij}}$ is the proportion of words in the response of individual $i$ to question $j$ relative to the overall size of the individuals' response. Again, the variable ranges from 0 (only one question was answered) to 1 (all questions were answered with the same word length per answer).
+
+Together, the three measures form a composite metric of political sophistication. I combine the individual aspects in a multiplicative rather than an additive fashion, because sophistication can be seen as \textsl{conjunctive} \citep[see][]{luskin1987measuring}. In other words, the separate elements are only effective in combination and are not substitutes of each other:
+\begin{equation}
+\text{sophistication}_i = \text{size}_i * \text{range}_i * \text{constraint}_i.
+\end{equation}
+
+Figure~\ref{fig:corplot} compares the new measure to conventional knowledge metrics. It  displays scatterplots between individual metrices (lower triangular), univariate densities (diagonal), and correlation coefficients (upper triangular). It can be observed that the text-based sophistication measure (v1) is positively correlated with all conventional metrics while capturing some additional variation.
 
 \begin{figure}[h]\centering
 \includegraphics{../fig/corplot.pdf}
-\caption{Correlations between knowledge measures}\label{fig:corplot}
+\caption{Correlation matrix of conventional political knowledge metrics and the text-based sophistication measure. The plots on the diagonal display unvariate densities for each variable. The panles in the lower triangular display the scatterplot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. All correlations reported are significant on the .05 level. v1: Text-based Sophistication; v2: Factual Knowledge; v3: Office Recognition; v4: Majorities in Congress}\label{fig:corplot}
 \end{figure}
 
+As such, it
+
+we examine the face validity of the measure. Appendix~\ref{app:soph} shows examples of survey responses and their estimated sophistication value. The first table displays responses with the minimum and maximum composite score in the dataset.  Short responses are clearly penalized. The second table shows the responses with minimum and maximum composite scores for a subset of the data where the response was between 50 and 100 words. We see that the score is not only based on word length, but also topic diversity and diversity across items. This initial investigation suggests that the variation in the sophistication measure captures interesting differences in response behavior.
 
 
 
 \section*{Are Women Really Less Sophisticated?}
+
+
 
 \begin{figure}[h]\centering
 \includegraphics{../fig/densities.pdf}
@@ -74,11 +169,20 @@ Literature review, previous explanations
 \end{figure}
 
 
+
+
+
+
 \section*{Determinants of Sophistication}
+
+The next step of our validation consists of comparing the results for common determinants of political knowledge across the conventional as well as our text-based measure of political sophistication. Previous studies consistently showed that political knowledge is positively affected by media exposure, frequent political discussions, and education. Furthermore, research frequently finds a gender gap, where female respondents appear to be less informed about politics \citep[c.f.][]{barabas2014question}.\footnote{However, as discussed previously, this gap can be partly attributed to differences in the propensity to guess in factual knowledge questions \citep[e.g.][]{mondak2004knowledge}.} Figure~\ref{fig:models} displays the coefficients of regression models with each knowledge/sophistication measure as the dependent variable.
+
+Overall, the patterns are quite similar across different dependent variables. Knowledge and sophistication is significantly higher among respondents who are more exposed to political news media, discuss politics frequently, and are more educated. However, there are some noteworthy and interesting differences between the conventional indices and our text-based measure. Most importantly, while we observe the common gender gap using factual knowledge questions and interviewer assessments, this difference disappears when looking at sophistication based on open-ended responses. Women might not score as high on political information quizzes (partly because they are less likely to guess rather express lack of knowledge), but they do not differ substantially in complexity and sophistication when they describe their political preferences. Another interesting finding is the effect of survey mode. For factual knowledge questions, we observe that respondents in online surveys score significantly higher than individuals in face-to-face interviews. This difference could be explained by the fact that individuals are able to look up responses to factual knowledge questions while taking an online survey \citep[see also][]{clifford2016cheating}. For the text-based measure, on the other hand, we see that individuals appear to score lower on sophistication in online surveys. Respondents in online surveys might therefore be less willing to elaborate on their attitudes.
+
 
 \begin{figure}[h]\centering
 \includegraphics{../fig/determinants.pdf}
-\caption{Determinants of political sophistication}\label{fig:determinants}
+\caption{Common determinants of political sophistication and political knowledge. Estimates are OLS regression coefficients with 95\% confidence intervals. Dependent variables are the text-based sophistication measure as well as conventional metrics.}\label{fig:determinants}
 \end{figure}
 
 \begin{figure}[h]\centering
@@ -108,210 +212,11 @@ Visualize learning through discussions/media exposure for men and women
 
 Comparing the measures as independent variables to predict participation, efficacy
 
-\section*{What Closes the Gap?}
-
-
 
 \section*{Conclusion}
-
-\clearpage
-
-\section{Theoretical Framework}
-
-\subsection{Political Knowledge and Sophistication}
-% 1: defining political participation in the literature
-% 2: measuring political sophistication, previous approaches
-% 3: issues with previous approaches, criticism
-
-\section*{Issues with Political Knowledge}
-\begin{itemize}
-   \item Biases due to guessing \citep[e.g.][]{mondak2004knowledge}
-   \item Partial knowledge \citep[e.g.][]{debell2013harder}.
-   \item Conditional on motivation \citep[e.g.][]{prior2008money}
-   \item Ignores important aspects such as visual cues \citep{prior2014visual}
-   \item Convolutes different types of knowledge \citep{barabas2014question}
-   \item Not relevant for participation \citep{lupia2006elitism}
-   \item Does not capture belief system constraint \citep{luskin1987measuring,tetlock1983cognitive}
-\end{itemize}
-
-In his seminal study, \citet{converse1964nature} examined to what degree citizens hold constrained belief systems about politics. Belief systems are thereby defined as ``a configuration of ideas and attitudes in which the elements are bound together by some form of constraint or functional interdependence'' \citep[207]{converse1964nature}. The analyses showed that the majority of the electorate does not hold structured and constrained belief systems, understand abstract ideological concepts, or hold stable issue positions. 
-
-This pessimistic view regarding the competence of the US electorate has been supported in multiple subsequent analyses. \citet{carpini1996americans} show that large parts of the American electorate are not sufficiently informed about politics and there are systematic differences in political attitudes and behavior between citizens who are well informed compared to those who are not. These findings are problematic from a normative perspective, since they indicate that differences in political information can result in unequal representation in the political system \citep[see also][]{althaus1998information,kuklinski2000misinformation,gilens2001political}. However, rather than relying on the degree to which individuals hold constrained belief systems, \citet{carpini1996americans}, conceptualized knowledge as the awareness of key democratic values, using factual knowledge questions \citep[see also][]{carpini1993measuring}. Many studies focus on similar factual knowledge measures \citep[e.g.][]{zaller1991information,jacoby1995structure,gomez2001political}.  \citet{zaller1992nature} argued for the measurement of political awareness using tests of neutral factual information about politics, since they ``more directly than any of the alternative measures, capture what has actually gotten into people’s minds'' \citep[21]{zaller1992nature}. However, other research casts doubt on this assertion, both from methodological as well as theoretical perspectives.
-
-Methodologically, many studies raised issues related to the validity of factual knowledge questions as a measure of political sophistication. One problem  are potential biases due to guessing \citep{mondak2000reconsidering,mondak2001developing,mondak2001asked,miller2008experimenting}. Knowledge items that offer a ``Don't Know'' option convolute two very distinct concepts: the individual information level and the propensity to guess. Based on this argument, \citet{mondak2004knowledge} show that conventional knowledge measures overestimate the gender gap in political knowledge due to male respondents being more likely to guess if they are not fully informed \citep[see also][]{pietryka2013analysis}. Their recommendation was to rely on closed rather than open-ended knowledge questions, and omitting ``Don't Know'' response options \citep[but see][]{sturgis2008experiment,luskin2011don}. Other scholars further criticized open-ended factual knowledge questions due to problematic coding rules, which do not capture partial knowledge \citep{krosnick2008problems,gibson2009knowing,debell2013harder}.
-
-Focusing factual political knowledge has also been criticized on theoretical grounds. \citet{lupia2006elitism} argued that the information asked for in the item batteries has no clear relevance to political participation. Instead, researchers should concentrate on heuristics that directly help citizens to make competent political decisions \citep[see also][]{lupia1994shortcuts}. Responses to factual knowledge questions have further been shown to be conditional on the respondents' motivation, partisanship, and monetary incentives \citep{prior2008money,bullock2015partisan,prior2015you}. Conventional items also differ with regard to the dimension of political knowledge they measure \citep{barabas2014question} and ignore important aspects such as visual cues \citep{prior2014visual}.
-
-Overall, the prior research suggests that the conventional item batteries have problematic measurement properties. More importantly, some authors raise doubts whether factual political knowledge actually captures the phenomena of interest. \citet{converse1964nature} focused on the level of constraint in political beliefs rather than isolated pieces of factual information. Other scholars, \citet{tetlock1983cognitive}, used \textsl{integrative complexity} to describe the integration of considerations related to an issue. It is important to note that here, sophistication is not based on the content (or accuracy) of related considerations but rather on its \textsl{structure}. \citet{luskin1987measuring} also defined political sophistication based on the structure of individual belief systems, arguing that belief systems can vary on three separate dimensions: (1) their \textsl{size} -- i.e. the number of cognitions, (2) their \textsl{range} -- i.e. the dispersion of cognition over categories, and (3) their \textsl{constraint} -- i.e. the extent to which cognitions are interconnected in a meaningful way. Political sophistication, in turn, is seen as the conjunction of these dimensions: ``A person is politically sophisticated to the extent to which his or her [political belief system] is large, wide-ranging, and highly constrained.'' \citep[860]{luskin1987measuring}.
-
-Such a conceptualization of political sophistication seems more useful from a theoretical perspective than simple tests of factual information. Why does a large body of literature in political science and public opinion focus only on knowledge questions? One answer to this question is the fact that they are relatively easy to implement and do not require large amounts of resources. Factual political knowledge is simply much easier to assess (albeit not perfectly) than the structure of political belief systems. Indeed, \citet{tetlock1983cognitive} had to rely on manual coding of policy statements of US senators to assess their degree of integrative complexity. Manual coding procedures become infeasible with large text datasets (such as in large surveys). Advances in automated text analyses, however, can provide us with the necessary tools to develop a measure of political sophistication that captures the theoretical arguments put forward by \citet{converse1964nature}, \citet{tetlock1983cognitive} and \citet{luskin1987measuring}, without human coders. In the following, I derive and explore such a measure based on open-ended survey responses.
-
-
-\subsection{Measurement Approach}
-% 1: describe measure and how it relates to theoretical conceptualization of sophistication (see Luskin's definition)
-% 2: how are open-ended responses administered, potential issues
-% 3: conclusion: coding open-ended responses gets us closer to the definition of political sophistication that we are actually interested in!
-
-The dimensions laid out by \citet{luskin1987measuring} --- size, range, and constraint of political belief systems --- can be measured directly by examining how individuals describe their political attitudes and beliefs. More specifically, I consider individual responses to open-ended questions where respondents described aspects that they liked and disliked about both major political parties and presidential candidates before the 2012 US election. There are a total number of 8 open-ended responses where individuals describe their beliefs and attitudes towards political actors. Table~\ref{tab:measure} summarizes how different characteristics of open-ended responses match aspects of political sophistication discussed previously.
-
-\begin{table}[h]
-\begin{tabularx}{\textwidth}{lX}
-\hline 
-Dimension of political belief system & Characteristic of open-ended response \\
-\hline
-Size (number of cognitions) & Overall length of responses \\
-Range (dispersion of cognitions over categories) & Diversity in topics raised in responses \\
-Constraint (interconnectedness of cognitions) & Diversity in response length between items \\
-\hline
-\end{tabularx}
-\caption{Dimensions of political belief system as aspects of political sophistication and their measure in open-ended responses \citep[c.f.][]{luskin1987measuring}.}\label{tab:measure}
-\end{table}
-
-The \textsl{size} of the political belief system can be captured as the overall length of individual responses. If people possess a larger number of considerations related to political parties and candidates, then this should be reflected in the  overall collection of their responses.
-
-The \textsl{range} of cognitions over categories can be measured as the diversity in topics raised in individual responses. If individuals hold more diverse cognitions towards political actors, I expect to observe a wider range of topics in their responses.
-
-The last dimension, the degree of \textsl{constraint} or interconnectedness of cognitions, is more difficult to capture. I argue that the diversity in responses to different items directed at different attitude objects could be used as a possible proxy. Consider two individuals who possess a belief system of similar size and range. I expect that their open-ended responses should be of similar overall length and have a comparable degree of diversity in topics. Now, suppose that for one individual, the belief system is highly interconnected, and for the other individual it is not. Holding the overall length and topic diversity of their set of responses constant, higher interconnectedness allows homogeneous spread of topics across items. In other words, if considerations were not interconnected, then responding to likes and dislikes (for party/candidates of in/out-party), would require an increase in the overall length and diversity of the response. As such, distributing responses across different items indicates a higher diversity in opinions and can therefore be seen as a proxy for interconnectedness of cognitions.
-
-Of course, the measurement strategy derived here makes strong implicit assumptions about the nature of political belief systems. However, the purpose of this discussion is to suggest potential links between the theoretical construct and measurable characteristics of open-ended responses. Ultimately it is an empirical question whether these characteristics provide valid measures of political sophistication. Before we turn to the issue of validation, I discuss the data and methods used in the analyses.
-
-
-\section{Empirical Analyses}
-
-\subsection{Data and Methods}
-% describe dataset and open-ended responses
-% describe measure for each dimension as well as composite measure of sophistication
-
-The following analyses are based on the 2012 American National Election Study (ANES) to demonstrate and validate the new measures of political sophistication. The dataset consists of a survey of 5914 adults. 2054 participated in face-to-face interviews while the remaining 3860 participated online. While these samples differ slightly with regard to the inclusion of some variables, I rely on the pooled dataset for the purpose of the present analyses.
-
-Our sophistication measure acts on open-ended questions in which respondents were asked to list anything in particular that they like/dislike about the Democratic/Republican party as well as anything that might make them vote/not vote for either of the Presidential candidates. They were probed by the interviewer asking ``anything else?'' until the respondent answered no. Open-ended responses were pre-processed using an implementation of the Aspell spell-checking algorithm in \texttt{R} (\url{www.aspell.net}), and dropping individuals who responded in Spanish (228 individuals). 
-
-As discussed above, I consider three aspects of the open-ended responses to capture distinct dimensions of political sophistication: size, range, and constraint of the political belief system. The \textbf{size} of the belief system is measured as the word count for each individual over all prompts:
-\begin{equation}
-\text{size}_i = \log\left(\sum_{j=1}^J n_{ij}\right),
-\end{equation}
-where $n_{ij}$ is the number of words in the response of individual $i$ in response to question $j$. $J$ denotes the set of all likes/dislikes items. I use the log of the count normalize the distribution of responses. The \textbf{range} of the belief system is captured as the diversity in topics raised by each respondents. I conceptualize diversity as the Shannon-entropy of topic proportions \citep{shannon1948mathematical,munger2016elites}:\footnote{The structural topic model was estimated using the \texttt{stm} package in R \citep{roberts2014structural}. The number of topics was selected using the algorithm of \citet{lee2014low} and the model was estimated via spectral initialization to address the issue of multi-modality \citep[see][for details]{roberts2014stm}. I used measures for age, education, party identification, as well as an interaction between education and party identification as covariates for topic prevalence. This variable selection is equivalent to the procedure model specification described in \citet{roberts2014structural}. I estimated a total number of 72 topics. While we cannot discuss the topics in detail due to limited space, it is worth noting that the results reported hereafter are robust for model specifications with fewer numbers of topics.}
-\begin{equation}
-\text{range}_i = −\sum_{k=1}^K \theta_{ik} \log_2(\theta_{ik}),
-\end{equation}
-where $\theta_{ik}$ denotes the predicted proportion of topic $k$ in the collection of responses by individual $i$. The variable ranges from 0 (response focuses on single topic), to $\log_2(K=72)$ (every topic has the same proportion). As a proxy for \textbf{constraint}, I measure the diversity in opinions raised across item by computing the Shannon-entropy of the proportions of response lengths for each likes/dislikes question:
-\begin{equation}
-\text{constraint}_i = −\sum_{j=1}^J p_{ij} \log_2(p_{ij}),
-\end{equation}
-where $p_{ij}=\tfrac{n_{ij}}{\sum_{j=1}^J n_{ij}}$ is the proportion of words in the response of individual $i$ to question $j$ relative to the overall size of the individuals' response. Again, the variable ranges from 0 (only one question was answered) to $\log_2(J=8)$ (all questions were answered with the same word length per answer).
-
-Together, the three measures form a composite metric of political sophistication. I combine the measures in a multiplicative rather than an additive fashion, because sophistication can be seen as \textsl{conjunctive} \citep[see][]{luskin1987measuring}. In other words, the separate elements are only effective in combination and are not substitutes of each other:
-\begin{equation}
-\text{sophistication}_i = (\text{size}_i + 1) * (\text{range}_i + 1) * (\text{constraint}_i + 1).
-\end{equation}
-Note that I added $+1$ to each term to assure that the minimum of each individual variable is 1 rather than 0. This way, we still capture variation in sophistication if one of the elements is at its minimum. There are a number of conventional political knowledge measures available for comparison with our metrics. The variables are summarized in Table~\ref{tab:featextr}. The first three measures are based on additive scales indicating the number of correct responses. The interviewer evaluation (only available in face-to-face sample) is based on a five-point scale that was recorded after the interviews (pre-election and post-election wave).
-
-\begin{align}
-\text{size}_i &= \dfrac{\log\left(\sum_{j=1}^J n_{ij}\right)}{\max\left[\log\left(\sum_{j=1}^J n_{ij}\right)\right]},\\
-\text{range}_i &= 1-\dfrac{\sum_{k_1=1}^K\sum_{k_2=1}^K |\theta_{ik_1} - \theta_{ik_2}|}{2\sum_{k_1=1}^K\sum_{k_2=1}^K \theta_{ik_1}},\\
-\text{constraint}_i &= 1-\dfrac{\sum_{j_1=1}^J\sum_{j_2=1}^J |p_{ij_1} - p_{ij_2}|}{2\sum_{j_1=1}^J\sum_{j_2=1}^J p_{ij_1}},\\
-\text{sophistication}_i &= \text{size}_i * \text{range}_i * \text{constraint}_i.
-\end{align}
-
-\begin{center}\singlespacing
-\begin{tabular}{lp{15cm}}
-\toprule 
-$i$ & Individual respondent \\
-$j \in J$ & Like/dislike items (8 total) \\
-$k \in K$ & Topics (72 total, estimated via STM using spectral initialization, c.f. \citealt{roberts2014structural}) \\
-$\theta_{ik}$ & predicted proportion of topic $k$ in the collection of responses by individual $i$\\
-$p_{jk}$ & proportion of words in the response of individual $i$ to question $j$ relative to the overall size of the individual's response\\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\begin{table}[h]\onehalfspacing\footnotesize
-\begin{tabularx}{\textwidth}{XXX}
-\hline
-Canonical Political Knowledge Metric &	Abridged Sample Questions &	Name in Figures \\
-\hline
-Knowledge of Office Recognition  	  & Who is the Speaker of the House? Who is the Vice President? &  Political Knowledge: Office Recognition \\ 
-Knowledge of U.S. Political Facts 	 & How many times can someone be elected president? What is the size of the federal deficit? & Political Knowledge: Factual Knowledge\\
-Knowledge of Majorities in Congress & What party has the most members in the U.S Senate? & Political Knowledge: Majorities in Congress\\
-Pre-Interview Political Knowledge Interviewer Evaluation & --- & Political Knowledge: Knowledge Pre Evaluation\\
-Post-Interview Political Knowledge Interviewer Evaluation & --- & Political Knowledge: Knowledge Pre Evaluation\\
-Pre-Interview Intelligence Interviewer Evaluation & --- & Political Knowledge: Intelligence Pre Evaluation\\
-Post-Interview Intelligence Interviewer Evaluation & --- & Political Knowledge: Intelligence Pre Evaluation\\
-Education Level 	 & (1) Less than high school credential&Political Knowledge: Education Level \\
-&(2) High School credential&\\
-&...&\\
-&(5) Graduate School & \\
-\hline 
-\end{tabularx} 
-\caption{Methods: Feature Extraction}\label{tab:featextr}
-\end{table}
-
-Furthermore, the analyses outlined below includes several control variables such as media exposure, frequency of political discussions, gender, age, race, religiosity, ideology, party identification, and survey mode (face-to-face vs. online).
-	
-
-\subsection{Descriptive Results}
-% histogram of response length could be useful -> done
-% histogram of individual aspects -> done
-% show examples of high and low scoring political knowledge -> appendix
-% distribution of knowledge measure -> done
-% correlation plot with other knowledge measures (including individual aspects) -> done
-
-First, we examine the characteristics of open-ended responses as a measure of political sophistication. Figure~\ref{fig:wc} displays the word count as well as the logged word count of the collection of open-ended responses for each individual.
-
-\begin{figure}[h]
-\includegraphics[width=\textwidth]{../fig/wc.pdf}
-\caption{Distribution of Response Lengths}\label{fig:wc}
-\end{figure}
-
-The distribution of raw word count is highly skewed. Most respondents provide brief statements when they describe their attitudes towards political parties and candidates. The mean response length to all 8 questions is about 75 words, so an average response to a single question consisted of less than 10 words, omitting respondents who did not provide any information.
-\begin{figure}[h]
-\includegraphics[width=\textwidth]{../fig/diversity_distributions.png}
-\caption{Diversity Distributions and Sophistication Measure}\label{fig:diversity}
-\end{figure}
-
-Figure~\ref{fig:diversity} presents histograms of the remaining two diversity measures as well as the composite index of political sophistication. Diversity across topics (left panel) is skewed and overall relatively large. Only few respondents appeared to focus on a very select number of topics. As we discuss below, this finding can be partly attributed to the way topic proportions are estimated in the structural topic model. More specifically, the posterior distribution of topic proportions is strongly determined by the respective prior if the individual response is very sparse. The distribution of response diversity (or opinion/item diversity, see middle panel), on the other hand, indicates that a large proportion of respondents only answered one open-ended question, which leads to a response diversity of 0. Looking at the histogram on the right in Figure~\ref{fig:diversity}, we can see that the combined measure of sophistication is approximately normal and captures a large amount of variance between individuals. But is this variance also conceptually meaningful?
-
-
-\subsection{Initial Validation Performance}
-% replicate common findings, e.g. gender gap in political knowledge \citep[e.g.][]{barabas2014question}
-% Increase in consistency b/w policy attitudes \citep[e.g.][]{prior2014visual}
-
-First, we examine the face validity of the measure. Appendix~\ref{app:soph} shows examples of survey responses and their estimated sophistication value. The first table displays responses with the minimum and maximum composite score in the dataset.  Short responses are clearly penalized. The second table shows the responses with minimum and maximum composite scores for a subset of the data where the response was between 50 and 100 words. We see that the score is not only based on word length, but also topic diversity and diversity across items. This initial investigation suggests that the variation in the sophistication measure captures interesting differences in response behavior.
-
-Next, we compare the measure with conventional knowledge indices. Figure~\ref{fig:corr} displays a correlation matrix of the traditional measures as well as the individual open-ended response characteristics and the composite measure of sophistication.
-
-\begin{figure}[h]\centering
-\includegraphics[width=.5\textwidth]{../fig/corplot.png}
-\caption{Correlation matrix of conventional political knowledge metrics, the text-based sophistication measure, as well as its individual components. The figures on the diagonal display unvariate densities for each variable. v1: Factual Knowledge; v4: Political Knowledge (Int. Eval.); v7: Topic Diversity; v2: Office Recognition; v5: Intelligence (Int. Eval.); v8: Response Diversity; v3: Majorities in Congress; v6: Total Response Length; v9: Text-based Sophistication}\label{fig:corr}
-\end{figure}
-
-% % % % % % % % % % % % % % % % % % % % % % % % %
-The text-based sophistication measure is positively correlated with all conventional metrics while capturing some additional variation. However, one of the components of the text-based measure, Topic Diversity (v7), shows low negative correlations with all other indices. One explanation for this finding is that the posterior topic proportions of the structural topic model are strongly affected by the prior over topics for short responses. The text-based sopistication measure is positively correlated with the interviewer's assessment of the respondent's apparent intelligence, although less so than other conventional metrics as well as less than with the interviewer's assessment of the respondent's level of information.
-% % % % % % % % % % % % % % % % % % % % % % % % % %
-
-The bold black box highlights the correlations between the political knowledge measures and the open-ended response measures.  Our first observation is that political knowledge measures are modestly to strongly correlated with one another.  As expected, these measures covary to some degree but also capture different unique aspects of knowledge.  Next, we see that Topic Diversity has low negative correlation with all other measures.  This suggests that topic diversity alone, in this context, is not an appropriate measure of political knowledge.  A possible explanation for this finding is that the posterior topic proportions of the structural topic model are not only determined by the words in each response but also the respective prior over topics. As such, if a respondent only mentions a single word in his or her response, the estimated topic proportions will be still be relatively equal (i.e. indicating high diversity), rather than strictly unitary. Therefore, short responses may overestimate topic diversity with our method, explaining negative correlations with traditional knowledge measures. Leaving this issue for future work, it is sufficient to note for now that any potential biases caused by this issue are (at least partly) compensated by including overall response lengths and opinion diversity in the resulting sophistication measure.
-
-We also see that the Response Diversity and the composite diversity metric have stronger correlations with the political knowledge measures than log(Response Word Count), suggesting that these two diversity measures are not strictly due to the length of the open-ended responses.  Finally, our final composite diversity score correlates across other political knowledge measures on the same order of magnitude as Factual Knowledge and Majorities in Congress, yet do not have especially high correlation with either.  The results provide some suggestive evidence that the composite diversity score is worthy of consideration among standard political knowledge measures, and captures independent information.    
-
-\begin{figure}\centering
-\includegraphics{../fig/models.pdf}
-\caption{Common determinants of political sophistication and political knowledge. Estimates are OLS regression coefficients with 95\% confidence intervals. Dependent variables are the text-based sophistication measure as well as conventional metrics.}
-\end{figure}
-
-The next step of our validation consists of comparing the results for common determinants of political knowledge across the conventional as well as our text-based measure of political sophistication. Previous studies consistently showed that political knowledge is positively affected by media exposure, frequent political discussions, and education. Furthermore, research frequently finds a gender gap, where female respondents appear to be less informed about politics \citep[c.f.][]{barabas2014question}.\footnote{However, as discussed previously, this gap can be partly attributed to differences in the propensity to guess in factual knowledge questions \citep[e.g.][]{mondak2004knowledge}.} Figure~\ref{fig:models} displays the coefficients of regression models with each knowledge/sophistication measure as the dependent variable.
-
-Overall, the patterns are quite similar across different dependent variables. Knowledge and sophistication is significantly higher among respondents who are more exposed to political news media, discuss politics frequently, and are more educated. However, there are some noteworthy and interesting differences between the conventional indices and our text-based measure. Most importantly, while we observe the common gender gap using factual knowledge questions and interviewer assessments, this difference disappears when looking at sophistication based on open-ended responses. Women might not score as high on political information quizzes (partly because they are less likely to guess rather express lack of knowledge), but they do not differ substantially in complexity and sophistication when they describe their political preferences. Another interesting finding is the effect of survey mode. For factual knowledge questions, we observe that respondents in online surveys score significantly higher than individuals in face-to-face interviews. This difference could be explained by the fact that individuals are able to look up responses to factual knowledge questions while taking an online survey \citep[see also][]{clifford2016cheating}. For the text-based measure, on the other hand, we see that individuals appear to score lower on sophistication in online surveys. Respondents in online surveys might therefore be less willing to elaborate on their attitudes.
-
-\begin{figure}\centering
-\includegraphics{../fig/models2.pdf}
-\caption{Sophistication and Coherent Attitudes. Estimates are OLS regression coefficients with 95\% confidence intervals. The dependent variable measures support for redistributive economic policies. Red circles indicate model results including control variables such as gender, age, race, religiosity, ideology, and party identification.}
-\end{figure}
-
-
-\section{Conclusion}
 % lot's of potential extensions, think about standardizing the measure to make it more comparable across contexts
 
-Previous research in political science and public opinion has raised multiple theoretical and methodological issues related to conventional political knowledge indices. The goal of this paper is to examine an alternative measure of political sophistication based on open-ended responses in surveys. It was argued that this measure is conceptually closer to theoretical approaches that emphasize the importance of the structure and complexity of belief systems rather than focusing on factual knowledge about institutions. So far, the preliminary findings show that conventional knowledge indices and the text-based measure share a substantial amount of variance. However, they are far from being identical and capture different aspects of sophistication. One of the most interesting findings is that using the text-based measure, we don't find evidence for a gender gap that has been commonly reported using factual knowledge scales. While further work on validation and the comparability of the measure across contexts and survey modes is necessary, measuring political sophistication based on open-ended responses has the potential to provide novel insights into the antecedents and consequences of political information.
+Previous research in political science and public opinion has raised multiple theoretical and methodological issues related to conventional political knowledge indices. The goal of this paper is to examine an alternative measure of political sophistication based on open-ended responses in surveys. It was argued that this measure is conceptually closer to theoretical approaches that emphasize the importance of the structure and complexity of belief systems rather than focusing on factual knowledge about institutions. The findings show that conventional knowledge indices and the text-based measure share a substantial amount of variance. However, they are far from being identical and capture different aspects of sophistication. One of the most interesting findings is that using the text-based measure, we don't find evidence for a gender gap that has been commonly reported using factual knowledge scales. While further work on validation and the comparability of the measure across contexts and survey modes is necessary, measuring political sophistication based on open-ended responses has the potential to provide novel insights into the antecedents and consequences of political sophistication.
 
 
 \clearpage\singlespacing\footnotesize
@@ -319,7 +224,7 @@ Previous research in political science and public opinion has raised multiple th
 \bibliography{/data/Dropbox/Uni/Lit/Literature}
 
 \clearpage
-\section*{Appendix: Samples of Open-Ended Responses for High/Low Sophistication}
+\section{Appendix: Samples of Open-Ended Responses for High/Low Sophistication}\label{app:soph}
 
 % latex table generated in R 3.3.0 by xtable 1.8-2 package
 % Wed May 11 10:13:17 2016
@@ -340,7 +245,6 @@ Case ID & 4258 & 1905 \\
    \caption{Example of open-ended responses for minimum and maximum score of political sophistication measure (among all responses). Note that these are the raw responses without any pre-processing (such as spell-checking, removal of terms like ``-1 Inapplicable'', removal of punctuation, stemming, etc.),}
 \end{longtable}
 
-\newpage
 % latex table generated in R 3.3.0 by xtable 1.8-2 package
 % Wed May 11 10:25:59 2016
 \begin{longtable}[ht]{p{4cm}p{6cm}p{6cm}}
@@ -378,6 +282,24 @@ Case ID & 4258 & 1905 \\
     \end{tabular}
   \caption{Example of open-ended responses for low and high scores of text-based sophistication measure with equal response length (between 50 and 100 words). Note that these are the raw responses without any pre-processing (spell-checking etc.).}
   \end{table}
+  
+\clearpage
+\section{Appendix: Details on open-ended responses}
+
+First, we examine the characteristics of open-ended responses as a measure of political sophistication. Figure~\ref{fig:wc} displays the word count as well as the logged word count of the collection of open-ended responses for each individual.
+
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{../fig/wc.pdf}
+\caption{Distribution of Response Lengths}\label{fig:wc}
+\end{figure}
+
+The distribution of raw word count is highly skewed. Most respondents provide brief statements when they describe their attitudes towards political parties and candidates. The mean response length to all 8 questions is about 75 words, so an average response to a single question consisted of less than 10 words, omitting respondents who did not provide any information.
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{../fig/diversity_distributions.png}
+\caption{Diversity Distributions and Sophistication Measure}\label{fig:diversity}
+\end{figure}
+
+Figure~\ref{fig:diversity} presents histograms of the remaining two diversity measures as well as the composite index of political sophistication. Diversity across topics (left panel) is skewed and overall relatively large. Only few respondents appeared to focus on a very select number of topics. As we discuss below, this finding can be partly attributed to the way topic proportions are estimated in the structural topic model. More specifically, the posterior distribution of topic proportions is strongly determined by the respective prior if the individual response is very sparse. The distribution of response diversity (or opinion/item diversity, see middle panel), on the other hand, indicates that a large proportion of respondents only answered one open-ended question, which leads to a response diversity of 0. Looking at the histogram on the right in Figure~\ref{fig:diversity}, we can see that the combined measure of sophistication is approximately normal and captures a large amount of variance between individuals.
 
 
 \end{document}

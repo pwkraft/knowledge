@@ -33,7 +33,7 @@ plot_default <- theme_classic(base_size=8) + theme(panel.border = element_rect(f
 # correlation matrices: compare with common measures
 ########
 
-datcor <- data[,c("polknow_factual", "polknow_office", "polknow_majority","polknow_text")]
+datcor <- data[,c("polknow_text","polknow_factual", "polknow_office", "polknow_majority")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 pdf("../fig/corplot.pdf",width=4, height=4)
@@ -126,7 +126,7 @@ res <- rbind(data.frame(sim(m2, iv=data.frame(female = 0, polmedia=seq(0,1,lengt
 res$dvlab <- factor(res$dv, labels = dvnames)
 
 ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi)) + plot_default +
-  geom_errorbar(alpha=.5, width=0.01) + geom_line() + 
+  geom_errorbar(alpha=.5, width=0) + geom_line() + 
   facet_grid(dvlab~Variable, scale="free_y") +
   ylab("Expected sophistication") + xlab("Value of independent variable")
 ggsave("../fig/closing.pdf",width=5,height=4.5)
@@ -182,7 +182,7 @@ res$dvlab <- factor(res$dv, labels = c("Internal Efficacy","External Efficacy"
                                        ,"Non-conv. Participation","Turnout"))
 
 ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi)) + plot_default +
-  geom_errorbar(alpha=.5, width=0.01) + geom_line() + 
+  geom_errorbar(alpha=.5, width=0) + geom_line() + 
   facet_grid(dvlab~Variable, scale="free") +
   ylab("Expected value of dependent variable") + xlab("Value of sophistication measure")
 ggsave("../fig/sopheff.pdf",width=7,height=5)
