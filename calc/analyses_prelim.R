@@ -139,7 +139,8 @@ res <- rbind(data.frame(sim(m2, iv=data.frame(female = 0, polmedia=seq(0,1,lengt
 res$dvlab <- factor(res$dv, labels = dvnames[1:2])
 
 ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + plot_default +
-  geom_errorbar(alpha=.5, width=0) + geom_line() + 
+  #geom_errorbar(alpha=.5, width=0) + 
+  geom_ribbon(alpha=0.1, lwd=.1) + geom_line() + 
   facet_grid(dvlab~Variable, scale="free_y") +
   ylab("Expected sophistication") + xlab("Value of independent variable")
 ggsave("../fig/closing.pdf",width=4,height=3)
@@ -197,14 +198,16 @@ res$dvlab <- factor(res$dv, labels = c("Internal Efficacy","External Efficacy"
 
 ggplot(res[res$dv%in%c("effic_int","effic_ext"),]
        , aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + plot_default +
-  geom_errorbar(alpha=.5, width=0) + geom_line() + 
+  #geom_errorbar(alpha=.5, width=0) + 
+  geom_ribbon(alpha=0.1, lwd=.1) + geom_line() + 
   facet_grid(dvlab~Variable, scale="free") +
   ylab("Expected value of dependent variable") + xlab("Value of sophistication measure")
 ggsave("../fig/efficacy.pdf",width=4,height=3)
 
 ggplot(res[res$dv%in%c("part","vote"),]
        , aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + plot_default +
-  geom_errorbar(alpha=.5, width=0) + geom_line() + 
+  #geom_errorbar(alpha=.5, width=0) +
+  geom_ribbon(alpha=0.1, lwd=.1) + geom_line() + 
   facet_grid(dvlab~Variable, scale="free") +
   ylab("Expected value of dependent variable") + xlab("Value of sophistication measure")
 ggsave("../fig/participation.pdf",width=4,height=3)

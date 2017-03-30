@@ -30,8 +30,8 @@
 \begin{document}
 \maketitle\doublespacing\thispagestyle{empty}
 
-\begin{abstract}
-This paper proposes a new measurement approach to assess individual political sophistication in opinion surveys. Rather than examining responses to factual knowledge questions, I analyze the complexity in how individuals describe their political beliefs in open-ended responses. This text-based metric captures aspects of sophistication unaccounted for when using conventional knowledge indices and is conceptually closer to theoretical approaches that emphasize the importance of the structure and complexity of belief systems. Overall, the measure behaves similarly to conventional factual knowledge scores. Contrary to previous research, however, there is no evidence for a gender gap in political sophistication. While women might score lower than men on factual knowledge about political institutions and elites, there are no differences in the complexity of expressed political attitudes. The paper proceeds to show how the new measure can improve our understanding of gender differences in political learning as well as the consequences of political sophistication.
+\begin{abstract}\singlespacing
+Studies frequently found that on average, women appear to be less informed about politics than men. However, recent research raised theoretical as well as methodological concerns regarding conventional measures of political knowledge. This paper proposes an alternative approach to assess individual political sophistication in opinion surveys. Building on theoretical frameworks that focus on the structure of political belief systems rather than factual knowledge, I examine how individuals describe their political attitudes in open-ended responses using quantitative text analysis methods. The proposed measure aims to capture the complexity of verbatim responses based on their topic diversity, opinion diversity, and relative length. Compared to traditional knowledge metrics, the new measure behaves similarly as a predictor of political attitudes and behavior and shares common determinants - with one important exception. Contrary to previous research, there is no evidence for a gender gap in political sophistication using the text-based measure. While women might score lower than men on factual knowledge about political institutions and elites, there are no differences in the complexity of expressed political attitudes. The paper proceeds to show how the new measure can improve our understanding of gender differences in political learning as well as the consequences of political sophistication. 
 
 \vspace{\baselineskip}
 \noindent \textbf{Keywords:} political sophistication, gender gap, measurement, open-ended responses, text analysis \\
@@ -41,6 +41,10 @@ This paper proposes a new measurement approach to assess individual political so
 
 
 \section*{Introduction}
+
+The gender gap in political knowledge is frequently observed in political science research.
+
+Studies frequently found that on average, women appear to be less informed about politics than men. However, recent research raised theoretical as well as methodological concerns regarding conventional measures of political knowledge. For example, Mondak and Anderson (2004) argued that at least part of the gender gap can be attributed to the fact that women are less likely to guess than men when facing a political knowledge question for which they do not know an immediate answer. This paper proposes an alternative approach to assess individual political sophistication in opinion surveys. Building on theoretical frameworks that focus on the structure of political belief systems rather than factual knowledge, I examine how individuals describe their political attitudes in open-ended responses using quantitative text analysis methods. More specifically, the proposed measure aims to capture the complexity of verbatim responses based on their topic diversity, opinion diversity, and relative length. Complexity in open-ended responses shares a considerable amount of variance with conventional factual knowledge scores but also captures aspects of sophistication previously unaccounted for. Compared to traditional knowledge metrics, the new measure behaves similarly as a predictor of political attitudes and behavior and shares common determinants - with one important exception. Contrary to previous research, there is no evidence for a gender gap in political sophistication using the text-based measure. While women might score lower than men on factual knowledge about political institutions and elites, there are no differences in the complexity of expressed political attitudes. The paper proceeds to show how the new measure can improve our understanding of gender differences in political learning as well as the consequences of political sophistication. More generally, the results suggest that developing valid measures of political sophistication based on open-ended responses can provide new opportunities to examine political knowledge across time and contexts.
 
 One fundamental concept in the study of political attitudes and behavior is political sophistication and knowledge \citep{converse1964nature,carpini1996americans}. While most scholars emphasize how little people know about politics, how to assess individual knowledge has been subject to re-occurring scholarly debate \citep[e.g.][]{mondak2000reconsidering,mondak2001asked,sturgis2008experiment,debell2013harder,pietryka2013analysis}. Many analyses exclusively rely on individual levels of political knowledge measured by correctness of factual knowledge questions. However, recent research points to important differences between types of knowledge questions that have previously been disregarded \citep{barabas2014question}. Furthermore, scholars argue that factual political knowledge, as measured in many surveys, may not be theoretically relevant \citep{lupia2006elitism} and we should rather focus on how people structure their attitudes and beliefs \citep[e.g.][]{luskin1987measuring}. As such, measuring sophistication solely based on answers to political trivia may misclassify respondents who cannot recall these facts, but do indeed have a coherent cognitive framework of political ideas.
 
@@ -282,13 +286,13 @@ Case ID & 4258 & 1905 \\
 First, we examine the characteristics of open-ended responses as a measure of political sophistication. Figure~\ref{fig:wc} displays the word count as well as the logged word count of the collection of open-ended responses for each individual.
 
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{../fig/wc.pdf}
+\includegraphics{../fig/wc.pdf}
 \caption{Distribution of Response Lengths}\label{fig:wc}
 \end{figure}
 
 The distribution of raw word count is highly skewed. Most respondents provide brief statements when they describe their attitudes towards political parties and candidates. The mean response length to all 8 questions is about 75 words, so an average response to a single question consisted of less than 10 words, omitting respondents who did not provide any information.
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{../fig/diversity_distributions.png}
+\includegraphics{../fig/diversity.pdf}
 \caption{Diversity Distributions and Sophistication Measure}\label{fig:diversity}
 \end{figure}
 

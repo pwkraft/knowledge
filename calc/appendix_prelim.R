@@ -24,13 +24,13 @@ load("anes.Rdata")
 #load("../data/anes_old.Rdata")
 
 # correlation matrices
-datcor <- data[,c("polknow_factual", "polknow_office", "polknow_majority","polknow_text")]
-colnames(datcor) <- paste0("v",1:ncol(datcor))
-
-png("../fig/corplot.png",width=7, height=7, units="in",res=300)
-ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.02, size=.2)), axisLabels="none") + 
-  theme_classic() + theme(panel.border = element_rect(fill=NA))
-dev.off()
+# datcor <- data[,c("polknow_factual", "polknow_office", "polknow_majority","polknow_text")]
+# colnames(datcor) <- paste0("v",1:ncol(datcor))
+# 
+# png("../fig/corplot.png",width=7, height=7, units="in",res=300)
+# ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.02, size=.2)), axisLabels="none") + 
+#   theme_classic() + theme(panel.border = element_rect(fill=NA))
+# dev.off()
 
 
 
@@ -53,26 +53,32 @@ lwc_mean = mean(data$lwc)
 p2 <- ggplot(data, aes(lwc, ..density..)) + geom_histogram(binwidth = 0.05, fill='grey') + 
   geom_density() + theme_classic(base_size = 8) + 
   theme(panel.border = element_rect(fill=NA)) + 
-  geom_vline(xintercept = lwc_mean, colour="red", linetype = 3) + 
-  ylab("Density") + xlab("log(Word Count)")
+  geom_vline(xintercept = lwc_mean, colour="red", linetype = "longdash") + 
+  ylab("Density") + xlab("log(Word Count) / max[log(Word Count)]")
+
+
+pdf("../fig/wc.pdf",width=5, height=2)
+grid.arrange(p1, p2, ncol=2)
+dev.off()
 
 ## histogram/density of topic_diversity
 diversity_mean = mean(data$topic_diversity)
 
 p3 <- ggplot(data, aes(topic_diversity, ..density..)) + geom_histogram(binwidth = 0.01,fill='grey') + geom_density() + theme_classic() + 
-  theme(panel.border = element_rect(fill=NA)) + geom_vline(xintercept = diversity_mean, colour="red", linetype = "longdash") + theme(axis.title.x=element_blank()) +
-  theme(axis.title.y=element_blank())
+  theme_classic(base_size = 8) + theme(panel.border = element_rect(fill=NA)) + 
+  geom_vline(xintercept = diversity_mean, colour="red", linetype = "longdash") + 
+  ylab("Density") + xlab("Topic Diversity")
 
 ## histogram/density of ditem
 ditem_mean = mean(data$ditem)
 
 p4 <- ggplot(data, aes(ditem, ..density..)) + geom_histogram(binwidth = 0.01,fill='grey') + geom_density() + theme_classic() + 
-  theme(panel.border = element_rect(fill=NA)) + geom_vline(xintercept = ditem_mean, colour="red", linetype = "longdash") + theme(axis.title.x=element_blank()) +
-  theme(axis.title.y=element_blank())
+  theme_classic(base_size = 8) + theme(panel.border = element_rect(fill=NA)) + 
+  geom_vline(xintercept = ditem_mean, colour="red", linetype = "longdash") + 
+  ylab("Density") + xlab("Opinion Diversity")
 
-
-pdf("../fig/polknow_components.pdf",width=7, height=2)
-grid.arrange(p1, p2, p3, p4, ncol=2)
+pdf("../fig/diversity.pdf",width=5, height=2)
+grid.arrange(p3, p4, ncol=2)
 dev.off()
 
 
