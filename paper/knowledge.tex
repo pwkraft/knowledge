@@ -14,7 +14,9 @@
 \usepackage{booktabs}
 \usepackage[colorlinks=true,citecolor=red!50!black,urlcolor=blue!50!black,linkcolor=red!50!black]{hyperref}
 
-\author{Patrick Kraft\footnote{Ph.D. Candidate, Stony Brook University, \href{mailto:patrick.kraft@stonybrook.edu}{patrick.kraft@stonybrook.edu}. A previous version of this paper was in collaboration with Laura Buchanan, Data Science NYU}}
+\author{Patrick Kraft\footnote{Ph.D. Candidate, Stony Brook University, \href{mailto:patrick.kraft@stonybrook.edu}{patrick.kraft@stonybrook.edu}.
+%A previous version of this paper was in collaboration with Laura Buchanan, Data Science NYU
+}}
 \date{today}
 
 \title{Women Also Know Stuff\\
@@ -151,10 +153,10 @@ Figure~\ref{fig:corplot} compares the new measure to conventional knowledge metr
 
 \begin{figure}[h]\centering
 \includegraphics{../fig/corplot.pdf}
-\caption{Correlation matrix of conventional political knowledge metrics and the text-based sophistication measure. The plots on the diagonal display unvariate densities for each variable. The panles in the lower triangular display the scatterplot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. All correlations reported are significant on the .05 level. v1: Text-based Sophistication; v2: Factual Knowledge; v3: Office Recognition; v4: Majorities in Congress}\label{fig:corplot}
+\caption{Correlation matrix of conventional political knowledge metrics and the text-based sophistication measure. The plots on the diagonal display unvariate densities for each variable. The panles in the lower triangular display the scatterplot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. All correlations reported are significant on the .05 level.}\label{fig:corplot}
 \end{figure}
 
-Furthermore, we can examine the face validity of the measure. Appendix~\ref{app:soph} shows examples of survey responses and their estimated sophistication value. The first table displays responses with the minimum and maximum composite score in the dataset. Short responses are clearly penalized. The second table shows the responses with minimum and maximum composite scores for a subset of the data where the response was between 50 and 100 words. It can be seen that the score is not only based on word length, but also topic diversity and diversity across items. This initial investigation suggests that the variation in the sophistication measure captures interesting differences in response behavior that clearly overlaps with traditional knowledge metrics while displaying some unique variation.
+Furthermore, we can examine the face validity of the measure. Appendix A shows examples of survey responses and their estimated sophistication value. The first table displays responses with the minimum and maximum composite score in the dataset. Short responses are clearly penalized. The second table shows the responses with minimum and maximum composite scores for a subset of the data where the response was between 50 and 100 words. It can be seen that the score is not only based on word length, but also topic diversity and diversity across items. This initial investigation suggests that the variation in the sophistication measure captures interesting differences in response behavior that clearly overlaps with traditional knowledge metrics while displaying some unique variation.
 
 
 
@@ -192,8 +194,14 @@ Media exposure and political discussions increase political sophistication among
 Political sophistication is not only of theoretical interest as a dependent variable in political science research, but commonly used as a determinant of other outcomes related to attitudes and behavior. Figure~\ref{fig:sopheff} presents the effects of each sophistication measure for men and women on four dependent variables commonly related to political sophistication: internal efficacy, external efficacy, non-conventional participation, and turnout. The results for the first three dependent variables are based on linear regressions while the effects on turnout are estimated using a logit model. Independent variables are the sophistication (interacted with gender) while controlling for age, race, religiosity, and survey mode (face-to-face vs. online). Each plot displays the expected value of the respective dependent variable (y-axis) for varying levels of each sophistication measure (x-axis), while holding all other variables at their respective means.
 
 \begin{figure}[h]\centering
-\includegraphics{../fig/sopheff.pdf}
-\caption{Effects of sophistication}\label{fig:sopheff}
+\includegraphics{../fig/efficacy.pdf}
+\caption{Effects of sophistication}\label{fig:efficacy}
+\end{figure}
+
+
+\begin{figure}[h]\centering
+\includegraphics{../fig/participation.pdf}
+\caption{Effects of sophistication}\label{fig:participation}
 \end{figure}
 
 Overall, the text-based measure performs at least as well as a predictor of internal efficacy, non-conventional participation, and turnout as the remaining variables. For some outcomes, the effect of text-based sophistication is even stronger than any of the conventional metrics. Furthermore, the effects of the text-based sophistication measure are constant across men and women. On the other hand, using factual knowledge, office recognition, or majorities in Congress, it appears that higher knowledge creates an apparent gender-gap in internal efficacy. Again, such a finding seems implausible, but could be explained by the fact that the traditional knowledge measures underestimate sophistication among women.
@@ -209,7 +217,7 @@ Previous research in political science and public opinion has raised multiple th
 \bibliography{/data/Dropbox/Uni/Lit/Literature}
 
 \clearpage
-\section{Appendix: Samples of Open-Ended Responses for High/Low Sophistication}\label{app:soph}
+\section*{Appendix A: Samples of Open-Ended Responses for High/Low Sophistication}\label{app:soph}
 
 % latex table generated in R 3.3.0 by xtable 1.8-2 package
 % Wed May 11 10:13:17 2016
@@ -269,7 +277,7 @@ Case ID & 4258 & 1905 \\
   \end{table}
   
 \clearpage
-\section{Appendix: Details on open-ended responses}
+\section*{Appendix B: Details on open-ended responses}
 
 First, we examine the characteristics of open-ended responses as a measure of political sophistication. Figure~\ref{fig:wc} displays the word count as well as the logged word count of the collection of open-ended responses for each individual.
 

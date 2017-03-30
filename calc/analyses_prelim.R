@@ -33,12 +33,15 @@ plot_default <- theme_classic(base_size=8) + theme(panel.border = element_rect(f
 # correlation matrices: compare with common measures
 ########
 
-datcor <- data[,c("polknow_text","polknow_factual", "polknow_office", "polknow_majority")]
+datcor <- data[,c("polknow_text","polknow_factual", "polknow_office", "polknow_majority", 
+                  "polknow_evalpre", "polknow_evalpost")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
-pdf("../fig/corplot.pdf",width=4, height=4)
-ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), axisLabels="none") + 
-  plot_default
+pdf("../fig/corplot.pdf",width=5, height=5)
+ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), axisLabels="none"
+        , columnLabels = c("Text-based\nSophistication","Factual\nKnowledge","Office\nRecognition"
+                           ,"Majorities\nin Congress", "Interviewer\nEvaluation (Pre)"
+                           , "Interviewer\nEvaluation (Post)")) + plot_default
 dev.off()
 
 
@@ -50,33 +53,40 @@ dev.off()
 plot_df <- data.frame(rbind(cbind(data$polknow_text, data$female, 1)
                       , cbind(data$polknow_factual, data$female, 2)
                       , cbind(data$polknow_office, data$female, 3)
-                      , cbind(data$polknow_majority, data$female, 4))) %>% na.omit()
+                      , cbind(data$polknow_majority, data$female, 4)
+                      , cbind(data$polknow_evalpre, data$female, 5)
+                      , cbind(data$polknow_evalpost, data$female, 6))) %>% na.omit()
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
 plot_df$Variable <- factor(plot_df$Variable, labels = c("Text-based sophistication", "Factual Knowledge"
-                                                        , "Office Recognition", "Majorities in Congress"))
+                                                        , "Office Recognition", "Majorities in Congress"
+                                                        , "Interviewer Evaluation (Pre)"
+                                                        , "Interviewer Evaluation (Post)"))
 plot_means <- plot_df %>% group_by(Variable, Gender) %>% summarize_each("mean")
 
-ggplot(plot_df, aes(x=Knowledge, col=Gender)) + plot_default + 
+ggplot(plot_df, aes(x=Knowledge, col=Gender, lty=Gender)) + plot_default + 
   geom_density() + facet_wrap(~Variable, scale="free") + 
   xlab("Value on knowledge measure") + ylab("Density") +
-  geom_vline(aes(xintercept = Knowledge, col = Gender), data=plot_means)
-ggsave("../fig/densities.pdf", width=6, height=3.5)
+  geom_vline(aes(xintercept = Knowledge, col = Gender, lty=Gender), data=plot_means)
+ggsave("../fig/densities.pdf", width=6, height=3)
 
 
 ########
 # determinants of political knowledge
 ########
+# NOTE: control for wordsum?
 
 m1 <- NULL
-m1[[1]] <- lm(polknow_text ~ female + polmedia + poldisc + educ + age + black + relig + mode, data = data)
-m1[[2]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + age + black + relig + mode, data = data)
-m1[[3]] <- lm(polknow_office ~ female + polmedia + poldisc + educ + age + black + relig + mode, data = data)
-m1[[4]] <- lm(polknow_majority ~ female + polmedia + poldisc + educ + age + black + relig + mode, data = data)
+m1[[1]] <- lm(polknow_text ~ female + polmedia + poldisc + educ + log(age) + black + relig + mode, data = data)
+m1[[2]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + log(age) + black + relig + mode, data = data)
+m1[[3]] <- lm(polknow_office ~ female + polmedia + poldisc + educ + log(age) + black + relig + mode, data = data)
+m1[[4]] <- lm(polknow_majority ~ female + polmedia + poldisc + educ + log(age) + black + relig + mode, data = data)
+m1[[5]] <- lm(polknow_evalpre ~ female + polmedia + poldisc + educ + log(age) + black + relig + mode, data = data)
+m1[[6]] <- lm(polknow_evalpost ~ female + polmedia + poldisc + educ + log(age) + black + relig + mode, data = data)
 lapply(m1, summary)
 
 dvnames <- c("Text-based Sophistication","Factual Knowledge","Office Recognition"
-             ,"Majorities in Congress")
+             ,"Majorities in Congress", "Interviewer Evaluation (Pre)", "Interviewer Evaluation (Post)")
 ivnames <- c("Intercept", "Gender (Female)", "Media exposure", "Political discussions", "Education"
              , "Age", "Race (Black)", "Religiosity", "Survey Mode (Online)")
 
@@ -100,20 +110,23 @@ dfplot <- dfplot[dfplot$ivnames!="Intercept",]
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") +
-  geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=2) +
+  geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=3) +
   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill=NA), axis.title=element_blank())
-ggsave("../fig/determinants.pdf",width=5,height=3.5)
+ggsave("../fig/determinants.pdf",width=5,height=3)
 
 
 ########
 # closing the knowledge gap
 ########
+# NOTE: control for wordsum?
 
 m2 <- NULL
-m2[[1]] <- lm(polknow_text ~ female * polmedia + female * poldisc + educ + age + black + relig + mode + wordsum, data = data)
-m2[[2]] <- lm(polknow_factual ~ female * polmedia + female * poldisc + educ + age + black + relig + mode + wordsum, data = data)
-m2[[3]] <- lm(polknow_office ~ female * polmedia + female * poldisc + educ + female + age + black + relig + mode + wordsum, data = data)
-m2[[4]] <- lm(polknow_majority ~ female * polmedia + female * poldisc + educ + female + age + black + relig + mode + wordsum, data = data)
+m2[[1]] <- lm(polknow_text ~ female * polmedia + female * poldisc + educ + log(age) + black + relig + mode, data = data)
+m2[[2]] <- lm(polknow_factual ~ female * polmedia + female * poldisc + educ + log(age) + black + relig + mode, data = data)
+#m2[[3]] <- lm(polknow_office ~ female * polmedia + female * poldisc + educ + female + log(age) + black + relig + mode, data = data)
+#m2[[4]] <- lm(polknow_majority ~ female * polmedia + female * poldisc + educ + female + log(age) + black + relig + mode, data = data)
+#m2[[5]] <- lm(polknow_evalpre ~ female * polmedia + female * poldisc + educ + female + log(age) + black + relig, data = data)
+#m2[[6]] <- lm(polknow_evalpost ~ female * polmedia + female * poldisc + educ + female + log(age) + black + relig, data = data)
 
 res <- rbind(data.frame(sim(m2, iv=data.frame(female = 0, polmedia=seq(0,1,length=10)))
                         ,value=seq(0,1,length=10),Variable="Media Exposure",Gender="Male")
@@ -123,13 +136,13 @@ res <- rbind(data.frame(sim(m2, iv=data.frame(female = 0, polmedia=seq(0,1,lengt
                           ,value=seq(0,1,length=10),Variable="Media Exposure",Gender="Female")
              , data.frame(sim(m2, iv=data.frame(female = 1, poldisc=seq(0,1,length=10)))
                           ,value=seq(0,1,length=10),Variable="Political Discussion",Gender="Female"))
-res$dvlab <- factor(res$dv, labels = dvnames)
+res$dvlab <- factor(res$dv, labels = dvnames[1:2])
 
-ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi)) + plot_default +
+ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + plot_default +
   geom_errorbar(alpha=.5, width=0) + geom_line() + 
   facet_grid(dvlab~Variable, scale="free_y") +
   ylab("Expected sophistication") + xlab("Value of independent variable")
-ggsave("../fig/closing.pdf",width=5,height=4.5)
+ggsave("../fig/closing.pdf",width=4,height=3)
 
 
 ########
@@ -145,14 +158,14 @@ m3b[[1]] <- lm(effic_int ~ polknow_factual*female + educ + age + black + relig +
 m3b[[2]] <- lm(effic_ext ~ polknow_factual*female + educ + age + black + relig + mode, data = data)
 m3b[[3]] <- lm(part ~ polknow_factual*female + educ + age + black + relig + mode, data = data)
 m3b[[4]] <- glm(vote ~ polknow_factual*female + educ + age + black + relig + mode, data = data, family=binomial("logit"))
-m3c[[1]] <- lm(effic_int ~ polknow_office*female + educ + age + black + relig + mode, data = data)
-m3c[[2]] <- lm(effic_ext ~ polknow_office*female + educ + age + black + relig + mode, data = data)
-m3c[[3]] <- lm(part ~ polknow_office*female + educ + age + black + relig + mode, data = data)
-m3c[[4]] <- glm(vote ~ polknow_office*female + educ + age + black + relig + mode, data = data, family=binomial("logit"))
-m3d[[1]] <- lm(effic_int ~ polknow_majority*female + educ + age + black + relig + mode, data = data)
-m3d[[2]] <- lm(effic_ext ~ polknow_majority*female + educ + age + black + relig + mode, data = data)
-m3d[[3]] <- lm(part ~ polknow_majority*female + educ + age + black + relig + mode, data = data)
-m3d[[4]] <- glm(vote ~ polknow_majority*female + educ + age + black + relig + mode, data = data, family=binomial("logit"))
+# m3c[[1]] <- lm(effic_int ~ polknow_office*female + educ + age + black + relig + mode, data = data)
+# m3c[[2]] <- lm(effic_ext ~ polknow_office*female + educ + age + black + relig + mode, data = data)
+# m3c[[3]] <- lm(part ~ polknow_office*female + educ + age + black + relig + mode, data = data)
+# m3c[[4]] <- glm(vote ~ polknow_office*female + educ + age + black + relig + mode, data = data, family=binomial("logit"))
+# m3d[[1]] <- lm(effic_int ~ polknow_majority*female + educ + age + black + relig + mode, data = data)
+# m3d[[2]] <- lm(effic_ext ~ polknow_majority*female + educ + age + black + relig + mode, data = data)
+# m3d[[3]] <- lm(part ~ polknow_majority*female + educ + age + black + relig + mode, data = data)
+# m3d[[4]] <- glm(vote ~ polknow_majority*female + educ + age + black + relig + mode, data = data, family=binomial("logit"))
 
 res <- rbind(data.frame(sim(m3a, iv=data.frame(female = 0, polknow_text=seq(0,max(data$polknow_text),length=10)))
                         , value=seq(0,max(data$polknow_text),length=10), Gender="Male"
@@ -166,26 +179,35 @@ res <- rbind(data.frame(sim(m3a, iv=data.frame(female = 0, polknow_text=seq(0,ma
              , data.frame(sim(m3b, iv=data.frame(female = 1, polknow_factual=seq(0,1,length=6)))
                           , value=seq(0,1,length=6), Gender="Female"
                           , Variable="Factual Knowledge")
-             , data.frame(sim(m3c, iv=data.frame(female = 0, polknow_office=seq(0,1,length=5)))
-                          , value=seq(0,1,length=5), Gender="Male"
-                          , Variable="Office Recognition")
-             , data.frame(sim(m3c, iv=data.frame(female = 1, polknow_office=seq(0,1,length=5)))
-                          , value=seq(0,1,length=5), Gender="Female"
-                          , Variable="Office Recognition")
-             , data.frame(sim(m3d, iv=data.frame(female = 0, polknow_majority=seq(0,1,length=3)))
-                          , value=seq(0,1,length=3), Gender="Male"
-                          , Variable="Majorities in Congress")
-             , data.frame(sim(m3d, iv=data.frame(female = 1, polknow_majority=seq(0,1,length=3)))
-                          , value=seq(0,1,length=3), Gender="Female"
-                          , Variable="Majorities in Congress"))
+             # , data.frame(sim(m3c, iv=data.frame(female = 0, polknow_office=seq(0,1,length=5)))
+             #              , value=seq(0,1,length=5), Gender="Male"
+             #              , Variable="Office Recognition")
+             # , data.frame(sim(m3c, iv=data.frame(female = 1, polknow_office=seq(0,1,length=5)))
+             #              , value=seq(0,1,length=5), Gender="Female"
+             #              , Variable="Office Recognition")
+             # , data.frame(sim(m3d, iv=data.frame(female = 0, polknow_majority=seq(0,1,length=3)))
+             #              , value=seq(0,1,length=3), Gender="Male"
+             #              , Variable="Majorities in Congress")
+             # , data.frame(sim(m3d, iv=data.frame(female = 1, polknow_majority=seq(0,1,length=3)))
+             #              , value=seq(0,1,length=3), Gender="Female"
+             #              , Variable="Majorities in Congress")
+             )
 res$dvlab <- factor(res$dv, labels = c("Internal Efficacy","External Efficacy"
                                        ,"Non-conv. Participation","Turnout"))
 
-ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi)) + plot_default +
+ggplot(res[res$dv%in%c("effic_int","effic_ext"),]
+       , aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + plot_default +
   geom_errorbar(alpha=.5, width=0) + geom_line() + 
   facet_grid(dvlab~Variable, scale="free") +
   ylab("Expected value of dependent variable") + xlab("Value of sophistication measure")
-ggsave("../fig/sopheff.pdf",width=7,height=5)
+ggsave("../fig/efficacy.pdf",width=4,height=3)
+
+ggplot(res[res$dv%in%c("part","vote"),]
+       , aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + plot_default +
+  geom_errorbar(alpha=.5, width=0) + geom_line() + 
+  facet_grid(dvlab~Variable, scale="free") +
+  ylab("Expected value of dependent variable") + xlab("Value of sophistication measure")
+ggsave("../fig/participation.pdf",width=4,height=3)
 
 
 
