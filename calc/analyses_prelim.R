@@ -164,7 +164,7 @@ ggsave("../fig/closing.pdf",width=5,height=3)
 
 
 ########
-# sophistication as an independent variable
+# sophistication as an independent variable: including gender interaction (used in previous version)
 ########
 
 m3a <- m3b <- m3c <- m3d <- NULL
@@ -185,10 +185,10 @@ m3b[[4]] <- glm(vote ~ polknow_factual*female + educ + log(age) + black + relig 
 # m3d[[3]] <- lm(part ~ polknow_majority*female + educ + log(age) + black + relig + mode, data = data)
 # m3d[[4]] <- glm(vote ~ polknow_majority*female + educ + log(age) + black + relig + mode, data = data, family=binomial("logit"))
 
-res <- rbind(data.frame(sim(m3a, iv=data.frame(female = 0, polknow_text_mean=seq(0,max(data$polknow_text_mean),length=10)))
+res <- rbind(data.frame(sim(m3a, iv=data.frame(female = 0, polknow_text_mean=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10)))
                         , value=seq(0,max(data$polknow_text_mean),length=10), Gender="Male"
                         , Variable="Text-based Sophistication")
-             , data.frame(sim(m3a, iv=data.frame(female = 1, polknow_text_mean=seq(0,max(data$polknow_text_mean),length=10)))
+             , data.frame(sim(m3a, iv=data.frame(female = 1, polknow_text_mean=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10)))
                           , value=seq(0,max(data$polknow_text_mean),length=10), Gender="Female"
                           , Variable="Text-based Sophistication")
              , data.frame(sim(m3b, iv=data.frame(female = 0, polknow_factual=seq(0,1,length=6)))
@@ -236,30 +236,30 @@ ggsave("../fig/participation.pdf",width=4,height=3)
 ########
 
 m4a <- m4b <- m4c <- m4d <- m4e <- m4f <- NULL
-m4a[[1]] <- lm(effic_int ~ polknow_text_mean + educ + log(age) + black + relig + mode, data = data)
-m4a[[2]] <- lm(effic_ext ~ polknow_text_mean + educ + log(age) + black + relig + mode, data = data)
-m4a[[3]] <- lm(part ~ polknow_text_mean + educ + log(age) + black + relig + mode, data = data)
-m4a[[4]] <- glm(vote ~ polknow_text_mean + educ + log(age) + black + relig + mode, data = data, family=binomial("logit"))
-m4b[[1]] <- lm(effic_int ~ polknow_factual + educ + log(age) + black + relig + mode, data = data)
-m4b[[2]] <- lm(effic_ext ~ polknow_factual + educ + log(age) + black + relig + mode, data = data)
-m4b[[3]] <- lm(part ~ polknow_factual + educ + log(age) + black + relig + mode, data = data)
-m4b[[4]] <- glm(vote ~ polknow_factual + educ + log(age) + black + relig + mode, data = data, family=binomial("logit"))
-m4c[[1]] <- lm(effic_int ~ polknow_office + educ + log(age) + black + relig + mode, data = data)
-m4c[[2]] <- lm(effic_ext ~ polknow_office + educ + log(age) + black + relig + mode, data = data)
-m4c[[3]] <- lm(part ~ polknow_office + educ + log(age) + black + relig + mode, data = data)
-m4c[[4]] <- glm(vote ~ polknow_office + educ + log(age) + black + relig + mode, data = data, family=binomial("logit"))
-m4d[[1]] <- lm(effic_int ~ polknow_majority + educ + log(age) + black + relig + mode, data = data)
-m4d[[2]] <- lm(effic_ext ~ polknow_majority + educ + log(age) + black + relig + mode, data = data)
-m4d[[3]] <- lm(part ~ polknow_majority + educ + log(age) + black + relig + mode, data = data)
-m4d[[4]] <- glm(vote ~ polknow_majority + educ + log(age) + black + relig + mode, data = data, family=binomial("logit"))
-m4e[[1]] <- lm(effic_int ~ polknow_evalpre + educ + log(age) + black + relig, data = data)
-m4e[[2]] <- lm(effic_ext ~ polknow_evalpre + educ + log(age) + black + relig, data = data)
-m4e[[3]] <- lm(part ~ polknow_evalpre + educ + log(age) + black + relig, data = data)
-m4e[[4]] <- glm(vote ~ polknow_evalpre + educ + log(age) + black + relig, data = data, family=binomial("logit"))
-m4f[[1]] <- lm(effic_int ~ polknow_evalpost + educ + log(age) + black + relig, data = data)
-m4f[[2]] <- lm(effic_ext ~ polknow_evalpost + educ + log(age) + black + relig, data = data)
-m4f[[3]] <- lm(part ~ polknow_evalpost + educ + log(age) + black + relig, data = data)
-m4f[[4]] <- glm(vote ~ polknow_evalpost + educ + log(age) + black + relig, data = data, family=binomial("logit"))
+m4a[[1]] <- lm(effic_int ~ polknow_text_mean + female + educ + log(age) + black + relig + mode, data = data)
+m4a[[2]] <- lm(effic_ext ~ polknow_text_mean + female + educ + log(age) + black + relig + mode, data = data)
+m4a[[3]] <- lm(part ~ polknow_text_mean + female + educ + log(age) + black + relig + mode, data = data)
+m4a[[4]] <- glm(vote ~ polknow_text_mean + female + educ + log(age) + black + relig + mode, data = data, family=binomial("logit"))
+m4b[[1]] <- lm(effic_int ~ polknow_factual + female + educ + log(age) + black + relig + mode, data = data)
+m4b[[2]] <- lm(effic_ext ~ polknow_factual + female + educ + log(age) + black + relig + mode, data = data)
+m4b[[3]] <- lm(part ~ polknow_factual + female + educ + log(age) + black + relig + mode, data = data)
+m4b[[4]] <- glm(vote ~ polknow_factual + female + educ + log(age) + black + relig + mode, data = data, family=binomial("logit"))
+m4c[[1]] <- lm(effic_int ~ polknow_office + female + educ + log(age) + black + relig + mode, data = data)
+m4c[[2]] <- lm(effic_ext ~ polknow_office + female + educ + log(age) + black + relig + mode, data = data)
+m4c[[3]] <- lm(part ~ polknow_office + female + educ + log(age) + black + relig + mode, data = data)
+m4c[[4]] <- glm(vote ~ polknow_office + female + educ + log(age) + black + relig + mode, data = data, family=binomial("logit"))
+m4d[[1]] <- lm(effic_int ~ polknow_majority + female + educ + log(age) + black + relig + mode, data = data)
+m4d[[2]] <- lm(effic_ext ~ polknow_majority + female + educ + log(age) + black + relig + mode, data = data)
+m4d[[3]] <- lm(part ~ polknow_majority + female + educ + log(age) + black + relig + mode, data = data)
+m4d[[4]] <- glm(vote ~ polknow_majority + female + educ + log(age) + black + relig + mode, data = data, family=binomial("logit"))
+m4e[[1]] <- lm(effic_int ~ polknow_evalpre + female + educ + log(age) + black + relig, data = data)
+m4e[[2]] <- lm(effic_ext ~ polknow_evalpre + female + educ + log(age) + black + relig, data = data)
+m4e[[3]] <- lm(part ~ polknow_evalpre + female + educ + log(age) + black + relig, data = data)
+m4e[[4]] <- glm(vote ~ polknow_evalpre + female + educ + log(age) + black + relig, data = data, family=binomial("logit"))
+m4f[[1]] <- lm(effic_int ~ polknow_evalpost + female + educ + log(age) + black + relig, data = data)
+m4f[[2]] <- lm(effic_ext ~ polknow_evalpost + female + educ + log(age) + black + relig, data = data)
+m4f[[3]] <- lm(part ~ polknow_evalpost + female + educ + log(age) + black + relig, data = data)
+m4f[[4]] <- glm(vote ~ polknow_evalpost + female + educ + log(age) + black + relig, data = data, family=binomial("logit"))
 
 res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
              , sim(m4b, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T)))
@@ -283,13 +283,65 @@ ggsave("../fig/knoweff.pdf", width=4, height=3)
 ##### Generate tables for appendix
 
 ## create labels
-ivlabs <- c("Sex (Female)","Media Exposure","Political Discussion"
-            ,"Education (College Degree)","log(Age)","Race (African American)"
+dvlabs <- c("Internal Efficacy","External Efficacy","Non-conv. Part.","Turnout")
+ivlabs <- c("Text-based","Factual","Office","Majorities","Eval. (Pre)", "Eval. (Post)"
+            ,"Sex (Female)","Education (College)","log(Age)","Race (Black)"
             ,"Church Attendance","Survey Mode (Online)")
-dvlabs <- c("Text-based","Factual","Office","Majorities","Eval. (Pre)", "Eval. (Post)")
-mlabs <- NULL
 
-## create table
+## Effects of sophistication
+stargazer(m4a[[1]],m4b[[1]],m4c[[1]],m4d[[1]],m4e[[1]],m4f[[1]]
+          , type="text", keep.stat = c("n","rsq")
+          , covariate.labels = ivlabs
+          , dep.var.labels = "Iternal Efficacy"
+          , align = TRUE, label="tab:inteff"
+          , model.numbers = TRUE, no.space = T
+          , star.cutoffs = c(.05,.01,.001)
+          , title="Effects on Internal Efficacy"
+          , out="../tab/inteff.tex"
+          , font.size = "scriptsize"
+          , column.sep.width = "-5pt"
+          , table.placement="ht")
+stargazer(m4a[[2]],m4b[[2]],m4c[[2]],m4d[[2]],m4e[[2]],m4f[[2]]
+          , type="text", keep.stat = c("n","rsq")
+          , covariate.labels = ivlabs
+          , dep.var.labels = "External Efficacy"
+          , align = TRUE, label="tab:exteff"
+          , model.numbers = FALSE, no.space = T
+          , star.cutoffs = c(.05,.01,.001)
+          , title="Effects on External Efficacy"
+          , out="../tab/exteff.tex"
+          , font.size = "scriptsize"
+          , column.sep.width = "-5pt"
+          , table.placement="ht")
+stargazer(m4a[[3]],m4b[[3]],m4c[[3]],m4d[[3]],m4e[[3]],m4f[[3]]
+          , type="text", keep.stat = c("n","rsq")
+          , covariate.labels = ivlabs
+          , dep.var.labels = "Non-conventional Participation"
+          , align = TRUE, label="tab:nonconv"
+          , model.numbers = FALSE, no.space = T
+          , star.cutoffs = c(.05,.01,.001)
+          , title="Effects on Non-conventional Participation"
+          , out="../tab/nonconv.tex"
+          , font.size = "scriptsize"
+          , column.sep.width = "-5pt"
+          , table.placement="ht")
+stargazer(m4a[[4]],m4b[[4]],m4c[[4]],m4d[[4]],m4e[[4]],m4f[[4]]
+          , type="text", keep.stat = c("n","aic")
+          , covariate.labels = ivlabs
+          , dep.var.labels = "Turnout"
+          , align = TRUE, label="tab:turnout"
+          , model.numbers = FALSE, no.space = T
+          , star.cutoffs = c(.05,.01,.001)
+          , title="Effects on Turnout (Logit)"
+          , out="../tab/turnout.tex"
+          , font.size = "scriptsize"
+          , column.sep.width = "-5pt"
+          , table.placement="ht")
+
+## create labels for remaining tables
+dvlabs <- c("Text-based","Factual","Office","Majorities","Eval. (Pre)", "Eval. (Post)")
+
+## Determinants of Political Knowledge
 stargazer(m1, type="text", keep.stat = c("n","rsq")
           , covariate.labels = ivnames[-1]
           , dep.var.labels = dvlabs
@@ -299,6 +351,21 @@ stargazer(m1, type="text", keep.stat = c("n","rsq")
           , star.cutoffs = c(.05,.01,.001)
           , title="Determinants of Political Knowledge."
           , out="../tab/determinants.tex"
+          , font.size = "scriptsize"
+          , column.sep.width = "-5pt"
+          , table.placement="ht")
+
+## Closing the Gap
+stargazer(m2, type="text", keep.stat = c("n","rsq")
+          , covariate.labels = c(ivnames[-1], "Female * Media"
+                                 , "Female * Discussions","Female * Education")
+          , dep.var.labels = dvlabs
+          , dep.var.caption = "Dependent Variable: Political Knowledge Measure"
+          , align = TRUE, label="tab:closing"
+          , model.numbers = FALSE, no.space = T
+          , star.cutoffs = c(.05,.01,.001)
+          , title="Closing the Gender Gap"
+          , out="../tab/closing.tex"
           , font.size = "scriptsize"
           , column.sep.width = "-5pt"
           , table.placement="ht")
