@@ -44,7 +44,7 @@ wc_mean = mean(data$wc)
 p1 <- ggplot(data, aes(wc)) + geom_histogram(fill = "grey", binwidth = 25) + 
   theme_classic(base_size = 8) + 
   theme(panel.border = element_rect(fill=NA)) + 
-  geom_vline(xintercept = wc_mean, colour="red", linetype = 3) +
+  geom_vline(xintercept = wc_mean, colour="red", linetype = "longdash") +
   ylab("Number of Respondents") + xlab("Word Count")
 
 ## histogram/density of lwc
@@ -90,20 +90,37 @@ dev.off()
 varnames <- c("Case ID","Obama (likes)","Obama (dislikes)","Romney (likes)","Romney (dislikes)"
               ,"Democratic party (likes)","Democratic party (dislikes)"
               ,"Republican party (likes)","Republican party (dislikes)")
+
+## max/min w/o wc restriction
 tab_ex1 <- t(rbind(anes2012opend[anes2012opend$caseid == with(data, caseid[polknow_text==min(polknow_text)])[1],]
                  , anes2012opend[anes2012opend$caseid == with(data, caseid[polknow_text==max(polknow_text)]),]))
 rownames(tab_ex1) <- varnames
 colnames(tab_ex1) <- c("Minimum","Maximum")
 xtable(tab_ex1)
 
-tab_ex2 <- t(rbind(anes2012opend[anes2012opend$caseid == with(filter(data,wc>50 & wc<100), caseid[polknow_text==min(polknow_text)]),]
-                   , anes2012opend[anes2012opend$caseid == with(filter(data,wc>50 & wc<100), caseid[polknow_text==max(polknow_text)]),]))
+## max/min w/ wc restiction + equal factual knowledge
+tab_ex2 <- t(rbind(anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & wc<125 & polknow_factual == .6), caseid[polknow_text==min(polknow_text)]),]
+                   , anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & wc<125 & polknow_factual == .6), caseid[polknow_text==max(polknow_text)]),]))
 rownames(tab_ex2) <- varnames
 colnames(tab_ex2) <- c("Minimum","Maximum")
 xtable(tab_ex2)
 
-arrange(data, polknow_text) %>% filter(wc>50 & wc<100) %>% dplyr::select(resp, polknow_text) %>% head()
-arrange(data, polknow_text) %>% filter(wc>50 & wc<100) %>% dplyr::select(resp, polknow_text) %>% tail()
+arrange(data, polknow_text) %>% filter(wc>25 & wc<125 & polknow_factual == .6) %>% dplyr::select(resp, polknow_text) %>% head()
+arrange(data, polknow_text) %>% filter(wc>25 & wc<125 & polknow_factual == .6) %>% dplyr::select(resp, polknow_text) %>% tail()
+
+## max/min w/ wc restiction + different factual knowledge + female vs. male (issue: text measure might not be min<max due to different groups)
+tab_ex3 <- t(rbind(anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & wc<125 & polknow_factual == .8 & female == 0), caseid[polknow_text==min(polknow_text)]),]
+                   , anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & wc<125 & polknow_factual == .6 & female == 1), caseid[polknow_text==max(polknow_text)]),]))
+rownames(tab_ex3) <- varnames
+colnames(tab_ex3) <- c("Minimum","Maximum")
+xtable(tab_ex3)
+
+## max/min w/ lower wc limit + equal factual knowledge
+tab_ex3 <- t(rbind(anes2012opend[anes2012opend$caseid %in% with(filter(data,wc>25 & polknow_factual == .6), caseid[polknow_text==min(polknow_text)]),]
+                   , anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & polknow_factual == .6), caseid[polknow_text==max(polknow_text)]),]))
+rownames(tab_ex3) <- varnames
+colnames(tab_ex3) <- c("Minimum","Maximum")
+xtable(tab_ex3)
 
 
 #########

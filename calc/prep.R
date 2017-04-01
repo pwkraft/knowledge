@@ -248,6 +248,21 @@ anes2012$ditem <- apply(anes2012spell[,-1], 1, function(x){
 })
 
 
+## compare response behavior by gender
+ggplot(anes2012, aes(wc, fill=factor(female))) + geom_bar(stat=mean)
+
+ggplot(anes2012, aes(factor(female), y=as.numeric(wc!=0))) + 
+  stat_summary_bin(fun.y = "mean", geom="bar")
+
+ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + geom_point(alpha=.1, size=.1) + 
+  stat_summary(fun.data = "mean_cl_boot", col="red")
+
+ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + 
+  stat_summary(fun.data = "mean_cl_boot", col="red")
+
+table(anes2012$spanish==0)
+table(anes2012$wc==0)
+
 ### fit structural topic model
 
 ### prepare data
