@@ -296,7 +296,11 @@ stargazer(m4a[[1]],m4b[[1]],m4c[[1]],m4d[[1]],m4e[[1]],m4f[[1]]
           , align = TRUE, label="tab:inteff"
           , model.numbers = TRUE, no.space = T
           , star.cutoffs = c(.05,.01,.001)
-          , title="Effects on Internal Efficacy"
+          , title="Effects of sophistication -- OLS models predicting internal efficacy 
+          based on different sophistication 
+          measures. Positive coefficients indicate higher self-reported internal efficacy. 
+          Standard errors in parentheses. Estimates are used for Figure~\\ref{fig:knoweff} 
+          in the main text."
           , out="../tab/inteff.tex"
           , font.size = "scriptsize"
           , column.sep.width = "-5pt"
@@ -308,7 +312,11 @@ stargazer(m4a[[2]],m4b[[2]],m4c[[2]],m4d[[2]],m4e[[2]],m4f[[2]]
           , align = TRUE, label="tab:exteff"
           , model.numbers = FALSE, no.space = T
           , star.cutoffs = c(.05,.01,.001)
-          , title="Effects on External Efficacy"
+          , title="Effects of sophistication -- OLS models predicting external efficacy 
+          based on different sophistication 
+          measures. Positive coefficients indicate higher self-reported external efficacy. 
+          Standard errors in parentheses. Estimates are used for Figure~\\ref{fig:knoweff} 
+          in the main text."
           , out="../tab/exteff.tex"
           , font.size = "scriptsize"
           , column.sep.width = "-5pt"
@@ -320,7 +328,12 @@ stargazer(m4a[[3]],m4b[[3]],m4c[[3]],m4d[[3]],m4e[[3]],m4f[[3]]
           , align = TRUE, label="tab:nonconv"
           , model.numbers = FALSE, no.space = T
           , star.cutoffs = c(.05,.01,.001)
-          , title="Effects on Non-conventional Participation"
+          , title="Effects of sophistication -- OLS models predicting non-conventional 
+          particpation (protest, signing 
+          petitions, etc.) based on different sophistication 
+          measures. Positive coefficients indicate higher levels of participation. 
+          Standard errors in parentheses. Estimates are used for Figure~\\ref{fig:knoweff} 
+          in the main text."
           , out="../tab/nonconv.tex"
           , font.size = "scriptsize"
           , column.sep.width = "-5pt"
@@ -332,7 +345,11 @@ stargazer(m4a[[4]],m4b[[4]],m4c[[4]],m4d[[4]],m4e[[4]],m4f[[4]]
           , align = TRUE, label="tab:turnout"
           , model.numbers = FALSE, no.space = T
           , star.cutoffs = c(.05,.01,.001)
-          , title="Effects on Turnout (Logit)"
+          , title="Effects of sophistication -- Logit models predicting turnout based on 
+          different sophistication measures. Positive coefficients indicate higher 
+          probabilities to participate in the election. 
+          Standard errors in parentheses. Estimates are used for Figure~\\ref{fig:knoweff} 
+          in the main text."
           , out="../tab/turnout.tex"
           , font.size = "scriptsize"
           , column.sep.width = "-5pt"
@@ -349,7 +366,11 @@ stargazer(m1, type="text", keep.stat = c("n","rsq")
           , align = TRUE, label="tab:determinants"
           , model.numbers = FALSE, no.space = T
           , star.cutoffs = c(.05,.01,.001)
-          , title="Determinants of Political Knowledge."
+          , title="Determinants of political knowledge -- OLS models predicting different 
+          political sophistication measures.
+          Positive coefficients indicate higher sophistication. 
+          Standard errors in parentheses. Estimates are used for Figure~\\ref{fig:determinants} 
+          in the main text."
           , out="../tab/determinants.tex"
           , font.size = "scriptsize"
           , column.sep.width = "-5pt"
@@ -364,7 +385,11 @@ stargazer(m2, type="text", keep.stat = c("n","rsq")
           , align = TRUE, label="tab:closing"
           , model.numbers = FALSE, no.space = T
           , star.cutoffs = c(.05,.01,.001)
-          , title="Closing the Gender Gap"
+          , title="Closing the Gender Gap -- OLS models predicting different 
+          political sophistication measures.
+          Positive coefficients indicate higher sophistication. 
+          Standard errors in parentheses. Estimates are used for 
+          Figure~\\ref{fig:closing} in the main text."
           , out="../tab/closing.tex"
           , font.size = "scriptsize"
           , column.sep.width = "-5pt"
