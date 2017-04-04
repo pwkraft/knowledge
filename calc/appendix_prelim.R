@@ -24,7 +24,7 @@ load("anes.Rdata")
 #load("../data/anes_old.Rdata")
 
 # correlation matrices
-# datcor <- data[,c("polknow_factual", "polknow_office", "polknow_majority","polknow_text")]
+# datcor <- data[,c("polknow_factual", "polknow_office", "polknow_majority","polknow_text_mean")]
 # colnames(datcor) <- paste0("v",1:ncol(datcor))
 # 
 # png("../fig/corplot.png",width=7, height=7, units="in",res=300)
@@ -92,25 +92,25 @@ varnames <- c("Case ID","Obama (likes)","Obama (dislikes)","Romney (likes)","Rom
               ,"Republican party (likes)","Republican party (dislikes)")
 
 ## max/min w/o wc restriction
-tab_ex1 <- t(rbind(anes2012opend[anes2012opend$caseid == with(data, caseid[polknow_text==min(polknow_text)])[1],]
-                 , anes2012opend[anes2012opend$caseid == with(data, caseid[polknow_text==max(polknow_text)]),]))
+tab_ex1 <- t(rbind(anes2012opend[anes2012opend$caseid == with(data, caseid[polknow_text_mean==min(polknow_text_mean)])[1],]
+                 , anes2012opend[anes2012opend$caseid == with(data, caseid[polknow_text_mean==max(polknow_text_mean)]),]))
 rownames(tab_ex1) <- varnames
 colnames(tab_ex1) <- c("Minimum","Maximum")
 xtable(tab_ex1)
 
 ## max/min w/ wc restiction + equal factual knowledge
-tab_ex2 <- t(rbind(anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & wc<125 & polknow_factual == .6), caseid[polknow_text==min(polknow_text)]),]
-                   , anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & wc<125 & polknow_factual == .6), caseid[polknow_text==max(polknow_text)]),]))
+tab_ex2 <- t(rbind(anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & wc<125 & polknow_factual == .6), caseid[polknow_text_mean==min(polknow_text_mean)]),]
+                   , anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & wc<125 & polknow_factual == .6), caseid[polknow_text_mean==max(polknow_text_mean)]),]))
 rownames(tab_ex2) <- varnames
 colnames(tab_ex2) <- c("Minimum","Maximum")
 xtable(tab_ex2)
 
-arrange(data, polknow_text) %>% filter(wc>25 & wc<125 & polknow_factual == .6) %>% dplyr::select(resp, polknow_text) %>% head()
-arrange(data, polknow_text) %>% filter(wc>25 & wc<125 & polknow_factual == .6) %>% dplyr::select(resp, polknow_text) %>% tail()
+arrange(data, polknow_text_mean) %>% filter(wc>25 & wc<125 & polknow_factual == .6) %>% dplyr::select(resp, polknow_text_mean) %>% head()
+arrange(data, polknow_text_mean) %>% filter(wc>25 & wc<125 & polknow_factual == .6) %>% dplyr::select(resp, polknow_text_mean) %>% tail()
 
 ## max/min w/ wc restiction + different factual knowledge + female vs. male (issue: text measure might not be min<max due to different groups)
-tab_ex3 <- t(rbind(anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & wc<125 & polknow_factual == .8 & female == 0), caseid[polknow_text==min(polknow_text)]),]
-                   , anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & wc<125 & polknow_factual == .6 & female == 1), caseid[polknow_text==max(polknow_text)]),]))
+tab_ex3 <- t(rbind(anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & wc<125 & polknow_factual == .8 & female == 0), caseid[polknow_text_mean==min(polknow_text_mean)]),]
+                   , anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & wc<125 & polknow_factual == .6 & female == 1), caseid[polknow_text_mean==max(polknow_text_mean)]),]))
 rownames(tab_ex3) <- varnames
 colnames(tab_ex3) <- c("Minimum","Maximum")
 xtable(tab_ex3)
@@ -123,12 +123,19 @@ colnames(tab_ex3) <- c("Minimum","Maximum")
 xtable(tab_ex3)
 
 
+tab_ex3 <- t(rbind(anes2012opend[anes2012opend$caseid %in% with(filter(data,wc>50 & wc<100 & polknow_factual == .6), caseid[polknow_text_mean==min(polknow_text_mean)]),]
+                   , anes2012opend[anes2012opend$caseid == with(filter(data,wc>50 & wc<100 & polknow_factual == .6), caseid[polknow_text_mean==max(polknow_text_mean)]),]))
+rownames(tab_ex3) <- varnames
+colnames(tab_ex3) <- c("Minimum","Maximum")
+xtable(tab_ex3)
+
+
 #########
 # determinants of political knowledge including wordsum score
 #########
 
 m1 <- NULL
-m1[[1]] <- lm(polknow_text ~ female + polmedia + poldisc + educ + age + black + relig + wordsum + mode, data = data)
+m1[[1]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + age + black + relig + wordsum + mode, data = data)
 m1[[2]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + age + black + relig + wordsum + mode, data = data)
 m1[[3]] <- lm(polknow_office ~ female + polmedia + poldisc + educ + age + black + relig + wordsum + mode, data = data)
 m1[[4]] <- lm(polknow_majority ~ female + polmedia + poldisc + educ + age + black + relig + wordsum + mode, data = data)
