@@ -46,6 +46,14 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), 
                            , "Interviewer\nEvaluation (Post)")) + plot_default
 dev.off()
 
+pdf("../fig/corplot_empty.pdf",width=5, height=5)
+ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), axisLabels="none"
+        , columnLabels = c("Text-based\nSophistication","Factual\nKnowledge","Office\nRecognition"
+                           ,"Majorities\nin Congress", "Interviewer\nEvaluation (Pre)"
+                           , "Interviewer\nEvaluation (Post)")) + 
+  theme_classic(base_size=8) + theme(panel.border = element_rect(fill="white"))
+dev.off()
+
 
 ########
 # histograms comparing men and women
@@ -83,6 +91,12 @@ ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi)) + plot_default +
   geom_point(aes(y=max), col="white")
 ggsave("../fig/meandiff.pdf", width=6, height=5)
 
+ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi)) + 
+  theme_classic(base_size=8) + theme(panel.border = element_rect(fill="white")) +
+  geom_bar(stat="identity", fill="grey80") + geom_errorbar(width=.25) + 
+  facet_wrap(~Variable, scale="free") + ylab("Mean Value on Knowledge Measure") +
+  geom_point(aes(y=max), col="white")
+ggsave("../fig/meandiff_empty.pdf", width=6, height=5)
 
 ########
 # determinants of political knowledge
@@ -122,10 +136,17 @@ dfplot <- dfplot[dfplot$ivnames!="Intercept",]
 
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
-  geom_vline(xintercept = 0, color="grey") + xlab("Estimate") +
+  geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=3) +
-  theme_classic(base_size = 8) + theme(panel.border = element_rect(fill=NA), axis.title=element_blank())
+  plot_default
 ggsave("../fig/determinants.pdf",width=5,height=3)
+
+ggplot(dfplot, aes(y=ivnames, x=Estimate
+                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
+  geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
+  geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=3) +
+  theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white"))
+ggsave("../fig/determinants_empty.pdf",width=5,height=3)
 
 
 ########
@@ -161,6 +182,14 @@ ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + 
   facet_grid(dvlab~Variable, scale="free_y") +
   ylab("Expected sophistication") + xlab("Value of independent variable")
 ggsave("../fig/closing.pdf",width=5,height=3)
+
+ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + 
+  theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white")) +
+  #geom_errorbar(alpha=.5, width=0) + 
+  geom_ribbon(alpha=0.1, lwd=.1) + geom_line() + 
+  facet_grid(dvlab~Variable, scale="free_y") +
+  ylab("Expected sophistication") + xlab("Value of independent variable")
+ggsave("../fig/closing_empty.pdf",width=5,height=3)
 
 
 ########
@@ -274,11 +303,17 @@ res$ivlab <- factor(res$iv, labels = dvnames)
 ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + 
   geom_point() + geom_errorbarh(height=0) + facet_wrap(~dvlab, scale="free_x") +
   geom_vline(xintercept = 0, color="grey") + 
-  xlab("Marginal Effect") + ylab("Independent Variable") +
-  theme_classic(base_size = 8) + theme(panel.border = element_rect(fill=NA)) +
+  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
   scale_y_discrete(limits = rev(levels(res$ivlab)))
 ggsave("../fig/knoweff.pdf", width=4, height=3)
 
+ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + 
+  geom_point() + geom_errorbarh(height=0) + facet_wrap(~dvlab, scale="free_x") +
+  xlab("Marginal Effect") + ylab("Independent Variable") +
+  theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white")) +
+  geom_vline(xintercept = 0, color="grey") + 
+  scale_y_discrete(limits = rev(levels(res$ivlab)))
+ggsave("../fig/knoweff_empty.pdf", width=4, height=3)
 
 ##### Generate tables for appendix
 

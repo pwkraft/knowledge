@@ -122,13 +122,24 @@ rownames(tab_ex3) <- varnames
 colnames(tab_ex3) <- c("Minimum","Maximum")
 xtable(tab_ex3)
 
-
-tab_ex3 <- t(rbind(anes2012opend[anes2012opend$caseid %in% with(filter(data,wc>50 & wc<100 & polknow_factual == .6), caseid[polknow_text_mean==min(polknow_text_mean)]),]
-                   , anes2012opend[anes2012opend$caseid == with(filter(data,wc>50 & wc<100 & polknow_factual == .6), caseid[polknow_text_mean==max(polknow_text_mean)]),]))
+## max/min w/ lower wc limit + equal factual knowledge + gender difference
+tab_ex3 <- t(rbind(anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & wc<125 & polknow_factual == .6 & female == 0), caseid[polknow_text_mean==min(polknow_text_mean)]),]
+                   , anes2012opend[anes2012opend$caseid == with(filter(data,wc>25 & wc<125 & polknow_factual == .6 & female == 1), caseid[polknow_text_mean==max(polknow_text_mean)]),]))
 rownames(tab_ex3) <- varnames
 colnames(tab_ex3) <- c("Minimum","Maximum")
 xtable(tab_ex3)
 
+
+### Table for presentation
+## max/min w/ lower wc limit + equal factual knowledge + gender difference
+tab_ex3 <- t(rbind(anes2012opend[anes2012opend$caseid == with(filter(data,wc>40 & wc<125 & polknow_factual == .6 & female == 1), caseid[polknow_text_mean==max(polknow_text_mean)]),]
+                   , anes2012opend[anes2012opend$caseid == with(filter(data,wc>40 & wc<125 & polknow_factual == .6 & female == 0), caseid[polknow_text_mean==min(polknow_text_mean)]),]))
+rownames(tab_ex3) <- varnames
+colnames(tab_ex3) <- c("Maximum","Minimum")
+xtable(tab_ex3)
+
+with(filter(data,wc>40 & wc<125 & polknow_factual == .6 & female == 1), min(polknow_text_mean))
+with(filter(data,wc>40 & wc<125 & polknow_factual == .6 & female == 1), max(polknow_text_mean))
 
 #########
 # determinants of political knowledge including wordsum score
