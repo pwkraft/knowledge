@@ -90,13 +90,14 @@ ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi)) + plot_default +
   facet_wrap(~Variable, scale="free") + ylab("Mean Value on Knowledge Measure") +
   geom_point(aes(y=max), col="white")
 ggsave("../fig/meandiff.pdf", width=6, height=5)
+ggsave("../fig/meandiff_small.pdf", width=5, height=4)
 
 ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi)) + 
   theme_classic(base_size=8) + theme(panel.border = element_rect(fill="white")) +
   geom_bar(stat="identity", fill="grey80") + geom_errorbar(width=.25) + 
   facet_wrap(~Variable, scale="free") + ylab("Mean Value on Knowledge Measure") +
   geom_point(aes(y=max), col="white")
-ggsave("../fig/meandiff_empty.pdf", width=6, height=5)
+ggsave("../fig/meandiff_empty.pdf", width=5, height=4)
 
 ########
 # determinants of political knowledge
