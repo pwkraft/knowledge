@@ -24,6 +24,8 @@ setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 load("anes.Rdata")
 #load("../data/anes_old.Rdata")
 
+## QUESTION: remove wc=0 and spanish=1?
+
 source("sim.R")
 source("latexTable.R")
 

@@ -19,6 +19,8 @@
 *.toc
 *.el
 *.bib.bak
+*.Rdata
+*.rds
 
 # History files
 .Rhistory
