@@ -136,8 +136,8 @@ anes2012$ideol_str <- abs(anes2012$ideol_ct)
 anes2012$pid <- factor(car::recode(raw2012$pid_x
                               , "1:2=1; c(3,4,5)=2; 6:7=3; else=NA")
                        , labels = c("Democrat","Independent","Republican"))
-anes2012$pid_dem <- as.numeric(dat$pid=="Democrat")
-anes2012$pid_rep <- as.numeric(dat$pid=="Republican")
+anes2012$pid_dem <- as.numeric(anes2012$pid=="Democrat")
+anes2012$pid_rep <- as.numeric(anes2012$pid=="Republican")
 
 ## pid continuous
 anes2012$pid_cont <- (car::recode(raw2012$pid_x, "lo:0=NA") - 4)/3

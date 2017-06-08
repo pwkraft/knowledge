@@ -16,6 +16,7 @@ library(dplyr)
 library(quanteda)
 library(stm)
 library(ineq)
+library(ggplot2)
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/")
 datasrc <- "/data/Dropbox/Uni/Data/YouGov/"
 raw <- read.csv(paste0(datasrc,"STBR0007_OUTPUT.csv"))
@@ -90,107 +91,68 @@ yougov$educ_pid <- yougov$educ_cont * yougov$pid_cont
 ## strength of partisanship
 yougov$pid_str <- abs(yougov$pid_cont)
 
-
-
-####################
-### CONTINUE HERE
-### CHANGE prep_anes.R to original version
-### correct pid_dem/pid_rep (anes2012 instead of dat)
-
 ## religiosity (church attendance)
-anes2012$relig <- (5 - car::recode(raw2012$relig_churchoft, "lo:0 = NA"))/5
-anes2012$relig[raw2012$relig_church != 1] <- 0
-anes2012$relig[raw2012$relig_churchwk == 2] <- 1
+yougov$relig <- (6 - car::recode(raw$pew_churatd, "7:hi=NA"))/5
 
 ## age
-anes2012$age <- car::recode(raw2012$dem_age_r_x, "c(-2,-9,-8) = NA")
+yougov$age <- 2015 - raw$birthyr
 
 ## sex
-anes2012$female <- raw2012$gender_respondent_x - 1
+yougov$female <- raw$gender - 1  
 
 ## race
-anes2012$black <- as.numeric(car::recode(raw2012$dem_raceeth_x, "lo:0 = NA") == 2)
+yougov$black <- as.numeric(raw$race == 2)
 
-## income...
+## income
+yougov$faminc <- (car::recode(raw$faminc, "31=12; 97:hi=NA") -1)/15
 
 
-### 2012 open-ended responses
+
+### open-ended responses
 ### MORE WORK ON PRE-PROCESSING NEEDED, check all steps, spell checking, stopword removal etc.
 
-## read original open-ended responses (downloaded from anes website)
-anes2012pre <- read.csv(paste0(datasrc,"anes2012TS_openends.csv"), as.is = T) %>%
-  dplyr::select(caseid, candlik_likewhatdpc, candlik_dislwhatdpc, candlik_likewhatrpc, candlik_dislwhatrpc
-         , ptylik_lwhatdp, ptylik_dwhatdp, ptylik_lwhatrp, ptylik_dwhatrp)
-#anes2012post <- read.csv(paste0(datasrc,"anes2012TS_post.csv"), as.is = T) %>%
-#  select(caseid, mip_prob1, mip_prob2, mip_prob3, mip_mostprob)
-#anes2012opend <- merge(anes2012pre, anes2012post)
-
-## optional: only select likes/dislikes
-anes2012opend <- anes2012pre
-
 ## minor pre-processing
-anes2012spell <- apply(anes2012opend[,-1], 2, function(x){
+opend <- apply(select(raw, Q2, Q3, Q5, Q6), 2, function(x){
     x <- gsub("(^\\s+|\\s+$)","", x)
-    x[x %in% c("-1 Inapplicable","-7 Refused","N/A","no","none","#(43042)","i am","Nome")] <- ""
+    x[x %in% c("N/A","n/a","na","Na","__NA__","no","not sure","none","nothing","good"
+               ,"don't know","don't no","","I have no clue","I do not know")] <- ""
     x <- gsub("//"," ", x , fixed = T)
     x <- gsub("\\s+"," ", x)
     x <- gsub("(^\\s+|\\s+$)","", x)
     return(x)
 })
 
-
-## num-lock issue
-# maybe look into this later
-
-## fix words without whitespace
-# maybe look into this later
-
 ## spell-checking
-write.table(anes2012spell, file = "calc/out/anes2012TS_combined.csv"
+write.table(opend, file = "calc/out/spell.csv"
             , sep = ",", col.names = F, row.names = F)
-spell <- aspell("calc/out/anes2012TS_combined.csv") %>%
+spell <- aspell("calc/out/spell.csv") %>%
   filter(Suggestions!="NULL")
 
 ## replace incorrect words
 for(i in 1:nrow(spell)){
-  anes2012spell[spell$Line[i],] <- gsub(spell$Original[i], unlist(spell$Suggestions[i])[1]
-                                        , anes2012spell[spell$Line[i],])
+  opend[spell$Line[i],] <- gsub(spell$Original[i], unlist(spell$Suggestions[i])[1]
+                                        , opend[spell$Line[i],])
 }
-anes2012spell <- data.frame(caseid = anes2012opend$caseid, anes2012spell,stringsAsFactors = F)
+opend <- data.frame(caseid = raw$caseid, opend, stringsAsFactors = F)
 
 
 ### add meta information about responses
 
 ## overall response length
-anes2012$wc <- apply(anes2012spell[,-1], 1, function(x){
+yougov$wc <- apply(opend[,-1], 1, function(x){
   length(unlist(strsplit(x,"\\s+")))
 })
-anes2012$lwc <- log(anes2012$wc)/max(log(anes2012$wc))
+yougov$lwc <- log(yougov$wc)/max(log(yougov$wc))
 
 ## number of items answered
-anes2012$nitem <- apply(anes2012spell[,-1] != "", 1, sum, na.rm = T)
+yougov$nitem <- apply(opend[,-1] != "", 1, sum, na.rm = T)
 
 ## diversity in item response
-anes2012$ditem <- apply(anes2012spell[,-1], 1, function(x){
+yougov$ditem <- apply(opend[,-1], 1, function(x){
   iwc <- unlist(lapply(strsplit(x,"\\s+"), length))
   1 - ineq(iwc,type="Gini")
 })
 
-
-## compare response behavior by gender
-ggplot(anes2012, aes(wc, fill=factor(female))) + geom_bar(stat=mean)
-
-ggplot(anes2012, aes(factor(female), y=as.numeric(wc!=0))) + 
-  stat_summary_bin(fun.y = "mean", geom="bar")
-
-ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + geom_point(alpha=.1, size=.1) + 
-  stat_summary(fun.data = "mean_cl_boot", col="red")
-
-ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + 
-  stat_summary(fun.data = "mean_cl_boot", col="red")
-
-table(anes2012$spanish==0)
-table(anes2012$wc==0)
 
 ### fit structural topic model
 
@@ -198,8 +160,7 @@ table(anes2012$wc==0)
 
 ## combine regular survey and open-ended data, remove spanish and empty responses
 meta <- c("age", "educ_cont", "pid_cont", "educ_pid")
-data <- anes2012 %>% mutate(resp = apply(anes2012spell[,-1],1,paste,collapse=' ')) %>%
-  filter(spanish == 0 & wc != 0)
+data <- yougov %>% mutate(resp = apply(opend[,-1],1,paste,collapse=' '))
 
 ## remove additional whitespaces
 data$resp <- gsub("\\s+"," ", data$resp)
@@ -215,7 +176,7 @@ out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
 
 ## remove discarded observations from data
 data <- data[-processed$docs.removed,]
-data <- data[-out$docs.removed,]
+#data <- data[-out$docs.removed,]
 
 ## quick fit (60 topics)
 # stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
@@ -239,7 +200,17 @@ data$polknow_text <- with(data, topic_diversity * lwc * ditem)
 data$polknow_text_mean <- with(data, (topic_diversity + lwc + ditem)/3)
 
 
+### compare measures
+summary(lm(know_dis ~ polknow_text_mean + know_pol, data=data))
+summary(lm(know_dis ~ polknow_text_mean + know_pol + female + log(age) + black + relig + educ + faminc, data=data))
+## argument: text-based sophistication is a better measure of competence in the sense that the respondents pick up information about the disease
+
+## closing gender gap is replicated!
+summary(lm(polknow_text_mean ~ female + educ + log(age) + black + relig + educ + faminc, data=data))
+summary(lm(know_pol ~ female + educ + log(age) + black + relig + educ + faminc, data=data))
+summary(lm(know_dis ~ female + educ + log(age) + black + relig + educ + faminc, data=data))
+
 ### save output
 
-save(anes2012, anes2012opend, anes2012pre, anes2012spell, data, meta, processed, out, stm_fit
-     , file="calc/out/anes.Rdata")
+save(yougov, opend, spell, data, meta, processed, out, stm_fit
+     , file="calc/out/yougov.Rdata")
