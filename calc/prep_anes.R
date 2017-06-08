@@ -2,7 +2,7 @@
 ### Measuring Political Sophistication using Open-ended Responses ###
 ### Patrick Kraft                                                 ###
 ### ============================================================= ###
-## prepares the yougov data for subsequent analyses
+## prepares the survey data of the 2008 and 2012 ANES for subsequent analyses
 ## prepares open-ended responses (selecting variables, spell checking etc.)
 ## fits structural topic model for open-ended responses
 ## creates diversity measures
@@ -15,36 +15,22 @@ library(car)
 library(dplyr)
 library(quanteda)
 library(stm)
+library(readstata13)
 library(ineq)
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/")
-datasrc <- "/data/Dropbox/Uni/Data/YouGov/"
-raw <- read.csv(paste0(datasrc,"STBR0007_OUTPUT.csv"))
+datasrc <- "/data/Dropbox/Uni/Data/anes2012/"
+raw2012 <- read.dta13(paste0(datasrc,"anes_timeseries_2012.dta"), convert.factors = F)
 
+
+### 2012 regular survey data
 
 ## respondent id
-yougov <- data.frame(caseid=raw$caseid)
+anes2012 <- data.frame(caseid=raw2012$caseid)
 
-## treatments in study 1
-raw$disgust <- raw$treat_rand1 == 3 | raw$treat_rand1 == 4
-raw$anxiety <- raw$treat_rand1 == 2 | raw$treat_rand1 == 4
+## interview mode (1=FTF, 2=online)
+anes2012$mode <- raw2012$mode
 
-## recode missing values in knowledge question
-raw$Q13[is.na(raw$Q13)] <- 8
-raw$Q14[is.na(raw$Q14)] <- 8
-
-## knowledge about diseases (study 1)
-yougov$know_dis <- with(raw, (Q12_1==1)
-                        + ((Q12_2==1)*!disgust) + ((Q12_2==2)*disgust)
-                        + ((Q12_3==2)*!disgust) + ((Q12_3==1)*disgust)
-                        + ((Q12_4==1)*!disgust) + ((Q12_4==2)*disgust)
-                        + ((Q12_5==2)*!disgust) + ((Q12_5==1)*disgust)
-                        + (Q12_6==2) + (Q12_7==2)
-                        + (Q13==1) + (Q14==2))
-
-
-############# CONTINUE HERE
-
-## political knowledge (study 3)
+## political knowledge (office recognition, post-election)
 anes2012$polknow_office <- with(raw2012, (car::recode(ofcrec_speaker_correct, "lo:-1=NA")
                                 + car::recode(ofcrec_vp_correct, "lo:-1=NA")
                                 + car::recode(ofcrec_pmuk_correct, "lo:-1=NA")
@@ -326,5 +312,5 @@ data$polknow_text_mean <- with(data, (topic_diversity + lwc + ditem)/3)
 
 ### save output
 
-save(anes2012, anes2012opend, anes2012pre, anes2012spell, data, meta, processed, out, stm_fit
-     , file="calc/out/anes.Rdata")
+save(anes2012, anes2012opend, anes2012spell, data, meta, processed, out, stm_fit
+     , file="out/anes.Rdata")
