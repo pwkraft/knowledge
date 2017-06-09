@@ -2,7 +2,7 @@
 ### Measuring Political Sophistication using Open-ended Responses ###
 ### Patrick Kraft                                                 ###
 ### ============================================================= ###
-## prepares the yougov data for subsequent analyses
+## prepares the LI survey data for subsequent analyses
 ## prepares open-ended responses (selecting variables, spell checking etc.)
 ## fits structural topic model for open-ended responses
 ## creates diversity measures
@@ -18,14 +18,14 @@ library(stm)
 library(ineq)
 library(ggplot2)
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/")
-datasrc <- "/data/Dropbox/Uni/Data/YouGov/"
-raw <- read.csv(paste0(datasrc,"STBR0007_OUTPUT.csv"))
+datasrc <- "/data/Dropbox/Uni/Data/lisurvey/"
+raw <- read.dta(paste0(datsrc,"combined123.dta"))
 
 
-### closed items in yougov data
+### closed items in lidat data
 
 ## respondent id
-yougov <- data.frame(caseid=raw$caseid)
+lidat <- data.frame(caseid=raw$caseid)
 
 ## treatments in study 1
 raw$disgust <- raw$treat_rand1 == 3 | raw$treat_rand1 == 4
@@ -36,7 +36,7 @@ raw$Q13[is.na(raw$Q13)] <- 8
 raw$Q14[is.na(raw$Q14)] <- 8
 
 ## knowledge about diseases (study 1)
-yougov$know_dis <- with(raw, (Q12_1==1)
+lidat$know_dis <- with(raw, (Q12_1==1)
                         + ((Q12_2==1)*!disgust) + ((Q12_2==2)*disgust)
                         + ((Q12_3==2)*!disgust) + ((Q12_3==1)*disgust)
                         + ((Q12_4==1)*!disgust) + ((Q12_4==2)*disgust)
@@ -55,56 +55,56 @@ raw$Q30[is.na(raw$Q30)] <- 8
 raw$Q31[is.na(raw$Q31)] <- 8
 
 ## political knowledge (study 3) CHECK ANSWERS!
-yougov$know_pol <- with(raw, (Q24==3) + (Q25==1) + (Q26==1) + (Q27==2)
+lidat$know_pol <- with(raw, (Q24==3) + (Q25==1) + (Q26==1) + (Q27==2)
                         + (Q28==2) + (Q29==1) + (Q30==2) + (Q31==1))
 
 ## education (bachelor degree)
-yougov$educ <- raw$educ>=5
+lidat$educ <- raw$educ>=5
 
 ## education (continuous)
-yougov$educ_cont <- (raw$educ-1)/5
+lidat$educ_cont <- (raw$educ-1)/5
 
 ## ideology (factor/dummies)
-yougov$ideol <- factor(car::recode(raw$ideo5, "1:2=1; 3=2; 4:5=3; else=NA")
+lidat$ideol <- factor(car::recode(raw$ideo5, "1:2=1; 3=2; 4:5=3; else=NA")
                          , labels = c("Liberal","Moderate","Conservative"))
-yougov$ideol_lib <- as.numeric(yougov$ideol=="Liberal")
-yougov$ideol_con <- as.numeric(yougov$ideol=="Conservative")
+lidat$ideol_lib <- as.numeric(lidat$ideol=="Liberal")
+lidat$ideol_con <- as.numeric(lidat$ideol=="Conservative")
 
 ## ideology (continuous, -1 to 1)
-yougov$ideol_ct <- (car::recode(raw$ideo5, "6=NA") - 3)/2
+lidat$ideol_ct <- (car::recode(raw$ideo5, "6=NA") - 3)/2
 
 ## strength of ideology
-yougov$ideol_str <- abs(yougov$ideol_ct)
+lidat$ideol_str <- abs(lidat$ideol_ct)
 
 ## party identification (factor/dummies)
-yougov$pid <- factor(car::recode(raw$pid3, "1=1; 2=3; 3=2; else=NA")
+lidat$pid <- factor(car::recode(raw$pid3, "1=1; 2=3; 3=2; else=NA")
                        , labels = c("Democrat","Independent","Republican"))
-yougov$pid_dem <- as.numeric(yougov$pid=="Democrat")
-yougov$pid_rep <- as.numeric(yougov$pid=="Republican")
+lidat$pid_dem <- as.numeric(lidat$pid=="Democrat")
+lidat$pid_rep <- as.numeric(lidat$pid=="Republican")
 
 ## pid continuous
-yougov$pid_cont <- (car::recode(raw$pid7, "8:hi=NA") - 4)/3
+lidat$pid_cont <- (car::recode(raw$pid7, "8:hi=NA") - 4)/3
 
 ## interaction: pid * education
-yougov$educ_pid <- yougov$educ_cont * yougov$pid_cont
+lidat$educ_pid <- lidat$educ_cont * lidat$pid_cont
 
 ## strength of partisanship
-yougov$pid_str <- abs(yougov$pid_cont)
+lidat$pid_str <- abs(lidat$pid_cont)
 
 ## religiosity (church attendance)
-yougov$relig <- (6 - car::recode(raw$pew_churatd, "7:hi=NA"))/5
+lidat$relig <- (6 - car::recode(raw$pew_churatd, "7:hi=NA"))/5
 
 ## age
-yougov$age <- 2015 - raw$birthyr
+lidat$age <- 2015 - raw$birthyr
 
 ## sex
-yougov$female <- raw$gender - 1  
+lidat$female <- raw$gender - 1  
 
 ## race
-yougov$black <- as.numeric(raw$race == 2)
+lidat$black <- as.numeric(raw$race == 2)
 
 ## income
-yougov$faminc <- (car::recode(raw$faminc, "31=12; 97:hi=NA") -1)/15
+lidat$faminc <- (car::recode(raw$faminc, "31=12; 97:hi=NA") -1)/15
 
 
 
@@ -139,16 +139,16 @@ opend <- data.frame(caseid = raw$caseid, opend, stringsAsFactors = F)
 ### add meta information about responses
 
 ## overall response length
-yougov$wc <- apply(opend[,-1], 1, function(x){
+lidat$wc <- apply(opend[,-1], 1, function(x){
   length(unlist(strsplit(x,"\\s+")))
 })
-yougov$lwc <- log(yougov$wc)/max(log(yougov$wc))
+lidat$lwc <- log(lidat$wc)/max(log(lidat$wc))
 
 ## number of items answered
-yougov$nitem <- apply(opend[,-1] != "", 1, sum, na.rm = T)
+lidat$nitem <- apply(opend[,-1] != "", 1, sum, na.rm = T)
 
 ## diversity in item response
-yougov$ditem <- apply(opend[,-1], 1, function(x){
+lidat$ditem <- apply(opend[,-1], 1, function(x){
   iwc <- unlist(lapply(strsplit(x,"\\s+"), length))
   1 - ineq(iwc,type="Gini")
 })
@@ -160,7 +160,7 @@ yougov$ditem <- apply(opend[,-1], 1, function(x){
 
 ## combine regular survey and open-ended data, remove spanish and empty responses
 meta <- c("age", "educ_cont", "pid_cont", "educ_pid")
-data <- yougov %>% mutate(resp = apply(opend[,-1],1,paste,collapse=' '))
+data <- lidat %>% mutate(resp = apply(opend[,-1],1,paste,collapse=' '))
 
 ## remove additional whitespaces
 data$resp <- gsub("\\s+"," ", data$resp)
@@ -200,7 +200,18 @@ data$polknow_text <- with(data, topic_diversity * lwc * ditem)
 data$polknow_text_mean <- with(data, (topic_diversity + lwc + ditem)/3)
 
 
+### compare measures
+summary(lm(know_dis ~ polknow_text_mean + know_pol, data=data))
+summary(lm(know_dis ~ polknow_text_mean + know_pol + female + log(age) + black + relig + educ + faminc, data=data))
+## argument: text-based sophistication is a better measure of competence in the sense that the respondents pick up information about the disease
+
+## closing gender gap is replicated!
+summary(lm(polknow_text_mean ~ female + educ + log(age) + black + relig + educ + faminc, data=data))
+summary(lm(know_pol ~ female + educ + log(age) + black + relig + educ + faminc, data=data))
+summary(lm(know_dis ~ female + educ + log(age) + black + relig + educ + faminc, data=data))
+
+
 ### save output
 
-save(yougov, opend, spell, data, meta, processed, out, stm_fit
-     , file="calc/out/yougov.Rdata")
+save(lidat, opend, spell, data, meta, processed, out, stm_fit
+     , file="calc/out/lidat.Rdata")
