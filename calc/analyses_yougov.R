@@ -165,9 +165,9 @@ ggplot(dfplot, aes(y=ivnames, x=Estimate
 # NOTE: control for wordsum?
 
 m2 <- NULL
-m2[[1]] <- lm(know_dis ~ polknow_text_mean * female + educ * female + log(age) + black + relig + faminc, data = data)
-m2[[2]] <- lm(know_dis ~ know_pol * female + educ * female + log(age) + black + relig + faminc, data = data)
-m2[[3]] <- lm(know_dis ~ polknow_text_mean * female + know_pol * female + educ * female + log(age) + black + relig + faminc, data = data)
+m2[[1]] <- lm(know_dis ~ polknow_text_mean * female + educ + log(age) + black + relig + faminc, data = data)
+m2[[2]] <- lm(know_dis ~ know_pol * female + educ + log(age) + black + relig + faminc, data = data)
+m2[[3]] <- lm(know_dis ~ polknow_text_mean * female + know_pol * female + educ + log(age) + black + relig + faminc, data = data)
 lapply(m2, summary)
 
 res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(female = 0, polknow_text_mean=seq(0,1,length=10)))
@@ -177,14 +177,22 @@ res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(female = 0, polknow_text_mean
              , data.frame(sim(m2[[2]], iv=data.frame(female = 0, know_pol=seq(0,1,length=10)))
                           ,value=seq(0,1,length=10),Variable="Factual Knowledge",Gender="Male")
              , data.frame(sim(m2[[2]], iv=data.frame(female = 1, know_pol=seq(0,1,length=10)))
+                          ,value=seq(0,1,length=10),Variable="Factual Knowledge",Gender="Female")
+             , data.frame(sim(m2[[3]], iv=data.frame(female = 0, polknow_text_mean=seq(0,1,length=10)))
+                          ,value=seq(0,1,length=10),Variable="Text-based Sophistication",Gender="Male")
+             , data.frame(sim(m2[[3]], iv=data.frame(female = 1, polknow_text_mean=seq(0,1,length=10)))
+                          ,value=seq(0,1,length=10),Variable="Text-based Sophistication",Gender="Female")
+             , data.frame(sim(m2[[3]], iv=data.frame(female = 0, know_pol=seq(0,1,length=10)))
+                          ,value=seq(0,1,length=10),Variable="Factual Knowledge",Gender="Male")
+             , data.frame(sim(m2[[3]], iv=data.frame(female = 1, know_pol=seq(0,1,length=10)))
                           ,value=seq(0,1,length=10),Variable="Factual Knowledge",Gender="Female"))
-res$dvlab <- factor(res$dv, labels = dvnames[1:2])
+res$model <- rep(c("Individual Models","Combined Model"), each=nrow(res)/2)
 
 ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + plot_default +
   #geom_errorbar(alpha=.5, width=0) + 
   geom_ribbon(alpha=0.1, lwd=.1) + geom_line() + 
-  facet_grid(dvlab~Variable, scale="free_y") +
-  ylab("Expected sophistication") + xlab("Value of independent variable")
+  facet_grid(model~Variable) +
+  ylab("Expected disease knowledge") + xlab("Value of independent variable")
 # ggsave("../fig/closing.pdf",width=5,height=3)
 
 ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + 
