@@ -100,6 +100,7 @@ ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi)) + plot_default +
   geom_bar(stat="identity", fill="grey80") + geom_errorbar(width=.25) + 
   facet_wrap(~Variable, scale="free") + ylab("Mean Value on Knowledge Measure") +
   geom_point(aes(y=max), col="white")
+ggsave("../fig/yg_meandiff.png", width=5, height=3)
 # ggsave("../fig/meandiff.pdf", width=6, height=5)
 # ggsave("../fig/meandiff_small.pdf", width=5, height=4)
 
@@ -149,6 +150,7 @@ ggplot(dfplot, aes(y=ivnames, x=Estimate
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=3) +
   plot_default
+ggsave("../fig/yg_determinants.png",width=5,height=3)
 # ggsave("../fig/determinants.pdf",width=5,height=3)
 
 # ggplot(dfplot, aes(y=ivnames, x=Estimate
@@ -178,13 +180,15 @@ res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=seq(0,1,len
                           ,value=seq(0,1,length=10),Variable="Text-based Sophistication")
              , data.frame(sim(m2[[3]], iv=data.frame(know_pol=seq(0,1,length=10)))
                           ,value=seq(0,1,length=10),Variable="Factual Knowledge"))
-res$model <- rep(c("Individual Models","Combined Model"), each=nrow(res)/2)
+res$model <- rep(c(1,2), each=nrow(res)/2)
+res$model <- factor(res$model, labels = c("Individual Models","Combined Model"))
 
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
   #geom_errorbar(alpha=.5, width=0) + 
   geom_ribbon(alpha=0.1, lwd=.1) + geom_line() + 
   facet_grid(model~Variable) +
   ylab("Expected disease knowledge") + xlab("Value of independent variable")
+ggsave("../fig/yg_disease.png",width=5,height=3)
 # ggsave("../fig/closing.pdf",width=5,height=3)
 
 ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + 
