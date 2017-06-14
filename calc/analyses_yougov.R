@@ -228,10 +228,10 @@ stargazer(m1, type="text", keep.stat = c("n","rsq")
 ## Predicting disease information retrieval
 stargazer(m2, type="text", keep.stat = c("n","rsq")
           , covariate.labels = c("Text-based Sophistication", "Factual Knowledge", ivnames[-1])
-          #, dep.var.labels = "Disease information retrieval"
-          , dep.var.caption = "Dependent Variable: Disease Information Retrieval"
+          , dep.var.labels = "Disease Information Retrieval"
+          #, dep.var.caption = ""
           , align = TRUE, label="tab:yg_disease"
-          , model.numbers = FALSE, no.space = T
+          , model.numbers = TRUE, no.space = T
           , star.cutoffs = c(.05,.01,.001)
           , title="Effects of sophistication (YouGov data) -- OLS models predicting disease 
           information retrieval.
