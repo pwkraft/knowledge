@@ -242,7 +242,7 @@ The findings presented in this paper show that conventional knowledge indices an
 \bibliography{/data/Dropbox/Uni/Lit/Literature}
 
 \clearpage
-\section*{Appendix A: Details on Open-ended Responses}
+\section*{Appendix A: Details on Open-ended Responses in ANES}
 \renewcommand\thefigure{A.\arabic{figure}}
 \renewcommand\thetable{A.\arabic{table}}
 \setcounter{figure}{0}
@@ -260,9 +260,27 @@ The findings presented in this paper show that conventional knowledge indices an
 
 
 \clearpage
-\section*{Appendix B: Tables of Model Estimates}
+\section*{Appendix B: Details on Sophistication in YouGov data}
 \renewcommand\thefigure{B.\arabic{figure}}
 \renewcommand\thetable{B.\arabic{table}}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\begin{figure}[h]\centering
+\includegraphics{../fig/yg_corplot.pdf}
+\caption{YouGov data -- Correlation matrix of text-based sophistication, a conventional political knowledge metric, and disease information retrieval. The plots on the diagonal display univariate densities for each variable. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. All correlations reported are statistically significant with $p<.05$.}\label{fig:corplot}
+\end{figure}
+
+\begin{figure}[h]\centering
+\includegraphics{../fig/yg_meandiff.pdf}
+\caption{YouGov data -- The gender gap in political sophistication. The figure displays mean levels of sophistication for each measure comparing men and women (including 95\% confidence intervals). The y-axis is scaled to range up to the maximum value observed in the data for each sophistication metric. All gender differences are statistically significant with $p<.05$.}\label{fig:meandiff}
+\end{figure}
+
+
+\clearpage
+\section*{Appendix C: Tables of Model Estimates}
+\renewcommand\thefigure{C.\arabic{figure}}
+\renewcommand\thetable{C.\arabic{table}}
 \setcounter{figure}{0}
 \setcounter{table}{0}
 
@@ -272,5 +290,10 @@ The findings presented in this paper show that conventional knowledge indices an
 \input{../tab/turnout}
 \input{../tab/determinants}
 \input{../tab/closing}
+
+\input{../tab/yg_determinants}
+\input{../tab/yg_disease}
+
+
 
 \end{document}

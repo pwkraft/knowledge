@@ -57,19 +57,19 @@ summary(lm(know_dis ~ female + educ + log(age) + black + relig + educ + faminc, 
 datcor <- data[,c("polknow_text_mean","know_pol", "know_dis")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
-pdf("../fig/yg_corplot.pdf",width=5, height=5)
+pdf("../fig/yg_corplot.pdf",width=2.5, height=2.5)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.1, size=.2)), axisLabels="none"
         , columnLabels = c("Text-based\nSophistication","Factual\nKnowledge","Disease\nInformation")) + 
   plot_default
 dev.off()
 
-# pdf("../fig/corplot_empty.pdf",width=5, height=5)
-# ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), axisLabels="none"
-#         , columnLabels = c("Text-based\nSophistication","Factual\nKnowledge","Office\nRecognition"
-#                            ,"Majorities\nin Congress", "Interviewer\nEvaluation (Pre)"
-#                            , "Interviewer\nEvaluation (Post)")) + 
-#   theme_classic(base_size=8) + theme(panel.border = element_rect(fill="white"))
-# dev.off()
+pdf("../fig/yg_corplot_empty.pdf",width=2.5, height=2.5)
+ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), axisLabels="none"
+        , columnLabels = c("Text-based\nSophistication","Factual\nKnowledge","Disease\nInformatilon"
+                           ,"Majorities\nin Congress", "Interviewer\nEvaluation (Pre)"
+                           , "Interviewer\nEvaluation (Post)")) +
+  theme_classic(base_size=8) + theme(panel.border = element_rect(fill="white"))
+dev.off()
 
 
 ########
@@ -101,15 +101,15 @@ ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi)) + plot_default +
   geom_bar(stat="identity", fill="grey80") + geom_errorbar(width=.25) + 
   facet_wrap(~Variable, scale="free") + ylab("Mean Value on Knowledge Measure") +
   geom_point(aes(y=max), col="white")
-ggsave("../fig/yg_meandiff.pdf", width=6, height=5)
-# ggsave("../fig/meandiff_small.pdf", width=5, height=4)
+ggsave("../fig/yg_meandiff.pdf", width=6, height=2.5)
+ggsave("../fig/meandiff_small.pdf", width=5, height=2)
 
-# ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi)) + 
-#   theme_classic(base_size=8) + theme(panel.border = element_rect(fill="white")) +
-#   geom_bar(stat="identity", fill="grey80") + geom_errorbar(width=.25) + 
-#   facet_wrap(~Variable, scale="free") + ylab("Mean Value on Knowledge Measure") +
-#   geom_point(aes(y=max), col="white")
-# ggsave("../fig/meandiff_empty.pdf", width=5, height=4)
+ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi)) +
+  theme_classic(base_size=8) + theme(panel.border = element_rect(fill="white")) +
+  geom_bar(stat="identity", fill="grey80") + geom_errorbar(width=.25) +
+  facet_wrap(~Variable, scale="free") + ylab("Mean Value on Knowledge Measure") +
+  geom_point(aes(y=max), col="white")
+ggsave("../fig/yg_meandiff_empty.pdf", width=5, height=2)
 
 ########
 # determinants of political knowledge
@@ -152,12 +152,12 @@ ggplot(dfplot, aes(y=ivnames, x=Estimate
   plot_default
 ggsave("../fig/yg_determinants.pdf",width=5,height=1.75)
 
-# ggplot(dfplot, aes(y=ivnames, x=Estimate
-#                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
-#   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
-#   geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=3) +
-#   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white"))
-# ggsave("../fig/yg_determinants_empty.pdf",width=5,height=3)
+ggplot(dfplot, aes(y=ivnames, x=Estimate
+                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) +
+  geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
+  geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=3) +
+  theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white"))
+ggsave("../fig/yg_determinants_empty.pdf",width=5,height=1.75)
 
 
 ########
@@ -189,10 +189,56 @@ ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
   ylab("Expected disease information retrieval") + xlab("Value of independent variable")
 ggsave("../fig/yg_disease.pdf",width=3,height=3)
 
-# ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + 
-#   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white")) +
-#   #geom_errorbar(alpha=.5, width=0) + 
-#   geom_ribbon(alpha=0.1, lwd=.1) + geom_line() + 
-#   facet_grid(dvlab~Variable, scale="free_y") +
-#   ylab("Expected sophistication") + xlab("Value of independent variable")
-# ggsave("../fig/yg_closing_empty.pdf",width=5,height=3)
+ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + 
+  theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white")) +
+  #geom_errorbar(alpha=.5, width=0) +
+  geom_ribbon(alpha=0.1, lwd=.1) + geom_line() +
+  facet_grid(dvlab~Variable, scale="free_y") +
+  ylab("Expected sophistication") + xlab("Value of independent variable")
+ggsave("../fig/yg_disease_empty.pdf",width=3,height=3)
+
+
+
+##### Generate tables for appendix
+
+## create labels
+dvlabs <- c("Text-based","Factual","Disease")
+ivlabs <- c("Sex (Female)","Education (College)","Income","log(Age)","Race (Black)"
+            ,"Church Attendance")
+
+
+## Determinants of Political Knowledge
+stargazer(m1, type="text", keep.stat = c("n","rsq")
+          , covariate.labels = ivnames[-1]
+          , dep.var.labels = dvlabs
+          , dep.var.caption = "Dependent Variable: Political Knowledge Measure"
+          , align = TRUE, label="tab:determinants"
+          , model.numbers = FALSE, no.space = T
+          , star.cutoffs = c(.05,.01,.001)
+          , title="Determinants of political knowledge (YouGov data) -- OLS models predicting 
+          political sophistication and disease information retrieval.
+          Positive coefficients indicate higher sophistication. 
+          Standard errors in parentheses. Estimates are used for Figure~\\ref{fig:yg_determinants} 
+          in the main text."
+          , out="../tab/yg_determinants.tex"
+          , font.size = "scriptsize"
+          , column.sep.width = "-5pt"
+          , table.placement="ht")
+
+## Predicting disease information retrieval
+stargazer(m2, type="text", keep.stat = c("n","rsq")
+          , covariate.labels = c("Text-based Sophistication", "Factual Knowledge", ivnames[-1])
+          #, dep.var.labels = "Disease information retrieval"
+          , dep.var.caption = "Dependent Variable: Disease Information Retrieval"
+          , align = TRUE, label="tab:yg_disease"
+          , model.numbers = FALSE, no.space = T
+          , star.cutoffs = c(.05,.01,.001)
+          , title="Effects of sophistication (YouGov data) -- OLS models predicting disease 
+          information retrieval.
+          Positive coefficients indicate higher sophistication. 
+          Standard errors in parentheses. Estimates are used for 
+          Figure~\\ref{fig:yg_disease} in the main text."
+          , out="../tab/yg_disease.tex"
+          , font.size = "scriptsize"
+          , column.sep.width = "-5pt"
+          , table.placement="ht")
