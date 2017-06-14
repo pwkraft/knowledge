@@ -162,6 +162,9 @@ anes2012$female <- raw2012$gender_respondent_x - 1
 ## race
 anes2012$black <- as.numeric(car::recode(raw2012$dem_raceeth_x, "lo:0 = NA") == 2)
 
+## income
+anes2012$faminc <- car::recode(raw2012$incgroup_prepost_x, "lo:0 = NA")
+
 ## spanish speaking respondent
 anes2012$spanish <- as.numeric(raw2012$profile_spanishsurv == 1 |
                               raw2012$admin_pre_lang_start == 2 |

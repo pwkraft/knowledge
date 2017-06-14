@@ -146,8 +146,8 @@ with(filter(data,wc>40 & wc<125 & polknow_factual == .6 & female == 1), max(polk
 #########
 
 m1 <- NULL
-m1[[1]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + age + black + relig + wordsum + mode, data = data)
-m1[[2]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + age + black + relig + wordsum + mode, data = data)
-m1[[3]] <- lm(polknow_office ~ female + polmedia + poldisc + educ + age + black + relig + wordsum + mode, data = data)
-m1[[4]] <- lm(polknow_majority ~ female + polmedia + poldisc + educ + age + black + relig + wordsum + mode, data = data)
+m1[[1]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + age + black + relig + wordsum + mode, data = data)
+m1[[2]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + age + black + relig + wordsum + mode, data = data)
+m1[[3]] <- lm(polknow_office ~ female + polmedia + poldisc + educ + faminc + age + black + relig + wordsum + mode, data = data)
+m1[[4]] <- lm(polknow_majority ~ female + polmedia + poldisc + educ + faminc + age + black + relig + wordsum + mode, data = data)
 lapply(m1, summary)
