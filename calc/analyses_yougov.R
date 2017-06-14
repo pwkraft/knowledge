@@ -40,7 +40,8 @@ plot_default <- theme_classic(base_size=8) + theme(panel.border = element_rect(f
 ### compare measures
 summary(lm(know_dis ~ polknow_text_mean + know_pol, data=data))
 summary(lm(know_dis ~ polknow_text_mean + know_pol + female + log(age) + black + relig + educ + faminc, data=data))
-## argument: text-based sophistication is a better measure of competence in the sense that the respondents pick up information about the disease
+## argument: text-based sophistication is a better measure of competence in the sense that the respondents pick up 
+## information about the disease
 
 ## closing gender gap is replicated!
 summary(lm(polknow_text_mean ~ female + educ + log(age) + black + relig + educ + faminc, data=data))
@@ -58,7 +59,7 @@ colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 pdf("../fig/yg_corplot.pdf",width=5, height=5)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.1, size=.2)), axisLabels="none"
-        , columnLabels = c("Text-based\nSophistication","Factual\nKnowledge","Disease\nKnowledge")) + 
+        , columnLabels = c("Text-based\nSophistication","Factual\nKnowledge","Disease\nInformation")) + 
   plot_default
 dev.off()
 
@@ -82,7 +83,7 @@ plot_df <- data.frame(rbind(cbind(data$polknow_text_mean, data$female, 1)
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
 plot_df$Variable <- factor(plot_df$Variable, labels = c("Text-based sophistication", "Factual Knowledge"
-                                                        , "Disease Knowledge"))
+                                                        , "Disease Information"))
 plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
   summarize_each(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
   mutate(cilo = mean - 1.96*sd/sqrt(n)
@@ -118,14 +119,14 @@ ggsave("../fig/yg_meandiff.pdf", width=6, height=5)
 ### Q: ADD POLITICAL INTEREST AS IV???
 
 m1 <- NULL
-m1[[1]] <- lm(polknow_text_mean ~ female + educ + log(age) + black + relig + faminc, data = data)
-m1[[2]] <- lm(know_pol ~ female + educ + log(age) + black + relig + faminc, data = data)
-m1[[3]] <- lm(know_dis ~ female + educ + log(age) + black + relig + faminc, data = data)
+m1[[1]] <- lm(polknow_text_mean ~ female + educ + faminc + log(age) + black + relig, data = data)
+m1[[2]] <- lm(know_pol ~ female + educ + faminc + log(age) + black + relig, data = data)
+m1[[3]] <- lm(know_dis ~ female + educ + faminc + log(age) + black + relig, data = data)
 lapply(m1, summary)
 
-dvnames <- c("Text-based Sophistication","Factual Knowledge","Disease Knowledge")
-ivnames <- c("Intercept", "Gender (Female)", "Education (College)"
-             , "log(Age)", "Race (Black)", "Church Attendance", "Family Income")
+dvnames <- c("Text-based Sophistication","Factual Knowledge","Disease Information")
+ivnames <- c("Intercept", "Gender (Female)", "Education (College)", "Income"
+             , "log(Age)", "Race (Black)", "Church Attendance")
 
 # prepare dataframe for plotting (sloppy code)
 dfplot <- data.frame()
@@ -149,7 +150,7 @@ ggplot(dfplot, aes(y=ivnames, x=Estimate
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=3) +
   plot_default
-ggsave("../fig/yg_determinants.pdf",width=5,height=3)
+ggsave("../fig/yg_determinants.pdf",width=5,height=1.75)
 
 # ggplot(dfplot, aes(y=ivnames, x=Estimate
 #                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
@@ -160,14 +161,14 @@ ggsave("../fig/yg_determinants.pdf",width=5,height=3)
 
 
 ########
-# predicting disease knowledge
+# predicting disease information retrieval
 ########
 # NOTE: control for wordsum?
 
 m2 <- NULL
-m2[[1]] <- lm(know_dis ~ polknow_text_mean + female + educ + log(age) + black + relig + faminc, data = data)
-m2[[2]] <- lm(know_dis ~ know_pol + female + educ + log(age) + black + relig + faminc, data = data)
-m2[[3]] <- lm(know_dis ~ polknow_text_mean + know_pol + female + educ + log(age) + black + relig + faminc, data = data)
+m2[[1]] <- lm(know_dis ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig, data = data)
+m2[[2]] <- lm(know_dis ~ know_pol + female + educ + faminc + log(age) + black + relig, data = data)
+m2[[3]] <- lm(know_dis ~ polknow_text_mean + know_pol + female + educ + faminc + log(age) + black + relig, data = data)
 lapply(m2, summary)
 
 res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=seq(0,1,length=10)))
@@ -185,8 +186,8 @@ ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
   #geom_errorbar(alpha=.5, width=0) + 
   geom_ribbon(alpha=0.1, lwd=.1) + geom_line() + 
   facet_grid(model~Variable) +
-  ylab("Expected disease knowledge") + xlab("Value of independent variable")
-ggsave("../fig/yg_disease.pdf",width=5,height=3)
+  ylab("Expected disease information retrieval") + xlab("Value of independent variable")
+ggsave("../fig/yg_disease.pdf",width=3,height=3)
 
 # ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + 
 #   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white")) +

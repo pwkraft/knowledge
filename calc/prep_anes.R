@@ -163,7 +163,7 @@ anes2012$female <- raw2012$gender_respondent_x - 1
 anes2012$black <- as.numeric(car::recode(raw2012$dem_raceeth_x, "lo:0 = NA") == 2)
 
 ## income
-anes2012$faminc <- car::recode(raw2012$incgroup_prepost_x, "lo:0 = NA")
+anes2012$faminc <- (car::recode(raw2012$incgroup_prepost_x, "lo:0 = NA") -1)/27
 
 ## spanish speaking respondent
 anes2012$spanish <- as.numeric(raw2012$profile_spanishsurv == 1 |
@@ -316,4 +316,4 @@ data$polknow_text_mean <- with(data, (topic_diversity + lwc + ditem)/3)
 ### save output
 
 save(anes2012, anes2012opend, anes2012spell, data, meta, processed, out, stm_fit
-     , file="out/anes.Rdata")
+     , file="calc/out/anes.Rdata")

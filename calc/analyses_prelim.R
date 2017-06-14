@@ -21,7 +21,7 @@ library(stargazer)
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
 ## load data and stm results
-load("anes.Rdata")
+load("out/anes.Rdata")
 #load("../data/anes_old.Rdata")
 
 ## QUESTION: remove wc=0 and spanish=1?
