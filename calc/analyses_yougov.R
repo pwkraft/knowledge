@@ -212,7 +212,7 @@ stargazer(m1, type="text", keep.stat = c("n","rsq")
           , covariate.labels = ivnames[-1]
           , dep.var.labels = dvlabs
           , dep.var.caption = "Dependent Variable: Political Knowledge Measure"
-          , align = TRUE, label="tab:determinants"
+          , align = TRUE, label="tab:yg_determinants"
           , model.numbers = FALSE, no.space = T
           , star.cutoffs = c(.05,.01,.001)
           , title="Determinants of political knowledge (YouGov data) -- OLS models predicting 

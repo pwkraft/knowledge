@@ -153,6 +153,14 @@ ggsave("../fig/determinants_empty.pdf",width=5,height=3)
 
 
 ########
+# potential effect of interviewer gender
+########
+
+summary(lm(polknow_factual ~ iwrmale + polmedia + poldisc + educ + faminc + log(age) + black + relig, data = data[data$female==1,]))
+summary(lm(polknow_text_mean ~ iwrmale + polmedia + poldisc + educ + faminc + log(age) + black + relig, data = data[data$female==1,]))
+
+
+########
 # closing the knowledge gap
 ########
 # NOTE: control for wordsum?
