@@ -36,6 +36,12 @@ The manuscript and code are available on GitHub: \url{https://github.com/pwkraft
 \begin{document}
 \maketitle\doublespacing\thispagestyle{empty}
 
+\begin{center}
+-- WORK IN PROGRESS -- \\
+PLEASE DO NOT CITE OR REDISTRIBUTE WITHOUT PERMISSION
+\end{center} 
+
+\hfill
 \begin{abstract}\singlespacing
 Studies frequently found that on average, women appear to be less informed about politics than men. However, recent research raised theoretical as well as methodological concerns regarding conventional measures of political knowledge. This paper proposes an alternative approach to assess individual political sophistication in opinion surveys. Building on theoretical frameworks that focus on the structure of political belief systems rather than factual knowledge, I examine how individuals describe their political attitudes in open-ended responses using quantitative text analysis methods. The proposed measure aims to capture the complexity of verbatim responses based on their relative length, topic diversity, and opinion diversity. Compared to traditional knowledge metrics, the new measure behaves similarly as a predictor of political attitudes and behavior and shares common determinants - with one important exception. Contrary to previous research, however, there is no evidence for a gender gap in political sophistication using the text-based measure. While women might score lower than men on factual knowledge about political institutions and elites, there are no differences in the complexity of expressed political attitudes. %The paper proceeds to show how the new measure can improve our understanding of gender differences in political learning as well as the consequences of political sophistication. 
 % QUESTION: measure can be based on different sets of items
@@ -44,6 +50,7 @@ Studies frequently found that on average, women appear to be less informed about
 \noindent \textbf{Keywords:} political sophistication, gender gap, measurement, open-ended responses, text analysis \\
 
 \end{abstract}
+\hfill
 \newpage\setcounter{page}{1}
 
 
@@ -122,17 +129,16 @@ Overall, a highly sophisticated individual can be expected to respond to a set o
 
 
 % CONTINUE HERE
-\section*{Study 1: American National Election Study 2012}
+\section*{Study 1: 2012 American National Election Study}
 
 The following analyses are based on the 2012 American National Election Study (ANES), which consists of a representative survey of 5914 adults in the months before the 2012 US Presidential election. 2054 respondents participated in face-to-face interviews while the remaining 3860 filled out the survey online. For the purpose of the present analysis, I rely on the pooled dataset while controlling for differences in survey mode. 
 
 The text-based sophistication measure is based on open-ended questions in which respondents were asked in the pre-election wave of the survey to list anything in particular that they like/dislike about the Democratic/Republican party as well as anything that might make them vote/not vote for either of the Presidential candidates. They were probed by the interviewer asking ``anything else?'' until the respondent answered ``no''. Overall, there are a total number of 8 open-ended responses where individuals described their beliefs and attitudes towards political actors. Verbatim responses were pre-processed using the Aspell spell-checking algorithm (\url{www.aspell.net}). Individuals who did not respond to all of the open-ended items (417 individuals), or who responded in Spanish (228 individuals), were excluded from the analysis.
 
+In the following, the text-based sophistication measure is compared to multiple alternative metrics of political knowledge. The most common way to measure political knowledge in surveys is to ask a set of factual questions about political institutions. The 2012 ANES includes such a basic item battery, inquiring for example about the number of times an individual can be elected President of the United States, or how the current U.S. federal budget deficit compares to the deficit in the 1990s. I combine individual responses on these items to a standard additive measure of \textbf{factual knowledge} about politics. The post-election wave of the 2012 ANES includes additional questions asking respondents to identify the offices of various politicians (e.g., John Boehner, Joe Biden) as well as to report which party controls the House of Representatives or the Senate after the election. Both sets of items are combined to additive indices for \textbf{office recognition} and knowledge about \textbf{majorities in Congress}, respectively. Additionally, the in-person sample of the 2012 ANES includes \textbf{interviewer assessments} of each respondent's political sophistication in the pre-election as well as the post-election wave.
 
 
 \subsection*{Validating the Measure}
-
-In the following, the text-based sophistication measure is compared to multiple alternative metrics of political knowledge. The most common way to measure political knowledge in surveys is to ask a set of factual questions about political institutions. The 2012 ANES includes such a basic item battery, inquiring for example about the number of times an individual can be elected President of the United States, or how the current U.S. federal budget deficit compares to the deficit in the 1990s. I combine individual responses on these items to a standard additive measure of \textbf{factual knowledge} about politics. The post-election wave of the 2012 ANES includes additional questions asking respondents to identify the offices of various politicians (e.g., John Boehner, Joe Biden) as well as to report which party controls the House of Representatives or the Senate after the election. Both sets of items are combined to additive indices for \textbf{office recognition} and knowledge about \textbf{majorities in Congress}, respectively. Additionally, the in-person sample of the 2012 ANES includes \textbf{interviewer assessments} of each respondent's political sophistication in the pre-election as well as the post-election wave.
 
 Figure~\ref{fig:corplot} provides a first validation of text-based sophistication by comparing it to the conventional knowledge metrics. The figure presents scatterplots between individual measures (lower triangular), univariate densities (diagonal), and correlation coefficients (upper triangular). The text-based sophistication measure is positively correlated with all conventional metrics while capturing some additional variation.
 
@@ -209,19 +215,54 @@ Media exposure, political discussions, and education increase political sophisti
 % JENN: not satisfying
 
 
-\section*{Study 2: YouGov Survey on Disease Information Retrieval}
+\section*{Study 2: 2015 YouGov Survey}
 % We can also look at a different set of open-ended items related to political attitudes!
+% TODO: How can I cite Jenn here? Add survey information (questionnaire etc.) in the appendix
 
-% Make a connection to political competence, we shouldn't care as much about political knowledge that is favored by elites, but rather examine whether individuals are able to discuss their political views in a coherent way. Seen that way, one could make an argument that political competence captures the extent to which individuals are able to incorporate new information.
+One of the advantages of measuring sophistication based on open-ended responses is that it can be applied in various settings that potentially focus on different types of political attitudes. Indeed, the logic of the text-based sophistication measure is not restricted to the type of open-ended items included in the 2012 ANES. From a theoretical perspective, the same arguments regarding the structure of individual belief systems holds when examining other types of open-ended responses, for example when respondents discuss their attitudes toward specific policy issues.
 
-% Zaller argues that it captures what actually got into people's minds... that's a perfect argument!
+The following analysis will replicate and extend the main results of the previous section using an alternative set of open-ended responses. The data consist of a YouGov online survey of 1000 US citizens that was conducted in December 2015. In this study, respondents were asked to report in a closed format whether they favor or oppose stricter gun laws. Subsequently, they are asked to respond to the following two questions in verbatim:
+\begin{itemize}
+\item Still thinking about the question you just answered, what thoughts came to mind while you were answering that question? Please try to list everything that came to mind.
+\item Thinking about the mass shootings that have occurred in the U.S. in the last few years, what factors do you think are responsible for the shootings?
+\end{itemize}
+Similarly, the respondents report on their attitude towards the Affordable Care Act in a closed format and are then asked to elaborate in their own words by answering the following questions:
+\begin{itemize}
+\item Still thinking about the question you just answered, what thoughts came to mind while you were answering that question? Please try to list everything that came to mind.
+\item For decades, experts have observed that the United States spends far more per person on health care than any other country. However, the U.S. falls behind on most measures of health care outcomes, such as life expectancy. What factors do you think are responsible for the state of our health care system?
+\end{itemize}
+The text-based sophistication measure is based on the verbatim responses to these four questions using the same procedures described above. Compared to the open-ended likes/dislikes items included in the 2012 ANES, they directly address considerations related to specific policy issues.
+
+Equivalent to the previous analysis, I begin by comparing text-based sophistication to a conventional political knowledge metric. The \textbf{factual knowledge} score in the YouGov data is based on a battery of eight items similar to the knowledge questions in the ANES. Additionally, the YouGov study included a survey task where respondents read a newspaper article about a fictional infectious disease and were subsequently asked to recall information provided in the article (e.g. regarding symptoms, modes of contraction etc.). I compute an additive index counting the pieces of information that were correctly recalled (\textbf{disease information}) as a measure of the ability to retrieve information from a news article on a non-partisan issue that is related to public health policies.
 
 
 \subsection*{Validating the Measure}
 
+Figure~\ref{fig:yg_corplot} examines the distribution of each measure of political knowledge as well as their respective correlations in the YouGov data. Again, we observe that text-based sophistication and factual political knowledge are positively correlated. The strength of the correlation itself is strikingly similar to the results of the previous analyses, which again indicates that the text-based sophistication measure overlaps with traditional knowledge metrics while capturing unique variation in individual response behavior. Interestingly, there appears to be a stronger relationship between text-based sophistication and disease information than between factual political knowledge and disease information.
+
 \begin{figure}[h]\centering
 \includegraphics{../fig/yg_corplot.pdf}
-\caption{YouGov data -- Correlation matrix of text-based sophistication, a conventional political knowledge metric, and disease information retrieval. The plots on the diagonal display univariate densities for each variable. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. All correlations reported are statistically significant with $p<.05$.}\label{fig:corplot}
+\caption{YouGov data -- Correlation matrix of text-based sophistication, a conventional political knowledge metric, and disease information retrieval. The plots on the diagonal display univariate densities for each variable. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. All correlations reported are statistically significant with $p<.05$.}\label{fig:yg_corplot}
+\end{figure}
+
+Recall that the disease information score is used as an indicator of the ability to retrieve specific information provided in a news article about a public health issue. As such, it could be argued that this ability to incorporate relevant information from news reporting may be a function of political sophistication and knowledge. After all, sophisticates are often characterized by higher political awareness and general news consumption (see also the previous results in Figure~\ref{fig:determinants}).
+
+
+% CONTINUE HERE
+
+
+...both measures potentially capture the individual ability to retrieve relevant information about the disease from the news article. 
+
+Text-based sophistication is a stronger predictor of the extent to which participants recalled the information about the fictional disease than general political knowledge.
+
+The text-based sophistication measure is similar to the disease information score in that it captures the extent to which participants were able to recall political information that is relevant to their attitudes. Conventional knowledge scores, on the other hand, inquire about specific that are not necessarily relevant to derive well-informed attitudes about political issues.
+
+
+
+
+\begin{figure}[h]\centering
+\includegraphics{../fig/yg_disease.pdf}
+\caption{Political knowledge and sophistication as a determinant of disease information retrieval. The figure displays expected values of the amount of information correctly recalled about the fictional disease described in a news article depending on text-based sophistication and factual political knowledge (including 95\% confidence intervals). Estimates are based on OLS controlling for gender, education, income, age, race, and religiosity. In the first row, text-based sophistication and factual knowledge are included as independent variables in separate models. The second row displays the respective effects while controlling for the alternative knowledge/sophistication measure. Full model results are presented in the appendix, Table~\ref{tab:yg_disease}}\label{fig:yg_disease}
 \end{figure}
 
 
@@ -229,7 +270,7 @@ Media exposure, political discussions, and education increase political sophisti
 
 \begin{figure}[h]\centering
 \includegraphics{../fig/yg_meandiff.pdf}
-\caption{YouGov data -- The gender gap in political sophistication. The figure displays mean levels of sophistication for each measure comparing men and women (including 95\% confidence intervals). The y-axis is scaled to range up to the maximum value observed in the data for each sophistication metric. All gender differences are statistically significant with $p<.05$.}\label{fig:meandiff}
+\caption{YouGov data -- The gender gap in political sophistication. The figure displays mean levels of sophistication for each measure comparing men and women (including 95\% confidence intervals). The y-axis is scaled to range up to the maximum value observed in the data for each sophistication metric. The gender difference in factual knowledge is statistically significant with $p<.05$.}\label{fig:meandiff}
 \end{figure}
 
 \begin{figure}[h]\centering
@@ -237,13 +278,11 @@ Media exposure, political discussions, and education increase political sophisti
 \caption{Common determinants of political sophistication -- Replication using YouGov data. Estimates are OLS regression coefficients with 95\% confidence intervals. Dependent variables are the text-based sophistication measure, factual political knowledge as well as knowledge about a fictional disease that was presented as part of the study. Full model results are presented in the appendix, Table~\ref{tab:yg_determinants}}\label{fig:yg_determinants}
 \end{figure}
 
+Again, there is a significant gender gap in factual knowledge (middle), which disappears using the text-based measure (left). The remaining determinants of sophistication are similar across measures (except for family income). Interestingly, the determinants of text-based sophistication are very similar to the determinants of knowledge about the fictional disease that was part of the study (right).
 
-\subsection*{Sophistication and Information Retrieval}
+% Make a reference to Jenn's study, which found that gender differences disappear if information is provided to respondents
 
-\begin{figure}[h]\centering
-\includegraphics{../fig/yg_disease.pdf}
-\caption{Political knowledge as a determinant of disease information retrieval. Estimates are OLS regression coefficients with 95\% confidence intervals. Dependent variables are the text-based sophistication measure, factual political knowledge as well as knowledge about a fictional disease that was presented as part of the study. Full model results are presented in the appendix, Table~\ref{tab:yg_disease}}\label{fig:yg_disease}
-\end{figure}
+
 
 % TODO: add section with LI survey data?
 % issue: doesn't contain conventional political knowledge score
@@ -256,6 +295,10 @@ Media exposure, political discussions, and education increase political sophisti
 
 \section*{Conclusion}
 % lot's of potential extensions, think about standardizing the measure to make it more comparable across contexts
+% Zaller argues that it captures what actually got into people's minds... that's a perfect argument for open-ended responses! check also the druckman paper.
+% Make a connection to political competence, we shouldn't care as much about political knowledge that is favored by elites, but rather examine whether individuals are able to discuss their political views in a coherent way. Seen that way, one could make an argument that political competence captures the extent to which individuals are able to incorporate new information.
+% What is a competent citizen? One who has good reasons for his or her attitudes... we can measure that when examining how repondents talk about their political beliefs.
+
 
 As Arthur Lupia \citeyearpar{lupia2015uninformed} described in his recent book ``Uninformed'', political scientists should worry less about pure levels of \textit{information}, but rather focus on the necessary conditions for individuals to make \textit{competent} decisions. Competence in the context of political decision-making and voting requires citizens to hold informed attitudes about their representatives. Factual knowledge about political institutions might be a useful proxy for competence in certain scenarios. However, it cannot address directly whether individuals are sufficiently opinionated about political actors they try to hold accountable. In comparison, the text-based sophistication measure proposed here is agnostic about the specific contents of individual beliefs, but directly captures the structure and complexity in attitude expression.
 
