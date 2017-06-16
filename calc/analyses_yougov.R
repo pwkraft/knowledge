@@ -189,6 +189,8 @@ ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
   ylab("Expected disease information retrieval") + xlab("Value of independent variable")
 ggsave("../fig/yg_disease.pdf",width=3,height=3)
 ### THE EFFECTS ARE PRETTY SIMILAR ACROSS MEASURES...
+### I wanted to make the argument that the text-based measure is a better predictor, 
+### but that is not really the case, both are equally good.
 
 # ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + 
 #   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white")) +
