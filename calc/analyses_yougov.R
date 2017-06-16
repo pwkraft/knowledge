@@ -171,12 +171,12 @@ m2[[2]] <- lm(know_dis ~ know_pol + female + educ + faminc + log(age) + black + 
 m2[[3]] <- lm(know_dis ~ polknow_text_mean + know_pol + female + educ + faminc + log(age) + black + relig, data = data)
 lapply(m2, summary)
 
-res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=seq(0,1,length=10)))
-                        ,value=seq(0,1,length=10),Variable="Text-based Sophistication")
+res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=seq(0.1514140,0.6173431,length=10)))
+                        ,value=seq(0.1514140,0.6173431,length=10),Variable="Text-based Sophistication")
              , data.frame(sim(m2[[2]], iv=data.frame(know_pol=seq(0,1,length=10)))
                           ,value=seq(0,1,length=10),Variable="Factual Knowledge")
-             , data.frame(sim(m2[[3]], iv=data.frame(polknow_text_mean=seq(0,1,length=10)))
-                          ,value=seq(0,1,length=10),Variable="Text-based Sophistication")
+             , data.frame(sim(m2[[3]], iv=data.frame(polknow_text_mean=seq(0.1514140,0.6173431,length=10)))
+                          ,value=seq(0.1514140,0.6173431,length=10),Variable="Text-based Sophistication")
              , data.frame(sim(m2[[3]], iv=data.frame(know_pol=seq(0,1,length=10)))
                           ,value=seq(0,1,length=10),Variable="Factual Knowledge"))
 res$model <- rep(c(1,2), each=nrow(res)/2)
@@ -185,17 +185,18 @@ res$model <- factor(res$model, labels = c("Individual Models","Combined Model"))
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
   #geom_errorbar(alpha=.5, width=0) + 
   geom_ribbon(alpha=0.1, lwd=.1) + geom_line() + 
-  facet_grid(model~Variable) +
+  facet_grid(model~Variable, scales="free_x") +
   ylab("Expected disease information retrieval") + xlab("Value of independent variable")
 ggsave("../fig/yg_disease.pdf",width=3,height=3)
+### THE EFFECTS ARE PRETTY SIMILAR ACROSS MEASURES...
 
-ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + 
-  theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white")) +
-  #geom_errorbar(alpha=.5, width=0) +
-  geom_ribbon(alpha=0.1, lwd=.1) + geom_line() +
-  facet_grid(dvlab~Variable, scale="free_y") +
-  ylab("Expected sophistication") + xlab("Value of independent variable")
-ggsave("../fig/yg_disease_empty.pdf",width=3,height=3)
+# ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + 
+#   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white")) +
+#   #geom_errorbar(alpha=.5, width=0) +
+#   geom_ribbon(alpha=0.1, lwd=.1) + geom_line() +
+#   facet_grid(dvlab~Variable, scale="free_y") +
+#   ylab("Expected sophistication") + xlab("Value of independent variable")
+# ggsave("../fig/yg_disease_empty.pdf",width=3,height=3)
 
 
 
