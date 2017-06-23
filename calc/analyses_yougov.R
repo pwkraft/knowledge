@@ -149,15 +149,15 @@ ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=3) +
-  plot_default
+  theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
 ggsave("../fig/yg_determinants.pdf",width=5,height=2.5)
-ggsave("../fig/yg_determinants_pres.pdf",width=4.75,height=2)
+ggsave("../fig/yg_determinants_pres.pdf",width=4.75,height=2.5)
 
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) +
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=3) +
-  theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white"))
+  theme_classic(base_size = 9) + theme(panel.border = element_rect(fill="white"))
 ggsave("../fig/yg_determinants_empty.pdf",width=4.75,height=2)
 
 
