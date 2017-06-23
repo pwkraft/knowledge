@@ -158,7 +158,7 @@ ggplot(dfplot, aes(y=ivnames, x=Estimate
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=3) +
   theme_classic(base_size = 9) + theme(panel.border = element_rect(fill="white"))
-ggsave("../fig/yg_determinants_empty.pdf",width=4.75,height=2)
+ggsave("../fig/yg_determinants_empty.pdf",width=4.75,height=2.5)
 
 
 ########
