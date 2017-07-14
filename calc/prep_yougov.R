@@ -18,7 +18,7 @@ library(stm)
 library(ineq)
 library(ggplot2)
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/")
-datasrc <- "/data/Dropbox/Uni/Data/YouGov/"
+datasrc <- "/data/Dropbox/Uni/Data/YouGov2015/"
 raw <- read.csv(paste0(datasrc,"STBR0007_OUTPUT.csv"))
 
 
