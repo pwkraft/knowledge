@@ -84,7 +84,7 @@ swiss$opinionation <- apply(select(swiss, prostring1:constring2), 1, function(x)
 ### prepare data
 
 ## combine regular survey and open-ended data
-## ADD: type of eferendum as a meta-covariate
+## ADD: type of referendum as a meta-covariate
 meta <- c("age", "edu", "ideol", "edu_ideol")
 swiss$resp <- apply(select(swiss, prostring1:constring2),1,paste,collapse=' ')
   
@@ -98,6 +98,11 @@ data <- swiss[apply(!is.na(swiss[,meta]),1,prod)==1,]
 
 ## remove empty strings
 data <- data[data$wc != 0, ]
+
+
+
+###################################################
+### German respondents
 
 ## select language
 opend_german <- data %>% filter(lang == 1)
@@ -133,7 +138,84 @@ opend_german$polknow_text <- with(opend_german, topic_diversity * lwc * opiniona
 opend_german$polknow_text_mean <- with(opend_german, (topic_diversity + lwc + opinionation)/3)
 
 
+
+#####################################################
+### French respondents
+
+## select language
+opend_french <- data %>% filter(lang == 2)
+
+## process for stm
+processed <- textProcessor(opend_french$resp, metadata = opend_french[,meta]
+                           , language = "french")
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+
+## remove discarded observations from data
+opend_french <- opend_french[-processed$docs.removed,]
+opend_french <- opend_french[-out$docs.removed,]
+
+## quick fit (60 topics)
+# stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+#                , K=60, init.type = "Spectral")
+
+## slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
+stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+               , K=0, init.type = "Spectral")
+
+
+### create new sophistication measures
+
+## probability fits and transform for diversity score  
+doc_topic_prob <- stm_fit$theta
+
+## topic diversity score
+opend_french$topic_diversity <- apply(doc_topic_prob, 1, function(x) 1 - ineq(x,type="Gini"))
+
+## text-based sophistication measures
+opend_french$polknow_text <- with(opend_french, topic_diversity * lwc * opinionation)
+opend_french$polknow_text_mean <- with(opend_french, (topic_diversity + lwc + opinionation)/3)
+
+
+
+#####################################################
+### Italian respondents
+
+## select language
+opend_italian <- data %>% filter(lang == 3)
+
+## process for stm
+processed <- textProcessor(opend_italian$resp, metadata = opend_italian[,meta]
+                           , language = "italian")
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+
+## remove discarded observations from data
+opend_italian <- opend_italian[-processed$docs.removed,]
+opend_italian <- opend_italian[-out$docs.removed,]
+
+## quick fit (60 topics)
+# stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+#                , K=60, init.type = "Spectral")
+
+## slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
+stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+               , K=0, init.type = "Spectral")
+
+
+### create new sophistication measures
+
+## probability fits and transform for diversity score  
+doc_topic_prob <- stm_fit$theta
+
+## topic diversity score
+opend_italian$topic_diversity <- apply(doc_topic_prob, 1, function(x) 1 - ineq(x,type="Gini"))
+
+## text-based sophistication measures
+opend_italian$polknow_text <- with(opend_italian, topic_diversity * lwc * opinionation)
+opend_italian$polknow_text_mean <- with(opend_italian, (topic_diversity + lwc + opinionation)/3)
+
+
+
 ### save output
 
-save(swiss, opend_german, data, meta, processed, out, stm_fit
+save(swiss, opend_german, opend_french, opend_italian, data, meta, processed, out, stm_fit
      , file="calc/out/swiss.Rdata")
