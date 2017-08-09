@@ -58,19 +58,22 @@ ggplot(opend_german, aes(x=loj, y=polknow_text_mean)) + geom_point(alpha=.1) + g
 p_german <- ggplot(opend_german, aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_joy(scale = 4, alpha=.2, fill="lightblue") + theme_joy() +
   scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
-  scale_x_continuous(expand = c(0, 0)) +
+  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) +
+  annotate("text", x=0.84, y=7, label = paste0("r = ",round(cor(opend_german$polknow_text_mean, opend_german$loj), 2))) +
   ggtitle("German respondents") + ylab("Level of Justification") + xlab("Text-based sophistication")
 
 p_french <- ggplot(opend_french, aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_joy(scale = 4, alpha=.2, fill="lightblue") + theme_joy() +
   scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
-  scale_x_continuous(expand = c(0, 0)) +
+  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) +
+  annotate("text", x=0.84, y=7, label = paste0("r = ",round(cor(opend_french$polknow_text_mean, opend_french$loj), 2))) +
   ggtitle("French respondents") + ylab("Level of Justification") + xlab("Text-based sophistication")
 
 p_italian <- ggplot(opend_italian, aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_joy(scale = 4, alpha=.2, fill="lightblue") + theme_joy() +
   scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
-  scale_x_continuous(expand = c(0, 0)) +
+  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) +
+  annotate("text", x=0.84, y=7, label = paste0("r = ",round(cor(opend_italian$polknow_text_mean, opend_italian$loj), 2))) +
   ggtitle("Italian respondents") + ylab("Level of Justification") + xlab("Text-based sophistication")
 
 pdf("../fig/ggjoy.pdf", width=6, height=9)

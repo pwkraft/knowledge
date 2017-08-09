@@ -19,7 +19,7 @@ library(haven)
 library(ineq)
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/")
 datasrc <- "/home/patrick/Dropbox/Uni/Data/colombo/"
-raw <- read_dta(paste0(datasrc,"citizencompetence_colombo.dta"))
+raw <- read_dta(paste0(datasrc,"citizencompetence_colombo.dta"), encoding = "latin 1")
 
 
 
@@ -57,22 +57,39 @@ swiss$prostring2[swiss$prostring2 %in% c(99999997,99999998)] <- ""
 swiss$constring1[swiss$constring1 %in% c(99999997,99999998)] <- ""
 swiss$constring2[swiss$constring2 %in% c(99999997,99999998)] <- ""
 
-## overall response length (this should actually be done by language!!!)
-swiss$wc <- apply(select(swiss, prostring1:constring2), 1, function(x){
-  length(unlist(strsplit(x,"\\s+")))
-})
-swiss$lwc <- log(swiss$wc)/max(log(swiss$wc))
-
-
-## minor pre-processing skipped for now
-# dash has to be fixed
-# wc is incorrect at the moment (I think I still have to trim spaces)
+## combine pro and con
+swiss$string1 <- tolower(paste(swiss$prostring1, swiss$constring1))
+swiss$string2 <- tolower(paste(swiss$prostring2, swiss$constring2))
+  
+## minor pre-processing
+opend <- apply(swiss[,c("string1","string2")], 2, function(x){
+  x <- gsub("[[:punct:]]","", x)  
+  x <- gsub("(^\\s+|\\s+$)","", x)
+  x[x %in% c("no","non","nein","rien","nichts","keinen","nsp","ka","n","prive","nono"
+             ,"si","oooooooooooo","ooooooooooo","ooooooooooo","ooooooooooooooo"
+             ,"llll","lll","xxx","xx","niente","weiss nicht","weis nicht","weiss nichts"
+             ,"keine ahnung","c","keine gründe","même raison","pas d'opinion","non mi ricordo"
+             ,"nessun motivo","non so","weis nicht mehr","weiss nicht mehr","kein kommentar"
+             ,"keine 2 grund","rien dautre","weis es nicht mehr","weiss es nicht mehr"
+             ,"keins","k angaben","kein weitere grund","keine anderen gründen","wn","keine"
+             ,"keiner","nichts mehr")] <- ""
+  x <- gsub("//"," ", x , fixed = T)
+  x <- gsub("\\s+"," ", x)
+  x <- gsub("(^\\s+|\\s+$)","", x)
+  return(x)
+  })
 
 
 ### add meta information about responses
 
+## overall response length (this should actually be done by language!!!)
+swiss$wc <- apply(opend, 1, function(x){
+  length(unlist(strsplit(x,"\\s+")))
+})
+swiss$lwc <- log(swiss$wc)/max(log(swiss$wc))
+
 ## opinionation (respondents either answered pro OR con, I should take that into account!!!)
-swiss$opinionation <- apply(select(swiss, prostring1:constring2), 1, function(x){
+swiss$opinionation <- apply(opend, 1, function(x){
   iwc <- unlist(lapply(strsplit(x,"\\s+"), length))
   1 - ineq(iwc,type="Gini")
 })
