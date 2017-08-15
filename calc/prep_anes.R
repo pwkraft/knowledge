@@ -295,8 +295,8 @@ data <- data[-processed$docs.removed,]
 data <- data[-out$docs.removed,]
 
 ## quick fit (60 topics)
-# stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-#                , K=60, init.type = "Spectral")
+stm_fit_20 <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+                , K=20, init.type = "Spectral")
 
 ## slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
@@ -310,6 +310,9 @@ doc_topic_prob <- stm_fit$theta
 
 ## topic diversity score
 data$topic_diversity <- apply(doc_topic_prob, 1, function(x) 1 - ineq(x,type="Gini"))
+
+## check sensitivity of diversity based on number of topics
+data$topic_diversity_20 <- apply(stm_fit_20$theta, 1, function(x) 1 - ineq(x,type="Gini"))
 
 ## text-based sophistication measures
 data$polknow_text <- with(data, topic_diversity * lwc * ditem)
