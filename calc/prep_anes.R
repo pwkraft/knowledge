@@ -104,6 +104,15 @@ anes2012$pastvote <- car::recode(raw2012$interest_voted2008, "c(2,5)=0; lo:-1=NA
 ## voted in current election
 anes2012$vote <- car::recode(raw2012$rvote2012_x, "2=0; lo:-1=NA")
 
+## vote choice (pre-election)
+anes2012$vc_pre <- car::recode(raw2012$prevote_presvtwho, "-9=NA")
+
+## vote choice (post-election)
+anes2012$vc_post <- car::recode(raw2012$postvote_presvtwho, "-9:-6=NA")
+
+## vote change (pre-post)
+anes2012$vc_change <- anes2012$vc_pre == anes2012$vc_post
+
 ## participated in protest march / rally
 anes2012$protest <- car::recode(raw2012$dhsinvolv_march, "c(2,5)=0; lo:-1=NA")
 
