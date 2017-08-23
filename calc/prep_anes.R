@@ -131,25 +131,27 @@ anes2012$vc_change <- anes2012$vc_pre == anes2012$vc_post
 anes2012$vc_change[raw2012$prevote_presvt == 1] <- 1
 
 ## party/candidate placements
-anes2012$ideol_dpc <- car::recode(raw2012$libcpre_dpc, "lo:0=NA")
+anes2012$ideol_ego <- car::recode(raw2012$libcpre_dpc, "lo:0=NA")
 anes2012$ideol_rpc <- car::recode(raw2012$libcpre_rpc, "lo:0=NA")
-anes2012$ideol_ptyd <- car::recode(raw2012$libcpre_ptyd, "lo:0=NA")
-anes2012$spsrvpr_ssself <- car::recode(raw2012$spsrvpr_ssself, "lo:0=NA")
-anes2012$spsrvpr_ssrpc <- car::recode(raw2012$spsrvpr_ssrpc, "lo:0=NA")
-anes2012$spsrvpr_ssdpc <- car::recode(raw2012$spsrvpr_ssdpc, "lo:0=NA")
-anes2012$spsrvpr_ssrep <- car::recode(raw2012$spsrvpr_ssrep, "lo:0=NA")
-anes2012$spsrvpr_ssdem <- car::recode(raw2012$spsrvpr_ssdem, "lo:0=NA")
-anes2012$defsppr_self <- car::recode(raw2012$defsppr_self, "lo:0=NA")
+anes2012$ideol_dpc <- car::recode(raw2012$libcpre_dpc, "lo:0=NA")
+anes2012$ideol_rep <- car::recode(raw2012$libcpre_ptyr, "lo:0=NA")
+anes2012$ideol_dem <- car::recode(raw2012$libcpre_ptyd, "lo:0=NA")
+anes2012$spsrvpr_ego <- car::recode(raw2012$spsrvpr_ssself, "lo:0=NA")
+anes2012$spsrvpr_rpc <- car::recode(raw2012$spsrvpr_ssrpc, "lo:0=NA")
+anes2012$spsrvpr_dpc <- car::recode(raw2012$spsrvpr_ssdpc, "lo:0=NA")
+anes2012$spsrvpr_rep <- car::recode(raw2012$spsrvpr_ssrep, "lo:0=NA")
+anes2012$spsrvpr_dem <- car::recode(raw2012$spsrvpr_ssdem, "lo:0=NA")
+anes2012$defsppr_ego <- car::recode(raw2012$defsppr_self, "lo:0=NA")
 anes2012$defsppr_rpc <- car::recode(raw2012$defsppr_rpc, "lo:0=NA")
 anes2012$defsppr_dpc <- car::recode(raw2012$defsppr_dpc, "lo:0=NA")
 anes2012$defsppr_rep <- car::recode(raw2012$defsppr_rep, "lo:0=NA")
 anes2012$defsppr_dem <- car::recode(raw2012$defsppr_dem, "lo:0=NA")
-anes2012$inspre_self <- car::recode(raw2012$inspre_self, "lo:0=NA")
+anes2012$inspre_ego <- car::recode(raw2012$inspre_self, "lo:0=NA")
 anes2012$inspre_rpc <- car::recode(raw2012$inspre_rpc, "lo:0=NA")
 anes2012$inspre_dpc <- car::recode(raw2012$inspre_dpc, "lo:0=NA")
 anes2012$inspre_rep <- car::recode(raw2012$inspre_rep, "lo:0=NA")
 anes2012$inspre_dem <- car::recode(raw2012$inspre_dem, "lo:0=NA")
-anes2012$guarpr_self <- car::recode(raw2012$guarpr_self, "lo:0=NA")
+anes2012$guarpr_ego <- car::recode(raw2012$guarpr_self, "lo:0=NA")
 anes2012$guarpr_rpc <- car::recode(raw2012$guarpr_rpc, "lo:0=NA")
 anes2012$guarpr_dpc <- car::recode(raw2012$guarpr_dpc, "lo:0=NA")
 anes2012$guarpr_rep <- car::recode(raw2012$guarpr_rep, "lo:0=NA")
@@ -190,6 +192,9 @@ anes2012$relig[raw2012$relig_churchwk == 2] <- 1
 
 ## age
 anes2012$age <- car::recode(raw2012$dem_age_r_x, "c(-2,-9,-8) = NA")
+
+## log(age)
+anes2012$lage <- log(anes2012$age)
 
 ## sex
 anes2012$female <- raw2012$gender_respondent_x - 1

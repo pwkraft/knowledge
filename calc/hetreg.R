@@ -50,10 +50,10 @@ z <- as.matrix(z1)
 # Heteroskedastic regression in R
 
 hetero.lik <- function(theta, y, x, z, data) {
-  tmp <- na.omit(data[,c(y,x,z)])
-  y <- tmp[,y]
-  x <- cbind(1,tmp[,x])
-  z <- cbind(1,tmp[,z])
+  #tmp <- na.omit(data[,c(y,x,z)])
+  #y <- tmp[,y]
+  x <- cbind(1,x)
+  z <- cbind(1,z)
   beta <- theta[1:ncol(x)]
   gamma <- theta[(ncol(x)+1):(ncol(x)+ncol(z))]
   # Residuals
