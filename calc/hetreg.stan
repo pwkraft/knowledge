@@ -23,6 +23,8 @@ model {
 }
 generated quantities {
   vector[S] sigmahat;
+  real sigmadif;
   sigmahat = exp(gamma0 + Zpred  * gamma);
+  sigmadif = sigmahat[S] - sigmahat[1];
 }
 

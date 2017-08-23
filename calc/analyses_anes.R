@@ -107,7 +107,7 @@ ggsave("../fig/knoweff_empty.pdf", width=4, height=3)
 
 policies <- c("ideol","spsrvpr","defsppr","inspre","guarpr")
 targets <- c("rpc","dpc","rep","dem")
-measures <- c("polknow_mean_text","polknow_factual")
+measures <- c("polknow_text_mean","polknow_factual")
 
 polknow_hetreg <- function(policy, target, measure
                            , controls = c("female", "educ", "faminc", "lage"
@@ -127,42 +127,25 @@ polknow_hetreg <- function(policy, target, measure
   return(res)
 }
 
-m5 <- NULL
+m5summary <- data.frame(NULL)
 for(p in policies){
   for(t in targets){
     for(m in measures){
       iterlab <- paste(c(p,t,m),collapse="_")
       cat("Iteration: ",iterlab,"\n")
-      m5[[iterlab]] <- polknow_hetreg(p, t, m)
+      tmp <- polknow_hetreg(p, t, m)
+      tmp_sigmadif <- extract(tmp, par="sigmadif")[[1]]
+      tmp_df <- data.frame(policy = p, target = t, measure = m, mean = mean(tmp_sigmadif)
+                           , cilo = quantile(tmp_sigmadif, .025), cihi = quantile(tmp_sigmadif, .975))
+      m5summary <- rbind(m5summary, tmp_df)
     }
   }
 }
 
-test <- polknow_hetreg("ideol", "rpc", "polknow_factual")
-
-
-tmp <- na.omit(as.numeric(data[,c("spsrvpr_ssself","female", "educ", "faminc"
-                                  , "lage", "black", "relig", "mode","polknow_text_mean")]))
-y <- tmp[,"spsrvpr_ssself"]
-X <- tmp[,c("female", "educ", "faminc", "lage", "black", "relig", "mode")]
-Z <- as.matrix(tmp[,"polknow_text_mean"])
-m5dl <- list(N = nrow(X), B = ncol(X), G = ncol(Z)
-             , y = y, X = X, Z = Z
-             , S = 10, Zpred = as.matrix(seq(min(Z[,1]), max(Z[,1]), length.out = 10)))
-m5stan <- stan(file = "hetreg.stan", data=m5dl)
-print(m5stan, par="sigmahat")
-
-tmp <- na.omit(data[,c("spsrvpr_ssself","female", "educ", "faminc"
-                       , "lage", "black", "relig", "mode","polknow_factual")])
-y <- tmp[,"spsrvpr_ssself"]
-X <- tmp[,c("female", "educ", "faminc", "lage", "black", "relig", "mode")]
-Z <- as.matrix(tmp[,"polknow_factual"])
-m6dl <- list(N = nrow(X), B = ncol(X), G = ncol(Z)
-             , y = y, X = X, Z = Z
-             , S = 10, Zpred = as.matrix(seq(min(Z[,1]), max(Z[,1]), length.out = 10)))
-m6stan <- stan(file = "hetreg.stan", data=m6dl)
-print(m6stan, par="sigmahat")
-
+ggplot(m5summary, aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) + 
+  geom_point() + geom_errorbarh(height=0) + facet_grid(policy~target) +
+  geom_vline(xintercept = 0, color="grey") + 
+  xlab("Error Variance Reduction") + ylab("Independent Variable (Max - Min)") + plot_default
 
 
 
