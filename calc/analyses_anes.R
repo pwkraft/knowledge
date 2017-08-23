@@ -56,7 +56,7 @@ dev.off()
 
 
 ## label definition
-dvnames <- c("Text-based\nSophistication","Factual\nKnowledge", "Interviewer\nEvaluation (Pre)")
+dvnames <- c("Text-based\nSophistication","Factual\nKnowledge")
 ivnames <- c("Intercept", "Gender\n(Female)", "Media\nExposure", "Political\nDiscussions", "Education\n(College)"
              , "Income", "log(Age)", "Race\n(Black)", "Church\nAttendance", "Survey Mode\n(Online)")
 
@@ -65,7 +65,7 @@ ivnames <- c("Intercept", "Gender\n(Female)", "Media\nExposure", "Political\nDis
 # sophistication as an independent variable: no gender interaction
 ########
 
-m4a <- m4b <- m4c <- NULL
+m4a <- m4b <- NULL
 m4a[[1]] <- lm(effic_int ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data)
 m4a[[2]] <- lm(effic_ext ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data)
 m4a[[3]] <- lm(part ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data)
@@ -74,14 +74,9 @@ m4b[[1]] <- lm(effic_int ~ polknow_factual + female + educ + faminc + log(age) +
 m4b[[2]] <- lm(effic_ext ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data)
 m4b[[3]] <- lm(part ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data)
 m4b[[4]] <- glm(vote ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data, family=binomial("logit"))
-m4c[[1]] <- lm(effic_int ~ polknow_evalpre + female + educ + faminc + log(age) + black + relig, data = data)
-m4c[[2]] <- lm(effic_ext ~ polknow_evalpre + female + educ + faminc + log(age) + black + relig, data = data)
-m4c[[3]] <- lm(part ~ polknow_evalpre + female + educ + faminc + log(age) + black + relig, data = data)
-m4c[[4]] <- glm(vote ~ polknow_evalpre + female + educ + faminc + log(age) + black + relig, data = data, family=binomial("logit"))
 
 res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
-             , sim(m4b, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T)))
-             , sim(m4c, iv=data.frame(polknow_evalpre=range(data$polknow_evalpre, na.rm = T))))
+             , sim(m4b, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
 res$dvlab <- factor(res$dv, labels = c("Internal Efficacy","External Efficacy"
                                        ,"Non-conv. Participation","Turnout"))
 res$ivlab <- factor(res$iv, labels = dvnames)
@@ -104,3 +99,21 @@ ggsave("../fig/knoweff_empty.pdf", width=4, height=3)
 
 
 ### search for placement in codebook
+
+
+### pre-post consistency
+m5a <- glm(vc_change ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data, family=binomial("logit"))
+m5b <- glm(vc_change ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data, family=binomial("logit"))
+
+summary(glm(vc_change ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data, family=binomial("logit")))
+
+res <- rbind(sim(m5a, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
+             , sim(m5b, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
+res$ivlab <- factor(res$iv, labels = dvnames)
+
+ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + 
+  geom_point() + geom_errorbarh(height=0) + 
+  geom_vline(xintercept = 0, color="grey") + 
+  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
+  scale_y_discrete(limits = rev(levels(res$ivlab)))
+

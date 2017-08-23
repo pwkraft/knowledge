@@ -104,15 +104,6 @@ anes2012$pastvote <- car::recode(raw2012$interest_voted2008, "c(2,5)=0; lo:-1=NA
 ## voted in current election
 anes2012$vote <- car::recode(raw2012$rvote2012_x, "2=0; lo:-1=NA")
 
-## vote choice (pre-election)
-anes2012$vc_pre <- car::recode(raw2012$prevote_presvtwho, "-9=NA")
-
-## vote choice (post-election)
-anes2012$vc_post <- car::recode(raw2012$postvote_presvtwho, "-9:-6=NA")
-
-## vote change (pre-post)
-anes2012$vc_change <- anes2012$vc_pre == anes2012$vc_post
-
 ## participated in protest march / rally
 anes2012$protest <- car::recode(raw2012$dhsinvolv_march, "c(2,5)=0; lo:-1=NA")
 
@@ -128,6 +119,41 @@ anes2012$button <- car::recode(raw2012$mobilpo_sign, "c(2,5)=0; lo:-1=NA")
 
 ## additive index protest behavior
 anes2012$part <- with(anes2012, as.numeric((protest + petition + button)>0))
+
+## vote choice (pre-election)
+anes2012$vc_pre <- car::recode(raw2012$prevote_intpreswho,"-8=-2; -9=NA")
+
+## vote choice (post-election)
+anes2012$vc_post <- car::recode(raw2012$postvote_presvtwho, "-9:-6=NA")
+
+## vote change (pre-post)
+anes2012$vc_change <- anes2012$vc_pre == anes2012$vc_post
+anes2012$vc_change[raw2012$prevote_presvt == 1] <- 1
+
+## party/candidate placements
+anes2012$ideol_dpc <- car::recode(raw2012$libcpre_dpc, "lo:0=NA")
+anes2012$ideol_rpc <- car::recode(raw2012$libcpre_rpc, "lo:0=NA")
+anes2012$ideol_ptyd <- car::recode(raw2012$libcpre_ptyd, "lo:0=NA")
+anes2012$spsrvpr_ssself <- car::recode(raw2012$spsrvpr_ssself, "lo:0=NA")
+anes2012$spsrvpr_ssrpc <- car::recode(raw2012$spsrvpr_ssrpc, "lo:0=NA")
+anes2012$spsrvpr_ssdpc <- car::recode(raw2012$spsrvpr_ssdpc, "lo:0=NA")
+anes2012$spsrvpr_ssrep <- car::recode(raw2012$spsrvpr_ssrep, "lo:0=NA")
+anes2012$spsrvpr_ssdem <- car::recode(raw2012$spsrvpr_ssdem, "lo:0=NA")
+anes2012$defsppr_self <- car::recode(raw2012$defsppr_self, "lo:0=NA")
+anes2012$defsppr_rpc <- car::recode(raw2012$defsppr_rpc, "lo:0=NA")
+anes2012$defsppr_dpc <- car::recode(raw2012$defsppr_dpc, "lo:0=NA")
+anes2012$defsppr_rep <- car::recode(raw2012$defsppr_rep, "lo:0=NA")
+anes2012$defsppr_dem <- car::recode(raw2012$defsppr_dem, "lo:0=NA")
+anes2012$inspre_self <- car::recode(raw2012$inspre_self, "lo:0=NA")
+anes2012$inspre_rpc <- car::recode(raw2012$inspre_rpc, "lo:0=NA")
+anes2012$inspre_dpc <- car::recode(raw2012$inspre_dpc, "lo:0=NA")
+anes2012$inspre_rep <- car::recode(raw2012$inspre_rep, "lo:0=NA")
+anes2012$inspre_dem <- car::recode(raw2012$inspre_dem, "lo:0=NA")
+anes2012$guarpr_self <- car::recode(raw2012$guarpr_self, "lo:0=NA")
+anes2012$guarpr_rpc <- car::recode(raw2012$guarpr_rpc, "lo:0=NA")
+anes2012$guarpr_dpc <- car::recode(raw2012$guarpr_dpc, "lo:0=NA")
+anes2012$guarpr_rep <- car::recode(raw2012$guarpr_rep, "lo:0=NA")
+anes2012$guarpr_dem <- car::recode(raw2012$guarpr_dem, "lo:0=NA")
 
 ## ideology (factor/dummies)
 anes2012$ideol <- factor(car::recode(raw2012$libcpre_self, "1:3=1; 4=2; 5:7=3; else=NA")
