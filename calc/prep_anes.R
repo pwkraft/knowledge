@@ -17,6 +17,10 @@ library(quanteda)
 library(stm)
 library(readstata13)
 library(ineq)
+library(rstan)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/")
 datasrc <- "/data/Dropbox/Uni/Data/anes2012/"
 raw2012 <- read.dta13(paste0(datasrc,"anes_timeseries_2012.dta"), convert.factors = F)
@@ -359,7 +363,56 @@ data$polknow_text <- with(data, topic_diversity * lwc * ditem)
 data$polknow_text_mean <- with(data, (topic_diversity + lwc + ditem)/3)
 
 
+### estimate hetreg models (in prep because it takes a long time)
+
+policies <- c("ideol","spsrvpr","defsppr","inspre","guarpr")
+targets <- c("rpc","dpc","rep","dem")
+measures <- c("polknow_text_mean","polknow_factual")
+
+polknow_hetreg <- function(policy, target, measure
+                           , controls = c("female", "educ", "faminc", "lage"
+                                          , "black", "relig", "mode")
+                           , df = data, control = NULL){
+  tmp <- na.omit(df[,c(paste(c(policy,target),collapse="_")
+                       , paste(c(policy,"ego"),collapse="_")
+                       , measure, controls)])
+  y <- tmp[,paste(c(policy,target),collapse="_")]
+  X <- tmp[,c(paste(c(policy,"ego"),collapse="_"), controls)]
+  Z <- as.matrix(tmp[,measure])
+  
+  dl <- list(N = nrow(X), B = ncol(X), G = ncol(Z)
+             , y = y, X = X, Z = Z
+             , S = 10, Zpred = as.matrix(seq(min(Z[,1]), max(Z[,1]), length.out = 10)))
+  res <- stan(file = "calc/hetreg.stan", data=dl, control=control)
+  return(res)
+}
+
+hetreg_summary <- data.frame(NULL)
+for(p in policies){
+  for(t in targets){
+    for(m in measures){
+      iterlab <- paste(c(p,t,m),collapse="_")
+      cat("Iteration: ",iterlab,"\n")
+      tmp <- polknow_hetreg(p, t, m)
+      tmp_sigmadif <- extract(tmp, par="sigmadif")[[1]]
+      tmp_df <- data.frame(policy = p, target = t, measure = m, mean = mean(tmp_sigmadif)
+                           , cilo = quantile(tmp_sigmadif, .025), cihi = quantile(tmp_sigmadif, .975))
+      hetreg_summary <- rbind(hetreg_summary, tmp_df)
+    }
+  }
+}
+
+## estimation issue with liberal/conservative assessment!
+tmp <- polknow_hetreg("ideol", "dpc", "polknow_factual", control = list(adapt_delta=.99))
+tmp_sigmadif <- extract(tmp, par="sigmadif")[[1]]
+tmp_df <- data.frame(policy = "ideol", target = "dpc", measure = "dpc"
+                     , mean = mean(tmp_sigmadif)
+                     , cilo = quantile(tmp_sigmadif, .025)
+                     , cihi = quantile(tmp_sigmadif, .975))
+
+
+
 ### save output
 
-save(anes2012, anes2012opend, anes2012spell, data, meta, processed, out, stm_fit
+save(anes2012, anes2012opend, anes2012spell, data, meta, processed, out, stm_fit, hetreg_summary
      , file="calc/out/anes.Rdata")

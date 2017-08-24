@@ -101,55 +101,32 @@ ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
 ggsave("../fig/knoweff_empty.pdf", width=4, height=3)
 
 
+
 ########
 # validation: party/candidate placement precision
 ########
 
-policies <- c("ideol","spsrvpr","defsppr","inspre","guarpr")
-targets <- c("rpc","dpc","rep","dem")
-measures <- c("polknow_text_mean","polknow_factual")
+hetreg_summary <- filter(hetreg_summary, policy!="ideol")
+hetreg_summary$policy <- factor(hetreg_summary$policy
+                                , labels = c("Government\nSpending","Defense\nSpending"
+                                             ,"Insurance\nPolicy","Job\nGuarantee"))
+hetreg_summary$measure <- factor(hetreg_summary$measure
+                                 , labels = c("Text-based\nSophistication","Factual\nKnowledge"))
+hetreg_summary$target <- factor(hetreg_summary$target
+                                , labels = c("Mitt\nRomney","Barack\nObama"
+                                             ,"Republican\nParty","Democratic\nParty"))
 
-polknow_hetreg <- function(policy, target, measure
-                           , controls = c("female", "educ", "faminc", "lage"
-                                          , "black", "relig", "mode")
-                           , df = data){
-  tmp <- na.omit(df[,c(paste(c(policy,target),collapse="_")
-                       , paste(c(policy,"ego"),collapse="_")
-                       , measure, controls)])
-  y <- tmp[,paste(c(policy,target),collapse="_")]
-  X <- tmp[,c(paste(c(policy,"ego"),collapse="_"), controls)]
-  Z <- as.matrix(tmp[,measure])
-  
-  dl <- list(N = nrow(X), B = ncol(X), G = ncol(Z)
-             , y = y, X = X, Z = Z
-             , S = 10, Zpred = as.matrix(seq(min(Z[,1]), max(Z[,1]), length.out = 10)))
-  res <- stan(file = "hetreg.stan", data=dl)
-  return(res)
-}
-
-m5summary <- data.frame(NULL)
-for(p in policies){
-  for(t in targets){
-    for(m in measures){
-      iterlab <- paste(c(p,t,m),collapse="_")
-      cat("Iteration: ",iterlab,"\n")
-      tmp <- polknow_hetreg(p, t, m)
-      tmp_sigmadif <- extract(tmp, par="sigmadif")[[1]]
-      tmp_df <- data.frame(policy = p, target = t, measure = m, mean = mean(tmp_sigmadif)
-                           , cilo = quantile(tmp_sigmadif, .025), cihi = quantile(tmp_sigmadif, .975))
-      m5summary <- rbind(m5summary, tmp_df)
-    }
-  }
-}
-
-ggplot(m5summary, aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) + 
+ggplot(hetreg_summary, aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) + 
   geom_point() + geom_errorbarh(height=0) + facet_grid(policy~target) +
   geom_vline(xintercept = 0, color="grey") + 
   xlab("Error Variance Reduction") + ylab("Independent Variable (Max - Min)") + plot_default
+ggsave("../fig/hetreg.pdf",width = 6, height = 4)
 
 
+#########
+### validation: pre-post consistency
+#########
 
-### pre-post consistency
 m5a <- glm(vc_change ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data, family=binomial("logit"))
 m5b <- glm(vc_change ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data, family=binomial("logit"))
 
@@ -164,4 +141,18 @@ ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
   geom_vline(xintercept = 0, color="grey") + 
   xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
   scale_y_discrete(limits = rev(levels(res$ivlab)))
+ggsave("../fig/prepost.pdf",width = 3, height = 2)
 
+
+res <- rbind(data.frame(sim(m5a, iv=data.frame(polknow_text_mean=seq(0.1798338, 0.7234572,length=10)))
+                        , value=seq(0.1798338, 0.7234572,length=10),Variable="Text-based Sophistication")
+             , data.frame(sim(m5b, iv=data.frame(polknow_factual=seq(0, 1,length=10)))
+                          , value=seq(0, 1,length=10),Variable="Factual Knowledge"))
+res$ivlab <- factor(res$iv, labels = dvnames)
+
+ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
+  #geom_errorbar(alpha=.5, width=0) + 
+  geom_ribbon(alpha=0.4, lwd=.1, fill="lightblue") + geom_line() + 
+  facet_grid(~Variable, scales="free_x") +
+  ylab("Expected Probability\nto Keep Vote Choice") + xlab("Value of independent variable")
+ggsave("../fig/prepost_exp.pdf",width=4,height=2)

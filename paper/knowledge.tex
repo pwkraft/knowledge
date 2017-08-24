@@ -259,24 +259,32 @@ Overall, the sophistication metrics perform similarly as predictors of internal 
 
 \subsection*{... Precise Positioning of Parties and Candidates}
 
+\begin{figure}[h]\centering
+\includegraphics{../fig/hetreg.pdf}
+\caption{Reduction in Error Variance}\label{fig:hetreg}
+\end{figure}
+
+
 \subsection*{... Stable Preferences}
+
+\begin{figure}[h]\centering
+\includegraphics{../fig/prepost_exp.pdf}
+\caption{Expected Probability to Keep Vote Choice}\label{fig:prepost}
+\end{figure}
 
 \subsection*{... Incorporation of New Information}
 % TODO: How can I cite Jenn here? Add survey information (questionnaire etc.) in the appendix
 
 The \textbf{factual knowledge} score in the YouGov data is based on a battery of eight items similar to the knowledge questions in the ANES. Additionally, the YouGov study included a task where respondents read a newspaper article about a fictional infectious disease and were subsequently asked to recall information provided in the article (e.g. regarding symptoms, modes of contraction etc.). I compute an additive index counting the pieces of information that were correctly recalled (\textbf{disease information}) as a measure of the ability to retrieve information from a news article on a non-partisan issue that is related to public health policies.
 
-Figure~\ref{fig:yg_corplot} examines the distribution of each measure of political knowledge as well as their respective correlations in the YouGov data. Again, we observe that text-based sophistication and factual political knowledge are positively correlated, which indicates that the text-based sophistication measure overlaps with traditional knowledge metrics while capturing unique variation in individual response behavior. Interestingly, there appears to be a stronger relationship between text-based sophistication and disease information than between factual political knowledge and disease information.
 
 \begin{figure}[h]\centering
-\includegraphics{../fig/yg_corplot.pdf}
-\caption{YouGov data -- Correlation matrix of text-based sophistication, a conventional political knowledge metric, and disease information retrieval. The plots on the diagonal display univariate densities for each variable. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. All correlations reported are statistically significant with $p<.05$.}\label{fig:yg_corplot}
+\includegraphics{../fig/yg_disease.pdf}
+\caption{YouGov data -- Effect on disease retrieval.}\label{fig:yg_corplot}
 \end{figure}
 
-Recall that the disease information score can be interpreted as an indicator of the ability to retrieve specific information provided in a news article about a public health issue. It could be argued that text-based sophistication is more similar to the disease information score in that it captures the extent to which participants were able to recall political information that is relevant to their own attitudes. Conventional knowledge scores, on the other hand, inquire about specific that are not necessarily relevant to derive well-informed attitudes about political issues.
 
-
-\subsection*{... Justified Political Decisions}
+\subsection*{... Well Justified Political Decisions}
 
 
 \begin{figure}[h]\centering
@@ -325,24 +333,6 @@ After controlling for common determinants, text-based sophistication reveals no 
 The patterns for the remaining determinants are quite similar across different dependent variables. Knowledge and sophistication is significantly higher among respondents who are more exposed to political news media, discuss politics frequently, are more educated, and have higher income. An interesting deviation, however, is the effect of survey mode. For factual knowledge questions, we observe that respondents in online surveys score significantly higher than individuals in face-to-face interviews. This difference could be explained by the fact that individuals are able to look up responses to factual knowledge questions while taking an online survey \citep[see also][]{clifford2016cheating}. For the text-based measure, on the other hand, we see that individuals appear to score lower on sophistication in online surveys. Respondents in online surveys therefore seem less willing to elaborate on their attitudes. Overall, the fact that the determinants of political sophistication are very consistent across models lends additional validity to the text-based measure.
 
 
-
-\subsection*{Study 2: 2015 YouGov Data}
-
-Next, I examine whether the results regarding the gender gap observed in Study 1 are replicated in the YouGov data. Figure~\ref{fig:yg_meandiff} compares the alternative measures of political knowledge and sophistication for men and women. As before, we observe a significant gender gap in factual knowledge (middle panel), which disappears using the text-based measure (left panel). Furthermore, there is no apparent gender gap in disease information retrieval. If anything, women are able to recall slightly more accurate information about the infectious disease described in the news article. This result is consistent with recent research by \citet{jerit2017revisiting}, which suggests that knowledge gaps between men and women disappear upon receiving sufficient information.
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/yg_meandiff.pdf}
-\caption{YouGov data -- The gender gap in political sophistication. The figure displays mean levels of sophistication for each measure comparing men and women (including 95\% confidence intervals). The y-axis is scaled to range up to the maximum value observed in the data for each sophistication metric. The gender difference in factual knowledge is statistically significant with $p<.05$.}\label{fig:yg_meandiff}
-\end{figure}
-
-A skeptical reader may again argue that the difference in factual knowledge between men and women could potentially be explained by systematic differences in resource-related factors. As such, we need to examine whether the gender gap persists even after controlling for covariates that might influence political knowledge. Similar to the analyses discussed in Study 1, Figure~\ref{fig:yg_determinants} presents the results of linear regressions predicting each measure as a function of gender, education, income, age, race, and religiosity.
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/yg_determinants.pdf}
-\caption{Common determinants of political sophistication -- Replication using YouGov data. Estimates are OLS regression coefficients with 95\% confidence intervals. Dependent variables are the text-based sophistication measure, factual political knowledge as well as knowledge about a fictional disease that was presented as part of the study. Full model results are presented in the appendix, Table~\ref{tab:yg_determinants}}\label{fig:yg_determinants}
-\end{figure}
-
-As before, men do not perform better than women on text-based sophistication or disease information retrieval in a multivariate setting. However, the gender gap in factual political knowledge persists and is substantively as well as statistically significant. The remaining determinants of sophistication/knowledge are similar across measures (except for family income). Interestingly, the observed pattern of effects on text-based sophistication is strikingly similar to the effects on information retrieval about the fictional disease. This result reinforces the conclusion that text-based sophistication and disease information retrieval in the YouGov study share common characteristics in the sense that they capture how individuals recall considerations that are relevant to their own attitudes rather than inquiring about facts related to political institutions and elites that are extraneous to the issues at hand.
 
 
 
@@ -412,10 +402,43 @@ The findings presented in this paper show that conventional knowledge indices an
 \end{figure}
 
 
+%\clearpage
+%\section*{Appendix C: YouGov Correlation Matrix}
+%
+%Figure~\ref{fig:yg_corplot} examines the distribution of each measure of political knowledge as well as their respective correlations in the YouGov data. Again, we observe that text-based sophistication and factual political knowledge are positively correlated, which indicates that the text-based sophistication measure overlaps with traditional knowledge metrics while capturing unique variation in individual response behavior. Interestingly, there appears to be a stronger relationship between text-based sophistication and disease information than between factual political knowledge and disease information.
+%
+%\begin{figure}[h]\centering
+%\includegraphics{../fig/yg_corplot.pdf}
+%\caption{YouGov data -- Correlation matrix of text-based sophistication, a conventional political knowledge metric, and disease information retrieval. The plots on the diagonal display univariate densities for each variable. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. All correlations reported are statistically significant with $p<.05$.}\label{fig:yg_corplot}
+%\end{figure}
+%
+%Recall that the disease information score can be interpreted as an indicator of the ability to retrieve specific information provided in a news article about a public health issue. It could be argued that text-based sophistication is more similar to the disease information score in that it captures the extent to which participants were able to recall political information that is relevant to their own attitudes. Conventional knowledge scores, on the other hand, inquire about specific that are not necessarily relevant to derive well-informed attitudes about political issues.
+
+
+
+%\subsection*{Appendix D: Gender Gap Replication -- 2015 YouGov Data}
+%
+%Next, I examine whether the results regarding the gender gap observed in Study 1 are replicated in the YouGov data. Figure~\ref{fig:yg_meandiff} compares the alternative measures of political knowledge and sophistication for men and women. As before, we observe a significant gender gap in factual knowledge (middle panel), which disappears using the text-based measure (left panel). Furthermore, there is no apparent gender gap in disease information retrieval. If anything, women are able to recall slightly more accurate information about the infectious disease described in the news article. This result is consistent with recent research by \citet{jerit2017revisiting}, which suggests that knowledge gaps between men and women disappear upon receiving sufficient information.
+%
+%\begin{figure}[h]\centering
+%\includegraphics{../fig/yg_meandiff.pdf}
+%\caption{YouGov data -- The gender gap in political sophistication. The figure displays mean levels of sophistication for each measure comparing men and women (including 95\% confidence intervals). The y-axis is scaled to range up to the maximum value observed in the data for each sophistication metric. The gender difference in factual knowledge is statistically significant with $p<.05$.}\label{fig:yg_meandiff}
+%\end{figure}
+%
+%A skeptical reader may again argue that the difference in factual knowledge between men and women could potentially be explained by systematic differences in resource-related factors. As such, we need to examine whether the gender gap persists even after controlling for covariates that might influence political knowledge. Similar to the analyses discussed in Study 1, Figure~\ref{fig:yg_determinants} presents the results of linear regressions predicting each measure as a function of gender, education, income, age, race, and religiosity.
+%
+%\begin{figure}[h]\centering
+%\includegraphics{../fig/yg_determinants.pdf}
+%\caption{Common determinants of political sophistication -- Replication using YouGov data. Estimates are OLS regression coefficients with 95\% confidence intervals. Dependent variables are the text-based sophistication measure, factual political knowledge as well as knowledge about a fictional disease that was presented as part of the study. Full model results are presented in the appendix, Table~\ref{tab:yg_determinants}}\label{fig:yg_determinants}
+%\end{figure}
+%
+%As before, men do not perform better than women on text-based sophistication or disease information retrieval in a multivariate setting. However, the gender gap in factual political knowledge persists and is substantively as well as statistically significant. The remaining determinants of sophistication/knowledge are similar across measures (except for family income). Interestingly, the observed pattern of effects on text-based sophistication is strikingly similar to the effects on information retrieval about the fictional disease. This result reinforces the conclusion that text-based sophistication and disease information retrieval in the YouGov study share common characteristics in the sense that they capture how individuals recall considerations that are relevant to their own attitudes rather than inquiring about facts related to political institutions and elites that are extraneous to the issues at hand.
+
+
 
 
 %\clearpage
-%\section*{Appendix C: Tables of Model Estimates}
+%\section*{Appendix E: Tables of Model Estimates}
 %\renewcommand\thefigure{C.\arabic{figure}}
 %\renewcommand\thetable{C.\arabic{table}}
 %\setcounter{figure}{0}

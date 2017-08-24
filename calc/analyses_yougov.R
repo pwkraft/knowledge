@@ -30,7 +30,7 @@ source("sim.R")
 source("latexTable.R")
 
 ## plot defaults
-plot_default <- theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
+plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
 
 
 ########
@@ -169,29 +169,37 @@ ggsave("../fig/yg_determinants_empty.pdf",width=4.75,height=2.5)
 m2 <- NULL
 m2[[1]] <- lm(know_dis ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig, data = data)
 m2[[2]] <- lm(know_dis ~ know_pol + female + educ + faminc + log(age) + black + relig, data = data)
-m2[[3]] <- lm(know_dis ~ polknow_text_mean + know_pol + female + educ + faminc + log(age) + black + relig, data = data)
+#m2[[3]] <- lm(know_dis ~ polknow_text_mean + know_pol + female + educ + faminc + log(age) + black + relig, data = data)
 lapply(m2, summary)
+
+res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=range(data$polknow_text_mean)))
+                        , Variable="Text-based Sophistication")
+             , data.frame(sim(m2[[2]], iv=data.frame(know_pol=range(data$know_pol)))
+                          , Variable="Factual Knowledge"))
+
+ggplot(res, aes(y=Variable, x=mean, xmin=cilo,xmax=cihi)) +
+  geom_point() + geom_errorbarh(height=0) + 
+  geom_vline(xintercept = 0, color="grey") + 
+  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default
+
 
 res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=seq(0.1514140,0.6173431,length=10)))
                         ,value=seq(0.1514140,0.6173431,length=10),Variable="Text-based Sophistication")
              , data.frame(sim(m2[[2]], iv=data.frame(know_pol=seq(0,1,length=10)))
-                          ,value=seq(0,1,length=10),Variable="Factual Knowledge")
-             , data.frame(sim(m2[[3]], iv=data.frame(polknow_text_mean=seq(0.1514140,0.6173431,length=10)))
-                          ,value=seq(0.1514140,0.6173431,length=10),Variable="Text-based Sophistication")
-             , data.frame(sim(m2[[3]], iv=data.frame(know_pol=seq(0,1,length=10)))
                           ,value=seq(0,1,length=10),Variable="Factual Knowledge"))
-res$model <- rep(c(1,2), each=nrow(res)/2)
-res$model <- factor(res$model, labels = c("Individual Models","Combined Model"))
+#res$model <- rep(c(1,2), each=nrow(res)/2)
+#res$model <- factor(res$model, labels = c("Individual Models","Combined Model"))
 
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
   #geom_errorbar(alpha=.5, width=0) + 
-  geom_ribbon(alpha=0.1, lwd=.1) + geom_line() + 
-  facet_grid(model~Variable, scales="free_x") +
-  ylab("Expected disease information retrieval") + xlab("Value of independent variable")
-ggsave("../fig/yg_disease.pdf",width=3,height=3)
+  geom_ribbon(alpha=0.4, lwd=.1, fill="lightblue") + geom_line() + 
+  facet_grid(~Variable, scales="free_x") +
+  ylab("Expected Disease\nInformation Retrieval") + xlab("Value of independent variable")
+ggsave("../fig/yg_disease.pdf",width=4,height=2)
 ### THE EFFECTS ARE PRETTY SIMILAR ACROSS MEASURES...
 ### I wanted to make the argument that the text-based measure is a better predictor, 
 ### but that is not really the case, both are equally good.
+
 
 # ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + 
 #   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white")) +
