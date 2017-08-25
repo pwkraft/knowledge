@@ -20,7 +20,7 @@ library(pmisc)
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
 ## load data and stm results
-load("out/yougov.Rdata")
+load("out/swiss.Rdata")
 
 
 
@@ -31,7 +31,7 @@ load("out/yougov.Rdata")
 ## histogram/density of wc
 wc_mean = mean(data$wc)
 
-p1 <- ggplot(data, aes(wc)) + geom_histogram(fill = "grey", binwidth = 25) + 
+p1 <- ggplot(data, aes(wc)) + geom_histogram(fill = "grey", binwidth = 2) + 
   theme_classic(base_size = 8) + 
   theme(panel.border = element_rect(fill=NA)) + 
   geom_vline(xintercept = wc_mean, colour="red", linetype = "longdash") +
@@ -47,27 +47,28 @@ p2 <- ggplot(data, aes(lwc, ..density..)) + geom_histogram(binwidth = 0.05, fill
   ylab("Density") + xlab("log(Word Count) / max[log(Word Count)]")
 
 
-pdf("../fig/yg_wc.pdf",width=5, height=2)
+pdf("../fig/swiss_wc.pdf",width=5, height=2)
 grid.arrange(p1, p2, ncol=2)
 dev.off()
 
 ## histogram/density of topic_diversity
-data$topic_diversity <- (data$topic_diversity - min(data$topic_diversity)) / (max(data$topic_diversity)-min(data$topic_diversity))
-diversity_mean = mean(data$topic_diversity)
+tmp <- rbind(opend_italian, opend_french, opend_german)
+diversity_mean = mean(tmp$topic_diversity)
 
-p3 <- ggplot(data, aes(topic_diversity, ..density..)) + geom_histogram(binwidth = 0.01,fill='grey') + geom_density() + theme_classic() + 
+p3 <- ggplot(tmp, aes(topic_diversity, ..density..)) + geom_histogram(binwidth = 0.01,fill='grey') + geom_density() + theme_classic() + 
   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill=NA)) + 
   geom_vline(xintercept = diversity_mean, colour="red", linetype = "longdash") + 
   ylab("Density") + xlab("Topic Diversity")
 
 ## histogram/density of ditem
-ditem_mean = mean(data$ditem)
+tmp$opinionation <- (tmp$opinionation - min(tmp$opinionation)) / (max(tmp$opinionation)-min(tmp$opinionation))
+opinionation_mean = mean(tmp$opinionation)
 
-p4 <- ggplot(data, aes(ditem, ..density..)) + geom_histogram(binwidth = 0.01,fill='grey') + geom_density() + theme_classic() + 
+p4 <- ggplot(tmp, aes(opinionation, ..density..)) + geom_histogram(binwidth = 0.01,fill='grey') + geom_density() + theme_classic() + 
   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill=NA)) + 
-  geom_vline(xintercept = ditem_mean, colour="red", linetype = "longdash") + 
+  geom_vline(xintercept = opinionation_mean, colour="red", linetype = "longdash") + 
   ylab("Density") + xlab("Opinionation")
 
-pdf("../fig/yg_diversity.pdf",width=5, height=2)
+pdf("../fig/swiss_diversity.pdf",width=5, height=2)
 grid.arrange(p3, p4, ncol=2)
 dev.off()

@@ -25,6 +25,7 @@ load("out/yougov.Rdata")
 
 
 ## QUESTION: remove wc=0 and spanish=1?
+mean(yougov$wc[yougov$wc>0])
 
 source("sim.R")
 source("latexTable.R")

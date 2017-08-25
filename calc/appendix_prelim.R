@@ -20,7 +20,7 @@ library(pmisc)
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
 ## load data and stm results
-load("anes.Rdata")
+load("out/anes.Rdata")
 #load("../data/anes_old.Rdata")
 
 # correlation matrices
@@ -70,12 +70,13 @@ p3 <- ggplot(data, aes(topic_diversity, ..density..)) + geom_histogram(binwidth 
   ylab("Density") + xlab("Topic Diversity")
 
 ## histogram/density of ditem
+data$ditem <- (data$ditem - min(data$ditem)) / (max(data$ditem)-min(data$ditem))
 ditem_mean = mean(data$ditem)
 
 p4 <- ggplot(data, aes(ditem, ..density..)) + geom_histogram(binwidth = 0.01,fill='grey') + geom_density() + theme_classic() + 
   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill=NA)) + 
   geom_vline(xintercept = ditem_mean, colour="red", linetype = "longdash") + 
-  ylab("Density") + xlab("Opinion Diversity")
+  ylab("Density") + xlab("Opinionation")
 
 pdf("../fig/diversity.pdf",width=5, height=2)
 grid.arrange(p3, p4, ncol=2)
