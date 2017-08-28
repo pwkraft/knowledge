@@ -30,9 +30,9 @@
 
 
 \author{Patrick W. Kraft}
-\institute{40\textsuperscript{th} Annual Meeting of the International Society of Political Psychology (ISPP)}
-\title{Women Also Know Stuff\\{\large Challenging the Gender Gap in Political Sophistication}}
-\date{Edinburgh, Scotland, 29 June -- 2 July 2017}
+\institute{113\textsuperscript{th} APSA Annual Meeting}
+\title{Looking for Answers\\{\large A Naive Approach for Measuring Political Sophistication}}
+\date{San Francisco, 31 August -- 3 September 2017}
 \titlegraphic{\includegraphics[height=.7cm]{/data/Dropbox/Uni/Misc/Logos/logo.pdf}}
 
 \begin{document}
@@ -141,8 +141,8 @@
 \frametitle{Measuring text-based sophistication}
 \begin{enumerate}
 \item Relative length = $ \dfrac{\log\left(\sum_{j=1}^J n_{ij}\right)}{\max\left[\log\left(\sum_{j=1}^J n_{ij}\right)\right]}$
-\item<2-> Topic diversity = $1-\dfrac{\sum_{k_1=1}^K\sum_{k_2=1}^K |\theta_{ik_1} - \theta_{ik_2}|}{2\sum_{k_1=1}^K\sum_{k_2=1}^K \theta_{ik_1}}$
-\item<3-> Opinion diversity = $1-\dfrac{\sum_{j_1=1}^J\sum_{j_2=1}^J |p_{ij_1} - p_{ij_2}|}{2\sum_{j_1=1}^J\sum_{j_2=1}^J p_{ij_1}}$
+\item<2-> Topic diversity = $1-\dfrac{\sum_{k_1=1}^K\sum_{k_2=1}^K |\theta_{ik_1} - \theta_{ik_2}|}{2K\sum_{k_1=1}^K \theta_{ik_1}}$
+\item<3-> Opinion diversity = $1-\dfrac{\sum_{j_1=1}^J\sum_{j_2=1}^J |p_{ij_1} - p_{ij_2}|}{2J\sum_{j_1=1}^J p_{ij_1}}$
 \end{enumerate}
 
 \begin{tabular}{lp{9cm}}
@@ -150,7 +150,7 @@
 $n$ & Word count \\
 $i$ & Individual respondent \\
 $j \in \{1,...,J\}$ & Like/dislike items (8 total) \\
-\visible<2->{$k \in \{1,...,K\}$ & Topics (72 total, estimated via STM, \citealt{roberts2014structural})} \\
+\visible<2->{$k \in \{1,...,K\}$ & Topics (estimated via STM, \citealt{roberts2014structural})} \\
 \visible<2->{$\theta_{ik}$ & Predicted proportion of topic $k$ in the collection of responses by individual $i$}\\
 \visible<3->{$p_{jk}$ & Proportion of words in the response of individual $i$ to question $j$ relative to the overall size of the individual's response}\\
 \end{tabular}
@@ -169,11 +169,16 @@ $j \in \{1,...,J\}$ & Like/dislike items (8 total) \\
 		\item Non-response: 417, Spanish: 228
 		\end{itemize}
 		\vspace{1em}
-	\item \emph{Replication:} 2015 YouGov Survey
+	\item \emph{Replication 1:} 2015 YouGov Survey
 		\begin{itemize}
 		\item N = 1000 (online)
 		\item Non-response: 48
 		\end{itemize}
+	\item \emph{Replication 2:} 2008--2012 Swiss Referendum Survey
+		\begin{itemize}
+		\item N = 1000 (phone)
+		\item Non-response: 48
+		\end{itemize}		
 	\end{itemize}
 \end{frame}
 
@@ -211,26 +216,26 @@ $j \in \{1,...,J\}$ & Like/dislike items (8 total) \\
 \section{Assessing the Gender Gap}
 
 \begin{frame} %[allowframebreaks]
-\frametitle{Assessing the Gender Gap I}
+\frametitle{Application: Assessing the Gender Gap I}
   \begin{figure}
   \includegraphics{../fig/meandiff_empty.pdf}
   \end{figure}
 \end{frame}
 \begin{frame} %[allowframebreaks]
-\frametitle{Assessing the Gender Gap I}
+\frametitle{Application: Assessing the Gender Gap I}
   \begin{figure}
   \includegraphics{../fig/meandiff_pres.pdf}
   \end{figure}
 \end{frame}
 
 \begin{frame} %[allowframebreaks]
-\frametitle{Assessing the Gender Gap II}
+\frametitle{Application: Assessing the Gender Gap II}
   \begin{figure}
   \includegraphics{../fig/determinants_empty.pdf}
   \end{figure}
 \end{frame}
 \begin{frame} %[allowframebreaks]
-\frametitle{Assessing the Gender Gap II}
+\frametitle{Application: Assessing the Gender Gap II}
   \begin{figure}
   \includegraphics{../fig/determinants_pres.pdf}
   \end{figure}
@@ -250,30 +255,18 @@ $j \in \{1,...,J\}$ & Like/dislike items (8 total) \\
 %\end{frame}
 
 % TODO: add the yougov study as a replication
-\begin{frame} %[allowframebreaks]
-\frametitle{Replication -- YouGov 2015}
-  \begin{figure}
-  \includegraphics{../fig/yg_determinants_empty.pdf}
-  \end{figure}
-\end{frame}
-\begin{frame} %[allowframebreaks]
-\frametitle{Replication -- YouGov 2015}
-  \begin{figure}
-  \includegraphics{../fig/yg_determinants_pres.pdf}
-  \end{figure}
-\end{frame}
 
 \section{Conclusion}
 \subsection{}
 \begin{frame}%[allowframebreaks]
   \frametitle{Conclusion}
   \begin{itemize}
-\item Women might score lower than men on \emph{factual knowledge} about political institutions, but there are no differences in the \emph{sophistication} of expressed political attitudes.
-
-\hspace{1em}
 \item We observe \emph{theoretically meaningful} variation in the \emph{complexity} of verbatim open-ended responses.
 %\item Text-based sophistication and conventional knowledge measures \emph{share a substantial amount of variance}, but they are far from identical.
 \item Text-based sophistication is conceptually closer to the \emph{structure of belief systems} than conventional measures \citep[e.g.,][]{tetlock1983cognitive,luskin1987measuring}.
+
+\hspace{1em}
+\item Women might score lower than men on \emph{factual knowledge} about political institutions, but there are no differences in the \emph{sophistication} of expressed political attitudes.
 \end{itemize}
 \end{frame}
 %Information vs. competence argument by Lupia!!
