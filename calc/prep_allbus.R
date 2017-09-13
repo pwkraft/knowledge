@@ -43,115 +43,121 @@ allbus2008$educ <- as.numeric(raw$V173==5)
 allbus2008$educ[raw$V173==99] <- NA
 
 ## education (continuous)
-allbus2008$educ_cont <- (car::recode(raw$V173, "6:99=NA") - 1)/4
+allbus2008$educ_cont <- (Recode(raw$V173, "6:99=NA") - 1)/4
 
 ## political media exposure
-allbus2008$polmedia <- with(raw, car::recode(V15, "9=NA") + car::recode(V17, "9=NA")
-                            + car::recode(V18, "9=NA"))/21
+allbus2008$polmedia <- with(raw, Recode(V15, "9=NA") + Recode(V17, "9=NA")
+                            + Recode(V18, "9=NA"))/21
 
 ## political discussion
-allbus2008$poldisc <- ((5 - car::recode(raw$V492, "6=5; 9=NA"))
-                       + (5 - car::recode(raw$V493, "6=5; 9=NA")) 
-                       + (5 - car::recode(raw$V494, "6=5; 9=NA"))
-                       + (5 - car::recode(raw$V495, "9=NA")))/16
+allbus2008$poldisc <- ((5 - Recode(raw$V492, "6=5; 9=NA"))
+                       + (5 - Recode(raw$V493, "6=5; 9=NA")) 
+                       + (5 - Recode(raw$V494, "6=5; 9=NA"))
+                       + (5 - Recode(raw$V495, "9=NA")))/16
 
 ## overall political interest
-allbus2008$polint <- (5 - car::recode(raw$V100, "9=NA"))/4
+allbus2008$polint <- (5 - Recode(raw$V100, "9=NA"))/4
 
 ## internal efficacy
-allbus2008$effic_int <- with(raw, 4 - car::recode(V86, "8:9=NA")
-                             + car::recode(V87, "8:9=NA") - 1
-                             + car::recode(V89, "8:9=NA") - 1) / 9
+allbus2008$effic_int <- with(raw, 4 - Recode(V86, "8:9=NA")
+                             + Recode(V87, "8:9=NA") - 1
+                             + Recode(V89, "8:9=NA") - 1) / 9
 
 ## external efficacy
-allbus2008$effic_ext <- with(raw, car::recode(V85, "8:9=NA") - 1
-                             - car::recode(V88, "8:9=NA") + 4) / 6
+allbus2008$effic_ext <- with(raw, Recode(V85, "8:9=NA") - 1
+                             - Recode(V88, "8:9=NA") + 4) / 6
 
 ## overall efficacy
 allbus2008$effic <- with(allbus2008, (effic_int + effic_ext)/2)
 
 ## voted in previous election
-allbus2008$pastvote <- car::recode(raw$V535, "2=0; 9=NA")
+allbus2008$pastvote <- Recode(raw$V535, "2=0; 9=NA")
 
 
 ####################################
 ### CONTINUE HERE
 
+## non-conventional participation index
+allbus2008$part <- (Recode(raw$V57, "6=0; 9=NA") + Recode(raw$V59, "6=0; 9=NA")
+                    + Recode(raw$V60, "6=0; 9=NA") + Recode(raw$V62, "6=0; 9=NA")
+                    + Recode(raw$V63, "6=0; 9=NA") + Recode(raw$V66, "6=0; 9=NA")
+                    + Recode(raw$V67, "6=0; 9=NA") + Recode(raw$V68, "6=0; 9=NA"))
+
 
 ## participated in protest march / rally
-allbus2008$protest <- car::recode(raw$dhsinvolv_march, "c(2,5)=0; lo:-1=NA")
+allbus2008$protest <- Recode(raw$dhsinvolv_march, "c(2,5)=0; lo:-1=NA")
 
 ## letter to congressman/senator
-allbus2008$letter <- car::recode(raw$dhsinvolv_contact1, "2=0; lo:-1=NA")
+allbus2008$letter <- Recode(raw$dhsinvolv_contact1, "2=0; lo:-1=NA")
 
 ## signed a petition
-allbus2008$petition <- as.numeric((car::recode(raw$dhsinvolv_netpetition, "c(2,5)=0; lo:-1=NA") +
-                                   car::recode(raw$dhsinvolv_petition, "c(2,5)=0; lo:-1=NA")) > 0)
+allbus2008$petition <- as.numeric((Recode(raw$dhsinvolv_netpetition, "c(2,5)=0; lo:-1=NA") +
+                                   Recode(raw$dhsinvolv_petition, "c(2,5)=0; lo:-1=NA")) > 0)
 
 ## wear a campaign button
-allbus2008$button <- car::recode(raw$mobilpo_sign, "c(2,5)=0; lo:-1=NA")
+allbus2008$button <- Recode(raw$mobilpo_sign, "c(2,5)=0; lo:-1=NA")
 
 ## additive index protest behavior
 allbus2008$part <- with(allbus2008, as.numeric((protest + petition + button)>0))
 
 ## vote choice (pre-election)
-allbus2008$vc_pre <- car::recode(raw$prevote_intpreswho,"-8=-2; -9=NA")
+allbus2008$vc_pre <- Recode(raw$prevote_intpreswho,"-8=-2; -9=NA")
 
 ## vote choice (post-election)
-allbus2008$vc_post <- car::recode(raw$postvote_presvtwho, "-9:-6=NA")
+allbus2008$vc_post <- Recode(raw$postvote_presvtwho, "-9:-6=NA")
 
 ## vote change (pre-post)
 allbus2008$vc_change <- allbus2008$vc_pre == allbus2008$vc_post
 allbus2008$vc_change[raw$prevote_presvt == 1] <- 1
 
 ## party/candidate placements
-allbus2008$ideol_ego <- car::recode(raw$libcpre_dpc, "lo:0=NA")
-allbus2008$ideol_rpc <- car::recode(raw$libcpre_rpc, "lo:0=NA")
-allbus2008$ideol_dpc <- car::recode(raw$libcpre_dpc, "lo:0=NA")
-allbus2008$ideol_rep <- car::recode(raw$libcpre_ptyr, "lo:0=NA")
-allbus2008$ideol_dem <- car::recode(raw$libcpre_ptyd, "lo:0=NA")
-allbus2008$spsrvpr_ego <- car::recode(raw$spsrvpr_ssself, "lo:0=NA")
-allbus2008$spsrvpr_rpc <- car::recode(raw$spsrvpr_ssrpc, "lo:0=NA")
-allbus2008$spsrvpr_dpc <- car::recode(raw$spsrvpr_ssdpc, "lo:0=NA")
-allbus2008$spsrvpr_rep <- car::recode(raw$spsrvpr_ssrep, "lo:0=NA")
-allbus2008$spsrvpr_dem <- car::recode(raw$spsrvpr_ssdem, "lo:0=NA")
-allbus2008$defsppr_ego <- car::recode(raw$defsppr_self, "lo:0=NA")
-allbus2008$defsppr_rpc <- car::recode(raw$defsppr_rpc, "lo:0=NA")
-allbus2008$defsppr_dpc <- car::recode(raw$defsppr_dpc, "lo:0=NA")
-allbus2008$defsppr_rep <- car::recode(raw$defsppr_rep, "lo:0=NA")
-allbus2008$defsppr_dem <- car::recode(raw$defsppr_dem, "lo:0=NA")
-allbus2008$inspre_ego <- car::recode(raw$inspre_self, "lo:0=NA")
-allbus2008$inspre_rpc <- car::recode(raw$inspre_rpc, "lo:0=NA")
-allbus2008$inspre_dpc <- car::recode(raw$inspre_dpc, "lo:0=NA")
-allbus2008$inspre_rep <- car::recode(raw$inspre_rep, "lo:0=NA")
-allbus2008$inspre_dem <- car::recode(raw$inspre_dem, "lo:0=NA")
-allbus2008$guarpr_ego <- car::recode(raw$guarpr_self, "lo:0=NA")
-allbus2008$guarpr_rpc <- car::recode(raw$guarpr_rpc, "lo:0=NA")
-allbus2008$guarpr_dpc <- car::recode(raw$guarpr_dpc, "lo:0=NA")
-allbus2008$guarpr_rep <- car::recode(raw$guarpr_rep, "lo:0=NA")
-allbus2008$guarpr_dem <- car::recode(raw$guarpr_dem, "lo:0=NA")
+allbus2008$ideol_ego <- Recode(raw$libcpre_dpc, "lo:0=NA")
+allbus2008$ideol_rpc <- Recode(raw$libcpre_rpc, "lo:0=NA")
+allbus2008$ideol_dpc <- Recode(raw$libcpre_dpc, "lo:0=NA")
+allbus2008$ideol_rep <- Recode(raw$libcpre_ptyr, "lo:0=NA")
+allbus2008$ideol_dem <- Recode(raw$libcpre_ptyd, "lo:0=NA")
+allbus2008$spsrvpr_ego <- Recode(raw$spsrvpr_ssself, "lo:0=NA")
+allbus2008$spsrvpr_rpc <- Recode(raw$spsrvpr_ssrpc, "lo:0=NA")
+allbus2008$spsrvpr_dpc <- Recode(raw$spsrvpr_ssdpc, "lo:0=NA")
+allbus2008$spsrvpr_rep <- Recode(raw$spsrvpr_ssrep, "lo:0=NA")
+allbus2008$spsrvpr_dem <- Recode(raw$spsrvpr_ssdem, "lo:0=NA")
+allbus2008$defsppr_ego <- Recode(raw$defsppr_self, "lo:0=NA")
+allbus2008$defsppr_rpc <- Recode(raw$defsppr_rpc, "lo:0=NA")
+allbus2008$defsppr_dpc <- Recode(raw$defsppr_dpc, "lo:0=NA")
+allbus2008$defsppr_rep <- Recode(raw$defsppr_rep, "lo:0=NA")
+allbus2008$defsppr_dem <- Recode(raw$defsppr_dem, "lo:0=NA")
+allbus2008$inspre_ego <- Recode(raw$inspre_self, "lo:0=NA")
+allbus2008$inspre_rpc <- Recode(raw$inspre_rpc, "lo:0=NA")
+allbus2008$inspre_dpc <- Recode(raw$inspre_dpc, "lo:0=NA")
+allbus2008$inspre_rep <- Recode(raw$inspre_rep, "lo:0=NA")
+allbus2008$inspre_dem <- Recode(raw$inspre_dem, "lo:0=NA")
+allbus2008$guarpr_ego <- Recode(raw$guarpr_self, "lo:0=NA")
+allbus2008$guarpr_rpc <- Recode(raw$guarpr_rpc, "lo:0=NA")
+allbus2008$guarpr_dpc <- Recode(raw$guarpr_dpc, "lo:0=NA")
+allbus2008$guarpr_rep <- Recode(raw$guarpr_rep, "lo:0=NA")
+allbus2008$guarpr_dem <- Recode(raw$guarpr_dem, "lo:0=NA")
 
 ## ideology (factor/dummies)
-allbus2008$ideol <- factor(car::recode(raw$libcpre_self, "1:3=1; 4=2; 5:7=3; else=NA")
+allbus2008$ideol <- factor(Recode(raw$libcpre_self, "1:3=1; 4=2; 5:7=3; else=NA")
                   , labels = c("Liberal","Moderate","Conservative"))
 allbus2008$ideol_lib <- as.numeric(allbus2008$ideol=="Liberal")
 allbus2008$ideol_con <- as.numeric(allbus2008$ideol=="Conservative")
 
 ## ideology (continuous, -1 to 1)
-allbus2008$ideol_ct <- (car::recode(raw$libcpre_self, "lo:0=NA") - 4)/3
+allbus2008$ideol_ct <- (Recode(raw$libcpre_self, "lo:0=NA") - 4)/3
 
 ## strength of ideology
 allbus2008$ideol_str <- abs(allbus2008$ideol_ct)
 
 ## party identification (factor/dummies)
-allbus2008$pid <- factor(car::recode(raw$pid_x
+allbus2008$pid <- factor(Recode(raw$pid_x
                               , "1:2=1; c(3,4,5)=2; 6:7=3; else=NA")
                        , labels = c("Democrat","Independent","Republican"))
 allbus2008$pid_dem <- as.numeric(allbus2008$pid=="Democrat")
 allbus2008$pid_rep <- as.numeric(allbus2008$pid=="Republican")
 
 ## pid continuous
-allbus2008$pid_cont <- (car::recode(raw$pid_x, "lo:0=NA") - 4)/3
+allbus2008$pid_cont <- (Recode(raw$pid_x, "lo:0=NA") - 4)/3
 
 ## interaction: pid * education
 allbus2008$educ_pid <- allbus2008$educ_cont * allbus2008$pid_cont
@@ -160,12 +166,12 @@ allbus2008$educ_pid <- allbus2008$educ_cont * allbus2008$pid_cont
 allbus2008$pid_str <- abs(allbus2008$pid_cont)
 
 ## religiosity (church attendance)
-allbus2008$relig <- (5 - car::recode(raw$relig_churchoft, "lo:0 = NA"))/5
+allbus2008$relig <- (5 - Recode(raw$relig_churchoft, "lo:0 = NA"))/5
 allbus2008$relig[raw$relig_church != 1] <- 0
 allbus2008$relig[raw$relig_churchwk == 2] <- 1
 
 ## age
-allbus2008$age <- car::recode(raw$dem_age_r_x, "c(-2,-9,-8) = NA")
+allbus2008$age <- Recode(raw$dem_age_r_x, "c(-2,-9,-8) = NA")
 
 ## log(age)
 allbus2008$lage <- log(allbus2008$age)
@@ -174,13 +180,13 @@ allbus2008$lage <- log(allbus2008$age)
 allbus2008$female <- raw$gender_respondent_x - 1
 
 ## race
-allbus2008$black <- as.numeric(car::recode(raw$dem_raceeth_x, "lo:0 = NA") == 2)
+allbus2008$black <- as.numeric(Recode(raw$dem_raceeth_x, "lo:0 = NA") == 2)
 
 ## income
-allbus2008$faminc <- (car::recode(raw$incgroup_prepost_x, "lo:0 = NA") -1)/27
+allbus2008$faminc <- (Recode(raw$incgroup_prepost_x, "lo:0 = NA") -1)/27
 
 ## gender of inerviewer
-allbus2008$iwrmale <- car::recode(raw$iwrdesc_pre_gender, "lo:0=NA; 2=0")
+allbus2008$iwrmale <- Recode(raw$iwrdesc_pre_gender, "lo:0=NA; 2=0")
 
 ## spanish speaking respondent
 allbus2008$spanish <- as.numeric(raw$profile_spanishsurv == 1 |
@@ -197,12 +203,12 @@ allbus2008$wordsum <- with(raw, (wordsum_setb == 5) + (wordsum_setd == 3)
 ## Pro-redistribution attitude: (new scale: 0-1)
 ## Services and spending tradeoff placement (1-7, max = increase spending)
 ## Standard of living (1-7, max = gov't should let each person get ahead on their own)
-allbus2008$redist <- (car::recode(raw$spsrvpr_ssself, "lo:0 = NA") - car::recode(raw$guarpr_self, "lo:0 = NA") + 6)/12
+allbus2008$redist <- (Recode(raw$spsrvpr_ssself, "lo:0 = NA") - Recode(raw$guarpr_self, "lo:0 = NA") + 6)/12
 
 ## Support tax increases (new scale: 0-1)
 ## favor tax on millionaires
 ## raising personal inc tax for over 250K inc to reduce deficit
-allbus2008$tax <- ((-car::recode(raw$milln_milltax_x, "lo:0 = NA") + 7)/3 + car::recode(raw$budget_rdef250k, "lo:0 = NA; 1=2; 2=0; 3=1"))/4
+allbus2008$tax <- ((-Recode(raw$milln_milltax_x, "lo:0 = NA") + 7)/3 + Recode(raw$budget_rdef250k, "lo:0 = NA; 1=2; 2=0; 3=1"))/4
 
 
 ### 2012 open-ended responses

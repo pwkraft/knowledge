@@ -35,10 +35,10 @@ anes2012 <- data.frame(caseid=raw2012$caseid)
 anes2012$mode <- raw2012$mode
 
 ## political knowledge (office recognition, post-election)
-anes2012$polknow_office <- with(raw2012, (car::recode(ofcrec_speaker_correct, "lo:-1=NA")
-                                + car::recode(ofcrec_vp_correct, "lo:-1=NA")
-                                + car::recode(ofcrec_pmuk_correct, "lo:-1=NA")
-                                + car::recode(ofcrec_cj_correct, "lo:-1=NA"))/4)
+anes2012$polknow_office <- with(raw2012, (Recode(ofcrec_speaker_correct, "lo:-1=NA")
+                                + Recode(ofcrec_vp_correct, "lo:-1=NA")
+                                + Recode(ofcrec_pmuk_correct, "lo:-1=NA")
+                                + Recode(ofcrec_cj_correct, "lo:-1=NA"))/4)
 
 ## political knowledge (factual knowledge questions, pre-election)
 anes2012$polknow_factual <- with(raw2012, ((preknow_prestimes==2) + (preknow_sizedef==1)
@@ -46,17 +46,17 @@ anes2012$polknow_factual <- with(raw2012, ((preknow_prestimes==2) + (preknow_siz
                                  + (preknow_leastsp==1))/5)
 
 ## political knowledge (majorities in congress, post-election)
-anes2012$polknow_majority <- with(raw2012, ((car::recode(raw2012$knowl_housemaj, "c(-6,-7)=NA")==2)
-                                  + (car::recode(raw2012$knowl_senmaj, "c(-6,-7)=NA")==1))/2)
+anes2012$polknow_majority <- with(raw2012, ((Recode(raw2012$knowl_housemaj, "c(-6,-7)=NA")==2)
+                                  + (Recode(raw2012$knowl_senmaj, "c(-6,-7)=NA")==1))/2)
 
 ## political knowledge (interviewer evaluation, only in F2F part!)
-anes2012$polknow_evalpre <- (5 - car::recode(raw2012$iwrobspre_levinfo, "lo:-1=NA"))/4
-anes2012$polknow_evalpost <- (5 - car::recode(raw2012$iwrobspost_levinfo, "lo:-1=NA"))/4
+anes2012$polknow_evalpre <- (5 - Recode(raw2012$iwrobspre_levinfo, "lo:-1=NA"))/4
+anes2012$polknow_evalpost <- (5 - Recode(raw2012$iwrobspost_levinfo, "lo:-1=NA"))/4
 anes2012$polknow_eval <- (anes2012$polknow_evalpre + anes2012$polknow_evalpost)/2
 
 ## intelligence (interviewer evaluation, only in F2F part!)
-anes2012$intpre <- (5 - car::recode(raw2012$iwrobspre_intell, "lo:-1=NA"))/4
-anes2012$intpost <- (5 - car::recode(raw2012$iwrobspost_intell, "lo:-1=NA"))/4
+anes2012$intpre <- (5 - Recode(raw2012$iwrobspre_intell, "lo:-1=NA"))/4
+anes2012$intpost <- (5 - Recode(raw2012$iwrobspost_intell, "lo:-1=NA"))/4
 anes2012$int <- (anes2012$intpre + anes2012$intpost)/2
 
 ## education (bachelor degree)
@@ -64,124 +64,124 @@ anes2012$educ <- as.numeric(raw2012$dem_edugroup_x >= 4)
 anes2012$educ[raw2012$raw2012$dem_edugroup_x < 0] <- NA
 
 ## education (continuous)
-anes2012$educ_cont <- (car::recode(raw2012$dem_edugroup_x, "lo:0=NA") - 1)/4
+anes2012$educ_cont <- (Recode(raw2012$dem_edugroup_x, "lo:0=NA") - 1)/4
 
 ## political media exposure
-anes2012$polmedia <- with(raw2012, car::recode(prmedia_wkinews, "lo:-4=NA; -1=0")
-                          + car::recode(prmedia_wktvnws, "lo:-4=NA; -1=0")
-                          + car::recode(prmedia_wkpaprnws, "lo:-4=NA; -1=0")
-                          + car::recode(prmedia_wkrdnws, "lo:-4=NA; -1=0")) / 28
+anes2012$polmedia <- with(raw2012, Recode(prmedia_wkinews, "lo:-4=NA; -1=0")
+                          + Recode(prmedia_wktvnws, "lo:-4=NA; -1=0")
+                          + Recode(prmedia_wkpaprnws, "lo:-4=NA; -1=0")
+                          + Recode(prmedia_wkrdnws, "lo:-4=NA; -1=0")) / 28
 
 ## political discussion
-anes2012$poldisc <- car::recode(raw2012$discuss_discpstwk, "lo:-1 = NA")/7
+anes2012$poldisc <- Recode(raw2012$discuss_discpstwk, "lo:-1 = NA")/7
 anes2012$poldisc[raw2012$discuss_disc>1] <- 0
 
 ## political interest (pay attention to politics)
-anes2012$polint_att <- 5 - car::recode(raw2012$interest_attention, "lo:-1 = NA")/4
+anes2012$polint_att <- 5 - Recode(raw2012$interest_attention, "lo:-1 = NA")/4
 
 ## political interest (following campaign)
-anes2012$polint_cam <- 3 - car::recode(raw2012$interest_following, "lo:-1 = NA")/2
+anes2012$polint_cam <- 3 - Recode(raw2012$interest_following, "lo:-1 = NA")/2
 
 ## overall political interest
 anes2012$polint <- with(anes2012, (polint_att + polint_cam)/2)
 
 ## internal efficacy
-anes2012$effic_int <- with(raw2012, car::recode(effic_complicstd, "lo:-8=NA; -1=1") - 1
-                           + car::recode(effic_complicrev, "lo:-8=NA; -1=1") - 1
-                           - car::recode(effic_undstd, "lo:-8=NA; -1=5") + 5
-                           - car::recode(effic_undrev, "lo:-8=NA; -1=5") + 5
+anes2012$effic_int <- with(raw2012, Recode(effic_complicstd, "lo:-8=NA; -1=1") - 1
+                           + Recode(effic_complicrev, "lo:-8=NA; -1=1") - 1
+                           - Recode(effic_undstd, "lo:-8=NA; -1=5") + 5
+                           - Recode(effic_undrev, "lo:-8=NA; -1=5") + 5
                            ) / 8
 
 ## external efficacy
-anes2012$effic_ext <- with(raw2012, car::recode(effic_carestd, "lo:-8=NA; -1=1") - 1
-                           - car::recode(effic_carerev, "lo:-8=NA; -1=5") + 5
-                           + car::recode(effic_saystd, "lo:-8=NA; -1=1") - 1
-                           - car::recode(effic_sayrev, "lo:-8=NA; -1=5") + 5
+anes2012$effic_ext <- with(raw2012, Recode(effic_carestd, "lo:-8=NA; -1=1") - 1
+                           - Recode(effic_carerev, "lo:-8=NA; -1=5") + 5
+                           + Recode(effic_saystd, "lo:-8=NA; -1=1") - 1
+                           - Recode(effic_sayrev, "lo:-8=NA; -1=5") + 5
                            ) / 8
 
 ## overall efficacy
 anes2012$effic <- with(anes2012, (effic_int + effic_ext)/2)
 
 ## voted in previous election
-anes2012$pastvote <- car::recode(raw2012$interest_voted2008, "c(2,5)=0; lo:-1=NA")
+anes2012$pastvote <- Recode(raw2012$interest_voted2008, "c(2,5)=0; lo:-1=NA")
 
 ## voted in current election
-anes2012$vote <- car::recode(raw2012$rvote2012_x, "2=0; lo:-1=NA")
+anes2012$vote <- Recode(raw2012$rvote2012_x, "2=0; lo:-1=NA")
 
 ## participated in protest march / rally
-anes2012$protest <- car::recode(raw2012$dhsinvolv_march, "c(2,5)=0; lo:-1=NA")
+anes2012$protest <- Recode(raw2012$dhsinvolv_march, "c(2,5)=0; lo:-1=NA")
 
 ## letter to congressman/senator
-anes2012$letter <- car::recode(raw2012$dhsinvolv_contact1, "2=0; lo:-1=NA")
+anes2012$letter <- Recode(raw2012$dhsinvolv_contact1, "2=0; lo:-1=NA")
 
 ## signed a petition
-anes2012$petition <- as.numeric((car::recode(raw2012$dhsinvolv_netpetition, "c(2,5)=0; lo:-1=NA") +
-                                   car::recode(raw2012$dhsinvolv_petition, "c(2,5)=0; lo:-1=NA")) > 0)
+anes2012$petition <- as.numeric((Recode(raw2012$dhsinvolv_netpetition, "c(2,5)=0; lo:-1=NA") +
+                                   Recode(raw2012$dhsinvolv_petition, "c(2,5)=0; lo:-1=NA")) > 0)
 
 ## wear a campaign button
-anes2012$button <- car::recode(raw2012$mobilpo_sign, "c(2,5)=0; lo:-1=NA")
+anes2012$button <- Recode(raw2012$mobilpo_sign, "c(2,5)=0; lo:-1=NA")
 
-## additive index protest behavior
-anes2012$part <- with(anes2012, as.numeric((protest + petition + button)>0))
+## additive index non-conventional participation
+anes2012$part <- with(anes2012, protest + petition + button + letter)
 
 ## vote choice (pre-election)
-anes2012$vc_pre <- car::recode(raw2012$prevote_intpreswho,"-8=-2; -9=NA")
+anes2012$vc_pre <- Recode(raw2012$prevote_intpreswho,"-8=-2; -9=NA")
 
 ## vote choice (post-election)
-anes2012$vc_post <- car::recode(raw2012$postvote_presvtwho, "-9:-6=NA")
+anes2012$vc_post <- Recode(raw2012$postvote_presvtwho, "-9:-6=NA")
 
 ## vote change (pre-post)
 anes2012$vc_change <- anes2012$vc_pre == anes2012$vc_post
 anes2012$vc_change[raw2012$prevote_presvt == 1] <- 1
 
 ## party/candidate placements
-anes2012$ideol_ego <- car::recode(raw2012$libcpre_dpc, "lo:0=NA")
-anes2012$ideol_rpc <- car::recode(raw2012$libcpre_rpc, "lo:0=NA")
-anes2012$ideol_dpc <- car::recode(raw2012$libcpre_dpc, "lo:0=NA")
-anes2012$ideol_rep <- car::recode(raw2012$libcpre_ptyr, "lo:0=NA")
-anes2012$ideol_dem <- car::recode(raw2012$libcpre_ptyd, "lo:0=NA")
-anes2012$spsrvpr_ego <- car::recode(raw2012$spsrvpr_ssself, "lo:0=NA")
-anes2012$spsrvpr_rpc <- car::recode(raw2012$spsrvpr_ssrpc, "lo:0=NA")
-anes2012$spsrvpr_dpc <- car::recode(raw2012$spsrvpr_ssdpc, "lo:0=NA")
-anes2012$spsrvpr_rep <- car::recode(raw2012$spsrvpr_ssrep, "lo:0=NA")
-anes2012$spsrvpr_dem <- car::recode(raw2012$spsrvpr_ssdem, "lo:0=NA")
-anes2012$defsppr_ego <- car::recode(raw2012$defsppr_self, "lo:0=NA")
-anes2012$defsppr_rpc <- car::recode(raw2012$defsppr_rpc, "lo:0=NA")
-anes2012$defsppr_dpc <- car::recode(raw2012$defsppr_dpc, "lo:0=NA")
-anes2012$defsppr_rep <- car::recode(raw2012$defsppr_rep, "lo:0=NA")
-anes2012$defsppr_dem <- car::recode(raw2012$defsppr_dem, "lo:0=NA")
-anes2012$inspre_ego <- car::recode(raw2012$inspre_self, "lo:0=NA")
-anes2012$inspre_rpc <- car::recode(raw2012$inspre_rpc, "lo:0=NA")
-anes2012$inspre_dpc <- car::recode(raw2012$inspre_dpc, "lo:0=NA")
-anes2012$inspre_rep <- car::recode(raw2012$inspre_rep, "lo:0=NA")
-anes2012$inspre_dem <- car::recode(raw2012$inspre_dem, "lo:0=NA")
-anes2012$guarpr_ego <- car::recode(raw2012$guarpr_self, "lo:0=NA")
-anes2012$guarpr_rpc <- car::recode(raw2012$guarpr_rpc, "lo:0=NA")
-anes2012$guarpr_dpc <- car::recode(raw2012$guarpr_dpc, "lo:0=NA")
-anes2012$guarpr_rep <- car::recode(raw2012$guarpr_rep, "lo:0=NA")
-anes2012$guarpr_dem <- car::recode(raw2012$guarpr_dem, "lo:0=NA")
+anes2012$ideol_ego <- Recode(raw2012$libcpre_dpc, "lo:0=NA")
+anes2012$ideol_rpc <- Recode(raw2012$libcpre_rpc, "lo:0=NA")
+anes2012$ideol_dpc <- Recode(raw2012$libcpre_dpc, "lo:0=NA")
+anes2012$ideol_rep <- Recode(raw2012$libcpre_ptyr, "lo:0=NA")
+anes2012$ideol_dem <- Recode(raw2012$libcpre_ptyd, "lo:0=NA")
+anes2012$spsrvpr_ego <- Recode(raw2012$spsrvpr_ssself, "lo:0=NA")
+anes2012$spsrvpr_rpc <- Recode(raw2012$spsrvpr_ssrpc, "lo:0=NA")
+anes2012$spsrvpr_dpc <- Recode(raw2012$spsrvpr_ssdpc, "lo:0=NA")
+anes2012$spsrvpr_rep <- Recode(raw2012$spsrvpr_ssrep, "lo:0=NA")
+anes2012$spsrvpr_dem <- Recode(raw2012$spsrvpr_ssdem, "lo:0=NA")
+anes2012$defsppr_ego <- Recode(raw2012$defsppr_self, "lo:0=NA")
+anes2012$defsppr_rpc <- Recode(raw2012$defsppr_rpc, "lo:0=NA")
+anes2012$defsppr_dpc <- Recode(raw2012$defsppr_dpc, "lo:0=NA")
+anes2012$defsppr_rep <- Recode(raw2012$defsppr_rep, "lo:0=NA")
+anes2012$defsppr_dem <- Recode(raw2012$defsppr_dem, "lo:0=NA")
+anes2012$inspre_ego <- Recode(raw2012$inspre_self, "lo:0=NA")
+anes2012$inspre_rpc <- Recode(raw2012$inspre_rpc, "lo:0=NA")
+anes2012$inspre_dpc <- Recode(raw2012$inspre_dpc, "lo:0=NA")
+anes2012$inspre_rep <- Recode(raw2012$inspre_rep, "lo:0=NA")
+anes2012$inspre_dem <- Recode(raw2012$inspre_dem, "lo:0=NA")
+anes2012$guarpr_ego <- Recode(raw2012$guarpr_self, "lo:0=NA")
+anes2012$guarpr_rpc <- Recode(raw2012$guarpr_rpc, "lo:0=NA")
+anes2012$guarpr_dpc <- Recode(raw2012$guarpr_dpc, "lo:0=NA")
+anes2012$guarpr_rep <- Recode(raw2012$guarpr_rep, "lo:0=NA")
+anes2012$guarpr_dem <- Recode(raw2012$guarpr_dem, "lo:0=NA")
 
 ## ideology (factor/dummies)
-anes2012$ideol <- factor(car::recode(raw2012$libcpre_self, "1:3=1; 4=2; 5:7=3; else=NA")
+anes2012$ideol <- factor(Recode(raw2012$libcpre_self, "1:3=1; 4=2; 5:7=3; else=NA")
                   , labels = c("Liberal","Moderate","Conservative"))
 anes2012$ideol_lib <- as.numeric(anes2012$ideol=="Liberal")
 anes2012$ideol_con <- as.numeric(anes2012$ideol=="Conservative")
 
 ## ideology (continuous, -1 to 1)
-anes2012$ideol_ct <- (car::recode(raw2012$libcpre_self, "lo:0=NA") - 4)/3
+anes2012$ideol_ct <- (Recode(raw2012$libcpre_self, "lo:0=NA") - 4)/3
 
 ## strength of ideology
 anes2012$ideol_str <- abs(anes2012$ideol_ct)
 
 ## party identification (factor/dummies)
-anes2012$pid <- factor(car::recode(raw2012$pid_x
+anes2012$pid <- factor(Recode(raw2012$pid_x
                               , "1:2=1; c(3,4,5)=2; 6:7=3; else=NA")
                        , labels = c("Democrat","Independent","Republican"))
 anes2012$pid_dem <- as.numeric(anes2012$pid=="Democrat")
 anes2012$pid_rep <- as.numeric(anes2012$pid=="Republican")
 
 ## pid continuous
-anes2012$pid_cont <- (car::recode(raw2012$pid_x, "lo:0=NA") - 4)/3
+anes2012$pid_cont <- (Recode(raw2012$pid_x, "lo:0=NA") - 4)/3
 
 ## interaction: pid * education
 anes2012$educ_pid <- anes2012$educ_cont * anes2012$pid_cont
@@ -190,12 +190,12 @@ anes2012$educ_pid <- anes2012$educ_cont * anes2012$pid_cont
 anes2012$pid_str <- abs(anes2012$pid_cont)
 
 ## religiosity (church attendance)
-anes2012$relig <- (5 - car::recode(raw2012$relig_churchoft, "lo:0 = NA"))/5
+anes2012$relig <- (5 - Recode(raw2012$relig_churchoft, "lo:0 = NA"))/5
 anes2012$relig[raw2012$relig_church != 1] <- 0
 anes2012$relig[raw2012$relig_churchwk == 2] <- 1
 
 ## age
-anes2012$age <- car::recode(raw2012$dem_age_r_x, "c(-2,-9,-8) = NA")
+anes2012$age <- Recode(raw2012$dem_age_r_x, "c(-2,-9,-8) = NA")
 
 ## log(age)
 anes2012$lage <- log(anes2012$age)
@@ -204,13 +204,13 @@ anes2012$lage <- log(anes2012$age)
 anes2012$female <- raw2012$gender_respondent_x - 1
 
 ## race
-anes2012$black <- as.numeric(car::recode(raw2012$dem_raceeth_x, "lo:0 = NA") == 2)
+anes2012$black <- as.numeric(Recode(raw2012$dem_raceeth_x, "lo:0 = NA") == 2)
 
 ## income
-anes2012$faminc <- (car::recode(raw2012$incgroup_prepost_x, "lo:0 = NA") -1)/27
+anes2012$faminc <- (Recode(raw2012$incgroup_prepost_x, "lo:0 = NA") -1)/27
 
 ## gender of inerviewer
-anes2012$iwrmale <- car::recode(raw2012$iwrdesc_pre_gender, "lo:0=NA; 2=0")
+anes2012$iwrmale <- Recode(raw2012$iwrdesc_pre_gender, "lo:0=NA; 2=0")
 
 ## spanish speaking respondent
 anes2012$spanish <- as.numeric(raw2012$profile_spanishsurv == 1 |
@@ -227,12 +227,12 @@ anes2012$wordsum <- with(raw2012, (wordsum_setb == 5) + (wordsum_setd == 3)
 ## Pro-redistribution attitude: (new scale: 0-1)
 ## Services and spending tradeoff placement (1-7, max = increase spending)
 ## Standard of living (1-7, max = gov't should let each person get ahead on their own)
-anes2012$redist <- (car::recode(raw2012$spsrvpr_ssself, "lo:0 = NA") - car::recode(raw2012$guarpr_self, "lo:0 = NA") + 6)/12
+anes2012$redist <- (Recode(raw2012$spsrvpr_ssself, "lo:0 = NA") - Recode(raw2012$guarpr_self, "lo:0 = NA") + 6)/12
 
 ## Support tax increases (new scale: 0-1)
 ## favor tax on millionaires
 ## raising personal inc tax for over 250K inc to reduce deficit
-anes2012$tax <- ((-car::recode(raw2012$milln_milltax_x, "lo:0 = NA") + 7)/3 + car::recode(raw2012$budget_rdef250k, "lo:0 = NA; 1=2; 2=0; 3=1"))/4
+anes2012$tax <- ((-Recode(raw2012$milln_milltax_x, "lo:0 = NA") + 7)/3 + Recode(raw2012$budget_rdef250k, "lo:0 = NA; 1=2; 2=0; 3=1"))/4
 
 
 ### 2012 open-ended responses
