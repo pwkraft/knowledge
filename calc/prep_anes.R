@@ -282,6 +282,11 @@ anes2012spell <- data.frame(caseid = anes2012opend$caseid, anes2012spell,strings
 
 ### add meta information about responses
 
+## function to compute shannon entropy (rescaled to 0-1??)
+shannon <- function(x){
+  (- sum(log(x^x)/log(length(x))))
+}
+
 ## overall response length
 anes2012$wc <- apply(anes2012spell[,-1], 1, function(x){
   length(unlist(strsplit(x,"\\s+")))
@@ -294,7 +299,8 @@ anes2012$nitem <- apply(anes2012spell[,-1] != "", 1, sum, na.rm = T)
 ## diversity in item response
 anes2012$ditem <- apply(anes2012spell[,-1], 1, function(x){
   iwc <- unlist(lapply(strsplit(x,"\\s+"), length))
-  1 - ineq(iwc,type="Gini")
+  #1 - ineq(iwc,type="Gini")
+  shannon(iwc)
 })
 
 
@@ -353,10 +359,12 @@ stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
 doc_topic_prob <- stm_fit$theta
 
 ## topic diversity score
-data$topic_diversity <- apply(doc_topic_prob, 1, function(x) 1 - ineq(x,type="Gini"))
+#data$topic_diversity <- apply(doc_topic_prob, 1, function(x) 1 - ineq(x,type="Gini"))
+data$topic_diversity <- apply(doc_topic_prob, 1, shannon)
 
 ## check sensitivity of diversity based on number of topics
-data$topic_diversity_20 <- apply(stm_fit_20$theta, 1, function(x) 1 - ineq(x,type="Gini"))
+#data$topic_diversity_20 <- apply(stm_fit_20$theta, 1, function(x) 1 - ineq(x,type="Gini"))
+data$topic_diversity_20 <- apply(stm_fit_20$theta, 1, shannon)
 
 ## text-based sophistication measures
 data$polknow_text <- with(data, topic_diversity * lwc * ditem)
