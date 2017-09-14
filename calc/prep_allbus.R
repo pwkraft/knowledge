@@ -73,42 +73,11 @@ allbus2008$effic <- with(allbus2008, (effic_int + effic_ext)/2)
 ## voted in previous election
 allbus2008$pastvote <- Recode(raw$V535, "2=0; 9=NA")
 
-
-####################################
-### CONTINUE HERE
-
 ## non-conventional participation index
 allbus2008$part <- (Recode(raw$V57, "6=0; 9=NA") + Recode(raw$V59, "6=0; 9=NA")
                     + Recode(raw$V60, "6=0; 9=NA") + Recode(raw$V62, "6=0; 9=NA")
                     + Recode(raw$V63, "6=0; 9=NA") + Recode(raw$V66, "6=0; 9=NA")
                     + Recode(raw$V67, "6=0; 9=NA") + Recode(raw$V68, "6=0; 9=NA"))
-
-
-## participated in protest march / rally
-allbus2008$protest <- Recode(raw$dhsinvolv_march, "c(2,5)=0; lo:-1=NA")
-
-## letter to congressman/senator
-allbus2008$letter <- Recode(raw$dhsinvolv_contact1, "2=0; lo:-1=NA")
-
-## signed a petition
-allbus2008$petition <- as.numeric((Recode(raw$dhsinvolv_netpetition, "c(2,5)=0; lo:-1=NA") +
-                                   Recode(raw$dhsinvolv_petition, "c(2,5)=0; lo:-1=NA")) > 0)
-
-## wear a campaign button
-allbus2008$button <- Recode(raw$mobilpo_sign, "c(2,5)=0; lo:-1=NA")
-
-## additive index protest behavior
-allbus2008$part <- with(allbus2008, as.numeric((protest + petition + button)>0))
-
-## vote choice (pre-election)
-allbus2008$vc_pre <- Recode(raw$prevote_intpreswho,"-8=-2; -9=NA")
-
-## vote choice (post-election)
-allbus2008$vc_post <- Recode(raw$postvote_presvtwho, "-9:-6=NA")
-
-## vote change (pre-post)
-allbus2008$vc_change <- allbus2008$vc_pre == allbus2008$vc_post
-allbus2008$vc_change[raw$prevote_presvt == 1] <- 1
 
 ## party/candidate placements
 allbus2008$ideol_ego <- Recode(raw$libcpre_dpc, "lo:0=NA")
@@ -138,6 +107,7 @@ allbus2008$guarpr_rep <- Recode(raw$guarpr_rep, "lo:0=NA")
 allbus2008$guarpr_dem <- Recode(raw$guarpr_dem, "lo:0=NA")
 
 ## ideology (factor/dummies)
+raw$V106
 allbus2008$ideol <- factor(Recode(raw$libcpre_self, "1:3=1; 4=2; 5:7=3; else=NA")
                   , labels = c("Liberal","Moderate","Conservative"))
 allbus2008$ideol_lib <- as.numeric(allbus2008$ideol=="Liberal")

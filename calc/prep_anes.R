@@ -135,7 +135,7 @@ anes2012$vc_change <- anes2012$vc_pre == anes2012$vc_post
 anes2012$vc_change[raw2012$prevote_presvt == 1] <- 1
 
 ## party/candidate placements
-anes2012$ideol_ego <- Recode(raw2012$libcpre_dpc, "lo:0=NA")
+anes2012$ideol_ego <- Recode(raw2012$libcpre_self, "lo:0=NA")
 anes2012$ideol_rpc <- Recode(raw2012$libcpre_rpc, "lo:0=NA")
 anes2012$ideol_dpc <- Recode(raw2012$libcpre_dpc, "lo:0=NA")
 anes2012$ideol_rep <- Recode(raw2012$libcpre_ptyr, "lo:0=NA")
