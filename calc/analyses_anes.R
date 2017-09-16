@@ -48,8 +48,8 @@ dim(stm_fit$beta$logbeta[[1]])
 # beta: List containing the log of the word probabilities for each topic.
 apply(exp(stm_fit$beta$logbeta[[1]]), 1, sum)
 
-hist(apply(exp(stm_fit$beta$logbeta[[1]]), 2, sum))
-hist(apply(exp(stm_fit$beta$logbeta[[1]]), 2, max))
+#hist(apply(exp(stm_fit$beta$logbeta[[1]]), 2, sum))
+#hist(apply(exp(stm_fit$beta$logbeta[[1]]), 2, max))
 
 length(stm_fit$vocab)
 stm_fit$vocab[1:5]
@@ -83,9 +83,11 @@ for(doc in 1:length(out$documents)){
 }
 data <- cbind(data, know)
 
-data$polknow_text_mean <- data$ntopics * data$entropy
 data$polknow_text_mean <- data$lwc
 data$polknow_text_mean <- data$ntopics
+data$polknow_text_mean <- data$entropy
+data$polknow_text_mean <- data$ntopics * data$entropy
+
 
 
 ########

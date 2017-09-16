@@ -33,6 +33,56 @@ source("latexTable.R")
 plot_default <- theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
 
 
+#######################
+### WORK ON NEW MEASURE
+#######################
+
+## check stm fit
+dim(stm_fit$beta$logbeta[[1]])
+# beta: List containing the log of the word probabilities for each topic.
+apply(exp(stm_fit$beta$logbeta[[1]]), 1, sum)
+
+#hist(apply(exp(stm_fit$beta$logbeta[[1]]), 2, sum))
+#hist(apply(exp(stm_fit$beta$logbeta[[1]]), 2, max))
+
+length(stm_fit$vocab)
+stm_fit$vocab[1:5]
+
+## compute shannon entropy
+shannon <- function(x, reversed = F){
+  out <- (- sum(log(x^x)/log(length(x))))
+  if(reversed) out <- 1 - out
+  out
+}
+
+## which features have the highest probability for each topic?
+stm_fit$vocab[apply(exp(stm_fit$beta$logbeta[[1]]), 1, which.max)]
+
+## which topic has highest likelihood for each word
+term_topic <- apply(stm_fit$beta$logbeta[[1]], 2, which.max)
+# -> compute log(#topics)
+
+## shannon entropy of each term as a measure for its distinctiveness -> vague term or clear topic
+pseudop <- exp(stm_fit$beta$logbeta[[1]])
+pseudop <- t(t(pseudop)/apply(pseudop,2,sum))
+term_entropy <- apply(pseudop, 2, shannon, reversed=T) # theoretically, it should be reversed=T
+# -> calculate average distinctiveness of words
+
+## combine both measures with open-ended responses
+know <- data.frame(ntopics = rep(NA, length(out$documents))
+                   , entropy = rep(NA, length(out$documents)))
+for(doc in 1:length(out$documents)){
+  know$ntopics[doc] <- log(length(unique(term_topic[out$documents[[doc]][1,]])))
+  know$entropy[doc] <- sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,]) / sum(out$documents[[doc]][2,])
+}
+data <- cbind(data, know)
+
+data$polknow_text_mean <- data$lwc
+data$polknow_text_mean <- data$ntopics
+data$polknow_text_mean <- data$entropy
+data$polknow_text_mean <- data$ntopics * data$entropy
+
+
 ########
 # correlation matrices: compare with common measures
 ########
