@@ -80,44 +80,32 @@ allbus2008$part <- (Recode(raw$V57, "6=0; 9=NA") + Recode(raw$V59, "6=0; 9=NA")
                     + Recode(raw$V67, "6=0; 9=NA") + Recode(raw$V68, "6=0; 9=NA"))
 
 ## party/candidate placements
-allbus2008$ideol_ego <- Recode(raw$libcpre_dpc, "lo:0=NA")
-allbus2008$ideol_rpc <- Recode(raw$libcpre_rpc, "lo:0=NA")
-allbus2008$ideol_dpc <- Recode(raw$libcpre_dpc, "lo:0=NA")
-allbus2008$ideol_rep <- Recode(raw$libcpre_ptyr, "lo:0=NA")
-allbus2008$ideol_dem <- Recode(raw$libcpre_ptyd, "lo:0=NA")
-allbus2008$spsrvpr_ego <- Recode(raw$spsrvpr_ssself, "lo:0=NA")
-allbus2008$spsrvpr_rpc <- Recode(raw$spsrvpr_ssrpc, "lo:0=NA")
-allbus2008$spsrvpr_dpc <- Recode(raw$spsrvpr_ssdpc, "lo:0=NA")
-allbus2008$spsrvpr_rep <- Recode(raw$spsrvpr_ssrep, "lo:0=NA")
-allbus2008$spsrvpr_dem <- Recode(raw$spsrvpr_ssdem, "lo:0=NA")
-allbus2008$defsppr_ego <- Recode(raw$defsppr_self, "lo:0=NA")
-allbus2008$defsppr_rpc <- Recode(raw$defsppr_rpc, "lo:0=NA")
-allbus2008$defsppr_dpc <- Recode(raw$defsppr_dpc, "lo:0=NA")
-allbus2008$defsppr_rep <- Recode(raw$defsppr_rep, "lo:0=NA")
-allbus2008$defsppr_dem <- Recode(raw$defsppr_dem, "lo:0=NA")
-allbus2008$inspre_ego <- Recode(raw$inspre_self, "lo:0=NA")
-allbus2008$inspre_rpc <- Recode(raw$inspre_rpc, "lo:0=NA")
-allbus2008$inspre_dpc <- Recode(raw$inspre_dpc, "lo:0=NA")
-allbus2008$inspre_rep <- Recode(raw$inspre_rep, "lo:0=NA")
-allbus2008$inspre_dem <- Recode(raw$inspre_dem, "lo:0=NA")
-allbus2008$guarpr_ego <- Recode(raw$guarpr_self, "lo:0=NA")
-allbus2008$guarpr_rpc <- Recode(raw$guarpr_rpc, "lo:0=NA")
-allbus2008$guarpr_dpc <- Recode(raw$guarpr_dpc, "lo:0=NA")
-allbus2008$guarpr_rep <- Recode(raw$guarpr_rep, "lo:0=NA")
-allbus2008$guarpr_dem <- Recode(raw$guarpr_dem, "lo:0=NA")
+allbus2008$ideol_ego <- Recode(raw$V106, "98:99=NA")
+allbus2008$ideol_cdu <- Recode(raw$V107, "98:99=NA")
+allbus2008$ideol_csu <- Recode(raw$V108, "98:99=NA")
+allbus2008$ideol_spd <- Recode(raw$V109, "98:99=NA")
+allbus2008$ideol_fdp <- Recode(raw$V110, "98:99=NA")
+allbus2008$ideol_lin <- Recode(raw$V111, "98:99=NA")
+allbus2008$ideol_gru <- Recode(raw$V112, "98:99=NA")
+allbus2008$ideol_npd <- Recode(raw$V113, "98:99=NA")
 
 ## ideology (factor/dummies)
 raw$V106
-allbus2008$ideol <- factor(Recode(raw$libcpre_self, "1:3=1; 4=2; 5:7=3; else=NA")
-                  , labels = c("Liberal","Moderate","Conservative"))
-allbus2008$ideol_lib <- as.numeric(allbus2008$ideol=="Liberal")
-allbus2008$ideol_con <- as.numeric(allbus2008$ideol=="Conservative")
+allbus2008$ideol <- factor(Recode(raw$V106, "1:4=1; 5:6=2; 7:10=3; else=NA")
+                           , labels = c("Left","Moderate","Right"))
+allbus2008$ideol_lib <- as.numeric(allbus2008$ideol=="Left")
+allbus2008$ideol_con <- as.numeric(allbus2008$ideol=="Right")
 
 ## ideology (continuous, -1 to 1)
-allbus2008$ideol_ct <- (Recode(raw$libcpre_self, "lo:0=NA") - 4)/3
+allbus2008$ideol_ct <- (Recode(raw$V106, "98:99=NA") - 5.5)/4.5
 
 ## strength of ideology
 allbus2008$ideol_str <- abs(allbus2008$ideol_ct)
+
+
+#################
+### CONTINUE HERE
+
 
 ## party identification (factor/dummies)
 allbus2008$pid <- factor(Recode(raw$pid_x

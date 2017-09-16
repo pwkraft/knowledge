@@ -37,6 +37,19 @@ source("latexTable.R")
 ## plot defaults
 plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
 
+## check stm fit
+dim(stm_fit$beta$logbeta[[1]])
+# beta: List containing the log of the word probabilities for each topic.
+apply(exp(stm_fit$beta$logbeta[[1]]), 1, sum)
+
+hist(apply(exp(stm_fit$beta$logbeta[[1]]), 2, max))
+
+length(stm_fit$vocab)
+stm_fit$vocab[1:5]
+
+## which topic has highest likelihood
+
+
 
 ########
 # correlation matrices: compare with common measures

@@ -300,7 +300,7 @@ anes2012$nitem <- apply(anes2012spell[,-1] != "", 1, sum, na.rm = T)
 anes2012$ditem <- apply(anes2012spell[,-1], 1, function(x){
   iwc <- unlist(lapply(strsplit(x,"\\s+"), length))
   #1 - ineq(iwc,type="Gini")
-  shannon(iwc)
+  shannon(iwc/sum(iwc))
 })
 
 
