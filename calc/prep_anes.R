@@ -252,7 +252,7 @@ anes2012opend <- anes2012pre
 ## minor pre-processing
 anes2012spell <- apply(anes2012opend[,-1], 2, function(x){
     x <- gsub("(^\\s+|\\s+$)","", x)
-    x[x %in% c("-1 Inapplicable","-7 Refused","N/A","no","none","#(43042)","i am","Nome")] <- ""
+    x[x %in% c("-1 Inapplicable","-7 Refused","N/A","no","none","#(43042)","i am","Nome","ditto","Ditto","No","NA")] <- ""
     x <- gsub("//"," ", x , fixed = T)
     x <- gsub("\\s+"," ", x)
     x <- gsub("(^\\s+|\\s+$)","", x)
@@ -344,13 +344,13 @@ out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
 data <- data[-processed$docs.removed,]
 data <- data[-out$docs.removed,]
 
-## quick fit (60 topics)
-stm_fit_20 <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+## quick fit (20 topics)
+stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
                 , K=20, init.type = "Spectral")
 
 ## slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
-stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-               , K=0, init.type = "Spectral")
+# stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+#                , K=0, init.type = "Spectral")
 
 
 ### create new sophistication measures
@@ -364,11 +364,71 @@ data$topic_diversity <- apply(doc_topic_prob, 1, shannon)
 
 ## check sensitivity of diversity based on number of topics
 #data$topic_diversity_20 <- apply(stm_fit_20$theta, 1, function(x) 1 - ineq(x,type="Gini"))
-data$topic_diversity_20 <- apply(stm_fit_20$theta, 1, shannon)
+#data$topic_diversity_20 <- apply(stm_fit_20$theta, 1, shannon)
 
 ## text-based sophistication measures
 data$polknow_text <- with(data, topic_diversity * lwc * ditem)
 data$polknow_text_mean <- with(data, (topic_diversity + lwc + ditem)/3)
+
+
+#######################
+### WORK ON NEW MEASURE
+#######################
+
+## check stm fit
+dim(stm_fit$beta$logbeta[[1]])
+# beta: List containing the log of the word probabilities for each topic.
+apply(exp(stm_fit$beta$logbeta[[1]]), 1, sum)
+
+#hist(apply(exp(stm_fit$beta$logbeta[[1]]), 2, sum))
+#hist(apply(exp(stm_fit$beta$logbeta[[1]]), 2, max))
+
+length(stm_fit$vocab)
+stm_fit$vocab[1:5]
+
+## compute shannon entropy
+shannon <- function(x, reversed = F){
+  out <- (- sum(log(x^x)/log(length(x))))
+  if(reversed) out <- 1 - out
+  out
+}
+
+## which features have the highest probability for each topic?
+stm_fit$vocab[apply(exp(stm_fit$beta$logbeta[[1]]), 1, which.max)]
+
+## which topic has highest likelihood for each word
+term_topic <- apply(stm_fit$beta$logbeta[[1]], 2, which.max)
+# -> compute log(#topics)
+
+## shannon entropy of each term as a measure for its distinctiveness -> vague term or clear topic
+pseudop <- exp(stm_fit$beta$logbeta[[1]])
+#pseudop <- t(t(pseudop)/apply(pseudop,2,sum))
+#term_entropy <- apply(pseudop, 2, shannon, reversed=T) # theoretically, it should be reversed=T
+term_entropy <- apply(pseudop, 2, max) # theoretically, it should be reversed=T
+# -> calculate average distinctiveness of words
+
+test <- data.frame(term_entropy, stm_fit$vocab)
+
+## combine both measures with open-ended responses
+know <- data.frame(ntopics = rep(NA, length(out$documents))
+                   , entropy = rep(NA, length(out$documents)))
+for(doc in 1:length(out$documents)){
+  know$ntopics[doc] <- log(length(unique(term_topic[out$documents[[doc]][1,]])))
+  know$entropy[doc] <- sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,]) / sum(out$documents[[doc]][2,])
+}
+know$ntopics <- know$ntopic/max(know$ntopics)
+data <- cbind(data, know)
+
+#data$polknow_text_mean <- data$lwc
+#data$polknow_text_mean <- data$ntopics
+#data$polknow_text_mean <- data$entropy
+data$polknow_text <- data$ntopics * data$entropy * data$ditem
+data$polknow_text_mean <- (data$ntopics + data$entropy + data$ditem)/3
+
+
+###################
+### End NEW MEASURE
+###################
 
 
 ### estimate hetreg models (in prep because it takes a long time)
