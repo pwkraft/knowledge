@@ -428,6 +428,7 @@ data <- cbind(data, know)
 #data$polknow_text_mean <- data$entropy
 data$polknow_text <- data$ntopics * data$entropy * data$ditem
 data$polknow_text_mean <- (data$ntopics + data$entropy + data$ditem)/3
+#data$polknow_text_mean <- (data$ntopics + data$entropy + data$nitem/max(data$nitem))/3
 
 
 ###################
