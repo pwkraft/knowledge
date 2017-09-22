@@ -74,14 +74,14 @@ plot_means <- plot_df %>% group_by(Variable, Gender) %>%
 ## bar plots comparing men and women
 ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
   geom_bar(stat="identity") + geom_errorbar(width=.25) + 
-  facet_wrap(~Variable, scale="free") + ylab("Mean Value on Knowledge Measure") +
+  facet_wrap(~Variable) + ylab("Mean Value on Knowledge Measure") +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired")
 ggsave("../fig/meandiff_pres.pdf", width=4.75, height=2.5)
 
 ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi)) + 
   theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white")) +
   geom_bar(stat="identity", fill="grey80") + geom_errorbar(width=.25) + 
-  facet_wrap(~Variable, scale="free") + ylab("Mean Value on Knowledge Measure") +
+  facet_wrap(~Variable) + ylab("Mean Value on Knowledge Measure") +
   geom_point(aes(y=max), col="white")
 ggsave("../fig/meandiff_empty.pdf", width=4.75, height=2.5)
 
@@ -121,14 +121,14 @@ dfplot <- dfplot[dfplot$ivnames!="Intercept",]
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
-  geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=3) +
+  geom_point(size=.5) + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=3) +
   plot_default
 ggsave("../fig/determinants_pres.pdf",width=4.75,height=3)
 
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
-  geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=3) +
+  geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=3) +
   theme_classic(base_size = 9) + theme(panel.border = element_rect(fill="white"))
 ggsave("../fig/determinants_empty.pdf",width=4.75,height=3)
 
