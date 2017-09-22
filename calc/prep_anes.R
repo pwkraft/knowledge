@@ -404,7 +404,8 @@ term_topic <- apply(stm_fit$beta$logbeta[[1]], 2, which.max)
 pseudop <- exp(stm_fit$beta$logbeta[[1]])
 #pseudop <- t(t(pseudop)/apply(pseudop,2,sum))
 #term_entropy <- apply(pseudop, 2, shannon, reversed=T) # theoretically, it should be reversed=T
-term_entropy <- apply(pseudop, 2, max) # theoretically, it should be reversed=T
+term_entropy <- apply(pseudop, 2, max)
+
 # -> calculate average distinctiveness of words
 
 test <- data.frame(term_entropy, stm_fit$vocab)
@@ -413,10 +414,13 @@ test <- data.frame(term_entropy, stm_fit$vocab)
 know <- data.frame(ntopics = rep(NA, length(out$documents))
                    , entropy = rep(NA, length(out$documents)))
 for(doc in 1:length(out$documents)){
-  know$ntopics[doc] <- log(length(unique(term_topic[out$documents[[doc]][1,]])))
-  know$entropy[doc] <- sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,]) / sum(out$documents[[doc]][2,])
+  #know$ntopics[doc] <- log(length(unique(term_topic[out$documents[[doc]][1,]])))
+  #know$entropy[doc] <- sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,])# / sum(out$documents[[doc]][2,])
+  know$ntopics[doc] <- length(unique(term_topic[out$documents[[doc]][1,]]))
+  know$entropy[doc] <- log(sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,]))
 }
 know$ntopics <- know$ntopic/max(know$ntopics)
+know$entropy <- (know$entropy-min(know$entropy))/(max(know$entropy)-min(know$entropy))
 data <- cbind(data, know)
 
 #data$polknow_text_mean <- data$lwc
@@ -484,3 +488,4 @@ tmp_df <- data.frame(policy = "ideol", target = "dpc", measure = "dpc"
 
 save(anes2012, anes2012opend, anes2012spell, data, meta, processed, out, stm_fit, hetreg_summary
      , file="calc/out/anes.Rdata")
+

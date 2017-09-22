@@ -39,14 +39,12 @@ plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(f
 
 
 
-
-
-
 ########
 # correlation matrices: compare with common measures
 ########
 
 datcor <- data[,c("polknow_text_mean","polknow_factual","polknow_evalpre")]
+#datcor <- data[,c("ditem","ntopics","entropy")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 pdf("../fig/corplot_pres.pdf",width=3.3, height=3.3)
