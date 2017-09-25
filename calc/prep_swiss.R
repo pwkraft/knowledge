@@ -133,13 +133,13 @@ out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
 opend_german <- opend_german[-processed$docs.removed,]
 opend_german <- opend_german[-out$docs.removed,]
 
-## quick fit (60 topics)
-# stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-#                , K=60, init.type = "Spectral")
+## quick fit (30 topics)
+stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+              , K=30, init.type = "Spectral")
 
 ## slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
-stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-               , K=0, init.type = "Spectral")
+#stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+#               , K=0, init.type = "Spectral")
 
 
 ### create new sophistication measures
@@ -154,6 +154,42 @@ opend_german$topic_diversity <- apply(doc_topic_prob, 1, function(x) 1 - ineq(x,
 opend_german$polknow_text <- with(opend_german, topic_diversity * lwc * opinionation)
 opend_german$polknow_text_mean <- with(opend_german, (topic_diversity + lwc + opinionation)/3)
 
+
+################
+### NEW MEASURE
+################
+
+## compute shannon entropy
+shannon <- function(x, reversed = F){
+  out <- (- sum(log(x^x)/log(length(x))))
+  if(reversed) out <- 1 - out
+  out
+}
+
+## which topic has highest likelihood for each word
+term_topic <- apply(stm_fit$beta$logbeta[[1]], 2, which.max)
+
+## shannon entropy of each term as a measure for its distinctiveness -> vague term or clear topic
+pseudop <- exp(stm_fit$beta$logbeta[[1]])
+term_entropy <- apply(pseudop, 2, max)
+
+## combine both measures with open-ended responses
+know <- data.frame(ntopics = rep(NA, length(out$documents))
+                   , entropy = rep(NA, length(out$documents)))
+for(doc in 1:length(out$documents)){
+  know$ntopics[doc] <- length(unique(term_topic[out$documents[[doc]][1,]]))
+  know$entropy[doc] <- log(sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,]))
+}
+know$ntopics <- know$ntopic/max(know$ntopics)
+know$entropy <- (know$entropy-min(know$entropy))/(max(know$entropy)-min(know$entropy))
+opend_german <- cbind(opend_german, know)
+
+opend_german$polknow_text <- opend_german$ntopics * opend_german$entropy * opend_german$ditem
+opend_german$polknow_text_mean <- (opend_german$ntopics + opend_german$entropy + opend_german$ditem)/3
+
+###################
+### END NEW MEASURE
+###################
 
 
 #####################################################
@@ -172,12 +208,12 @@ opend_french <- opend_french[-processed$docs.removed,]
 opend_french <- opend_french[-out$docs.removed,]
 
 ## quick fit (60 topics)
-# stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-#                , K=60, init.type = "Spectral")
+stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+              , K=30, init.type = "Spectral")
 
 ## slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
-stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-               , K=0, init.type = "Spectral")
+#stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+#               , K=0, init.type = "Spectral")
 
 
 ### create new sophistication measures
@@ -192,6 +228,42 @@ opend_french$topic_diversity <- apply(doc_topic_prob, 1, function(x) 1 - ineq(x,
 opend_french$polknow_text <- with(opend_french, topic_diversity * lwc * opinionation)
 opend_french$polknow_text_mean <- with(opend_french, (topic_diversity + lwc + opinionation)/3)
 
+
+################
+### NEW MEASURE
+################
+
+## compute shannon entropy
+shannon <- function(x, reversed = F){
+  out <- (- sum(log(x^x)/log(length(x))))
+  if(reversed) out <- 1 - out
+  out
+}
+
+## which topic has highest likelihood for each word
+term_topic <- apply(stm_fit$beta$logbeta[[1]], 2, which.max)
+
+## shannon entropy of each term as a measure for its distinctiveness -> vague term or clear topic
+pseudop <- exp(stm_fit$beta$logbeta[[1]])
+term_entropy <- apply(pseudop, 2, max)
+
+## combine both measures with open-ended responses
+know <- data.frame(ntopics = rep(NA, length(out$documents))
+                   , entropy = rep(NA, length(out$documents)))
+for(doc in 1:length(out$documents)){
+  know$ntopics[doc] <- length(unique(term_topic[out$documents[[doc]][1,]]))
+  know$entropy[doc] <- log(sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,]))
+}
+know$ntopics <- know$ntopic/max(know$ntopics)
+know$entropy <- (know$entropy-min(know$entropy))/(max(know$entropy)-min(know$entropy))
+opend_french <- cbind(opend_french, know)
+
+opend_french$polknow_text <- opend_french$ntopics * opend_french$entropy * opend_french$ditem
+opend_french$polknow_text_mean <- (opend_french$ntopics + opend_french$entropy + opend_french$ditem)/3
+
+###################
+### END NEW MEASURE
+###################
 
 
 #####################################################
@@ -210,12 +282,12 @@ opend_italian <- opend_italian[-processed$docs.removed,]
 opend_italian <- opend_italian[-out$docs.removed,]
 
 ## quick fit (60 topics)
-# stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-#                , K=60, init.type = "Spectral")
+stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+              , K=30, init.type = "Spectral")
 
 ## slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
-stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-               , K=0, init.type = "Spectral")
+#stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+#               , K=0, init.type = "Spectral")
 
 
 ### create new sophistication measures
@@ -230,7 +302,41 @@ opend_italian$topic_diversity <- apply(doc_topic_prob, 1, function(x) 1 - ineq(x
 opend_italian$polknow_text <- with(opend_italian, topic_diversity * lwc * opinionation)
 opend_italian$polknow_text_mean <- with(opend_italian, (topic_diversity + lwc + opinionation)/3)
 
+################
+### NEW MEASURE
+################
 
+## compute shannon entropy
+shannon <- function(x, reversed = F){
+  out <- (- sum(log(x^x)/log(length(x))))
+  if(reversed) out <- 1 - out
+  out
+}
+
+## which topic has highest likelihood for each word
+term_topic <- apply(stm_fit$beta$logbeta[[1]], 2, which.max)
+
+## shannon entropy of each term as a measure for its distinctiveness -> vague term or clear topic
+pseudop <- exp(stm_fit$beta$logbeta[[1]])
+term_entropy <- apply(pseudop, 2, max)
+
+## combine both measures with open-ended responses
+know <- data.frame(ntopics = rep(NA, length(out$documents))
+                   , entropy = rep(NA, length(out$documents)))
+for(doc in 1:length(out$documents)){
+  know$ntopics[doc] <- length(unique(term_topic[out$documents[[doc]][1,]]))
+  know$entropy[doc] <- log(sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,]))
+}
+know$ntopics <- know$ntopic/max(know$ntopics)
+know$entropy <- (know$entropy-min(know$entropy))/(max(know$entropy)-min(know$entropy))
+opend_italian <- cbind(opend_italian, know)
+
+opend_italian$polknow_text <- opend_italian$ntopics * opend_italian$entropy * opend_italian$ditem
+opend_italian$polknow_text_mean <- (opend_italian$ntopics + opend_italian$entropy + opend_italian$ditem)/3
+
+###################
+### END NEW MEASURE
+###################
 
 ### save output
 

@@ -33,54 +33,6 @@ source("latexTable.R")
 plot_default <- theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
 
 
-#######################
-### WORK ON NEW MEASURE
-#######################
-
-## check stm fit
-dim(stm_fit$beta$logbeta[[1]])
-# beta: List containing the log of the word probabilities for each topic.
-apply(exp(stm_fit$beta$logbeta[[1]]), 1, sum)
-
-#hist(apply(exp(stm_fit$beta$logbeta[[1]]), 2, sum))
-#hist(apply(exp(stm_fit$beta$logbeta[[1]]), 2, max))
-
-length(stm_fit$vocab)
-stm_fit$vocab[1:5]
-
-## compute shannon entropy
-shannon <- function(x, reversed = F){
-  out <- (- sum(log(x^x)/log(length(x))))
-  if(reversed) out <- 1 - out
-  out
-}
-
-## which features have the highest probability for each topic?
-stm_fit$vocab[apply(exp(stm_fit$beta$logbeta[[1]]), 1, which.max)]
-
-## which topic has highest likelihood for each word
-term_topic <- apply(stm_fit$beta$logbeta[[1]], 2, which.max)
-# -> compute log(#topics)
-
-## shannon entropy of each term as a measure for its distinctiveness -> vague term or clear topic
-pseudop <- exp(stm_fit$beta$logbeta[[1]])
-pseudop <- t(t(pseudop)/apply(pseudop,2,sum))
-term_entropy <- apply(pseudop, 2, shannon, reversed=T) # theoretically, it should be reversed=T
-# -> calculate average distinctiveness of words
-
-## combine both measures with open-ended responses
-know <- data.frame(ntopics = rep(NA, length(out$documents))
-                   , entropy = rep(NA, length(out$documents)))
-for(doc in 1:length(out$documents)){
-  know$ntopics[doc] <- log(length(unique(term_topic[out$documents[[doc]][1,]])))
-  know$entropy[doc] <- sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,]) / sum(out$documents[[doc]][2,])
-}
-data <- cbind(data, know)
-
-data$polknow_text_mean <- data$lwc
-data$polknow_text_mean <- data$ntopics
-data$polknow_text_mean <- data$entropy
-data$polknow_text_mean <- data$ntopics * data$entropy
 
 
 ########
@@ -129,3 +81,30 @@ p_italian <- ggplot(opend_italian, aes(x=polknow_text_mean, y=as.factor(loj))) +
 pdf("../fig/ggjoy.pdf", width=6, height=9)
 grid.arrange(p_german, p_french, p_italian, ncol=1)
 dev.off()
+
+
+opend_combined <- rbind(data.frame(opend_german, language = "German")
+                        , data.frame(opend_french, language = "French")
+                        , data.frame(opend_italian, language = "Italian"))
+
+opend_cor <- rbind(data.frame(cor = paste0("r = ",round(cor(opend_german$polknow_text_mean, opend_german$loj), 2)), language = "German")
+                   , data.frame(cor = paste0("r = ",round(cor(opend_french$polknow_text_mean, opend_french$loj), 2)), language = "French")
+                   , data.frame(cor = paste0("r = ",round(cor(opend_italian$polknow_text_mean, opend_italian$loj), 2)), language = "Italian"))
+opend_cor$polknow_text_mean <- 0.3
+opend_cor$loj <- 5
+
+ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
+  geom_joy(scale = 4, alpha=.2, fill="lightblue") + plot_default +
+  scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
+  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + facet_wrap(~language,ncol=1) +
+  geom_text(data=opend_cor, aes(label=cor),size=2) +
+  ylab("Level of Justification") + xlab("Text-based sophistication")
+ggsave("../fig/swiss_ggjoy.pdf",width=2.5,height=3)
+
+ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
+  geom_joy(scale = 4, alpha=.2, fill="lightblue") + plot_default +
+  scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
+  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + facet_wrap(~language,ncol=1) +
+  geom_text(data=opend_cor, aes(label=cor),size=2) + theme(panel.border = element_rect(fill="white")) +
+  ylab("Level of Justification") + xlab("Text-based sophistication")
+ggsave("../fig/swiss_ggjoy_empty.pdf",width=2.5,height=3)

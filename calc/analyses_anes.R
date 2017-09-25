@@ -108,12 +108,12 @@ ggsave("../fig/knoweff_empty.pdf", width=4, height=3)
 # validation: party/candidate placement precision
 ########
 
-hetreg_summary <- filter(hetreg_summary, policy!="ideol")
+#hetreg_summary <- filter(hetreg_summary, policy!="ideol")
 hetreg_summary$policy <- factor(hetreg_summary$policy
-                                , labels = c("Government\nSpending","Defense\nSpending"
+                                , labels = c("Ideology","Government\nSpending","Defense\nSpending"
                                              ,"Insurance\nPolicy","Job\nGuarantee"))
-hetreg_summary$measure <- factor(hetreg_summary$measure
-                                 , labels = c("Text-based\nSophistication","Factual\nKnowledge"))
+hetreg_summary$measure <- factor(hetreg_summary$measure, levels = rev(levels(hetreg_summary$measure))
+                                 , labels = c("Factual\nKnowledge", "Text-based\nSophistication"))
 hetreg_summary$target <- factor(hetreg_summary$target
                                 , labels = c("Mitt\nRomney","Barack\nObama"
                                              ,"Republican\nParty","Democratic\nParty"))
@@ -123,6 +123,20 @@ ggplot(hetreg_summary, aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) +
   geom_vline(xintercept = 0, color="grey") + 
   xlab("Error Variance Reduction") + ylab("Independent Variable (Max - Min)") + plot_default
 ggsave("../fig/hetreg.pdf",width = 6, height = 4)
+
+hetreg_summary %>% filter(policy=="Ideology") %>%
+  ggplot(aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) + 
+  geom_point() + geom_errorbarh(height=0) + facet_wrap(~target, ncol=2) +
+  geom_vline(xintercept = 0, color="grey") + 
+  xlab("Error Variance Reduction (Max - Min)") + ylab("Independent Variable") + plot_default
+ggsave("../fig/hetreg_pres.pdf",width = 4, height = 3)
+
+hetreg_summary %>% filter(policy=="Ideology") %>%
+  ggplot(aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) + plot_default + 
+  geom_point() + geom_errorbarh(height=0) + facet_wrap(~target, ncol=2) +
+  geom_vline(xintercept = 0, color="grey") + theme(panel.border = element_rect(fill="white")) +
+  xlab("Error Variance Reduction (Max - Min)") + ylab("Independent Variable")
+ggsave("../fig/hetreg_empty.pdf",width = 4, height = 3)
 
 
 #########
@@ -146,6 +160,7 @@ ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
 ggsave("../fig/prepost.pdf",width = 3, height = 2)
 
 
+
 res <- rbind(data.frame(sim(m5a, iv=data.frame(polknow_text_mean=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10)))
                         , value=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10),Variable="Text-based Sophistication")
              , data.frame(sim(m5b, iv=data.frame(polknow_factual=seq(0, 1,length=10)))
@@ -158,3 +173,10 @@ ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
   facet_grid(~Variable, scales="free_x") +
   ylab("Expected Probability\nto Keep Vote Choice") + xlab("Value of independent variable")
 ggsave("../fig/prepost_exp.pdf",width=4,height=2)
+
+ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
+  #geom_errorbar(alpha=.5, width=0) + 
+  geom_ribbon(alpha=0.4, lwd=.1, fill="lightblue") + geom_line() + 
+  facet_grid(~Variable, scales="free_x") + xlab("Value of independent variable") + 
+  ylab("Expected Probability\nto Keep Vote Choice") + theme(panel.border = element_rect(fill="white"))
+ggsave("../fig/prepost_empty.pdf",width=4,height=2)

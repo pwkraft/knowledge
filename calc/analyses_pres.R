@@ -164,7 +164,7 @@ ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
   geom_vline(xintercept = 0, color="grey") + 
   xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
   scale_y_discrete(limits = rev(levels(res$ivlab)))
-ggsave("../fig/knoweff_pres.pdf", width=4, height=3)
+#ggsave("../fig/knoweff_pres.pdf", width=4, height=3)
 
 ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + 
   geom_point() + geom_errorbarh(height=0) + facet_wrap(~dvlab, scale="free_x") +
@@ -172,5 +172,5 @@ ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
   theme_classic(base_size = 9) + theme(panel.border = element_rect(fill="white")) +
   geom_vline(xintercept = 0, color="grey") + 
   scale_y_discrete(limits = rev(levels(res$ivlab)))
-ggsave("../fig/knoweff_empty.pdf", width=4, height=3)
+#ggsave("../fig/knoweff_empty.pdf", width=4, height=3)
 

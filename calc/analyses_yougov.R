@@ -34,56 +34,6 @@ source("latexTable.R")
 plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
 
 
-#######################
-### WORK ON NEW MEASURE
-#######################
-
-## check stm fit
-dim(stm_fit$beta$logbeta[[1]])
-# beta: List containing the log of the word probabilities for each topic.
-apply(exp(stm_fit$beta$logbeta[[1]]), 1, sum)
-
-#hist(apply(exp(stm_fit$beta$logbeta[[1]]), 2, sum))
-#hist(apply(exp(stm_fit$beta$logbeta[[1]]), 2, max))
-
-length(stm_fit$vocab)
-stm_fit$vocab[1:5]
-
-## compute shannon entropy
-shannon <- function(x, reversed = F){
-  out <- (- sum(log(x^x)/log(length(x))))
-  if(reversed) out <- 1 - out
-  out
-}
-
-## which features have the highest probability for each topic?
-stm_fit$vocab[apply(exp(stm_fit$beta$logbeta[[1]]), 1, which.max)]
-
-## which topic has highest likelihood for each word
-term_topic <- apply(stm_fit$beta$logbeta[[1]], 2, which.max)
-# -> compute log(#topics)
-
-## shannon entropy of each term as a measure for its distinctiveness -> vague term or clear topic
-pseudop <- exp(stm_fit$beta$logbeta[[1]])
-pseudop <- t(t(pseudop)/apply(pseudop,2,sum))
-term_entropy <- apply(pseudop, 2, shannon, reversed=T) # theoretically, it should be reversed=T
-# -> calculate average distinctiveness of words
-
-## combine both measures with open-ended responses
-know <- data.frame(ntopics = rep(NA, length(out$documents))
-                   , entropy = rep(NA, length(out$documents)))
-for(doc in 1:length(out$documents)){
-  know$ntopics[doc] <- log(length(unique(term_topic[out$documents[[doc]][1,]])))
-  know$entropy[doc] <- sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,]) / sum(out$documents[[doc]][2,])
-}
-data <- cbind(data, know)
-
-data$polknow_text_mean <- data$lwc
-data$polknow_text_mean <- data$ntopics
-data$polknow_text_mean <- data$entropy
-data$polknow_text_mean <- data$ntopics * data$entropy
-
-
 
 ########
 # Prelim results
@@ -236,7 +186,7 @@ ggplot(res, aes(y=Variable, x=mean, xmin=cilo,xmax=cihi)) +
 
 
 res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10)))
-                        ,value=seq(0.1514140,0.6173431,length=10),Variable="Text-based Sophistication")
+                        ,value=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10),Variable="Text-based Sophistication")
              , data.frame(sim(m2[[2]], iv=data.frame(know_pol=seq(0,1,length=10)))
                           ,value=seq(0,1,length=10),Variable="Factual Knowledge"))
 #res$model <- rep(c(1,2), each=nrow(res)/2)
@@ -245,13 +195,16 @@ res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=seq(min(dat
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
   #geom_errorbar(alpha=.5, width=0) + 
   geom_ribbon(alpha=0.4, lwd=.1, fill="lightblue") + geom_line() + 
-  facet_grid(~Variable, scales="free_x") +
+  facet_grid(~Variable) +
   ylab("Expected Disease\nInformation Retrieval") + xlab("Value of independent variable")
 ggsave("../fig/yg_disease.pdf",width=4,height=2)
-### THE EFFECTS ARE PRETTY SIMILAR ACROSS MEASURES...
-### I wanted to make the argument that the text-based measure is a better predictor, 
-### but that is not really the case, both are equally good.
 
+ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
+  #geom_errorbar(alpha=.5, width=0) + 
+  geom_ribbon(alpha=0.4, lwd=.1, fill="lightblue") + geom_line() + 
+  facet_grid(~Variable) + theme(panel.border = element_rect(fill="white")) +
+  ylab("Expected Disease\nInformation Retrieval") + xlab("Value of independent variable")
+ggsave("../fig/yg_disease_empty.pdf",width=4,height=2)
 
 # ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + 
 #   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white")) +

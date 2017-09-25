@@ -178,13 +178,13 @@ out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
 data <- data[-processed$docs.removed,]
 #data <- data[-out$docs.removed,]
 
-## quick fit (60 topics)
-# stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-#                , K=60, init.type = "Spectral")
+## quick fit (15 topics)
+stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+               , K=15, init.type = "Spectral")
 
 ## slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
-stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-               , K=0, init.type = "Spectral")
+#stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+#               , K=0, init.type = "Spectral")
 
 
 ### create new sophistication measures
@@ -199,6 +199,41 @@ data$topic_diversity <- apply(doc_topic_prob, 1, function(x) 1 - ineq(x,type="Gi
 data$polknow_text <- with(data, topic_diversity * lwc * ditem)
 data$polknow_text_mean <- with(data, (topic_diversity + lwc + ditem)/3)
 
+################
+### NEW MEASURE
+################
+
+## compute shannon entropy
+shannon <- function(x, reversed = F){
+  out <- (- sum(log(x^x)/log(length(x))))
+  if(reversed) out <- 1 - out
+  out
+}
+
+## which topic has highest likelihood for each word
+term_topic <- apply(stm_fit$beta$logbeta[[1]], 2, which.max)
+
+## shannon entropy of each term as a measure for its distinctiveness -> vague term or clear topic
+pseudop <- exp(stm_fit$beta$logbeta[[1]])
+term_entropy <- apply(pseudop, 2, max)
+
+## combine both measures with open-ended responses
+know <- data.frame(ntopics = rep(NA, length(out$documents))
+                   , entropy = rep(NA, length(out$documents)))
+for(doc in 1:length(out$documents)){
+  know$ntopics[doc] <- length(unique(term_topic[out$documents[[doc]][1,]]))
+  know$entropy[doc] <- log(sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,]))
+}
+know$ntopics <- know$ntopic/max(know$ntopics)
+know$entropy <- (know$entropy-min(know$entropy))/(max(know$entropy)-min(know$entropy))
+data <- cbind(data, know)
+
+data$polknow_text <- data$ntopics * data$entropy * data$ditem
+data$polknow_text_mean <- (data$ntopics + data$entropy + data$ditem)/3
+
+###################
+### END NEW MEASURE
+###################
 
 ### save output
 
