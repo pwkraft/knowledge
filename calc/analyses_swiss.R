@@ -17,7 +17,7 @@ library(GGally)
 library(dplyr)
 library(pmisc)
 library(stargazer)
-library(ggjoy)
+library(ggridges)
 
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
@@ -55,30 +55,30 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), 
 ggplot(opend_german, aes(x=loj, y=polknow_text_mean)) + geom_point(alpha=.1) + geom_smooth(method="lm") + plot_default
 
 
-### joy plots
+### ridge plots
 
 p_german <- ggplot(opend_german, aes(x=polknow_text_mean, y=as.factor(loj))) +
-  geom_joy(scale = 4, alpha=.2, fill="lightblue") + theme_joy() +
+  geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + theme_ridges() +
   scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
   scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) +
   annotate("text", x=0.84, y=7, label = paste0("r = ",round(cor(opend_german$polknow_text_mean, opend_german$loj), 2))) +
   ggtitle("German respondents") + ylab("Level of Justification") + xlab("Text-based sophistication")
 
 p_french <- ggplot(opend_french, aes(x=polknow_text_mean, y=as.factor(loj))) +
-  geom_joy(scale = 4, alpha=.2, fill="lightblue") + theme_joy() +
+  geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + theme_ridges() +
   scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
   scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) +
   annotate("text", x=0.84, y=7, label = paste0("r = ",round(cor(opend_french$polknow_text_mean, opend_french$loj), 2))) +
   ggtitle("French respondents") + ylab("Level of Justification") + xlab("Text-based sophistication")
 
 p_italian <- ggplot(opend_italian, aes(x=polknow_text_mean, y=as.factor(loj))) +
-  geom_joy(scale = 4, alpha=.2, fill="lightblue") + theme_joy() +
+  geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + theme_ridges() +
   scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
   scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) +
   annotate("text", x=0.84, y=7, label = paste0("r = ",round(cor(opend_italian$polknow_text_mean, opend_italian$loj), 2))) +
   ggtitle("Italian respondents") + ylab("Level of Justification") + xlab("Text-based sophistication")
 
-pdf("../fig/ggjoy.pdf", width=6, height=9)
+pdf("../fig/ggridges.pdf", width=6, height=9)
 grid.arrange(p_german, p_french, p_italian, ncol=1)
 dev.off()
 
@@ -94,17 +94,17 @@ opend_cor$polknow_text_mean <- 0.3
 opend_cor$loj <- 5
 
 ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
-  geom_joy(scale = 4, alpha=.2, fill="lightblue") + plot_default +
+  geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
   scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
   scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + facet_wrap(~language,ncol=1) +
   geom_text(data=opend_cor, aes(label=cor),size=2) +
   ylab("Level of Justification") + xlab("Text-based sophistication")
-ggsave("../fig/swiss_ggjoy.pdf",width=2.5,height=3)
+ggsave("../fig/swiss_ggridges.pdf",width=2.5,height=3)
 
 ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
-  geom_joy(scale = 4, alpha=.2, fill="lightblue") + plot_default +
+  geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
   scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
   scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + facet_wrap(~language,ncol=1) +
   geom_text(data=opend_cor, aes(label=cor),size=2) + theme(panel.border = element_rect(fill="white")) +
   ylab("Level of Justification") + xlab("Text-based sophistication")
-ggsave("../fig/swiss_ggjoy_empty.pdf",width=2.5,height=3)
+ggsave("../fig/swiss_ggridges_empty.pdf",width=2.5,height=3)

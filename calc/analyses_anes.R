@@ -44,7 +44,6 @@ plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(f
 ########
 
 datcor <- data[,c("polknow_text_mean","polknow_factual","polknow_evalpre")]
-#datcor <- data[,c("ditem","ntopics","entropy")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 pdf("../fig/corplot_pres.pdf",width=3.3, height=3.3)
@@ -58,6 +57,14 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), 
         , columnLabels = c("Text-based\nSophistication","Factual\nKnowledge"
                            ,"Interviewer\nEvaluation (Pre)")) + 
   theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white"))
+dev.off()
+
+datcor <- data[,c("ntopics","entropy","ditem")]
+colnames(datcor) <- paste0("v",1:ncol(datcor))
+
+pdf("../fig/corplot_components.pdf",width=3.3, height=3.3)
+ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
+        , columnLabels = c("Elaboration","Distinctiveness","Opinionation")) + plot_default
 dev.off()
 
 
