@@ -57,46 +57,54 @@ ggplot(opend_german, aes(x=loj, y=polknow_text_mean)) + geom_point(alpha=.1) + g
 
 ### ridge plots
 
+plot_default <- theme_classic(base_size=8) + 
+  theme(panel.border = element_rect(fill=NA)
+        , plot.title = element_text(size = 8, vjust=-1)
+        , axis.title = element_text(size=8)
+        , axis.title.x = element_text(vjust=1.5)
+        , plot.margin = unit(c(-.1,.1,0,.1), "cm"))
+
+
 p_german <- ggplot(opend_german, aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
-  scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
-  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + theme(plot.title = element_text(size = 6), axis.title=element_text(size=6), axis.title.x=element_text(vjust=-1)) +
-  annotate("text", x=0.3, y=7, size=2, label = paste0("r = ",round(cor(opend_german$polknow_text_mean, opend_german$loj), 2))) +
+  scale_y_discrete(expand = c(0.05, 0.05)) + # will generally have to set the `expand` option
+  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + 
+  annotate("text", x=0.3, y=6, size=2, label = paste0("r = ",round(cor(opend_german$polknow_text_mean, opend_german$loj), 2))) +
   ggtitle("German respondents") + ylab("") + xlab("")
 
 p_german_empty <- ggplot(opend_german, aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
-  scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
-  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + theme(plot.title = element_text(size = 6), axis.title=element_text(size=6), axis.title.x=element_text(vjust=-1)) +
-  annotate("text", x=0.3, y=7, size=2, label = paste0("r = ",round(cor(opend_german$polknow_text_mean, opend_german$loj), 2))) +
+  scale_y_discrete(expand = c(0.05, 0.05)) +   # will generally have to set the `expand` option
+  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) +
+  annotate("text", x=0.3, y=6, size=2, label = paste0("r = ",round(cor(opend_german$polknow_text_mean, opend_german$loj), 2))) +
   ggtitle("German respondents") + ylab("") + xlab("") + theme(panel.border = element_rect(fill="white"))
 
 p_french <- ggplot(opend_french, aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
-  scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
-  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + theme(plot.title = element_text(size = 6), axis.title=element_text(size=6), axis.title.x=element_text(vjust=-1)) +
-  annotate("text", x=0.3, y=7, size=2, label = paste0("r = ",round(cor(opend_french$polknow_text_mean, opend_french$loj), 2))) +
+  scale_y_discrete(expand = c(0.05, 0.05)) +   # will generally have to set the `expand` option
+  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + 
+  annotate("text", x=0.3, y=6, size=2, label = paste0("r = ",round(cor(opend_french$polknow_text_mean, opend_french$loj), 2))) +
   ggtitle("French respondents") + ylab("Level of Justification") + xlab("")
 
 p_french_empty <- ggplot(opend_french, aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
-  scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
-  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + theme(plot.title = element_text(size = 6), axis.title=element_text(size=6), axis.title.x=element_text(vjust=-1)) +
-  annotate("text", x=0.3, y=7, size=2, label = paste0("r = ",round(cor(opend_french$polknow_text_mean, opend_french$loj), 2))) +
+  scale_y_discrete(expand = c(0.05, 0.05)) +   # will generally have to set the `expand` option
+  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + 
+  annotate("text", x=0.3, y=6, size=2, label = paste0("r = ",round(cor(opend_french$polknow_text_mean, opend_french$loj), 2))) +
   ggtitle("French respondents") + ylab("Level of Justification") + xlab("") + theme(panel.border = element_rect(fill="white"))
 
 p_italian <- ggplot(opend_italian, aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
-  scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
-  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + theme(plot.title = element_text(size = 6), axis.title=element_text(size=6), axis.title.x=element_text(vjust=-1)) +
-  annotate("text", x=0.3, y=7, size=2, label = paste0("r = ",round(cor(opend_italian$polknow_text_mean, opend_italian$loj), 2))) +
+  scale_y_discrete(expand = c(0.05, 0.05)) +   # will generally have to set the `expand` option
+  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + 
+  annotate("text", x=0.3, y=6, size=2, label = paste0("r = ",round(cor(opend_italian$polknow_text_mean, opend_italian$loj), 2))) +
   ggtitle("Italian respondents") + ylab("") + xlab("Text-based sophistication")
 
 p_italian_empty <- ggplot(opend_italian, aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
-  scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
-  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + theme(plot.title = element_text(size = 6), axis.title=element_text(size=6), axis.title.x=element_text(vjust=-1)) +
-  annotate("text", x=0.3, y=7, size=2, label = paste0("r = ",round(cor(opend_italian$polknow_text_mean, opend_italian$loj), 2))) +
+  scale_y_discrete(expand = c(0.05, 0.05)) +   # will generally have to set the `expand` option
+  scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + 
+  annotate("text", x=0.3, y=6, size=2, label = paste0("r = ",round(cor(opend_italian$polknow_text_mean, opend_italian$loj), 2))) +
   ggtitle("Italian respondents") + ylab("") + xlab("Text-based sophistication") + theme(panel.border = element_rect(fill="white"))
 
 pdf("../fig/swiss_ggridges_0.pdf", width=2.5, height=3)
@@ -115,6 +123,11 @@ pdf("../fig/swiss_ggridges_3.pdf", width=2.5, height=3)
 grid.arrange(p_german, p_french, p_italian, ncol=1)
 dev.off()
 
+
+######################
+### old combined plot
+
+plot_default <- theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
 
 opend_combined <- rbind(data.frame(opend_german, language = "German")
                         , data.frame(opend_french, language = "French")
