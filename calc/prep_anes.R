@@ -375,6 +375,63 @@ data$polknow_text_mean <- with(data, (topic_diversity + lwc + ditem)/3)
 ### WORK ON NEW MEASURE
 #######################
 
+## goal: P(t_i|w) 
+
+## P(t|X): probability of topic t given covariates X [5176,20]
+pt_x <- stm_fit$theta
+
+## P(w|t): probability of word w given topic t [20,4178]
+pw_t <- exp(stm_fit$beta$logbeta[[1]])
+
+## P(w|X) = sum_j(P(w|t_j)P(t_j|X)): probability of word w across all topics [5176,4178]
+pw_x <- pt_x %*% pw_t
+
+## P(t_i|w,X) = P(w|t_i)P(t_i|X)/P(w|X): probability of topic t given word w and covariates X
+## THIS SHOULD BE A 3-DIM array!
+nobs <- nrow(pt_x)
+nwords <- ncol(pw_t)
+ntopics <- ncol(pt_x)
+pt_wx <- array(NA, c(nobs, nwords, ntopics))
+
+pb <- txtProgressBar(min = 1, max = nwords, style = 3)
+for(w in 1:nwords){
+  for(t in 1:ntopics){
+    pt_wx[,w,t] <- pw_t[t,w] * pt_x[,t] / pw_x[,w]
+  }
+  setTxtProgressBar(pb, w)
+}
+close(pb)
+
+## compute shannon entropy
+shannon <- function(x, reversed = F){
+  out <- (- sum(log(x^x)/log(length(x))))
+  if(reversed) out <- 1 - out
+  out
+}
+
+## data frame to store results
+know <- data.frame(ntopics = rep(NA, nobs), distinct = rep(NA, nobs))
+
+## compute sophistication components
+for(n in 1:nobs){
+  maxtopic_wx <- apply(pt_wx[n,,],1,which.max) # which topic has the highest probability for each word (given X)
+  maxprob_wx <- apply(pt_wx[n,,],1,max) # maximum probability across topics
+  shannon_wx <- apply(pt_wx[n,,],1,shannon, reverse=T) # reversed shannon entropy to measure 
+  
+  know$ntopics[n] <- length(unique(maxtopic_wx[out$documents[[n]][1,]])) # number of topics in response
+  know$distinct[n] <- log(sum(maxprob_wx[out$documents[[n]][1,]] * out$documents[[n]][2,])) # sum of max probabilities
+  know$entropy[n] <- log(sum(shannon_wx[out$documents[[n]][1,]] * out$documents[[n]][2,])) # sum of max probabilities
+}
+know$ntopics <- know
+
+## this has to be done averaged across observations!!
+test <- data.frame(maxprob_wx, shannon_wx, stm_fit$vocab)
+
+# this seems problematic because rare terms receive high values
+
+###################### NEW trial above
+
+
 ## check stm fit
 dim(stm_fit$beta$logbeta[[1]])
 # beta: List containing the log of the word probabilities for each topic.
@@ -386,12 +443,7 @@ apply(exp(stm_fit$beta$logbeta[[1]]), 1, sum)
 length(stm_fit$vocab)
 stm_fit$vocab[1:5]
 
-## compute shannon entropy
-shannon <- function(x, reversed = F){
-  out <- (- sum(log(x^x)/log(length(x))))
-  if(reversed) out <- 1 - out
-  out
-}
+
 
 ## which features have the highest probability for each topic?
 stm_fit$vocab[apply(exp(stm_fit$beta$logbeta[[1]]), 1, which.max)]
