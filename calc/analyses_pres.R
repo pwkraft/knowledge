@@ -92,14 +92,14 @@ ggsave("../fig/meandiff_empty.pdf", width=4.75, height=2.5)
 # NOTE: rescale knowledge variables to unit variance?
 
 m1 <- NULL
-m1[[1]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data)
-m1[[2]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data)
-m1[[3]] <- lm(polknow_evalpre ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data)
+m1[[1]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data)
+m1[[2]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data)
+m1[[3]] <- lm(polknow_evalpre ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data)
 lapply(m1, summary)
 
 dvnames <- c("Text-based\nSophistication","Factual\nKnowledge", "Interviewer\nEvaluation (Pre)")
-ivnames <- c("Intercept", "Gender\n(Female)", "Media\nExposure", "Political\nDiscussions", "Education\n(College)"
-             , "Income", "log(Age)", "Race\n(Black)", "Church\nAttendance", "Survey Mode\n(Online)")
+ivnames <- c("Intercept", "Female", "Media", "Discussions", "College"
+             , "Income", "log(Age)", "Church", "Black", "Online")
 
 # prepare dataframe for plotting (sloppy code)
 dfplot <- data.frame()
@@ -121,14 +121,14 @@ dfplot <- dfplot[dfplot$ivnames!="Intercept",]
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
-  geom_point(size=.5) + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=3) +
+  geom_point(size=.75) + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=3) +
   plot_default
 ggsave("../fig/determinants_pres.pdf",width=4.75,height=3)
 
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
-  geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=3) +
+  geom_point(size=.75) + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=3) +
   theme_classic(base_size = 9) + theme(panel.border = element_rect(fill="white"))
 ggsave("../fig/determinants_empty.pdf",width=4.75,height=3)
 
