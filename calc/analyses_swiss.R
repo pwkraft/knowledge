@@ -66,42 +66,42 @@ plot_default <- theme_classic(base_size=8) +
 
 
 p_german <- ggplot(opend_german, aes(x=polknow_text_mean, y=as.factor(loj))) +
-  geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
+  geom_density_ridges(scale = 4, alpha=.5, fill="lightblue") + plot_default +
   scale_y_discrete(expand = c(0.05, 0.05)) + # will generally have to set the `expand` option
   scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + 
   annotate("text", x=0.3, y=6, size=2, label = paste0("r = ",round(cor(opend_german$polknow_text_mean, opend_german$loj), 2))) +
   ggtitle("German respondents") + ylab("") + xlab("")
 
 p_german_empty <- ggplot(opend_german, aes(x=polknow_text_mean, y=as.factor(loj))) +
-  geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
+  geom_density_ridges(scale = 4, alpha=.5, fill="lightblue") + plot_default +
   scale_y_discrete(expand = c(0.05, 0.05)) +   # will generally have to set the `expand` option
   scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) +
   annotate("text", x=0.3, y=6, size=2, label = paste0("r = ",round(cor(opend_german$polknow_text_mean, opend_german$loj), 2))) +
   ggtitle("German respondents") + ylab("") + xlab("") + theme(panel.border = element_rect(fill="white"))
 
 p_french <- ggplot(opend_french, aes(x=polknow_text_mean, y=as.factor(loj))) +
-  geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
+  geom_density_ridges(scale = 4, alpha=.5, fill="lightblue") + plot_default +
   scale_y_discrete(expand = c(0.05, 0.05)) +   # will generally have to set the `expand` option
   scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + 
   annotate("text", x=0.3, y=6, size=2, label = paste0("r = ",round(cor(opend_french$polknow_text_mean, opend_french$loj), 2))) +
   ggtitle("French respondents") + ylab("Level of Justification") + xlab("")
 
 p_french_empty <- ggplot(opend_french, aes(x=polknow_text_mean, y=as.factor(loj))) +
-  geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
+  geom_density_ridges(scale = 4, alpha=.5, fill="lightblue") + plot_default +
   scale_y_discrete(expand = c(0.05, 0.05)) +   # will generally have to set the `expand` option
   scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + 
   annotate("text", x=0.3, y=6, size=2, label = paste0("r = ",round(cor(opend_french$polknow_text_mean, opend_french$loj), 2))) +
   ggtitle("French respondents") + ylab("Level of Justification") + xlab("") + theme(panel.border = element_rect(fill="white"))
 
 p_italian <- ggplot(opend_italian, aes(x=polknow_text_mean, y=as.factor(loj))) +
-  geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
+  geom_density_ridges(scale = 4, alpha=.5, fill="lightblue") + plot_default +
   scale_y_discrete(expand = c(0.05, 0.05)) +   # will generally have to set the `expand` option
   scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + 
   annotate("text", x=0.3, y=6, size=2, label = paste0("r = ",round(cor(opend_italian$polknow_text_mean, opend_italian$loj), 2))) +
   ggtitle("Italian respondents") + ylab("") + xlab("Text-based sophistication")
 
 p_italian_empty <- ggplot(opend_italian, aes(x=polknow_text_mean, y=as.factor(loj))) +
-  geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
+  geom_density_ridges(scale = 4, alpha=.5, fill="lightblue") + plot_default +
   scale_y_discrete(expand = c(0.05, 0.05)) +   # will generally have to set the `expand` option
   scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + 
   annotate("text", x=0.3, y=6, size=2, label = paste0("r = ",round(cor(opend_italian$polknow_text_mean, opend_italian$loj), 2))) +
@@ -140,7 +140,7 @@ opend_cor$polknow_text_mean <- 0.3
 opend_cor$loj <- 5
 
 ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
-  geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
+  geom_density_ridges(scale = 4, alpha=.5, fill="lightblue") + plot_default +
   scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
   scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + facet_wrap(~language,ncol=1) +
   geom_text(data=opend_cor, aes(label=cor),size=2) +
@@ -148,7 +148,7 @@ ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
 ggsave("../fig/swiss_ggridges.pdf",width=2.5,height=3)
 
 ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
-  geom_density_ridges(scale = 4, alpha=.2, fill="lightblue") + plot_default +
+  geom_density_ridges(scale = 4, alpha=.5, fill="lightblue") + plot_default +
   scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
   scale_x_continuous(expand = c(0, 0)) + xlim(.25,.85) + facet_wrap(~language,ncol=1) +
   geom_text(data=opend_cor, aes(label=cor),size=2) + theme(panel.border = element_rect(fill="white")) +

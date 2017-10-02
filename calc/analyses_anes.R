@@ -2,7 +2,7 @@
 ### Measuring Political Sophistication using Open-ended Responses ###
 ### Patrick Kraft                                                 ###
 ### ============================================================= ###
-## reduced analysis for presentation (based on data created in prep.R)
+## main ANES analyses for paper + presentation (based on data created in prep.R)
 
 
 rm(list = ls())

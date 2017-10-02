@@ -194,14 +194,14 @@ res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=seq(min(dat
 
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
   #geom_errorbar(alpha=.5, width=0) + 
-  geom_ribbon(alpha=0.4, lwd=.1, fill="lightblue") + geom_line() + 
+  geom_ribbon(alpha=0.8, lwd=.1, fill="lightblue") + geom_line() + 
   facet_grid(~Variable) +
   ylab("Expected Disease\nInformation Retrieval") + xlab("Value of independent variable")
 ggsave("../fig/yg_disease.pdf",width=4,height=2)
 
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
   #geom_errorbar(alpha=.5, width=0) + 
-  geom_ribbon(alpha=0.4, lwd=.1, fill="lightblue") + geom_line() + 
+  geom_ribbon(alpha=0.8, lwd=.1, fill="lightblue") + geom_line() + 
   facet_grid(~Variable) + theme(panel.border = element_rect(fill="white")) +
   ylab("Expected Disease\nInformation Retrieval") + xlab("Value of independent variable")
 ggsave("../fig/yg_disease_empty.pdf",width=4,height=2)
