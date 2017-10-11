@@ -40,18 +40,18 @@ plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(f
 datcor <- data[,c("polknow_text_mean","polknow_factual","polknow_evalpre")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
-pdf("../fig/corplot_pres.pdf",width=3.3, height=3.3)
+#pdf("../fig/corplot_pres.pdf",width=3.3, height=3.3)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Text-based\nSophistication","Factual\nKnowledge"
+        , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge"
                            ,"Interviewer\nEvaluation (Pre)")) + plot_default
-dev.off()
+#dev.off()
 
-pdf("../fig/corplot_empty.pdf",width=3.3, height=3.3)
+#pdf("../fig/corplot_empty.pdf",width=3.3, height=3.3)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Text-based\nSophistication","Factual\nKnowledge"
+        , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge"
                            ,"Interviewer\nEvaluation (Pre)")) + 
   theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white"))
-dev.off()
+#dev.off()
 
 
 ########
@@ -64,7 +64,7 @@ plot_df <- data.frame(rbind(cbind(data$polknow_text_mean, data$female, 1)
                       , cbind(data$polknow_evalpre, data$female, 3))) %>% na.omit()
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
-plot_df$Variable <- factor(plot_df$Variable, labels = c("Text-based\nsophistication", "Factual\nKnowledge"
+plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"
                                                         , "Interviewer\nEvaluation (Pre)"))
 plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
   summarize_each(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
@@ -72,18 +72,33 @@ plot_means <- plot_df %>% group_by(Variable, Gender) %>%
          , cihi = mean + 1.96*sd/sqrt(n))
 
 ## bar plots comparing men and women
-ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
-  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
-  facet_wrap(~Variable) + ylab("Mean Value on Knowledge Measure") +
-  geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired")
-ggsave("../fig/meandiff_pres.pdf", width=4.75, height=2.5)
-
 ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi)) + 
   theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white")) +
   geom_bar(stat="identity", fill="grey80") + geom_errorbar(width=.25) + 
   facet_wrap(~Variable) + ylab("Mean Value on Knowledge Measure") +
   geom_point(aes(y=max), col="white")
 ggsave("../fig/meandiff_empty.pdf", width=4.75, height=2.5)
+
+ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
+  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
+  facet_wrap(~Variable) + ylab("Mean Value on Knowledge Measure") +
+  geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired")
+ggsave("../fig/meandiff_pres_3.pdf", width=4.75, height=2.5)
+
+plot_means[plot_means$Variable=="Discursive\nSophistication",-1:-2] <- NA
+ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
+  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
+  facet_wrap(~Variable) + ylab("Mean Value on Knowledge Measure") +
+  geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired")
+ggsave("../fig/meandiff_pres_2.pdf", width=4.75, height=2.5)
+
+plot_means[plot_means$Variable=="Factual\nKnowledge",-1:-2] <- NA
+ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
+  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
+  facet_wrap(~Variable) + ylab("Mean Value on Knowledge Measure") +
+  geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired")
+ggsave("../fig/meandiff_pres_1.pdf", width=4.75, height=2.5)
+
 
 ########
 # determinants of political knowledge
@@ -97,7 +112,7 @@ m1[[2]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + lo
 m1[[3]] <- lm(polknow_evalpre ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data)
 lapply(m1, summary)
 
-dvnames <- c("Text-based\nSophistication","Factual\nKnowledge", "Interviewer\nEvaluation (Pre)")
+dvnames <- c("Discursive\nSophistication","Factual\nKnowledge", "Interviewer\nEvaluation (Pre)")
 ivnames <- c("Intercept", "Female", "Media", "Discussions", "College"
              , "Income", "log(Age)", "Church", "Black", "Online")
 
@@ -122,15 +137,32 @@ ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point(size=.75) + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=3) +
-  plot_default
-ggsave("../fig/determinants_pres.pdf",width=4.75,height=3)
+  plot_default + xlim(-0.1,0.32)
+ggsave("../fig/determinants_3.pdf",width=4.75,height=3)
 
+dfplot[dfplot$dv=="Discursive\nSophistication",c(1,2)] <- NA
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point(size=.75) + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=3) +
-  theme_classic(base_size = 9) + theme(panel.border = element_rect(fill="white"))
-ggsave("../fig/determinants_empty.pdf",width=4.75,height=3)
+  plot_default + xlim(-0.1,0.32)
+ggsave("../fig/determinants_2.pdf",width=4.75,height=3)
+
+dfplot[dfplot$dv=="Factual\nKnowledge",c(1,2)] <- NA
+ggplot(dfplot, aes(y=ivnames, x=Estimate
+                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
+  geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
+  geom_point(size=.75) + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=3) +
+  plot_default + xlim(-0.1,0.32)
+ggsave("../fig/determinants_1.pdf",width=4.75,height=3)
+
+dfplot[dfplot$dv=="Interviewer\nEvaluation (Pre)",c(1,2)] <- NA
+ggplot(dfplot, aes(y=ivnames, x=Estimate
+                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
+  geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
+  geom_point(size=.75) + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=3) +
+  plot_default + xlim(-0.1,0.32)
+ggsave("../fig/determinants_0.pdf",width=4.75,height=3)
 
 
 

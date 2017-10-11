@@ -42,7 +42,7 @@ plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(f
 ### compare measures
 summary(lm(know_dis ~ polknow_text_mean + know_pol, data=data))
 summary(lm(know_dis ~ polknow_text_mean + know_pol + female + log(age) + black + relig + educ + faminc, data=data))
-## argument: text-based sophistication is a better measure of competence in the sense that the respondents pick up 
+## argument: Discursive sophistication is a better measure of competence in the sense that the respondents pick up 
 ## information about the disease
 
 ## closing gender gap is replicated!
@@ -61,13 +61,13 @@ colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 pdf("../fig/yg_corplot.pdf",width=2.5, height=2.5)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.1, size=.2)), axisLabels="none"
-        , columnLabels = c("Text-based\nSophistication","Factual\nKnowledge","Disease\nInformation")) + 
+        , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge","Disease\nInformation")) + 
   plot_default
 dev.off()
 
 pdf("../fig/yg_corplot_empty.pdf",width=2.5, height=2.5)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), axisLabels="none"
-        , columnLabels = c("Text-based\nSophistication","Factual\nKnowledge","Disease\nInformatilon"
+        , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge","Disease\nInformatilon"
                            ,"Majorities\nin Congress", "Interviewer\nEvaluation (Pre)"
                            , "Interviewer\nEvaluation (Post)")) +
   theme_classic(base_size=8) + theme(panel.border = element_rect(fill="white"))
@@ -84,7 +84,7 @@ plot_df <- data.frame(rbind(cbind(data$polknow_text_mean, data$female, 1)
                       , cbind(data$know_dis, data$female, 3))) %>% na.omit()
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
-plot_df$Variable <- factor(plot_df$Variable, labels = c("Text-based sophistication", "Factual Knowledge"
+plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive sophistication", "Factual Knowledge"
                                                         , "Disease Information"))
 plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
   summarize_each(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
@@ -126,7 +126,7 @@ m1[[2]] <- lm(know_pol ~ female + educ + faminc + log(age) + black + relig, data
 m1[[3]] <- lm(know_dis ~ female + educ + faminc + log(age) + black + relig, data = data)
 lapply(m1, summary)
 
-dvnames <- c("Text-based\nSophistication","Factual\nKnowledge","Disease\nInformation")
+dvnames <- c("Discursive\nSophistication","Factual\nKnowledge","Disease\nInformation")
 ivnames <- c("Intercept", "Gender\n(Female)", "Education\n(College)", "Income"
              , "log(Age)", "Race\n(Black)", "Church\nAttendance")
 
@@ -175,7 +175,7 @@ m2[[2]] <- lm(know_dis ~ know_pol + female + educ + faminc + log(age) + black + 
 lapply(m2, summary)
 
 res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=range(data$polknow_text_mean)))
-                        , Variable="Text-based Sophistication")
+                        , Variable="Discursive Sophistication")
              , data.frame(sim(m2[[2]], iv=data.frame(know_pol=range(data$know_pol)))
                           , Variable="Factual Knowledge"))
 
@@ -186,7 +186,7 @@ ggplot(res, aes(y=Variable, x=mean, xmin=cilo,xmax=cihi)) +
 
 
 res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10)))
-                        ,value=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10),Variable="Text-based Sophistication")
+                        ,value=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10),Variable="Discursive Sophistication")
              , data.frame(sim(m2[[2]], iv=data.frame(know_pol=seq(0,1,length=10)))
                           ,value=seq(0,1,length=10),Variable="Factual Knowledge"))
 #res$model <- rep(c(1,2), each=nrow(res)/2)
@@ -194,14 +194,14 @@ res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=seq(min(dat
 
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
   #geom_errorbar(alpha=.5, width=0) + 
-  geom_ribbon(alpha=0.8, lwd=.1, fill="lightblue") + geom_line() + 
+  geom_ribbon(alpha=0.5, lwd=.1, fill="blue") + geom_line() + 
   facet_grid(~Variable) +
   ylab("Expected Disease\nInformation Retrieval") + xlab("Value of independent variable")
 ggsave("../fig/yg_disease.pdf",width=4,height=2)
 
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
   #geom_errorbar(alpha=.5, width=0) + 
-  geom_ribbon(alpha=0.8, lwd=.1, fill="lightblue") + geom_line() + 
+  geom_ribbon(alpha=0.5, lwd=.1, fill="blue") + geom_line() + 
   facet_grid(~Variable) + theme(panel.border = element_rect(fill="white")) +
   ylab("Expected Disease\nInformation Retrieval") + xlab("Value of independent variable")
 ggsave("../fig/yg_disease_empty.pdf",width=4,height=2)
@@ -219,7 +219,7 @@ ggsave("../fig/yg_disease_empty.pdf",width=4,height=2)
 ##### Generate tables for appendix
 
 ## create labels
-dvlabs <- c("Text-based","Factual","Disease")
+dvlabs <- c("Discursive","Factual","Disease")
 ivlabs <- c("Sex (Female)","Education (College)","Income","log(Age)","Race (Black)"
             ,"Church Attendance")
 
@@ -244,7 +244,7 @@ stargazer(m1, type="text", keep.stat = c("n","rsq")
 
 ## Predicting disease information retrieval
 stargazer(m2, type="text", keep.stat = c("n","rsq")
-          , covariate.labels = c("Text-based Sophistication", "Factual Knowledge", ivnames[-1])
+          , covariate.labels = c("Discursive Sophistication", "Factual Knowledge", ivnames[-1])
           , dep.var.labels = "Disease Information Retrieval"
           #, dep.var.caption = ""
           , align = TRUE, label="tab:yg_disease"

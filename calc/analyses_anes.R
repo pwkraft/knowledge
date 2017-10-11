@@ -48,14 +48,14 @@ colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 pdf("../fig/corplot_pres.pdf",width=3.3, height=3.3)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Text-based\nSophistication","Factual\nKnowledge"
+        , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge"
                            ,"Interviewer\nEvaluation (Pre)")) + plot_default
 dev.off()
 
 pdf("../fig/corplot_empty.pdf",width=3.3, height=3.3)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Text-based\nSophistication","Factual\nKnowledge"
-                           ,"Interviewer\nEvaluation (Pre)")) + 
+        , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge"
+                           ,"Interviewer\nEvaluation (Pre)")) +
   theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white"))
 dev.off()
 
@@ -69,7 +69,7 @@ dev.off()
 
 
 ## label definition
-dvnames <- c("Text-based\nSophistication","Factual\nKnowledge")
+dvnames <- c("Discursive\nSophistication","Factual\nKnowledge")
 ivnames <- c("Intercept", "Gender\n(Female)", "Media\nExposure", "Political\nDiscussions", "Education\n(College)"
              , "Income", "log(Age)", "Race\n(Black)", "Church\nAttendance", "Survey Mode\n(Online)")
 
@@ -94,18 +94,18 @@ res$dvlab <- factor(res$dv, labels = c("Internal Efficacy","External Efficacy"
                                        ,"Non-conv. Participation","Turnout"))
 res$ivlab <- factor(res$iv, labels = dvnames)
 
-ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + 
+ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
   geom_point() + geom_errorbarh(height=0) + facet_wrap(~dvlab, scale="free_x") +
-  geom_vline(xintercept = 0, color="grey") + 
+  geom_vline(xintercept = 0, color="grey") +
   xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
   scale_y_discrete(limits = rev(levels(res$ivlab)))
 ggsave("../fig/knoweff_pres.pdf", width=4, height=3)
 
-ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + 
+ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
   geom_point() + geom_errorbarh(height=0) + facet_wrap(~dvlab, scale="free_x") +
   xlab("Marginal Effect") + ylab("Independent Variable") +
   theme_classic(base_size = 9) + theme(panel.border = element_rect(fill="white")) +
-  geom_vline(xintercept = 0, color="grey") + 
+  geom_vline(xintercept = 0, color="grey") +
   scale_y_discrete(limits = rev(levels(res$ivlab)))
 ggsave("../fig/knoweff_empty.pdf", width=4, height=3)
 
@@ -120,26 +120,26 @@ hetreg_summary$policy <- factor(hetreg_summary$policy
                                 , labels = c("Ideology","Government\nSpending","Defense\nSpending"
                                              ,"Insurance\nPolicy","Job\nGuarantee"))
 hetreg_summary$measure <- factor(hetreg_summary$measure, levels = rev(levels(hetreg_summary$measure))
-                                 , labels = c("Factual\nKnowledge", "Text-based\nSophistication"))
+                                 , labels = c("Factual\nKnowledge", "Discursive\nSophistication"))
 hetreg_summary$target <- factor(hetreg_summary$target
                                 , labels = c("Mitt\nRomney","Barack\nObama"
                                              ,"Republican\nParty","Democratic\nParty"))
 
-ggplot(hetreg_summary, aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) + 
+ggplot(hetreg_summary, aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) +
   geom_point() + geom_errorbarh(height=0) + facet_grid(policy~target) +
-  geom_vline(xintercept = 0, color="grey") + 
+  geom_vline(xintercept = 0, color="grey") +
   xlab("Error Variance Reduction") + ylab("Independent Variable (Max - Min)") + plot_default
 ggsave("../fig/hetreg.pdf",width = 6, height = 4)
 
 hetreg_summary %>% filter(policy=="Ideology") %>%
-  ggplot(aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) + 
+  ggplot(aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) +
   geom_point() + geom_errorbarh(height=0) + facet_wrap(~target, ncol=2) +
-  geom_vline(xintercept = 0, color="grey") + 
+  geom_vline(xintercept = 0, color="grey") +
   xlab("Error Variance Reduction (Max - Min)") + ylab("Independent Variable") + plot_default
 ggsave("../fig/hetreg_pres.pdf",width = 4, height = 3)
 
 hetreg_summary %>% filter(policy=="Ideology") %>%
-  ggplot(aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) + plot_default + 
+  ggplot(aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) + plot_default +
   geom_point() + geom_errorbarh(height=0) + facet_wrap(~target, ncol=2) +
   geom_vline(xintercept = 0, color="grey") + theme(panel.border = element_rect(fill="white")) +
   xlab("Error Variance Reduction (Max - Min)") + ylab("Independent Variable")
@@ -159,9 +159,9 @@ res <- rbind(sim(m5a, iv=data.frame(polknow_text_mean=range(data$polknow_text_me
              , sim(m5b, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
 res$ivlab <- factor(res$iv, labels = dvnames)
 
-ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + 
-  geom_point() + geom_errorbarh(height=0) + 
-  geom_vline(xintercept = 0, color="grey") + 
+ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
+  geom_point() + geom_errorbarh(height=0) +
+  geom_vline(xintercept = 0, color="grey") +
   xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
   scale_y_discrete(limits = rev(levels(res$ivlab)))
 ggsave("../fig/prepost.pdf",width = 3, height = 2)
@@ -169,21 +169,34 @@ ggsave("../fig/prepost.pdf",width = 3, height = 2)
 
 
 res <- rbind(data.frame(sim(m5a, iv=data.frame(polknow_text_mean=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10)))
-                        , value=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10),Variable="Text-based Sophistication")
+                        , value=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10),Variable="Discursive Sophistication")
              , data.frame(sim(m5b, iv=data.frame(polknow_factual=seq(0, 1,length=10)))
                           , value=seq(0, 1,length=10),Variable="Factual Knowledge"))
 res$ivlab <- factor(res$iv, labels = dvnames)
 
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
-  #geom_errorbar(alpha=.5, width=0) + 
-  geom_ribbon(alpha=0.4, lwd=.1, fill="lightblue") + geom_line() + 
+  #geom_errorbar(alpha=.5, width=0) +
+  geom_ribbon(alpha=0.5, lwd=.1, fill="blue") + geom_line() +
   facet_grid(~Variable, scales="free_x") +
   ylab("Expected Probability\nto Keep Vote Choice") + xlab("Value of independent variable")
 ggsave("../fig/prepost_exp.pdf",width=4,height=2)
 
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
-  #geom_errorbar(alpha=.5, width=0) + 
-  geom_ribbon(alpha=0.4, lwd=.1, fill="lightblue") + geom_line() + 
-  facet_grid(~Variable, scales="free_x") + xlab("Value of independent variable") + 
+  #geom_errorbar(alpha=.5, width=0) +
+  geom_ribbon(alpha=0.5, lwd=.1, fill="blue") + geom_line() +
+  facet_grid(~Variable, scales="free_x") + xlab("Value of independent variable") +
   ylab("Expected Probability\nto Keep Vote Choice") + theme(panel.border = element_rect(fill="white"))
 ggsave("../fig/prepost_empty.pdf",width=4,height=2)
+
+
+###################
+### Additional information: STM summaries
+###################
+
+pdf("../fig/stm_labels.pdf")
+plot(stm_fit, "labels", topics=c(16,14,10,8), main="Sample Topics (2012 ANES)")
+dev.off()
+
+pdf("../fig/stm_prop.pdf")
+plot(stm_fit)
+dev.off()
