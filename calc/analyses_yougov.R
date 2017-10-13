@@ -67,9 +67,7 @@ dev.off()
 
 pdf("../fig/yg_corplot_empty.pdf",width=2.5, height=2.5)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), axisLabels="none"
-        , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge","Disease\nInformatilon"
-                           ,"Majorities\nin Congress", "Interviewer\nEvaluation (Pre)"
-                           , "Interviewer\nEvaluation (Post)")) +
+        , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge","Disease\nInformatilon")) +
   theme_classic(base_size=8) + theme(panel.border = element_rect(fill="white"))
 dev.off()
 
@@ -196,14 +194,14 @@ ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
   #geom_errorbar(alpha=.5, width=0) + 
   geom_ribbon(alpha=0.5, lwd=.1, fill="blue") + geom_line() + 
   facet_grid(~Variable) +
-  ylab("Expected Disease\nInformation Retrieval") + xlab("Value of independent variable")
+  ylab("Information Retrieval") + xlab("Value of independent variable")
 ggsave("../fig/yg_disease.pdf",width=4,height=2)
 
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
   #geom_errorbar(alpha=.5, width=0) + 
   geom_ribbon(alpha=0.5, lwd=.1, fill="blue") + geom_line() + 
   facet_grid(~Variable) + theme(panel.border = element_rect(fill="white")) +
-  ylab("Expected Disease\nInformation Retrieval") + xlab("Value of independent variable")
+  ylab("Information Retrieval") + xlab("Value of independent variable")
 ggsave("../fig/yg_disease_empty.pdf",width=4,height=2)
 
 # ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + 

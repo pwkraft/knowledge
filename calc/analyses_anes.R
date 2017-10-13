@@ -90,8 +90,9 @@ m4b[[4]] <- glm(vote ~ polknow_factual + female + educ + faminc + log(age) + bla
 
 res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
              , sim(m4b, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
-res$dvlab <- factor(res$dv, labels = c("Internal Efficacy","External Efficacy"
-                                       ,"Non-conv. Participation","Turnout"))
+res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
+                    , labels = c("Turnout","Non-conv. Participation"
+                                 , "Internal Efficacy","External Efficacy"))
 res$ivlab <- factor(res$iv, labels = dvnames)
 
 ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
