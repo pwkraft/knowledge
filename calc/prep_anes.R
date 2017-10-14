@@ -471,7 +471,7 @@ for(doc in 1:length(out$documents)){
   know$ntopics[doc] <- length(unique(term_topic[out$documents[[doc]][1,]]))
   know$entropy[doc] <- log(sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,]))
 }
-know$ntopics <- know$ntopic/max(know$ntopics)
+know$ntopics <- know$ntopics/max(know$ntopics)
 know$entropy <- (know$entropy-min(know$entropy))/(max(know$entropy)-min(know$entropy))
 data <- cbind(data, know)
 
