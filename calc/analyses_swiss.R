@@ -39,7 +39,7 @@ plot_default <- theme_classic(base_size=8) + theme(panel.border = element_rect(f
 # correlation matrices: compare with common measures
 ########
 
-datcor <- opend_german[,c("loj", "polknow_text_mean", "polknow_text","topic_diversity", "lwc", "opinionation")]
+datcor <- opend_german[,c("loj", "polknow_text_mean")]
 #datcor <- opend_german[,c("loj", "polknow_text_mean")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
@@ -53,6 +53,31 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), 
 
 
 ggplot(opend_german, aes(x=loj, y=polknow_text_mean)) + geom_point(alpha=.1) + geom_smooth(method="lm") + plot_default
+
+
+datcor <- opend_german[,c("ntopics","entropy","opinionation")]
+colnames(datcor) <- paste0("v",1:ncol(datcor))
+
+pdf("../fig/swiss_corplot_german_components.pdf",width=3.3, height=3.3)
+ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
+        , columnLabels = c("Considerations","Word Choice","Opinionation")) + plot_default
+dev.off()
+
+datcor <- opend_french[,c("ntopics","entropy","opinionation")]
+colnames(datcor) <- paste0("v",1:ncol(datcor))
+
+pdf("../fig/swiss_corplot_french_components.pdf",width=3.3, height=3.3)
+ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
+        , columnLabels = c("Considerations","Word Choice","Opinionation")) + plot_default
+dev.off()
+
+datcor <- opend_italian[,c("ntopics","entropy","opinionation")]
+colnames(datcor) <- paste0("v",1:ncol(datcor))
+
+pdf("../fig/swiss_corplot_italian_components.pdf",width=3.3, height=3.3)
+ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
+        , columnLabels = c("Considerations","Word Choice","Opinionation")) + plot_default
+dev.off()
 
 
 ### ridge plots

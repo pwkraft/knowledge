@@ -57,9 +57,11 @@ p2 <- ggplot(data, aes(lwc, ..density..)) + geom_histogram(binwidth = 0.05, fill
   ylab("Density") + xlab("log(Word Count) / max[log(Word Count)]")
 
 
-pdf("../fig/wc.pdf",width=5, height=2)
-grid.arrange(p1, p2, ncol=2)
-dev.off()
+# pdf("../fig/wc.pdf",width=5, height=2)
+# grid.arrange(p1, p2, ncol=2)
+# dev.off()
+
+ggsave("../fig/wc.pdf", p1, width = 3, height = 2)
 
 ## histogram/density of topic_diversity
 diversity_mean = mean(data$topic_diversity)

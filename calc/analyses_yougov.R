@@ -72,6 +72,15 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), 
 dev.off()
 
 
+datcor <- data[,c("ntopics","entropy","ditem")]
+colnames(datcor) <- paste0("v",1:ncol(datcor))
+
+pdf("../fig/yg_corplot_components.pdf",width=3.3, height=3.3)
+ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
+        , columnLabels = c("Considerations","Word Choice","Opinionation")) + plot_default
+dev.off()
+
+
 ########
 # histograms comparing men and women
 ########
@@ -212,6 +221,14 @@ ggsave("../fig/yg_disease_empty.pdf",width=4,height=2)
 #   ylab("Expected sophistication") + xlab("Value of independent variable")
 # ggsave("../fig/yg_disease_empty.pdf",width=3,height=3)
 
+
+###################
+### Additional information: STM summaries
+###################
+
+pdf("../fig/yg_stm_prop.pdf")
+plot(stm_fit)
+dev.off()
 
 
 ##### Generate tables for appendix

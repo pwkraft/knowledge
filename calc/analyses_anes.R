@@ -64,7 +64,7 @@ colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 pdf("../fig/corplot_components.pdf",width=3.3, height=3.3)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Elaboration","Distinctiveness","Opinionation")) + plot_default
+        , columnLabels = c("Considerations","Word Choice","Opinionation")) + plot_default
 dev.off()
 
 
