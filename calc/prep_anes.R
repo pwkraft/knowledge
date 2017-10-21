@@ -352,8 +352,8 @@ stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
                 , K=20, init.type = "Spectral")
 
 ## slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
-# stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-#                , K=0, init.type = "Spectral")
+stm_fit_full <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+                    , K=0, init.type = "Spectral")
 
 
 ### create new sophistication measures
@@ -396,14 +396,14 @@ nwords <- ncol(pw_t)
 ntopics <- ncol(pt_x)
 pt_wx <- array(NA, c(nobs, nwords, ntopics))
 
-pb <- txtProgressBar(min = 1, max = nwords, style = 3)
-for(w in 1:nwords){
-  for(t in 1:ntopics){
-    pt_wx[,w,t] <- pw_t[t,w] * pt_x[,t] / pw_x[,w]
-  }
-  setTxtProgressBar(pb, w)
-}
-close(pb)
+# pb <- txtProgressBar(min = 1, max = nwords, style = 3)
+# for(w in 1:nwords){
+#   for(t in 1:ntopics){
+#     pt_wx[,w,t] <- pw_t[t,w] * pt_x[,t] / pw_x[,w]
+#   }
+#   setTxtProgressBar(pb, w)
+# }
+# close(pb)
 
 ## compute shannon entropy
 shannon <- function(x, reversed = F){
@@ -489,6 +489,47 @@ data$polknow_text_mean <- (data$ntopics + data$entropy + data$ditem)/3
 ###################
 ### End NEW MEASURE
 ###################
+
+
+###################
+### Replicate measure with larger number of topics
+###################
+
+### create new sophistication measures
+
+## which topic has highest likelihood for each word
+term_topic <- apply(stm_fit_full$beta$logbeta[[1]], 2, which.max)
+
+## shannon entropy of each term as a measure for its distinctiveness -> vague term or clear topic
+pseudop <- exp(stm_fit_full$beta$logbeta[[1]])
+term_entropy <- apply(pseudop, 2, max)
+
+## combine both measures with open-ended responses
+know <- data.frame(ntopics = rep(NA, length(out$documents))
+                   , entropy = rep(NA, length(out$documents)))
+for(doc in 1:length(out$documents)){
+  know$ntopics[doc] <- length(unique(term_topic[out$documents[[doc]][1,]]))
+  know$entropy[doc] <- log(sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,]))
+}
+know$ntopics <- know$ntopics/max(know$ntopics)
+know$entropy <- (know$entropy-min(know$entropy))/(max(know$entropy)-min(know$entropy))
+data$polknow_text_mean_full <- (know$ntopics + know$entropy + data$ditem)/3
+
+
+### Compare 20 topic sophistication to 77 topic sophistication
+
+ggplot(data, aes(x=polknow_text_mean_full, y=polknow_text_mean)) +
+  geom_point(alpha=.05) + geom_smooth(method="lm") +
+  ylab("Discursive Sophistication\n(20 Topics)") + xlab("Discursive Sophistication\n(77 Topics)") +
+  annotate("text", x=0.1, y=.9, size=2
+           , label = paste0("r = ",round(cor(data$polknow_text_mean, data$polknow_text_mean_full), 2))) +
+  theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
+ggsave("fig/ktopic.pdf", width=3, height=3)
+
+
+#################
+### End replication for larger number of topics 
+#################
 
 
 ### estimate hetreg models (in prep because it takes a long time)

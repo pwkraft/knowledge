@@ -181,6 +181,30 @@ ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
 ggsave("../fig/knoweff_lwc.pdf", width=4, height=3)
 
 
+
+### Joint model controlling for extraversion and being reserved!
+
+m4c <- NULL
+m4c[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + extraversion + reserved, data = data)
+m4c[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + extraversion + reserved, data = data)
+m4c[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + extraversion + reserved, data = data)
+m4c[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + extraversion + reserved, data = data, family=binomial("logit"))
+
+res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
+             , sim(m4c, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
+res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
+                    , labels = c("Turnout","Non-conv. Participation"
+                                 , "Internal Efficacy","External Efficacy"))
+res$ivlab <- factor(res$iv, labels = dvnames)
+
+ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
+  geom_point() + geom_errorbarh(height=0) + facet_wrap(~dvlab, scale="free_x") +
+  geom_vline(xintercept = 0, color="grey") +
+  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
+  scale_y_discrete(limits = rev(levels(res$ivlab)))
+ggsave("../fig/knoweff_personality.pdf", width=4, height=3)
+
+
 ########
 # validation: party/candidate placement precision
 ########
