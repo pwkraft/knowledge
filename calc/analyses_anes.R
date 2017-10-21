@@ -78,7 +78,7 @@ ivnames <- c("Intercept", "Gender\n(Female)", "Media\nExposure", "Political\nDis
 # validation: effect on political engagement
 ########
 
-m4a <- m4b <- NULL
+m4a <- m4b <- m4c <- NULL
 m4a[[1]] <- lm(effic_int ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data)
 m4a[[2]] <- lm(effic_ext ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data)
 m4a[[3]] <- lm(part ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data)
@@ -87,6 +87,7 @@ m4b[[1]] <- lm(effic_int ~ polknow_factual + female + educ + faminc + log(age) +
 m4b[[2]] <- lm(effic_ext ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data)
 m4b[[3]] <- lm(part ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data)
 m4b[[4]] <- glm(vote ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data, family=binomial("logit"))
+
 
 res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
              , sim(m4b, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
@@ -110,6 +111,74 @@ ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
   scale_y_discrete(limits = rev(levels(res$ivlab)))
 ggsave("../fig/knoweff_empty.pdf", width=4, height=3)
 
+
+### Joint model controlling for both measures
+
+m4c <- NULL
+m4c[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data)
+m4c[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data)
+m4c[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data)
+m4c[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data, family=binomial("logit"))
+
+res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
+             , sim(m4c, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
+res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
+                    , labels = c("Turnout","Non-conv. Participation"
+                                 , "Internal Efficacy","External Efficacy"))
+res$ivlab <- factor(res$iv, labels = dvnames)
+
+ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
+  geom_point() + geom_errorbarh(height=0) + facet_wrap(~dvlab, scale="free_x") +
+  geom_vline(xintercept = 0, color="grey") +
+  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
+  scale_y_discrete(limits = rev(levels(res$ivlab)))
+ggsave("../fig/knoweff_joint.pdf", width=4, height=3)
+
+
+### Joint model controlling for both measures + wordsum index!
+
+m4c <- NULL
+m4c[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data)
+m4c[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data)
+m4c[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data)
+m4c[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data, family=binomial("logit"))
+
+res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
+             , sim(m4c, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
+res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
+                    , labels = c("Turnout","Non-conv. Participation"
+                                 , "Internal Efficacy","External Efficacy"))
+res$ivlab <- factor(res$iv, labels = dvnames)
+
+ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
+  geom_point() + geom_errorbarh(height=0) + facet_wrap(~dvlab, scale="free_x") +
+  geom_vline(xintercept = 0, color="grey") +
+  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
+  scale_y_discrete(limits = rev(levels(res$ivlab)))
+ggsave("../fig/knoweff_wordsum.pdf", width=4, height=3)
+
+
+### Joint model controlling for both measures + wordsum index!
+
+m4c <- NULL
+m4c[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data)
+m4c[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data)
+m4c[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data)
+m4c[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data, family=binomial("logit"))
+
+res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
+             , sim(m4c, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
+res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
+                    , labels = c("Turnout","Non-conv. Participation"
+                                 , "Internal Efficacy","External Efficacy"))
+res$ivlab <- factor(res$iv, labels = dvnames)
+
+ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
+  geom_point() + geom_errorbarh(height=0) + facet_wrap(~dvlab, scale="free_x") +
+  geom_vline(xintercept = 0, color="grey") +
+  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
+  scale_y_discrete(limits = rev(levels(res$ivlab)))
+ggsave("../fig/knoweff_lwc.pdf", width=4, height=3)
 
 
 ########

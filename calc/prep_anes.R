@@ -234,6 +234,9 @@ anes2012$redist <- (Recode(raw2012$spsrvpr_ssself, "lo:0 = NA") - Recode(raw2012
 ## raising personal inc tax for over 250K inc to reduce deficit
 anes2012$tax <- ((-Recode(raw2012$milln_milltax_x, "lo:0 = NA") + 7)/3 + Recode(raw2012$budget_rdef250k, "lo:0 = NA; 1=2; 2=0; 3=1"))/4
 
+## Personality characteristics: Extraversion
+anes2012$extraversion <- Recode(raw2012$tipi_extra, "lo:0 = NA")
+anes2012$reserved <- Recode(raw2012$tipi_resv, "lo:0 = NA")
 
 ### 2012 open-ended responses
 ### MORE WORK ON PRE-PROCESSING NEEDED, check all steps, spell checking, stopword removal etc.

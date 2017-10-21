@@ -123,19 +123,18 @@ ggsave("../fig/yg_meandiff_empty.pdf", width=5, height=2)
 ########
 # determinants of political knowledge
 ########
-# NOTE: control for wordsum?
 
 ### Q: ADD POLITICAL INTEREST AS IV???
 
 m1 <- NULL
-m1[[1]] <- lm(polknow_text_mean ~ female + educ + faminc + log(age) + black + relig, data = data)
-m1[[2]] <- lm(know_pol ~ female + educ + faminc + log(age) + black + relig, data = data)
-m1[[3]] <- lm(know_dis ~ female + educ + faminc + log(age) + black + relig, data = data)
+m1[[1]] <- lm(polknow_text_mean ~ female + educ + faminc + log(age) + relig + black, data = data)
+m1[[2]] <- lm(know_pol ~ female + educ + faminc + log(age) + relig + black, data = data)
+#m1[[3]] <- lm(know_dis ~ female + educ + faminc + log(age) + relig  + black, data = data)
 lapply(m1, summary)
 
 dvnames <- c("Discursive\nSophistication","Factual\nKnowledge","Disease\nInformation")
-ivnames <- c("Intercept", "Gender\n(Female)", "Education\n(College)", "Income"
-             , "log(Age)", "Race\n(Black)", "Church\nAttendance")
+ivnames <- c("Intercept", "Female", "College", "Income"
+             , "log(Age)", "Church", "Black")
 
 # prepare dataframe for plotting (sloppy code)
 dfplot <- data.frame()
@@ -157,17 +156,17 @@ dfplot <- dfplot[dfplot$ivnames!="Intercept",]
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
-  geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=3) +
+  geom_point(size=.75) + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=2) +
   theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
-ggsave("../fig/yg_determinants.pdf",width=5,height=2.5)
-ggsave("../fig/yg_determinants_pres.pdf",width=4.75,height=2.5)
+ggsave("../fig/yg_determinants.pdf",width=3,height=2.5)
+ggsave("../fig/yg_determinants_pres.pdf",width=3,height=2.5)
 
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) +
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
-  geom_point() + geom_errorbarh(height = 0) + facet_wrap(~dv, scales="free_x",ncol=3) +
+  geom_point(size=.75) + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=2) +
   theme_classic(base_size = 9) + theme(panel.border = element_rect(fill="white"))
-ggsave("../fig/yg_determinants_empty.pdf",width=4.75,height=2.5)
+ggsave("../fig/yg_determinants_empty.pdf",width=3,height=2.5)
 
 
 ########
@@ -178,7 +177,6 @@ ggsave("../fig/yg_determinants_empty.pdf",width=4.75,height=2.5)
 m2 <- NULL
 m2[[1]] <- lm(know_dis ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig, data = data)
 m2[[2]] <- lm(know_dis ~ know_pol + female + educ + faminc + log(age) + black + relig, data = data)
-#m2[[3]] <- lm(know_dis ~ polknow_text_mean + know_pol + female + educ + faminc + log(age) + black + relig, data = data)
 lapply(m2, summary)
 
 res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=range(data$polknow_text_mean)))
@@ -220,6 +218,27 @@ ggsave("../fig/yg_disease_empty.pdf",width=4,height=2)
 #   facet_grid(dvlab~Variable, scale="free_y") +
 #   ylab("Expected sophistication") + xlab("Value of independent variable")
 # ggsave("../fig/yg_disease_empty.pdf",width=3,height=3)
+
+
+### Joint model controlling for both measures
+
+m2full <- lm(know_dis ~ polknow_text_mean + know_pol + female + educ + faminc + log(age) + black + relig, data = data)
+
+res <- rbind(data.frame(sim(m2full, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean)))
+                        , Variable="Discursive Sophistication")
+             , data.frame(sim(m2full, iv=data.frame(know_pol=range(data$know_pol)))
+                          , Variable="Factual Knowledge"))
+
+res <- rbind(data.frame(sim(m2full, iv=data.frame(polknow_text_mean=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10)))
+                        ,value=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10),Variable="Discursive Sophistication")
+             , data.frame(sim(m2full, iv=data.frame(know_pol=seq(0,1,length=10)))
+                          ,value=seq(0,1,length=10),Variable="Factual Knowledge"))
+ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
+  #geom_errorbar(alpha=.5, width=0) + 
+  geom_ribbon(alpha=0.5, lwd=.1, fill="blue") + geom_line() + 
+  facet_grid(~Variable) +
+  ylab("Information Retrieval") + xlab("Value of independent variable")
+ggsave("../fig/yg_disease_joint.pdf",width=4,height=2)
 
 
 ###################

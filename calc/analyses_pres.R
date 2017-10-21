@@ -17,6 +17,7 @@ library(GGally)
 library(dplyr)
 library(pmisc)
 library(stargazer)
+library(sampleSelection)
 
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
@@ -116,6 +117,7 @@ dvnames <- c("Discursive\nSophistication","Factual\nKnowledge", "Interviewer\nEv
 ivnames <- c("Intercept", "Female", "Media", "Discussions", "College"
              , "Income", "log(Age)", "Church", "Black", "Online")
 
+
 # prepare dataframe for plotting (sloppy code)
 dfplot <- data.frame()
 for(i in 1:length(m1)){
@@ -164,6 +166,71 @@ ggplot(dfplot, aes(y=ivnames, x=Estimate
   plot_default + xlim(-0.1,0.32)
 ggsave("../fig/determinants_0.pdf",width=4.75,height=3)
 
+
+########
+# robustness checks: determinants of willingness to respond?
+########
+
+## check determinants of oe response >0
+m2 <- glm(as.numeric(wc>0) ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = anes2012, family=binomial("logit"))
+summary(m2)
+
+## gender differences in willingness to respond & length of response
+mean(data$wc)
+t.test(wc~female, data=data)
+t.test(as.numeric(wc>0)~female, data=anes2012)
+
+## prep data for heckit model
+heck_tmp <- data.frame(caseid=data$caseid, polknow_text_mean=data$polknow_text_mean)
+heck_tmp <- merge(anes2012, heck_tmp, all=TRUE)
+heck_tmp$select <- as.numeric(!is.na(heck_tmp$polknow_text_mean))
+
+table(heck_tmp$select)
+table(is.na(heck_tmp$polknow_text_mean), heck_tmp$wc>0)
+
+## estimate heckit model (does this specification make sense theoretically?)
+m3 <- heckit(select ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode + wordsum
+             , polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode
+             , data = heck_tmp)
+summary(m3)
+
+m3 <- heckit(select ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode + wordsum
+             , polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode
+             , data = heck_tmp)
+summary(m3)
+
+
+## heckit model for other outcomes
+
+m3 <- heckit(select ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode + wordsum
+             , effic_int ~ polknow_text_mean + polknow_factual + female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode
+             , data = heck_tmp)
+summary(m3)
+
+
+########
+# check validity of knowledge measure similar to Prior
+########
+
+m2 <- lm(redist ~ tax * polknow_text + tax * polknow_factual + female + age + black + relig + educ + faminc + ideol_ct + pid_cont, data=data)
+summary(m2)
+
+## prepare dataframe for plotting (sloppy code)
+dfplot <- summary(m2)$coefficients[c(2:4,13,14),1:2]
+tmp <- rownames(dfplot); rownames(dfplot) <- NULL; dfplot <- data.frame(dfplot)
+dfplot$iv <- gsub(":","_", tmp)
+dfplot$ivname <- factor(dfplot$iv
+                        , levels = c("tax_polknow_factual", "tax_polknow_text", "polknow_factual", "polknow_text", "tax")
+                        , labels = c("Tax X Factual Know.","Tax X Discursive Soph."
+                                     , "Factual Knowledge", "Discursive Sophistication"
+                                     , "Support Tax Increase"))
+
+ggplot(dfplot, aes(y=ivname, x=Estimate
+                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
+  geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
+  geom_point(size=.75) + geom_errorbarh(height = 0) + 
+  plot_default
+ggsave("../fig/redistribution.pdf",height=2.5,width=4)
 
 
 ########
