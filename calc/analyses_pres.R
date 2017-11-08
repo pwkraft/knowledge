@@ -101,6 +101,7 @@ ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot
 ggsave("../fig/meandiff_pres_1.pdf", width=4.75, height=2.5)
 
 
+
 ########
 # determinants of political knowledge
 ########

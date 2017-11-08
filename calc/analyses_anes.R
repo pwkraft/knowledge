@@ -67,6 +67,12 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), 
         , columnLabels = c("Considerations","Word Choice","Opinionation")) + plot_default
 dev.off()
 
+pdf("../fig/corplot_components0.pdf",width=3.3, height=3.3)
+ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
+        , columnLabels = c("Considerations","Word Choice","Opinionation")) + 
+  theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white"))
+dev.off()
+
 
 ## label definition
 dvnames <- c("Discursive\nSophistication","Factual\nKnowledge")

@@ -327,7 +327,7 @@ table(anes2012$wc==0)
 ### prepare data
 
 ## combine regular survey and open-ended data, remove spanish and empty responses
-meta <- c("age", "educ_cont", "pid_cont", "educ_pid")
+meta <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
 data <- anes2012 %>% mutate(resp = apply(anes2012spell[,-1],1,paste,collapse=' ')) %>%
   filter(spanish == 0 & wc != 0)
 
@@ -350,6 +350,27 @@ data <- data[-out$docs.removed,]
 ## quick fit (20 topics)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
                 , K=20, init.type = "Spectral")
+
+########
+# topic differences b/w men and women (this should go in the main analysis part!)
+########
+
+prep <- estimateEffect(~ age + educ_cont + pid_cont + educ_pid + female
+                       , stm_fit, meta = out$meta, uncertainty = "Global")
+
+summary(stm_fit)
+topics <- c("1: Compromise","2: Romney","3: Morality/Religion","4: Obama","5: Taxes"
+            ,"6: Inequality","7: Social Security","8: Middle class","9: Immigration","10: Government Debt"
+            ,"11: Abortion","12: Economic Policy","13: Foreign Policy","14: Evaluation/Sentiment","15: Values"
+            ,"16: Presidential Performance","17: Patriotism","18: Health Care","19: Miscellaneous","20: Parties")
+
+pdf("fig/stm_gender.pdf")
+plot.estimateEffect(prep, covariate = "female", topics = 1:20, model = stm_fit
+                    , xlim = c(-.1,.05), method = "difference", cov.value1 = 1, cov.value2 = 0
+                    , main = "Gender Differences in Topic Proportions"
+                    , labeltype = "custom", custom.labels = topics)
+dev.off()
+
 
 ## slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
 stm_fit_full <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
