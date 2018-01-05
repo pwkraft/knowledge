@@ -38,6 +38,22 @@ plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(f
 
 
 
+## compare response behavior by gender
+ggplot(anes2012, aes(wc, fill=factor(female))) + geom_bar(stat=mean)
+
+ggplot(anes2012, aes(factor(female), y=as.numeric(wc!=0))) + 
+  stat_summary_bin(fun.y = "mean", geom="bar")
+
+ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + geom_point(alpha=.1, size=.1) + 
+  stat_summary(fun.data = "mean_cl_boot", col="red")
+
+ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + 
+  stat_summary(fun.data = "mean_cl_boot", col="red")
+
+table(anes2012$spanish==0)
+table(anes2012$wc==0)
+
+
 ########
 # correlation matrices: compare with common measures
 ########
@@ -298,4 +314,25 @@ dev.off()
 
 pdf("../fig/stm_prop.pdf")
 plot(stm_fit)
+dev.off()
+
+
+########
+# topic differences b/w men and women
+########
+
+prep <- estimateEffect(~ age + educ_cont + pid_cont + educ_pid + female
+                       , stm_fit, meta = out$meta, uncertainty = "Global")
+
+summary(stm_fit)
+topics <- c("1: Compromise","2: Romney","3: Morality/Religion","4: Obama","5: Taxes"
+            ,"6: Inequality","7: Social Security","8: Middle class","9: Immigration","10: Government Debt"
+            ,"11: Abortion","12: Economic Policy","13: Foreign Policy","14: Evaluation/Sentiment","15: Values"
+            ,"16: Presidential Performance","17: Patriotism","18: Health Care","19: Miscellaneous","20: Parties")
+
+pdf("fig/stm_gender.pdf")
+plot.estimateEffect(prep, covariate = "female", topics = 1:20, model = stm_fit
+                    , xlim = c(-.1,.05), method = "difference", cov.value1 = 1, cov.value2 = 0
+                    , main = "Gender Differences in Topic Proportions"
+                    , labeltype = "custom", custom.labels = topics)
 dev.off()

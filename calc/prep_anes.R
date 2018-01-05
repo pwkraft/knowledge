@@ -13,6 +13,7 @@
 rm(list = ls())
 library(car)
 library(dplyr)
+library(SnowballC)
 library(quanteda)
 library(stm)
 library(readstata13)
@@ -247,7 +248,7 @@ anes2012opend <- read.csv(paste0(datasrc,"anes2012TS_openends.csv"), as.is = T) 
          , ptylik_lwhatdp, ptylik_dwhatdp, ptylik_lwhatrp, ptylik_dwhatrp)
 
 ## minor pre-processing
-anes2012spell <- apply(opend, 2, function(x){
+anes2012spell <- apply(anes2012opend[,-1], 2, function(x){
   x <- char_tolower(x)
   x <- gsub("(^\\s+|\\s+$)","", x)
   x <- gsub("//"," ", x , fixed = T)
@@ -318,25 +319,9 @@ anes2012$nitem <- apply(anes2012spell[,-1] != "", 1, sum, na.rm = T)
 ## diversity in item response
 anes2012$ditem <- apply(anes2012spell[,-1], 1, function(x){
   iwc <- unlist(lapply(strsplit(x,"\\s+"), length))
-  #1 - ineq(iwc,type="Gini")
   shannon(iwc/sum(iwc))
 })
 
-
-## compare response behavior by gender
-ggplot(anes2012, aes(wc, fill=factor(female))) + geom_bar(stat=mean)
-
-ggplot(anes2012, aes(factor(female), y=as.numeric(wc!=0))) + 
-  stat_summary_bin(fun.y = "mean", geom="bar")
-
-ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + geom_point(alpha=.1, size=.1) + 
-  stat_summary(fun.data = "mean_cl_boot", col="red")
-
-ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + 
-  stat_summary(fun.data = "mean_cl_boot", col="red")
-
-table(anes2012$spanish==0)
-table(anes2012$wc==0)
 
 ### fit structural topic model
 
@@ -356,63 +341,24 @@ data <- data[apply(!is.na(data[,meta]),1,prod)==1,]
 
 ## process for stm
 processed <- textProcessor(data$resp, metadata = data[,meta]
-                           , customstopwords = c("dont", "just", "hes", "that"))
+                           , customstopwords = c("dont", "hes", "that", "etc"))
 out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
 
 ## remove discarded observations from data
 data <- data[-processed$docs.removed,]
 data <- data[-out$docs.removed,]
 
-## quick fit (20 topics)
+## stm fit with 20 topics
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
                 , K=20, init.type = "Spectral")
 
-########
-# topic differences b/w men and women (this should go in the main analysis part!)
-########
-
-prep <- estimateEffect(~ age + educ_cont + pid_cont + educ_pid + female
-                       , stm_fit, meta = out$meta, uncertainty = "Global")
-
-summary(stm_fit)
-topics <- c("1: Compromise","2: Romney","3: Morality/Religion","4: Obama","5: Taxes"
-            ,"6: Inequality","7: Social Security","8: Middle class","9: Immigration","10: Government Debt"
-            ,"11: Abortion","12: Economic Policy","13: Foreign Policy","14: Evaluation/Sentiment","15: Values"
-            ,"16: Presidential Performance","17: Patriotism","18: Health Care","19: Miscellaneous","20: Parties")
-
-pdf("fig/stm_gender.pdf")
-plot.estimateEffect(prep, covariate = "female", topics = 1:20, model = stm_fit
-                    , xlim = c(-.1,.05), method = "difference", cov.value1 = 1, cov.value2 = 0
-                    , main = "Gender Differences in Topic Proportions"
-                    , labeltype = "custom", custom.labels = topics)
-dev.off()
-
-
-## slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
+## stm fit with ~80 topics
 stm_fit_full <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
                     , K=0, init.type = "Spectral")
 
 
-### create new sophistication measures
-
-## probability fits and transform for diversity score  
-doc_topic_prob <- stm_fit$theta
-
-## topic diversity score
-#data$topic_diversity <- apply(doc_topic_prob, 1, function(x) 1 - ineq(x,type="Gini"))
-data$topic_diversity <- apply(doc_topic_prob, 1, shannon)
-
-## check sensitivity of diversity based on number of topics
-#data$topic_diversity_20 <- apply(stm_fit_20$theta, 1, function(x) 1 - ineq(x,type="Gini"))
-#data$topic_diversity_20 <- apply(stm_fit_20$theta, 1, shannon)
-
-## text-based sophistication measures
-data$polknow_text <- with(data, topic_diversity * lwc * ditem)
-data$polknow_text_mean <- with(data, (topic_diversity + lwc + ditem)/3)
-
-
 #######################
-### WORK ON NEW MEASURE
+### Discursive sophistication measute
 #######################
 
 ## goal: P(t_i|w) 
