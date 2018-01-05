@@ -26,8 +26,7 @@ load("out/swiss.Rdata")
 
 ## QUESTION: remove wc=0 and spanish=1?
 
-source("sim.R")
-source("latexTable.R")
+source("func.R")
 
 ## plot defaults
 plot_default <- theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
