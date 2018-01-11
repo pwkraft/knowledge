@@ -2,7 +2,7 @@
 ### Measuring Political Sophistication using Open-ended Responses ###
 ### Patrick Kraft                                                 ###
 ### ============================================================= ###
-## prepares the survey data of the 2008 and 2012 ANES for subsequent analyses
+## prepares the survey data of the 2012 ANES for subsequent analyses
 ## prepares open-ended responses (selecting variables, spell checking etc.)
 ## fits structural topic model for open-ended responses
 ## creates diversity measures
@@ -347,7 +347,7 @@ processed <- textProcessor(data$resp, metadata = data[,meta]
 out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
 
 ## remove discarded observations from data
-data <- data[-processed$docs.removed,]
+#data <- data[-processed$docs.removed,]
 data <- data[-out$docs.removed,]
 
 ## stm fit with 20 topics
@@ -360,55 +360,11 @@ stm_fit_full <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
 
 
 #######################
-### Discursive sophistication measute
+### Discursive sophistication measure
 #######################
 
-## goal: P(t_i|w,X) 
-
-## P(t|X): probability of topic t given covariates X [5176,20]
-pt_x <- stm_fit$theta
-
-## P(w|t): probability of word w given topic t [20,4178]
-# logbeta: List containing the log of the word probabilities for each topic.
-pw_t <- exp(stm_fit$beta$logbeta[[1]])
-
-## P(w|X) = sum_j(P(w|t_j)P(t_j|X)): probability of word w across all topics [5176,4178]
-pw_x <- pt_x %*% pw_t
-
-## P(t_i|w,X) = P(w|t_i)P(t_i|X)/P(w|X): probability of topic t given word w and covariates X
-nobs <- nrow(pt_x)
-nwords <- ncol(pw_t)
-ntopics <- ncol(pt_x)
-pt_wx <- array(NA, c(nobs, nwords, ntopics))
-
-pb <- txtProgressBar(min = 1, max = nwords, style = 3)
-for(w in 1:nwords){
-  for(t in 1:ntopics){
-    pt_wx[,w,t] <- pw_t[t,w] * pt_x[,t] / pw_x[,w]
-  }
-  setTxtProgressBar(pb, w)
-}
-close(pb)
-
-## compute sophistication components
-know <- data.frame(ntopics = rep(NA, nobs), distinct = rep(NA, nobs))
-pb <- txtProgressBar(min = 1, max = nobs, style = 3)
-for(n in 1:nobs){
-  maxtopic_wx <- apply(pt_wx[n,,],1,which.max) # which topic has the highest probability for each word (given X)
-  wordprob_t <- diag(pw_t[maxtopic_wx,]) # what is the probability of the word given the assigned topic
-  
-  know$ntopics[n] <- length(unique(maxtopic_wx[out$documents[[n]][1,]])) # number of topics in response
-  know$distinct[n] <- log(sum(wordprob_t[out$documents[[n]][1,]] * out$documents[[n]][2,])) # sum of word probabilities
-  setTxtProgressBar(pb, n)
-}
-know$ntopics <- know$ntopics/max(know$ntopics)
-know$distinct <- know$distinct/max(know$distinct)
-
-# scale minimum to zero?
-# know$distinct <- (know$distinct-min(know$distinct))/(max(know$distinct)-min(know$distinct))
-
 ## combine sophistication components with remaining data
-data <- cbind(data, know)
+data <- cbind(data, sophistication(stm_fit))
 
 ## compute combined measures
 data$polknow_text <- data$ntopics * data$distinct * data$ditem
@@ -416,28 +372,14 @@ data$polknow_text_mean <- (data$ntopics + data$distinct + data$ditem)/3
 
 
 ###################
-### Replicate (old!) measure with larger number of topics
+### Replicate measure with larger number of topics
 ###################
 
-### create new sophistication measures
+## combine sophistication components with remaining data
+know <- sophistication(stm_fit)
 
-## which topic has highest likelihood for each word
-term_topic <- apply(stm_fit_full$beta$logbeta[[1]], 2, which.max)
-
-## shannon entropy of each term as a measure for its distinctiveness -> vague term or clear topic
-pseudop <- exp(stm_fit_full$beta$logbeta[[1]])
-term_entropy <- apply(pseudop, 2, max)
-
-## combine both measures with open-ended responses
-know <- data.frame(ntopics = rep(NA, length(out$documents))
-                   , entropy = rep(NA, length(out$documents)))
-for(doc in 1:length(out$documents)){
-  know$ntopics[doc] <- length(unique(term_topic[out$documents[[doc]][1,]]))
-  know$entropy[doc] <- log(sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,]))
-}
-know$ntopics <- know$ntopics/max(know$ntopics)
-know$entropy <- (know$entropy-min(know$entropy))/(max(know$entropy)-min(know$entropy))
-data$polknow_text_mean_full <- (know$ntopics + know$entropy + data$ditem)/3
+## compute combined measures
+data$polknow_text_mean_full <- (know$ntopics + know$distinct + data$ditem)/3
 
 
 ### Compare 20 topic sophistication to 77 topic sophistication
@@ -505,6 +447,6 @@ tmp_df <- data.frame(policy = "ideol", target = "dpc", measure = "dpc"
 
 ### save output
 
-save(anes2012, anes2012opend, anes2012spell, data, meta, processed, out, stm_fit, hetreg_summary
+save(anes2012, anes2012opend, anes2012spell, data, meta, processed, out
+     , stm_fit, stm_fit_full, hetreg_summary
      , file="calc/out/anes.Rdata")
-

@@ -179,7 +179,7 @@ ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
 ggsave("../fig/knoweff_wordsum.pdf", width=4, height=3)
 
 
-### Joint model controlling for both measures + wordsum index!
+### Joint model controlling for both measures + word count!
 
 m4c <- NULL
 m4c[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data)
