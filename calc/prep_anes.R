@@ -26,6 +26,7 @@ setwd("/data/Dropbox/Uni/Projects/2016/knowledge/")
 datasrc <- "/data/Dropbox/Uni/Data/anes2012/"
 raw2012 <- read.dta13(paste0(datasrc,"anes_timeseries_2012.dta"), convert.factors = F)
 
+source("calc/func.R")
 
 ### 2012 regular survey data
 
@@ -354,9 +355,9 @@ data <- data[-out$docs.removed,]
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
                 , K=20, init.type = "Spectral")
 
-## stm fit with ~80 topics
+## stm fit with 50 topics (estimating number of topics gives ~70, but creates computational issues)
 stm_fit_full <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-                    , K=0, init.type = "Spectral")
+                    , K=40, init.type = "Spectral")
 
 
 #######################
@@ -376,7 +377,7 @@ data$polknow_text_mean <- (data$ntopics + data$distinct + data$ditem)/3
 ###################
 
 ## combine sophistication components with remaining data
-know <- sophistication(stm_fit)
+know <- sophistication(stm_fit_full)
 
 ## compute combined measures
 data$polknow_text_mean_full <- (know$ntopics + know$distinct + data$ditem)/3
@@ -386,7 +387,7 @@ data$polknow_text_mean_full <- (know$ntopics + know$distinct + data$ditem)/3
 
 ggplot(data, aes(x=polknow_text_mean_full, y=polknow_text_mean)) +
   geom_point(alpha=.05) + geom_smooth(method="lm") +
-  ylab("Discursive Sophistication\n(20 Topics)") + xlab("Discursive Sophistication\n(77 Topics)") +
+  ylab("Discursive Sophistication\n(20 Topics)") + xlab("Discursive Sophistication\n(40 Topics)") +
   annotate("text", x=0.1, y=.9, size=2
            , label = paste0("r = ",round(cor(data$polknow_text_mean, data$polknow_text_mean_full), 2))) +
   theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))

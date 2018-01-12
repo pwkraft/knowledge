@@ -43,7 +43,7 @@ sophistication <- function(x){
   close(pb)
   
   ## compute sophistication components
-  cat("\n\nComputing sophistication components:\n")
+  cat("\nComputing sophistication components:\n")
   know <- data.frame(ntopics = rep(NA, nobs), distinct = rep(NA, nobs))
   pb <- txtProgressBar(min = 1, max = nobs, style = 3)
   for(n in 1:nobs){
@@ -54,6 +54,7 @@ sophistication <- function(x){
     know$distinct[n] <- sum(wordprob_t[out$documents[[n]][1,]] * out$documents[[n]][2,]) # sum of word probabilities
     setTxtProgressBar(pb, n)
   }
+  cat("\n\n")
   
   ## rescaling
   know$ntopics <- know$ntopics/max(know$ntopics)
