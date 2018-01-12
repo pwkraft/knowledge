@@ -6,6 +6,12 @@
 ###########################################################################################
 
 
+## function to compute -1/+1 SD range around mean
+sdrange <- function(x){
+  mean(x, na.rm = T) + c(-1,1) * sd(x, na.rm = T)
+}
+
+
 ### Compute discursive sophistication components based on stm results
 #' built: 2018-01-11, Patrick Kraft
 #' @import stm

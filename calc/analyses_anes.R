@@ -109,9 +109,8 @@ m4b[[2]] <- lm(effic_ext ~ polknow_factual + female + educ + faminc + log(age) +
 m4b[[3]] <- lm(part ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data)
 m4b[[4]] <- glm(vote ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data, family=binomial("logit"))
 
-
-res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
-             , sim(m4b, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
+res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=sdrange(data$polknow_text_mean)))
+             , sim(m4b, iv=data.frame(polknow_factual=sdrange(data$polknow_factual))))
 res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
                     , labels = c("Turnout","Non-conv. Participation"
                                  , "Internal Efficacy","External Efficacy"))
@@ -141,8 +140,8 @@ m4c[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ +
 m4c[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data)
 m4c[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data, family=binomial("logit"))
 
-res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
-             , sim(m4c, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
+res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=sdrange(data$polknow_text_mean)))
+             , sim(m4c, iv=data.frame(polknow_factual=sdrange(data$polknow_factual))))
 res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
                     , labels = c("Turnout","Non-conv. Participation"
                                  , "Internal Efficacy","External Efficacy"))
@@ -164,8 +163,8 @@ m4c[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ +
 m4c[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data)
 m4c[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data, family=binomial("logit"))
 
-res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
-             , sim(m4c, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
+res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=sdrange(data$polknow_text_mean)))
+             , sim(m4c, iv=data.frame(polknow_factual=sdrange(data$polknow_factual))))
 res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
                     , labels = c("Turnout","Non-conv. Participation"
                                  , "Internal Efficacy","External Efficacy"))
@@ -187,8 +186,8 @@ m4c[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ +
 m4c[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data)
 m4c[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data, family=binomial("logit"))
 
-res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
-             , sim(m4c, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
+res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=sdrange(data$polknow_text_mean)))
+             , sim(m4c, iv=data.frame(polknow_factual=sdrange(data$polknow_factual))))
 res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
                     , labels = c("Turnout","Non-conv. Participation"
                                  , "Internal Efficacy","External Efficacy"))
@@ -211,8 +210,8 @@ m4c[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ +
 m4c[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + extraversion + reserved, data = data)
 m4c[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + extraversion + reserved, data = data, family=binomial("logit"))
 
-res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
-             , sim(m4c, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
+res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=sdrange(data$polknow_text_mean)))
+             , sim(m4c, iv=data.frame(polknow_factual=sdrange(data$polknow_factual))))
 res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
                     , labels = c("Turnout","Non-conv. Participation"
                                  , "Internal Efficacy","External Efficacy"))
@@ -270,8 +269,8 @@ m5b <- glm(vc_change ~ polknow_factual + female + educ + faminc + log(age) + bla
 
 summary(glm(vc_change ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data, family=binomial("logit")))
 
-res <- rbind(sim(m5a, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
-             , sim(m5b, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T))))
+res <- rbind(sim(m5a, iv=data.frame(polknow_text_mean=sdrange(data$polknow_text_mean)))
+             , sim(m5b, iv=data.frame(polknow_factual=sdrange(data$polknow_factual))))
 res$ivlab <- factor(res$iv, labels = dvnames)
 
 ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
