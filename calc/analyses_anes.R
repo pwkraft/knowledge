@@ -329,7 +329,7 @@ topics <- c("1: Compromise","2: Romney","3: Morality/Religion","4: Obama","5: Ta
             ,"11: Abortion","12: Economic Policy","13: Foreign Policy","14: Evaluation/Sentiment","15: Values"
             ,"16: Presidential Performance","17: Patriotism","18: Health Care","19: Miscellaneous","20: Parties")
 
-pdf("fig/stm_gender.pdf")
+pdf("../fig/stm_gender.pdf")
 plot.estimateEffect(prep, covariate = "female", topics = 1:20, model = stm_fit
                     , xlim = c(-.1,.05), method = "difference", cov.value1 = 1, cov.value2 = 0
                     , main = "Gender Differences in Topic Proportions"
