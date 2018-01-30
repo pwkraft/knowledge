@@ -144,18 +144,17 @@ res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
                     , labels = c("Turnout","Non-conv. Participation"
                                  , "Internal Efficacy","External Efficacy"))
 res$ivlab <- factor(res$iv, labels = dvnames)
-res$Year <- rep(c("2012","2016"), each=8)
-
-ggplot(res, aes(x=ivlab, y=mean, ymin=cilo, ymax=cihi, shape=Year, col=Year)) +
-  geom_point(position=position_dodge(width = -.25)) + 
-  geom_errorbar(width=0, position=position_dodge(width = -.25)) + 
-  facet_wrap(~dvlab, scale="free_x") +
-  geom_hline(yintercept = 0, color="grey") +
-  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
-  scale_x_discrete(limits = rev(levels(res$ivlab))) + coord_flip()
-ggsave("../fig/knoweff_pres.pdf", width=4, height=3)
+res$Year <- rep(c("2012 ANES","2016 ANES"), each=8)
 
 ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
+  geom_point() + geom_errorbarh(height=0) + facet_grid(Year~dvlab, scale="free_x") +
+  geom_vline(xintercept = 0, color="grey") +
+  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
+  scale_y_discrete(limits = rev(levels(res$ivlab))) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggsave("../fig/knoweff_pres.pdf", width=6.5, height=2.2)
+
+ggplot(res[res$Year=="2012",], aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
   geom_point() + geom_errorbarh(height=0) + facet_wrap(~dvlab, scale="free_x") +
   xlab("Marginal Effect") + ylab("Independent Variable") +
   theme_classic(base_size = 9) + theme(panel.border = element_rect(fill="white")) +
