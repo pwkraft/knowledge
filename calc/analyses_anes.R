@@ -27,6 +27,7 @@ setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
 ## load data and stm results
 load("out/anes2012.Rdata")
+load("out/anes2016.Rdata")
 #load("../data/anes_old.Rdata")
 
 ## QUESTION: remove wc=0 and spanish=1?

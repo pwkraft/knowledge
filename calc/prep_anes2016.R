@@ -298,32 +298,32 @@ anes2016$ditem <- apply(anes2016spell[,-1], 1, function(x){
 ### prepare data
 
 ## combine regular survey and open-ended data, remove spanish and empty responses
-meta <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
-data <- anes2016 %>% mutate(resp = apply(anes2016spell[,-1],1,paste,collapse=' ')) %>%
+meta2016 <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
+data2016 <- anes2016 %>% mutate(resp = apply(anes2016spell[,-1],1,paste,collapse=' ')) %>%
   filter(spanish == 0 & wc != 0)
 
 ## remove additional whitespaces
-data$resp <- gsub("\\s+"," ", data$resp)
-data$resp <- gsub("(^\\s+|\\s+$)","", data$resp)
+data2016$resp <- gsub("\\s+"," ", data2016$resp)
+data2016$resp <- gsub("(^\\s+|\\s+$)","", data2016$resp)
 
 ## remove missings on metadata
-data <- data[apply(!is.na(data[,meta]),1,prod)==1,]
+data2016 <- data2016[apply(!is.na(data2016[,meta2016]),1,prod)==1,]
 
 ## process for stm
-processed <- textProcessor(data$resp, metadata = data[,meta]
+processed2016 <- textProcessor(data2016$resp, metadata = data2016[,meta2016]
                            , customstopwords = c("dont", "hes", "that", "etc"))
-out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+out2016 <- prepDocuments(processed2016$documents, processed2016$vocab, processed2016$meta)
 
 ## remove discarded observations from data
-data <- data[-processed$docs.removed,]
-data <- data[-out$docs.removed,]
+data2016 <- data2016[-processed2016$docs.removed,]
+data2016 <- data2016[-out2016$docs.removed,]
 
 ## stm fit with 20 topics
-stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+stm_fit2016 <- stm(out2016$documents, out2016$vocab, prevalence = as.matrix(out2016$meta)
                 , K=20, init.type = "Spectral")
 
 ## stm fit with 50 topics (estimating number of topics gives ~70, but creates computational issues)
-stm_fit_full <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+stm_fit2016_full <- stm(out2016$documents, out2016$vocab, prevalence = as.matrix(out2016$meta)
                     , K=40, init.type = "Spectral")
 
 
@@ -332,11 +332,11 @@ stm_fit_full <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
 #######################
 
 ## combine sophistication components with remaining data
-data <- cbind(data, sophistication(stm_fit))
+data2016 <- cbind(data2016, sophistication(stm_fit2016, out2016))
 
 ## compute combined measures
-data$polknow_text <- data$ntopics * data$distinct * data$ditem
-data$polknow_text_mean <- (data$ntopics + data$distinct + data$ditem)/3
+data2016$polknow_text <- data2016$ntopics * data2016$distinct * data2016$ditem
+data2016$polknow_text_mean <- (data2016$ntopics + data2016$distinct + data2016$ditem)/3
 
 
 ###################
@@ -344,19 +344,19 @@ data$polknow_text_mean <- (data$ntopics + data$distinct + data$ditem)/3
 ###################
 
 ## combine sophistication components with remaining data
-know <- sophistication(stm_fit_full)
+know <- sophistication(stm_fit2016_full, out2016)
 
 ## compute combined measures
-data$polknow_text_mean_full <- (know$ntopics + know$distinct + data$ditem)/3
+data2016$polknow_text_mean_full <- (know$ntopics + know$distinct + data2016$ditem)/3
 
 
 ### Compare 20 topic sophistication to 77 topic sophistication
 
-ggplot(data, aes(x=polknow_text_mean_full, y=polknow_text_mean)) +
+ggplot(data2016, aes(x=polknow_text_mean_full, y=polknow_text_mean)) +
   geom_point(alpha=.05) + geom_smooth(method="lm") +
   ylab("Discursive Sophistication\n(20 Topics)") + xlab("Discursive Sophistication\n(40 Topics)") +
   annotate("text", x=0.1, y=.9, size=2
-           , label = paste0("r = ",round(cor(data$polknow_text_mean, data$polknow_text_mean_full), 2))) +
+           , label = paste0("r = ",round(cor(data2016$polknow_text_mean, data2016$polknow_text_mean_full), 2))) +
   theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
 ggsave("fig/ktopic.pdf", width=3, height=3)
 
@@ -373,7 +373,7 @@ measures <- c("polknow_text_mean","polknow_factual")
 polknow_hetreg <- function(policy, target, measure
                            , controls = c("female", "educ", "faminc", "lage"
                                           , "black", "relig", "mode")
-                           , df = data, control = NULL){
+                           , df = data2016, control = NULL){
   tmp <- na.omit(df[,c(paste(c(policy,target),collapse="_")
                        , paste(c(policy,"ego"),collapse="_")
                        , measure, controls)])
@@ -388,7 +388,7 @@ polknow_hetreg <- function(policy, target, measure
   return(res)
 }
 
-hetreg_summary <- data.frame(NULL)
+hetreg_summary2016 <- data.frame(NULL)
 for(p in policies){
   for(t in targets){
     for(m in measures){
@@ -398,23 +398,15 @@ for(p in policies){
       tmp_sigmadif <- extract(tmp, par="sigmadif")[[1]]
       tmp_df <- data.frame(policy = p, target = t, measure = m, mean = mean(tmp_sigmadif)
                            , cilo = quantile(tmp_sigmadif, .025), cihi = quantile(tmp_sigmadif, .975))
-      hetreg_summary <- rbind(hetreg_summary, tmp_df)
+      hetreg_summary2016 <- rbind(hetreg_summary2016, tmp_df)
     }
   }
 }
-
-## estimation issue with liberal/conservative assessment!
-tmp <- polknow_hetreg("ideol", "dpc", "polknow_factual", control = list(adapt_delta=.99))
-tmp_sigmadif <- extract(tmp, par="sigmadif")[[1]]
-tmp_df <- data.frame(policy = "ideol", target = "dpc", measure = "dpc"
-                     , mean = mean(tmp_sigmadif)
-                     , cilo = quantile(tmp_sigmadif, .025)
-                     , cihi = quantile(tmp_sigmadif, .975))
 
 
 
 ### save output
 
-save(anes2016, anes2016opend, anes2016spell, data, meta, processed, out
-     , stm_fit, stm_fit_full, hetreg_summary
+save(anes2016, anes2016opend, anes2016spell, data2016, meta2016, processed2016, out2016
+     , stm_fit2016, stm_fit2016_full, hetreg_summary2016
      , file="calc/out/anes2016.Rdata")

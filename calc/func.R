@@ -19,7 +19,7 @@ sdrange <- function(x){
 #' @return data.frame: estimated number of topics and distinctiveness of word choice
 #' @export
 
-sophistication <- function(x){
+sophistication <- function(x, docs){
   if(class(x)!="STM") stop("x must be an STM object")
   
   ## P(t|X): probability of topic t given covariates X [nobs,ntopics]
@@ -56,8 +56,8 @@ sophistication <- function(x){
     maxtopic_wx <- apply(pt_wx[n,,],1,which.max) # which topic has the highest probability for each word (given X)
     wordprob_t <- diag(pw_t[maxtopic_wx,]) # what is the probability of the word given the assigned topic
     
-    know$ntopics[n] <- length(unique(maxtopic_wx[out$documents[[n]][1,]])) # number of topics in response
-    know$distinct[n] <- sum(wordprob_t[out$documents[[n]][1,]] * out$documents[[n]][2,]) # sum of word probabilities
+    know$ntopics[n] <- length(unique(maxtopic_wx[docs$documents[[n]][1,]])) # number of topics in response
+    know$distinct[n] <- sum(wordprob_t[docs$documents[[n]][1,]] * docs$documents[[n]][2,]) # sum of word probabilities
     setTxtProgressBar(pb, n)
   }
   cat("\n\n")
