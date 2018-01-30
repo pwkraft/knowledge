@@ -34,7 +34,7 @@ source("calc/func.R")
 anes2012 <- data.frame(caseid=raw2012$caseid)
 
 ## interview mode (1=FTF, 2=online)
-anes2012$mode <- raw2012$mode
+anes2012$mode <- raw2012$mode - 1
 
 ## political knowledge (office recognition, post-election)
 anes2012$polknow_office <- with(raw2012, (Recode(ofcrec_speaker_correct, "lo:-1=NA")
@@ -48,8 +48,8 @@ anes2012$polknow_factual <- with(raw2012, ((preknow_prestimes==2) + (preknow_siz
                                  + (preknow_leastsp==1))/5)
 
 ## political knowledge (majorities in congress, post-election)
-anes2012$polknow_majority <- with(raw2012, ((Recode(raw2012$knowl_housemaj, "c(-6,-7)=NA")==2)
-                                  + (Recode(raw2012$knowl_senmaj, "c(-6,-7)=NA")==1))/2)
+anes2012$polknow_majority <- with(raw2012, ((Recode(knowl_housemaj, "c(-6,-7)=NA")==2)
+                                  + (Recode(knowl_senmaj, "c(-6,-7)=NA")==1))/2)
 
 ## political knowledge (interviewer evaluation, only in F2F part!)
 anes2012$polknow_evalpre <- (5 - Recode(raw2012$iwrobspre_levinfo, "lo:-1=NA"))/4
@@ -79,10 +79,10 @@ anes2012$poldisc <- Recode(raw2012$discuss_discpstwk, "lo:-1 = NA")/7
 anes2012$poldisc[raw2012$discuss_disc>1] <- 0
 
 ## political interest (pay attention to politics)
-anes2012$polint_att <- 5 - Recode(raw2012$interest_attention, "lo:-1 = NA")/4
+anes2012$polint_att <- (5 - Recode(raw2012$interest_attention, "lo:-1 = NA"))/4
 
 ## political interest (following campaign)
-anes2012$polint_cam <- 3 - Recode(raw2012$interest_following, "lo:-1 = NA")/2
+anes2012$polint_cam <- (3 - Recode(raw2012$interest_following, "lo:-1 = NA"))/2
 
 ## overall political interest
 anes2012$polint <- with(anes2012, (polint_att + polint_cam)/2)
@@ -185,11 +185,11 @@ anes2012$pid_rep <- as.numeric(anes2012$pid=="Republican")
 ## pid continuous
 anes2012$pid_cont <- (Recode(raw2012$pid_x, "lo:0=NA") - 4)/3
 
-## interaction: pid * education
-anes2012$educ_pid <- anes2012$educ_cont * anes2012$pid_cont
-
 ## strength of partisanship
 anes2012$pid_str <- abs(anes2012$pid_cont)
+
+## interaction: pid * education
+anes2012$educ_pid <- anes2012$educ_cont * anes2012$pid_cont
 
 ## religiosity (church attendance)
 anes2012$relig <- (5 - Recode(raw2012$relig_churchoft, "lo:0 = NA"))/5
@@ -262,7 +262,7 @@ anes2012spell <- apply(anes2012opend[,-1], 2, function(x){
              ,"no idea", "can t say","no comment","no views","nope","not at all"
              ,"no i can t","no i cant", "i don t know","iguess not","i dont know"
              , "dont know", "dint care","no no comment","no not really", "again no"
-             , "1", "1 dk","dk5","no answer","hi","i","not","nothing","no commont"
+             , "1", "1 dk","dk5","no answer","hi","i","not","no commont"
              , "can t answer","no can not","dosen t know","he is not sure"
              , "its confidential","no answwer","not reaslly","lkjlkj","skjzhdkjhsd"
              , "you can", "even", "can","dont know dont talk about politics"
@@ -450,4 +450,4 @@ tmp_df <- data.frame(policy = "ideol", target = "dpc", measure = "dpc"
 
 save(anes2012, anes2012opend, anes2012spell, data, meta, processed, out
      , stm_fit, stm_fit_full, hetreg_summary
-     , file="calc/out/anes.Rdata")
+     , file="calc/out/anes2012.Rdata")

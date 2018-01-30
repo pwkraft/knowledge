@@ -22,7 +22,7 @@ library(sampleSelection)
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
 ## load data and stm results
-load("out/anes2012.Rdata")
+load("out/anes2016.Rdata")
 #load("../data/anes_old.Rdata")
 
 ## QUESTION: remove wc=0 and spanish=1?
@@ -172,17 +172,17 @@ ggsave("../fig/determinants_0.pdf",width=4.75,height=3)
 ########
 
 ## check determinants of oe response >0
-m2 <- glm(as.numeric(wc>0) ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = anes2012, family=binomial("logit"))
+m2 <- glm(as.numeric(wc>0) ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = anes2016, family=binomial("logit"))
 summary(m2)
 
 ## gender differences in willingness to respond & length of response
 mean(data$wc)
 t.test(wc~female, data=data)
-t.test(as.numeric(wc>0)~female, data=anes2012)
+t.test(as.numeric(wc>0)~female, data=anes2016)
 
 ## prep data for heckit model
 heck_tmp <- data.frame(caseid=data$caseid, polknow_text_mean=data$polknow_text_mean)
-heck_tmp <- merge(anes2012, heck_tmp, all=TRUE)
+heck_tmp <- merge(anes2016, heck_tmp, all=TRUE)
 heck_tmp$select <- as.numeric(!is.na(heck_tmp$polknow_text_mean))
 
 table(heck_tmp$select)

@@ -28,255 +28,222 @@ raw2016 <- read.dta13(paste0(datasrc,"anes_timeseries_2016.dta"), convert.factor
 
 source("calc/func.R")
 
-### 2012 regular survey data
+### 2016 regular survey data
 
 ## respondent id
-anes2012 <- data.frame(caseid=raw2012$caseid)
+anes2016 <- data.frame(caseid=raw2016$V160001)
 
 ## interview mode (1=FTF, 2=online)
-anes2012$mode <- raw2012$mode
+anes2016$mode <- raw2016$V160501 - 1
 
 ## political knowledge (office recognition, post-election)
-anes2012$polknow_office <- with(raw2012, (Recode(ofcrec_speaker_correct, "lo:-1=NA")
-                                + Recode(ofcrec_vp_correct, "lo:-1=NA")
-                                + Recode(ofcrec_pmuk_correct, "lo:-1=NA")
-                                + Recode(ofcrec_cj_correct, "lo:-1=NA"))/4)
+anes2016$polknow_office <- with(raw2016, (Recode(V162072, "lo:-1=NA")
+                                + Recode(V162073b, "lo:-1=NA")
+                                + Recode(V162074b, "lo:-1=NA")
+                                + Recode(V162075b, "lo:-1=NA")
+                                + Recode(V162076b, "lo:-1=NA"))/5)
 
 ## political knowledge (factual knowledge questions, pre-election)
-anes2012$polknow_factual <- with(raw2012, ((preknow_prestimes==2) + (preknow_sizedef==1)
-                                 + (preknow_senterm==6) + (preknow_medicare==1)
-                                 + (preknow_leastsp==1))/5)
+anes2016$polknow_factual <- with(raw2016, (Recode(V161513, "-5=NA; 6=1; else=0")
+                                           + Recode(V161514, "-5=NA; 4=1; else=0")
+                                           + Recode(V161515, "-5=NA; 2=1; else=0")
+                                           + Recode(V161516, "-5=NA; 2=1; else=0"))/4)
 
 ## political knowledge (majorities in congress, post-election)
-anes2012$polknow_majority <- with(raw2012, ((Recode(raw2012$knowl_housemaj, "c(-6,-7)=NA")==2)
-                                  + (Recode(raw2012$knowl_senmaj, "c(-6,-7)=NA")==1))/2)
+# not available in 2016
 
 ## political knowledge (interviewer evaluation, only in F2F part!)
-anes2012$polknow_evalpre <- (5 - Recode(raw2012$iwrobspre_levinfo, "lo:-1=NA"))/4
-anes2012$polknow_evalpost <- (5 - Recode(raw2012$iwrobspost_levinfo, "lo:-1=NA"))/4
-anes2012$polknow_eval <- (anes2012$polknow_evalpre + anes2012$polknow_evalpost)/2
+anes2016$polknow_evalpre <- (5 - Recode(raw2016$V168016, "lo:-1=NA"))/4
+anes2016$polknow_evalpost <- (5 - Recode(raw2016$V168112, "lo:-1=NA"))/4
+anes2016$polknow_eval <- (anes2016$polknow_evalpre + anes2016$polknow_evalpost)/2
 
 ## intelligence (interviewer evaluation, only in F2F part!)
-anes2012$intpre <- (5 - Recode(raw2012$iwrobspre_intell, "lo:-1=NA"))/4
-anes2012$intpost <- (5 - Recode(raw2012$iwrobspost_intell, "lo:-1=NA"))/4
-anes2012$int <- (anes2012$intpre + anes2012$intpost)/2
+anes2016$intpre <- (5 - Recode(raw2016$V168017, "lo:-1=NA"))/4
+anes2016$intpost <- (5 - Recode(raw2016$V168113, "lo:-1=NA"))/4
+anes2016$int <- (anes2016$intpre + anes2016$intpost)/2
 
 ## education (bachelor degree)
-anes2012$educ <- as.numeric(raw2012$dem_edugroup_x >= 4)
-anes2012$educ[raw2012$raw2012$dem_edugroup_x < 0] <- NA
+anes2016$educ <- Recode(raw2016$V161270, "c(-9,95,90)=NA; 1:12=0; 13:16=1")
 
 ## education (continuous)
-anes2012$educ_cont <- (Recode(raw2012$dem_edugroup_x, "lo:0=NA") - 1)/4
+anes2016$educ_cont <- Recode(raw2016$V161270, "c(-9,95,90)=NA")
 
-## political media exposure
-anes2012$polmedia <- with(raw2012, Recode(prmedia_wkinews, "lo:-4=NA; -1=0")
-                          + Recode(prmedia_wktvnws, "lo:-4=NA; -1=0")
-                          + Recode(prmedia_wkpaprnws, "lo:-4=NA; -1=0")
-                          + Recode(prmedia_wkrdnws, "lo:-4=NA; -1=0")) / 28
+## political media exposure (only one item in 2016)
+anes2016$polmedia <- Recode(raw2016$V161008, "lo:-1=NA")/7
 
 ## political discussion
-anes2012$poldisc <- Recode(raw2012$discuss_discpstwk, "lo:-1 = NA")/7
-anes2012$poldisc[raw2012$discuss_disc>1] <- 0
+anes2016$poldisc <- Recode(raw2016$V162174a, "lo:-1=NA")/7
+anes2016$poldisc[raw2016$raw2016$V162174c==2] <- 0
 
 ## political interest (pay attention to politics)
-anes2012$polint_att <- 5 - Recode(raw2012$interest_attention, "lo:-1 = NA")/4
+anes2016$polint_att <- (5 - Recode(raw2016$V161003, "lo:-1 = NA"))/4
 
 ## political interest (following campaign)
-anes2012$polint_cam <- 3 - Recode(raw2012$interest_following, "lo:-1 = NA")/2
+anes2016$polint_cam <- (3 - Recode(raw2016$V161004, "lo:-1 = NA"))/2
 
 ## overall political interest
-anes2012$polint <- with(anes2012, (polint_att + polint_cam)/2)
+anes2016$polint <- with(anes2016, (polint_att + polint_cam)/2)
 
 ## internal efficacy
-anes2012$effic_int <- with(raw2012, Recode(effic_complicstd, "lo:-8=NA; -1=1") - 1
-                           + Recode(effic_complicrev, "lo:-8=NA; -1=1") - 1
-                           - Recode(effic_undstd, "lo:-8=NA; -1=5") + 5
-                           - Recode(effic_undrev, "lo:-8=NA; -1=5") + 5
-                           ) / 8
+anes2016$effic_int <- with(raw2016, Recode(V162217, "lo:-1=NA") - 1
+                           - Recode(V162218, "lo:-1=NA") + 5) / 8
 
 ## external efficacy
-anes2012$effic_ext <- with(raw2012, Recode(effic_carestd, "lo:-8=NA; -1=1") - 1
-                           - Recode(effic_carerev, "lo:-8=NA; -1=5") + 5
-                           + Recode(effic_saystd, "lo:-8=NA; -1=1") - 1
-                           - Recode(effic_sayrev, "lo:-8=NA; -1=5") + 5
-                           ) / 8
+anes2016$effic_ext <- with(raw2016, Recode(V162215, "lo:-1=NA") - 1
+                           + Recode(V162216, "lo:-1=NA") - 1) / 8
 
 ## overall efficacy
-anes2012$effic <- with(anes2012, (effic_int + effic_ext)/2)
+anes2016$effic <- with(anes2016, (effic_int + effic_ext)/2)
 
 ## voted in previous election
-anes2012$pastvote <- Recode(raw2012$interest_voted2008, "c(2,5)=0; lo:-1=NA")
+anes2016$pastvote <- Recode(raw2016$V161005, "2=0; lo:-1=NA")
 
 ## voted in current election
-anes2012$vote <- Recode(raw2012$rvote2012_x, "2=0; lo:-1=NA")
+anes2016$vote <- Recode(raw2016$V161030, "2=0; lo:-1=NA")
+anes2016$vote[raw2016$V161026==1] <- 1
+anes2016$vote[raw2016$V161024x==1] <- 0
 
 ## participated in protest march / rally
-anes2012$protest <- Recode(raw2012$dhsinvolv_march, "c(2,5)=0; lo:-1=NA")
+anes2016$protest <- Recode(raw2016$V162018a, "2=0; lo:-1=NA")
 
 ## letter to congressman/senator
-anes2012$letter <- Recode(raw2012$dhsinvolv_contact1, "2=0; lo:-1=NA")
+anes2016$letter <- Recode(raw2016$V162019, "2=0; lo:-1=NA")
 
 ## signed a petition
-anes2012$petition <- as.numeric((Recode(raw2012$dhsinvolv_netpetition, "c(2,5)=0; lo:-1=NA") +
-                                   Recode(raw2012$dhsinvolv_petition, "c(2,5)=0; lo:-1=NA")) > 0)
+anes2016$petition <- Recode(raw2016$V162018b, "2=0; lo:-1=NA")
 
 ## wear a campaign button
-anes2012$button <- Recode(raw2012$mobilpo_sign, "c(2,5)=0; lo:-1=NA")
+anes2016$button <- Recode(raw2016$V162012, "2=0; lo:-1=NA")
 
 ## additive index non-conventional participation
-anes2012$part <- with(anes2012, protest + petition + button + letter)
+anes2016$part <- with(anes2016, protest + petition + button + letter)
 
 ## vote choice (pre-election)
-anes2012$vc_pre <- Recode(raw2012$prevote_intpreswho,"-8=-2; -9=NA")
+anes2016$vc_pre <- Recode(raw2016$V161031,"lo:-1=NA")
 
 ## vote choice (post-election)
-anes2012$vc_post <- Recode(raw2012$postvote_presvtwho, "-9:-6=NA")
+anes2016$vc_post <- Recode(raw2016$V162034a, "lo:-1=NA")
 
 ## vote change (pre-post)
-anes2012$vc_change <- anes2012$vc_pre == anes2012$vc_post
-anes2012$vc_change[raw2012$prevote_presvt == 1] <- 1
+anes2016$vc_change <- as.numeric(anes2016$vc_pre == anes2016$vc_post)
+anes2016$vc_change[raw2016$V161026 == 1] <- 1
 
 ## party/candidate placements
-anes2012$ideol_ego <- Recode(raw2012$libcpre_self, "lo:0=NA")
-anes2012$ideol_rpc <- Recode(raw2012$libcpre_rpc, "lo:0=NA")
-anes2012$ideol_dpc <- Recode(raw2012$libcpre_dpc, "lo:0=NA")
-anes2012$ideol_rep <- Recode(raw2012$libcpre_ptyr, "lo:0=NA")
-anes2012$ideol_dem <- Recode(raw2012$libcpre_ptyd, "lo:0=NA")
-anes2012$spsrvpr_ego <- Recode(raw2012$spsrvpr_ssself, "lo:0=NA")
-anes2012$spsrvpr_rpc <- Recode(raw2012$spsrvpr_ssrpc, "lo:0=NA")
-anes2012$spsrvpr_dpc <- Recode(raw2012$spsrvpr_ssdpc, "lo:0=NA")
-anes2012$spsrvpr_rep <- Recode(raw2012$spsrvpr_ssrep, "lo:0=NA")
-anes2012$spsrvpr_dem <- Recode(raw2012$spsrvpr_ssdem, "lo:0=NA")
-anes2012$defsppr_ego <- Recode(raw2012$defsppr_self, "lo:0=NA")
-anes2012$defsppr_rpc <- Recode(raw2012$defsppr_rpc, "lo:0=NA")
-anes2012$defsppr_dpc <- Recode(raw2012$defsppr_dpc, "lo:0=NA")
-anes2012$defsppr_rep <- Recode(raw2012$defsppr_rep, "lo:0=NA")
-anes2012$defsppr_dem <- Recode(raw2012$defsppr_dem, "lo:0=NA")
-anes2012$inspre_ego <- Recode(raw2012$inspre_self, "lo:0=NA")
-anes2012$inspre_rpc <- Recode(raw2012$inspre_rpc, "lo:0=NA")
-anes2012$inspre_dpc <- Recode(raw2012$inspre_dpc, "lo:0=NA")
-anes2012$inspre_rep <- Recode(raw2012$inspre_rep, "lo:0=NA")
-anes2012$inspre_dem <- Recode(raw2012$inspre_dem, "lo:0=NA")
-anes2012$guarpr_ego <- Recode(raw2012$guarpr_self, "lo:0=NA")
-anes2012$guarpr_rpc <- Recode(raw2012$guarpr_rpc, "lo:0=NA")
-anes2012$guarpr_dpc <- Recode(raw2012$guarpr_dpc, "lo:0=NA")
-anes2012$guarpr_rep <- Recode(raw2012$guarpr_rep, "lo:0=NA")
-anes2012$guarpr_dem <- Recode(raw2012$guarpr_dem, "lo:0=NA")
+anes2016$ideol_ego <- Recode(raw2016$V161126, "lo:0=NA; 99=NA")
+anes2016$ideol_dpc <- Recode(raw2016$V161128, "lo:0=NA")
+anes2016$ideol_rpc <- Recode(raw2016$V161129, "lo:0=NA")
+anes2016$ideol_dem <- Recode(raw2016$V161130, "lo:0=NA")
+anes2016$ideol_rep <- Recode(raw2016$V161131, "lo:0=NA")
+anes2016$spsrvpr_ego <- Recode(raw2016$V161178, "lo:0=NA; 99=NA")
+anes2016$spsrvpr_dpc <- Recode(raw2016$V161179, "lo:0=NA")
+anes2016$spsrvpr_rpc <- Recode(raw2016$V161180, "lo:0=NA")
+anes2016$defsppr_ego <- Recode(raw2016$V161181, "lo:0=NA; 99=NA")
+anes2016$defsppr_dpc <- Recode(raw2016$V161182, "lo:0=NA")
+anes2016$defsppr_rpc <- Recode(raw2016$V161183, "lo:0=NA")
+anes2016$inspre_ego <- Recode(raw2016$V161184, "lo:0=NA; 99=NA")
+anes2016$inspre_dpc <- Recode(raw2016$V161185, "lo:0=NA")
+anes2016$inspre_rpc <- Recode(raw2016$V161186, "lo:0=NA")
+anes2016$guarpr_ego <- Recode(raw2016$V161189, "lo:0=NA; 99=NA")
+anes2016$guarpr_dpc <- Recode(raw2016$V161190, "lo:0=NA")
+anes2016$guarpr_rpc <- Recode(raw2016$V161191, "lo:0=NA")
 
 ## ideology (factor/dummies)
-anes2012$ideol <- factor(Recode(raw2012$libcpre_self, "1:3=1; 4=2; 5:7=3; else=NA")
+anes2016$ideol <- factor(Recode(raw2016$V161126, "1:3=1; 4=2; 5:7=3; else=NA")
                   , labels = c("Liberal","Moderate","Conservative"))
-anes2012$ideol_lib <- as.numeric(anes2012$ideol=="Liberal")
-anes2012$ideol_con <- as.numeric(anes2012$ideol=="Conservative")
+anes2016$ideol_lib <- as.numeric(anes2016$ideol=="Liberal")
+anes2016$ideol_con <- as.numeric(anes2016$ideol=="Conservative")
 
 ## ideology (continuous, -1 to 1)
-anes2012$ideol_ct <- (Recode(raw2012$libcpre_self, "lo:0=NA") - 4)/3
+anes2016$ideol_ct <- (Recode(raw2016$V161126, "lo:0=NA; 99=NA") - 4)/3
 
 ## strength of ideology
-anes2012$ideol_str <- abs(anes2012$ideol_ct)
+anes2016$ideol_str <- abs(anes2016$ideol_ct)
 
 ## party identification (factor/dummies)
-anes2012$pid <- factor(Recode(raw2012$pid_x
-                              , "1:2=1; c(3,4,5)=2; 6:7=3; else=NA")
+anes2016$pid <- factor(Recode(raw2016$V161158x
+                              , "1:2=1; 3:5=2; 6:7=3; else=NA")
                        , labels = c("Democrat","Independent","Republican"))
-anes2012$pid_dem <- as.numeric(anes2012$pid=="Democrat")
-anes2012$pid_rep <- as.numeric(anes2012$pid=="Republican")
+anes2016$pid_dem <- as.numeric(anes2016$pid=="Democrat")
+anes2016$pid_rep <- as.numeric(anes2016$pid=="Republican")
 
 ## pid continuous
-anes2012$pid_cont <- (Recode(raw2012$pid_x, "lo:0=NA") - 4)/3
-
-## interaction: pid * education
-anes2012$educ_pid <- anes2012$educ_cont * anes2012$pid_cont
+anes2016$pid_cont <- (Recode(raw2016$V161158x, "lo:0=NA") - 4)/3
 
 ## strength of partisanship
-anes2012$pid_str <- abs(anes2012$pid_cont)
+anes2016$pid_str <- abs(anes2016$pid_cont)
+
+## interaction: pid * education
+anes2016$educ_pid <- anes2016$educ_cont * anes2016$pid_cont
 
 ## religiosity (church attendance)
-anes2012$relig <- (5 - Recode(raw2012$relig_churchoft, "lo:0 = NA"))/5
-anes2012$relig[raw2012$relig_church != 1] <- 0
-anes2012$relig[raw2012$relig_churchwk == 2] <- 1
+anes2016$relig <- (5 - Recode(raw2016$V161245, "lo:0 = NA"))/5
+anes2016$relig[raw2016$V161244 != 1] <- 0
+anes2016$relig[raw2016$V161245a == 2] <- 1
 
 ## age
-anes2012$age <- Recode(raw2012$dem_age_r_x, "c(-2,-9,-8) = NA")
+anes2016$age <- Recode(raw2016$V161267, "lo:0 = NA")
 
 ## log(age)
-anes2012$lage <- log(anes2012$age)
+anes2016$lage <- log(anes2016$age)
 
 ## sex
-anes2012$female <- raw2012$gender_respondent_x - 1
+anes2016$female <- Recode(raw2016$V161342, "c(-9,3)=NA") - 1
 
 ## race
-anes2012$black <- as.numeric(Recode(raw2012$dem_raceeth_x, "lo:0 = NA") == 2)
+anes2016$black <- as.numeric(Recode(raw2016$V161310x, "lo:0 = NA") == 2)
 
 ## income
-anes2012$faminc <- (Recode(raw2012$incgroup_prepost_x, "lo:0 = NA") -1)/27
+anes2016$faminc <- (Recode(raw2016$V161361x, "lo:0 = NA") -1)/27
 
-## gender of inerviewer
-anes2012$iwrmale <- Recode(raw2012$iwrdesc_pre_gender, "lo:0=NA; 2=0")
+## gender of interviewer
+# not included in 2016 ANES (?)
 
 ## spanish speaking respondent
-anes2012$spanish <- as.numeric(raw2012$profile_spanishsurv == 1 |
-                              raw2012$admin_pre_lang_start == 2 |
-                              raw2012$admin_post_lang_start == 2)
+# not included in 2016 ANES (?)
 
 ## wordsum literacy test
-anes2012$wordsum <- with(raw2012, (wordsum_setb == 5) + (wordsum_setd == 3)
-                         + (wordsum_sete == 1) + (wordsum_setf == 3)
-                         + (wordsum_setg == 5) + (wordsum_seth == 4)
-                         + (wordsum_setj == 1) + (wordsum_setk == 1)
-                         + (wordsum_setl == 4) + (wordsum_seto == 2))/10
+anes2016$wordsum <- with(raw2016, Recode(V161497, "lo:-1=NA")
+                         + Recode(V161498, "lo:-1=NA") + Recode(V161499, "lo:-1=NA")
+                         + Recode(V161500, "lo:-1=NA") + Recode(V161501, "lo:-1=NA")
+                         + Recode(V161502, "lo:-1=NA") + Recode(V161503, "lo:-1=NA")
+                         + Recode(V161504, "lo:-1=NA") + Recode(V161505, "lo:-1=NA")
+                         + Recode(V161500, "lo:-1=NA"))/10
 
 ## Pro-redistribution attitude: (new scale: 0-1)
 ## Services and spending tradeoff placement (1-7, max = increase spending)
 ## Standard of living (1-7, max = gov't should let each person get ahead on their own)
-anes2012$redist <- (Recode(raw2012$spsrvpr_ssself, "lo:0 = NA") - Recode(raw2012$guarpr_self, "lo:0 = NA") + 6)/12
+anes2016$redist <- (anes2016$spsrvpr_ego - anes2016$guarpr_ego + 6)/12
 
 ## Support tax increases (new scale: 0-1)
 ## favor tax on millionaires
 ## raising personal inc tax for over 250K inc to reduce deficit
-anes2012$tax <- ((-Recode(raw2012$milln_milltax_x, "lo:0 = NA") + 7)/3 + Recode(raw2012$budget_rdef250k, "lo:0 = NA; 1=2; 2=0; 3=1"))/4
+anes2016$tax <- Recode(raw2016$V162140, "lo:-1=NA; 2=0; 3=0.5") 
+
+### NOTE:
+# MAYBE ALSO CHECK THE FEDERAL SPENDING ITEMS (V161205) etc. for consistency
+###
 
 ## Personality characteristics: Extraversion
-anes2012$extraversion <- Recode(raw2012$tipi_extra, "lo:0 = NA")
-anes2012$reserved <- Recode(raw2012$tipi_resv, "lo:0 = NA")
+anes2016$extraversion <- Recode(raw2016$V162333, "lo:0 = NA")
+anes2016$reserved <- Recode(raw2016$V162338, "lo:0 = NA")
 
-### 2012 open-ended responses
+### 2016 open-ended responses
 ### MORE WORK ON PRE-PROCESSING NEEDED, check all steps, spell checking, stopword removal etc.
 
 ## read original open-ended responses (downloaded from anes website)
-anes2012opend <- read.csv(paste0(datasrc,"anes2012TS_openends.csv"), as.is = T) %>%
-  dplyr::select(caseid, candlik_likewhatdpc, candlik_dislwhatdpc, candlik_likewhatrpc, candlik_dislwhatrpc
-         , ptylik_lwhatdp, ptylik_dwhatdp, ptylik_lwhatrp, ptylik_dwhatrp)
+anes2016opend <- read.csv(paste0(datasrc,"anes_timeseries_2016_redacted_openends.csv"), as.is = T)
+
+## identify spanish respondents
+anes2016$spanish <- as.numeric(cld2::detect_language(apply(anes2016opend[,-1],1,paste,collapse=' ')) != "en")
 
 ## minor pre-processing
-anes2012spell <- apply(anes2012opend[,-1], 2, function(x){
+anes2016spell <- apply(anes2016opend[,-1], 2, function(x){
   x <- char_tolower(x)
   x <- gsub("(^\\s+|\\s+$)","", x)
   x <- gsub("//"," ", x , fixed = T)
   x <- gsub("[[:punct:]]"," ", x)
   x <- gsub("\\s+"," ", x)
   x <- gsub("(^\\s+|\\s+$)","", x)
-  x[x %in% c("1 inapplicable","7 refused","n a","no","none","43042","i am","nome"
-             ,"i refuse", "i rwfuse to disclose", "refuse to disclose"
-             ,"dk","skip","no5","don t know","same","not really"
-             ,"no idea", "can t say","no comment","no views","nope","not at all"
-             ,"no i can t","no i cant", "i don t know","iguess not","i dont know"
-             , "dont know", "dint care","no no comment","no not really", "again no"
-             , "1", "1 dk","dk5","no answer","hi","i","not","nothing","no commont"
-             , "can t answer","no can not","dosen t know","he is not sure"
-             , "its confidential","no answwer","not reaslly","lkjlkj","skjzhdkjhsd"
-             , "you can", "even", "can","dont know dont talk about politics"
-             , "dont knoiw","nono","not sure","do not know it","quit"
-             , "doesnt know","she doesnt know","no not thinking","cant say"
-             , "i don t know much", "would rather not explain","past"
-             , "skipped question", "skip the question", "hjkdhfkjhdskjh"
-             , "theuyidhfjdhkjdhfiaesjrhdjhflike shit", "dfdsjfksdjfkdsjf","dfsadfsf"
-             , "god knows no i can t","no comments","dont want to comment"
-             , "doesn t know","wants to skip","no not sure","no i caint", "not really no"
-             , "i really cant say let me think","nope i don t know what liberal is"
-             , "dont know what a conservative is dont care","she cannot"
-             , "doesn t klnow", "no i cain t", "decline", "really can t"
-             , "i choose not to","no i don t want to","no skip")] <- ""
   return(x)
 })
 
@@ -288,17 +255,17 @@ anes2012spell <- apply(anes2012opend[,-1], 2, function(x){
 # maybe look into this later
 
 ## spell-checking
-write.table(anes2012spell, file = "calc/out/anes2012TS_combined.csv"
+write.table(anes2016spell, file = "calc/out/anes2016oe.csv"
             , sep = ",", col.names = F, row.names = F)
-spell <- aspell("calc/out/anes2012TS_combined.csv") %>%
+spell <- aspell("calc/out/anes2016oe.csv") %>%
   filter(Suggestions!="NULL")
 
 ## replace incorrect words
 for(i in 1:nrow(spell)){
-  anes2012spell[spell$Line[i],] <- gsub(spell$Original[i], unlist(spell$Suggestions[i])[1]
-                                        , anes2012spell[spell$Line[i],])
+  anes2016spell[spell$Line[i],] <- gsub(spell$Original[i], unlist(spell$Suggestions[i])[1]
+                                        , anes2016spell[spell$Line[i],])
 }
-anes2012spell <- data.frame(caseid = anes2012opend$caseid, anes2012spell,stringsAsFactors = F)
+anes2016spell <- data.frame(caseid = anes2016opend$V160001, anes2016spell,stringsAsFactors = F)
 
 
 ### add meta information about responses
@@ -311,16 +278,16 @@ shannon <- function(x, reversed = F){
 }
 
 ## overall response length
-anes2012$wc <- apply(anes2012spell[,-1], 1, function(x){
+anes2016$wc <- apply(anes2016spell[,-1], 1, function(x){
   length(unlist(strsplit(x,"\\s+")))
 })
-anes2012$lwc <- log(anes2012$wc)/max(log(anes2012$wc))
+anes2016$lwc <- log(anes2016$wc)/max(log(anes2016$wc))
 
 ## number of items answered
-anes2012$nitem <- apply(anes2012spell[,-1] != "", 1, sum, na.rm = T)
+anes2016$nitem <- apply(anes2016spell[,-1] != "", 1, sum, na.rm = T)
 
 ## diversity in item response
-anes2012$ditem <- apply(anes2012spell[,-1], 1, function(x){
+anes2016$ditem <- apply(anes2016spell[,-1], 1, function(x){
   iwc <- unlist(lapply(strsplit(x,"\\s+"), length))
   shannon(iwc/sum(iwc))
 })
@@ -332,7 +299,7 @@ anes2012$ditem <- apply(anes2012spell[,-1], 1, function(x){
 
 ## combine regular survey and open-ended data, remove spanish and empty responses
 meta <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
-data <- anes2012 %>% mutate(resp = apply(anes2012spell[,-1],1,paste,collapse=' ')) %>%
+data <- anes2016 %>% mutate(resp = apply(anes2016spell[,-1],1,paste,collapse=' ')) %>%
   filter(spanish == 0 & wc != 0)
 
 ## remove additional whitespaces
@@ -348,7 +315,7 @@ processed <- textProcessor(data$resp, metadata = data[,meta]
 out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
 
 ## remove discarded observations from data
-#data <- data[-processed$docs.removed,]
+data <- data[-processed$docs.removed,]
 data <- data[-out$docs.removed,]
 
 ## stm fit with 20 topics
@@ -400,7 +367,7 @@ ggsave("fig/ktopic.pdf", width=3, height=3)
 
 
 policies <- c("ideol","spsrvpr","defsppr","inspre","guarpr")
-targets <- c("rpc","dpc","rep","dem")
+targets <- c("rpc","dpc")
 measures <- c("polknow_text_mean","polknow_factual")
 
 polknow_hetreg <- function(policy, target, measure
@@ -448,6 +415,6 @@ tmp_df <- data.frame(policy = "ideol", target = "dpc", measure = "dpc"
 
 ### save output
 
-save(anes2012, anes2012opend, anes2012spell, data, meta, processed, out
+save(anes2016, anes2016opend, anes2016spell, data, meta, processed, out
      , stm_fit, stm_fit_full, hetreg_summary
-     , file="calc/out/anes.Rdata")
+     , file="calc/out/anes2016.Rdata")

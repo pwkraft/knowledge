@@ -26,7 +26,7 @@ options(mc.cores = parallel::detectCores())
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
 ## load data and stm results
-load("out/anes2012.Rdata")
+load("out/anes2016.Rdata")
 #load("../data/anes_old.Rdata")
 
 ## QUESTION: remove wc=0 and spanish=1?
@@ -39,19 +39,19 @@ plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(f
 
 
 ## compare response behavior by gender
-ggplot(anes2012, aes(wc, fill=factor(female))) + geom_bar(stat=mean)
+ggplot(anes2016, aes(wc, fill=factor(female))) + geom_bar(stat=mean)
 
-ggplot(anes2012, aes(factor(female), y=as.numeric(wc!=0))) + 
+ggplot(anes2016, aes(factor(female), y=as.numeric(wc!=0))) + 
   stat_summary_bin(fun.y = "mean", geom="bar")
 
-ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + geom_point(alpha=.1, size=.1) + 
+ggplot(filter(anes2016, wc>0), aes(factor(female), y=wc)) + geom_point(alpha=.1, size=.1) + 
   stat_summary(fun.data = "mean_cl_boot", col="red")
 
-ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + 
+ggplot(filter(anes2016, wc>0), aes(factor(female), y=wc)) + 
   stat_summary(fun.data = "mean_cl_boot", col="red")
 
-table(anes2012$spanish==0)
-table(anes2012$wc==0)
+table(anes2016$spanish==0)
+table(anes2016$wc==0)
 
 
 ########
@@ -236,8 +236,7 @@ hetreg_summary$policy <- factor(hetreg_summary$policy
 hetreg_summary$measure <- factor(hetreg_summary$measure, levels = rev(levels(hetreg_summary$measure))
                                  , labels = c("Factual\nKnowledge", "Discursive\nSophistication"))
 hetreg_summary$target <- factor(hetreg_summary$target
-                                , labels = c("Mitt\nRomney","Barack\nObama"
-                                             ,"Republican\nParty","Democratic\nParty"))
+                                , labels = c("Mitt\nRomney","Barack\nObama"))
 
 ggplot(hetreg_summary, aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) +
   geom_point() + geom_errorbarh(height=0) + facet_grid(policy~target) +
@@ -308,7 +307,7 @@ ggsave("../fig/prepost_empty.pdf",width=4,height=2)
 ###################
 
 pdf("../fig/stm_labels.pdf")
-plot(stm_fit, "labels", topics=c(16,14,10,8), main="Sample Topics (2012 ANES)")
+plot(stm_fit, "labels", topics=c(16,14,10,8), main="Sample Topics (2016 ANES)")
 dev.off()
 
 pdf("../fig/stm_prop.pdf")
