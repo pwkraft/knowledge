@@ -9,6 +9,7 @@
 \usepackage{lscape}
 \usepackage{dcolumn}
 \usepackage{xcolor}
+\usepackage{subcaption}
 \usepackage{enumerate}
 \usepackage{longtable}
 \usepackage{tabularx}
@@ -205,10 +206,21 @@ Before turning to the validation, I begin by directly comparing discursive sophi
 
 Figure~\ref{fig:corplot} compares discursive sophistication to the conventional knowledge metrics. The figure presents scatterplots between individual measures (lower triangular), univariate densities (diagonal), and correlation coefficients (upper triangular). The measure of discursive sophistication is positively correlated with both conventional metrics while capturing some additional variation.
 
-\begin{figure}[h]\centering
-\includegraphics{../fig/corplot_pres.pdf}
-\caption{Correlation matrix of conventional political knowledge metrics and discursive sophistication. The plots on the diagonal display univariate densities for each variable. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. All correlations reported are statistically significant with $p<.05$.}\label{fig:corplot}
-\end{figure}
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics{../fig/corplot_pres2012.pdf}
+        \caption{2012 ANES}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics{../fig/corplot_pres2016.pdf}
+        \caption{2016 ANES}
+    \end{subfigure}
+    \caption{Correlation matrix of conventional political knowledge metrics and discursive sophistication. The plots on the diagonal display univariate densities for each variable. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. All correlations reported are statistically significant with $p<.05$.}\label{fig:corplot}
+\end{figure*}
 
 Interestingly, we observe a stronger correlation between discursive sophistication and interviewer evaluations than between factual knowledge and interviewer evaluations. The open-ended measure therefore appears to capture characteristics that influence subjective assessments of sophistication. The interviewers certainly form their impressions throughout the entire survey, but the complexity of a respondent's verbatim answers seems to be more influential than their performance on the factual knowledge questions.
 
