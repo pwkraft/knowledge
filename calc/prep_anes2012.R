@@ -418,7 +418,7 @@ polknow_hetreg <- function(policy, target, measure
   
   dl <- list(N = nrow(X), B = ncol(X), G = ncol(Z)
              , y = y, X = X, Z = Z
-             , Zpred = sdrange(Z[,1]))
+             , Zpred = as.matrix(sdrange(Z[,1])))
   res <- stan(file = "calc/hetreg.stan", data=dl, control=control)
   return(res)
 }
