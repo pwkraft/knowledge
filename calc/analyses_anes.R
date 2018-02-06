@@ -334,17 +334,15 @@ m5b <- glm(vc_change ~ polknow_factual + female + educ + faminc + log(age) + bla
 m5c <- glm(vc_change ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data2016, family=binomial("logit"))
 m5d <- glm(vc_change ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2016, family=binomial("logit"))
 
-summary(glm(vc_change ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2012, family=binomial("logit")))
-
 res <- rbind(sim(m5a, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean)))
              , sim(m5b, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
              , sim(m5c, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean)))
              , sim(m5d, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))))
 res$ivlab <- factor(res$iv, labels = dvnames)
-res$Year <- 
+res$Year <- rep(c("2012 ANES","2016 ANES"), each=2)
 
 ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
-  geom_point() + geom_errorbarh(height=0) +
+  geom_point() + geom_errorbarh(height=0) + facet_wrap(~Year) +
   geom_vline(xintercept = 0, color="grey") +
   xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
   scale_y_discrete(limits = rev(levels(res$ivlab)))
@@ -355,12 +353,17 @@ ggsave("../fig/prepost.pdf",width = 3, height = 2)
 res <- rbind(data.frame(sim(m5a, iv=data.frame(polknow_text_mean=seq(min(data2012$polknow_text_mean),max(data2012$polknow_text_mean),length=10)))
                         , value=seq(min(data2012$polknow_text_mean),max(data2012$polknow_text_mean),length=10),Variable="Discursive Sophistication")
              , data.frame(sim(m5b, iv=data.frame(polknow_factual=seq(0, 1,length=10)))
+                          , value=seq(0, 1,length=10),Variable="Factual Knowledge")
+             , data.frame(sim(m5c, iv=data.frame(polknow_text_mean=seq(min(data2016$polknow_text_mean),max(data2016$polknow_text_mean),length=10)))
+                          , value=seq(min(data2016$polknow_text_mean),max(data2016$polknow_text_mean),length=10),Variable="Discursive Sophistication")
+             , data.frame(sim(m5d, iv=data.frame(polknow_factual=seq(0, 1,length=10)))
                           , value=seq(0, 1,length=10),Variable="Factual Knowledge"))
 res$ivlab <- factor(res$iv, labels = dvnames)
+res$Year <- rep(c("2012 ANES","2016 ANES"), each=20)
 
-ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
+ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi, fill=Year)) + plot_default +
   #geom_errorbar(alpha=.5, width=0) +
-  geom_ribbon(alpha=0.5, lwd=.1, fill="blue") + geom_line() +
+  geom_ribbon(alpha=0.5, lwd=.1) + geom_line() +
   facet_grid(~Variable, scales="free_x") +
   ylab("Expected Probability\nto Keep Vote Choice") + xlab("Value of independent variable")
 ggsave("../fig/prepost_exp.pdf",width=4,height=2)

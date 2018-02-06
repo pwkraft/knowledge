@@ -137,8 +137,8 @@ anes2012$vc_post <- Recode(raw2012$postvote_presvtwho,"lo:-1=NA; 1=1; 2=2; else=
 ## vote change (pre-post)
 anes2012$vc_change <- anes2012$vc_pre == anes2012$vc_post
 #anes2012$vc_change[raw2012$prevote_presvt == 1] <- 1
-anes2016$vc_change[is.na(anes2016$vc_pre) & !is.na(anes2016$vc_post)] <- 0
-anes2016$vc_change[!is.na(anes2016$vc_pre) & is.na(anes2016$vc_post)] <- 0
+anes2012$vc_change[is.na(anes2012$vc_pre) & !is.na(anes2012$vc_post)] <- 0
+anes2012$vc_change[!is.na(anes2012$vc_pre) & is.na(anes2012$vc_post)] <- 0
 
 ## party/candidate placements
 anes2012$ideol_ego <- Recode(raw2012$libcpre_self, "lo:0=NA")
