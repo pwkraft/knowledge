@@ -371,7 +371,7 @@ ggsave("fig/ktopic.pdf", width=3, height=3)
 
 
 policies <- c("ideol","spsrvpr","defsppr","inspre","guarpr")
-targets <- c("rpc","dpc","rep","dem")
+targets <- c("rpc","dpc")#,"rep","dem")
 m <- c("polknow_text_mean","polknow_factual","wordsum")
 
 polknow_hetreg <- function(policy, target, measure
