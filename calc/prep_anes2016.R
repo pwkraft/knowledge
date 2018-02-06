@@ -371,8 +371,8 @@ ggsave("fig/ktopic.pdf", width=3, height=3)
 
 
 policies <- c("ideol","spsrvpr","defsppr","inspre","guarpr")
-targets <- c("rpc","dpc")
-measures <- c("polknow_text_mean","polknow_factual")
+targets <- c("rpc","dpc","rep","dem")
+m <- c("polknow_text_mean","polknow_factual","wordsum")
 
 polknow_hetreg <- function(policy, target, measure
                            , controls = c("female", "educ", "faminc", "lage"
@@ -387,7 +387,8 @@ polknow_hetreg <- function(policy, target, measure
   
   dl <- list(N = nrow(X), B = ncol(X), G = ncol(Z)
              , y = y, X = X, Z = Z
-             , Zpred = as.matrix(sdrange(Z[,1])))
+             , Zpred = rbind(cbind(sdrange(Z[,1]), mean(Z[,2]), mean(Z[,3]))
+                             , cbind(mean(Z[,1]), sdrange(Z[,2]), mean(Z[,3]))))
   res <- stan(file = "calc/hetreg.stan", data=dl, control=control)
   return(res)
 }
@@ -395,15 +396,18 @@ polknow_hetreg <- function(policy, target, measure
 hetreg_summary2016 <- data.frame(NULL)
 for(p in policies){
   for(t in targets){
-    for(m in measures){
-      iterlab <- paste(c(p,t,m),collapse="_")
-      cat("Iteration: ",iterlab,"\n")
-      tmp <- polknow_hetreg(p, t, m)
-      tmp_sigmadif <- extract(tmp, par="sigmadif")[[1]]
-      tmp_df <- data.frame(policy = p, target = t, measure = m, mean = mean(tmp_sigmadif)
-                           , cilo = quantile(tmp_sigmadif, .025), cihi = quantile(tmp_sigmadif, .975))
-      hetreg_summary2016 <- rbind(hetreg_summary2016, tmp_df)
-    }
+    iterlab <- paste(c(p,t),collapse="_")
+    cat("\n\n===================================================================================")
+    cat("\nIteration: ",iterlab)
+    cat("\n___________________________________________________________________________________\n")
+    tmp <- polknow_hetreg(p, t, m)
+    tmp_sigmadif1 <- extract(tmp, par="sigmadif1")[[1]]
+    tmp_sigmadif2 <- extract(tmp, par="sigmadif2")[[1]]
+    tmp_df <- data.frame(policy = p, target = t, measure = m[1:2]
+                         , mean = c(mean(tmp_sigmadif1), mean(tmp_sigmadif2))
+                         , cilo = c(quantile(tmp_sigmadif1, .025), quantile(tmp_sigmadif2, .025))
+                         , cihi = c(quantile(tmp_sigmadif1, .975), quantile(tmp_sigmadif2, .975)))
+    hetreg_summary2016 <- rbind(hetreg_summary2016, tmp_df)
   }
 }
 
