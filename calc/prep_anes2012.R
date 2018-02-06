@@ -129,14 +129,16 @@ anes2012$button <- Recode(raw2012$mobilpo_sign, "c(2,5)=0; lo:-1=NA")
 anes2012$part <- with(anes2012, protest + petition + button + letter)
 
 ## vote choice (pre-election)
-anes2012$vc_pre <- Recode(raw2012$prevote_intpreswho,"1=1; 2=2; else=NA")
+anes2012$vc_pre <- Recode(raw2012$prevote_intpreswho,"lo:-1=NA; 1=1; 2=2; else=3")
 
 ## vote choice (post-election)
-anes2012$vc_post <- Recode(raw2012$postvote_presvtwho, "1=1; 2=2; else=NA")
+anes2012$vc_post <- Recode(raw2012$postvote_presvtwho,"lo:-1=NA; 1=1; 2=2; else=3")
 
 ## vote change (pre-post)
 anes2012$vc_change <- anes2012$vc_pre == anes2012$vc_post
 #anes2012$vc_change[raw2012$prevote_presvt == 1] <- 1
+anes2016$vc_change[is.na(anes2016$vc_pre) & !is.na(anes2016$vc_post)] <- 0
+anes2016$vc_change[!is.na(anes2016$vc_pre) & is.na(anes2016$vc_post)] <- 0
 
 ## party/candidate placements
 anes2012$ideol_ego <- Recode(raw2012$libcpre_self, "lo:0=NA")

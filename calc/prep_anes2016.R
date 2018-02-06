@@ -121,14 +121,16 @@ anes2016$button <- Recode(raw2016$V162012, "2=0; lo:-1=NA")
 anes2016$part <- with(anes2016, protest + petition + button + letter)
 
 ## vote choice (pre-election)
-anes2016$vc_pre <- Recode(raw2016$V161031,"1=1; 2=2; else=NA")
+anes2016$vc_pre <- Recode(raw2016$V161031,"lo:-1=NA; 1=1; 2=2; else=3")
 
 ## vote choice (post-election)
-anes2016$vc_post <- Recode(raw2016$V162034a, "1=1; 2=2; else=NA")
+anes2016$vc_post <- Recode(raw2016$V162034a, "lo:-1=NA; 1=1; 2=2; else=3")
 
 ## vote change (pre-post)
 anes2016$vc_change <- as.numeric(anes2016$vc_pre == anes2016$vc_post)
 #anes2016$vc_change[raw2016$V161026 == 1] <- 1
+anes2016$vc_change[is.na(anes2016$vc_pre) & !is.na(anes2016$vc_post)] <- 0
+anes2016$vc_change[!is.na(anes2016$vc_pre) & is.na(anes2016$vc_post)] <- 0
 
 ## party/candidate placements
 anes2016$ideol_ego <- Recode(raw2016$V161126, "lo:0=NA; 99=NA")
