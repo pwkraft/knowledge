@@ -159,7 +159,7 @@ yougov$ditem <- apply(opend[,-1], 1, function(x){
 ### prepare data
 
 ## combine regular survey and open-ended data, remove spanish and empty responses
-meta <- c("age", "educ_cont", "pid_cont", "educ_pid")
+meta <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
 data <- yougov %>% mutate(resp = apply(opend[,-1],1,paste,collapse=' '))
 
 ## remove additional whitespaces

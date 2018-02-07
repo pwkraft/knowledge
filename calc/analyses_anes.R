@@ -38,8 +38,6 @@ source("func.R")
 ## plot defaults
 plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
 
-
-
 ## compare response behavior by gender
 ggplot(anes2012, aes(factor(female), y=as.numeric(wc!=0))) + 
   stat_summary_bin(fun.y = "mean", geom="bar")
@@ -106,40 +104,54 @@ ggsave("../fig/corplot_components2016.pdf",width=3.3, height=3.3)
 
 
 
-
 ## label definition
 dvnames <- c("Discursive\nSophistication","Factual\nKnowledge")
 ivnames <- c("Intercept", "Gender\n(Female)", "Media\nExposure", "Political\nDiscussions", "Education\n(College)"
              , "Income", "log(Age)", "Race\n(Black)", "Church\nAttendance", "Survey Mode\n(Online)")
+
+#########
+# Validation: compare number of topics
+#########
+
+p1 <- ggplot(data2012, aes(x=polknow_text_mean, y=polknow_text_mean_full)) +
+  geom_point(alpha=.05) + geom_smooth(method="lm") +  ggtitle("2012 ANES") +
+  xlab("Discursive Sophistication\n(20 Topics)") + ylab("Discursive Sophistication\n(40 Topics)") +
+  annotate("text", x=0.1, y=max(data2012$polknow_text_mean_full), size=2
+           , label = paste0("r = ",round(cor(data2012$polknow_text_mean, data2012$polknow_text_mean_full), 2))) +
+  theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
+
+p2 <- ggplot(data2016, aes(x=polknow_text_mean, y=polknow_text_mean_full)) +
+  geom_point(alpha=.05) + geom_smooth(method="lm") + ggtitle("2016 ANES") +
+  xlab("Discursive Sophistication\n(20 Topics)") + ylab("Discursive Sophistication\n(40 Topics)") +
+  annotate("text", x=.1, y=max(data2016$polknow_text_mean_full), size=2
+           , label = paste0("r = ",round(cor(data2016$polknow_text_mean, data2016$polknow_text_mean_full), 2))) +
+  theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
+
+(p0 <- grid.arrange(p1, p2, ncol=2))
+ggsave("../fig/ktopic.pdf", p0, width=6, height=3)
+
 
 
 ########
 # validation: effect on political engagement
 ########
 
-m4a <- m4b <- m4c <- m4d <- NULL
-m4a[[1]] <- lm(effic_int ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data2012)
-m4a[[2]] <- lm(effic_ext ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data2012)
-m4a[[3]] <- lm(part ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data2012)
-m4a[[4]] <- glm(vote ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data2012, family=binomial("logit"))
-m4b[[1]] <- lm(effic_int ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2012)
-m4b[[2]] <- lm(effic_ext ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2012)
-m4b[[3]] <- lm(part ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2012)
-m4b[[4]] <- glm(vote ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2012, family=binomial("logit"))
-m4c[[1]] <- lm(effic_int ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data2016)
-m4c[[2]] <- lm(effic_ext ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data2016)
-m4c[[3]] <- lm(part ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data2016)
-m4c[[4]] <- glm(vote ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data2016, family=binomial("logit"))
-m4d[[1]] <- lm(effic_int ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2016)
-m4d[[2]] <- lm(effic_ext ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2016)
-m4d[[3]] <- lm(part ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2016)
-m4d[[4]] <- glm(vote ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2016, family=binomial("logit"))
+### Joint model controlling for both measures + wordsum index
 
+m4a <- m4b <- NULL
+m4a[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012)
+m4a[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012)
+m4a[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012)
+m4a[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012, family=binomial("logit"))
+m4b[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
+m4b[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
+m4b[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
+m4b[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016, family=binomial("logit"))
 
 res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean)))
-             , sim(m4b, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
-             , sim(m4c, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean)))
-             , sim(m4d, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))))
+             , sim(m4a, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
+             , sim(m4b, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean)))
+             , sim(m4b, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))))
 res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
                     , labels = c("Turnout","Non-conv. Participation"
                                  , "Internal Efficacy","External Efficacy"))
@@ -149,36 +161,28 @@ res$Year <- rep(c("2012 ANES","2016 ANES"), each=8)
 ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
   geom_point() + geom_errorbarh(height=0) + facet_grid(Year~dvlab, scale="free_x") +
   geom_vline(xintercept = 0, color="grey") +
-  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
+  xlab("Marginal Effect (-/+ 1 SD)") + ylab("Independent Variable") + plot_default +
   scale_y_discrete(limits = rev(levels(res$ivlab))) + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ggsave("../fig/knoweff_pres.pdf", width=6.5, height=2.2)
 
-ggplot(res[res$Year=="2012 ANES",], aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
-  geom_point() + geom_errorbarh(height=0) + facet_wrap(~dvlab, scale="free_x") +
-  xlab("Marginal Effect") + ylab("Independent Variable") +
-  theme_classic(base_size = 9) + theme(panel.border = element_rect(fill="white")) +
-  geom_vline(xintercept = 0, color="grey") +
-  scale_y_discrete(limits = rev(levels(res$ivlab)))
-ggsave("../fig/knoweff_empty.pdf", width=4, height=3)
 
+### Robustness check: Joint model controlling for both measures + word count
 
-### Joint model controlling for both measures
+m4a <- m4b <- NULL
+m4a[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2012)
+m4a[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2012)
+m4a[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2012)
+m4a[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2012, family=binomial("logit"))
+m4b[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2016)
+m4b[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2016)
+m4b[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2016)
+m4b[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2016, family=binomial("logit"))
 
-m4c <- m4d <- NULL
-m4c[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2012)
-m4c[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2012)
-m4c[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2012)
-m4c[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2012, family=binomial("logit"))
-m4d[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2016)
-m4d[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2016)
-m4d[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2016)
-m4d[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2016, family=binomial("logit"))
-
-res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean)))
-             , sim(m4c, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
-             , sim(m4d, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean)))
-             , sim(m4d, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))))
+res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean)))
+             , sim(m4a, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
+             , sim(m4b, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean)))
+             , sim(m4b, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))))
 res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
                     , labels = c("Turnout","Non-conv. Participation"
                                  , "Internal Efficacy","External Efficacy"))
@@ -188,91 +192,28 @@ res$Year <- rep(c("2012 ANES","2016 ANES"), each=8)
 ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
   geom_point() + geom_errorbarh(height=0) + facet_grid(Year~dvlab, scale="free_x") +
   geom_vline(xintercept = 0, color="grey") +
-  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
-  scale_y_discrete(limits = rev(levels(res$ivlab))) + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-ggsave("../fig/knoweff_joint.pdf", width=6.5, height=2.2)
-
-
-### Joint model controlling for both measures + wordsum index!
-
-m4c <- m4d <- NULL
-m4c[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012)
-m4c[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012)
-m4c[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012)
-m4c[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012, family=binomial("logit"))
-m4d[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
-m4d[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
-m4d[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
-m4d[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016, family=binomial("logit"))
-
-res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean)))
-             , sim(m4c, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
-             , sim(m4d, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean)))
-             , sim(m4d, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))))
-res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
-                    , labels = c("Turnout","Non-conv. Participation"
-                                 , "Internal Efficacy","External Efficacy"))
-res$ivlab <- factor(res$iv, labels = dvnames)
-res$Year <- rep(c("2012 ANES","2016 ANES"), each=8)
-
-ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
-  geom_point() + geom_errorbarh(height=0) + facet_grid(Year~dvlab, scale="free_x") +
-  geom_vline(xintercept = 0, color="grey") +
-  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
-  scale_y_discrete(limits = rev(levels(res$ivlab))) + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-ggsave("../fig/knoweff_wordsum.pdf", width=6.5, height=2.2)
-
-
-### Joint model controlling for both measures + word count!
-
-m4c <- m4d <- NULL
-m4c[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data2012)
-m4c[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data2012)
-m4c[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data2012)
-m4c[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data2012, family=binomial("logit"))
-m4d[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data2016)
-m4d[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data2016)
-m4d[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data2016)
-m4d[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + lwc, data = data2016, family=binomial("logit"))
-
-res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean)))
-             , sim(m4c, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
-             , sim(m4d, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean)))
-             , sim(m4d, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))))
-res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
-                    , labels = c("Turnout","Non-conv. Participation"
-                                 , "Internal Efficacy","External Efficacy"))
-res$ivlab <- factor(res$iv, labels = dvnames)
-res$Year <- rep(c("2012 ANES","2016 ANES"), each=8)
-
-ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
-  geom_point() + geom_errorbarh(height=0) + facet_grid(Year~dvlab, scale="free_x") +
-  geom_vline(xintercept = 0, color="grey") +
-  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
+  xlab("Marginal Effect (-/+ 1 SD)") + ylab("Independent Variable") + plot_default +
   scale_y_discrete(limits = rev(levels(res$ivlab))) + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ggsave("../fig/knoweff_lwc.pdf", width=6.5, height=2.2)
 
 
+### Robustness check: Joint model controlling for personality (extraversion and being reserved)
 
-### Joint model controlling for extraversion and being reserved!
+m4a <- m4b <- NULL
+m4a[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2012)
+m4a[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2012)
+m4a[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2012)
+m4a[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2012, family=binomial("logit"))
+m4b[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2016)
+m4b[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2016)
+m4b[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2016)
+m4b[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2016, family=binomial("logit"))
 
-m4c <- m4d <- NULL
-m4c[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + extraversion + reserved, data = data2012)
-m4c[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + extraversion + reserved, data = data2012)
-m4c[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + extraversion + reserved, data = data2012)
-m4c[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + extraversion + reserved, data = data2012, family=binomial("logit"))
-m4d[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + extraversion + reserved, data = data2016)
-m4d[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + extraversion + reserved, data = data2016)
-m4d[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + extraversion + reserved, data = data2016)
-m4d[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + extraversion + reserved, data = data2016, family=binomial("logit"))
-
-res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean)))
-             , sim(m4c, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
-             , sim(m4d, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean)))
-             , sim(m4d, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))))
+res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean)))
+             , sim(m4a, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
+             , sim(m4b, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean)))
+             , sim(m4b, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))))
 res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
                     , labels = c("Turnout","Non-conv. Participation"
                                  , "Internal Efficacy","External Efficacy"))
@@ -282,10 +223,11 @@ res$Year <- rep(c("2012 ANES","2016 ANES"), each=8)
 ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
   geom_point() + geom_errorbarh(height=0) + facet_grid(Year~dvlab, scale="free_x") +
   geom_vline(xintercept = 0, color="grey") +
-  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
+  xlab("Marginal Effect (-/+ 1 SD)") + ylab("Independent Variable") + plot_default +
   scale_y_discrete(limits = rev(levels(res$ivlab))) + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ggsave("../fig/knoweff_personality.pdf", width=6.5, height=2.2)
+
 
 
 ########
@@ -305,10 +247,11 @@ hetreg_summary$target <- factor(hetreg_summary$target
                                              ,"Donald\nTrump","Hillary\nClinton"))
 
 ggplot(hetreg_summary, aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) +
-  geom_point() + geom_errorbarh(height=0) + facet_grid(policy~target) +
+  geom_point() + geom_errorbarh(height=0) + facet_grid(target~policy) +
   geom_vline(xintercept = 0, color="grey") +
-  xlab("Error Variance Reduction") + ylab("Independent Variable (-/+ 1 SD)") + plot_default
-ggsave("../fig/hetreg.pdf",width = 6, height = 4)
+  xlab("Error Variance Reduction (-/+ 1 SD)") + ylab("Independent Variable") + 
+  plot_default + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggsave("../fig/hetreg.pdf",width = 6.5, height = 3.3)
 
 hetreg_summary %>% filter(policy=="Ideology") %>%
   ggplot(aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) +
@@ -317,38 +260,16 @@ hetreg_summary %>% filter(policy=="Ideology") %>%
   xlab("Error Variance Reduction (-/+ 1 SD)") + ylab("Independent Variable") + plot_default
 ggsave("../fig/hetreg_pres.pdf",width = 4, height = 3)
 
-hetreg_summary %>% filter(policy=="Ideology") %>%
-  ggplot(aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) + plot_default +
-  geom_point() + geom_errorbarh(height=0) + facet_wrap(~target, ncol=2) +
-  geom_vline(xintercept = 0, color="grey") + theme(panel.border = element_rect(fill="white")) +
-  xlab("Error Variance Reduction (-/+ 1 SD)") + ylab("Independent Variable")
-ggsave("../fig/hetreg_empty.pdf",width = 4, height = 3)
 
 
 #########
 ### validation: pre-post consistency
 #########
 
-m5a <- glm(vc_change ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data2012, family=binomial("logit"))
-m5b <- glm(vc_change ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2012, family=binomial("logit"))
-m5c <- glm(vc_change ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data2016, family=binomial("logit"))
-m5d <- glm(vc_change ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2016, family=binomial("logit"))
-
-res <- rbind(sim(m5a, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean)))
-             , sim(m5b, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
-             , sim(m5c, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean)))
-             , sim(m5d, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))))
-res$ivlab <- factor(res$iv, labels = dvnames)
-res$Year <- rep(c("2012 ANES","2016 ANES"), each=2)
-
-ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
-  geom_point() + geom_errorbarh(height=0) + facet_wrap(~Year) +
-  geom_vline(xintercept = 0, color="grey") +
-  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
-  scale_y_discrete(limits = rev(levels(res$ivlab)))
-ggsave("../fig/prepost.pdf",width = 3, height = 2)
-
-
+m5a <- glm(vc_change ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012, family=binomial("logit"))
+m5b <- glm(vc_change ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012, family=binomial("logit"))
+m5c <- glm(vc_change ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016, family=binomial("logit"))
+m5d <- glm(vc_change ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016, family=binomial("logit"))
 
 res <- rbind(data.frame(sim(m5a, iv=data.frame(polknow_text_mean=seq(min(data2012$polknow_text_mean),max(data2012$polknow_text_mean),length=10)))
                         , value=seq(min(data2012$polknow_text_mean),max(data2012$polknow_text_mean),length=10),Variable="Discursive Sophistication")
@@ -361,30 +282,28 @@ res <- rbind(data.frame(sim(m5a, iv=data.frame(polknow_text_mean=seq(min(data201
 res$ivlab <- factor(res$iv, labels = dvnames)
 res$Year <- rep(c("2012 ANES","2016 ANES"), each=20)
 
-ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi, fill=Year)) + plot_default +
-  #geom_errorbar(alpha=.5, width=0) +
-  geom_ribbon(alpha=0.5, lwd=.1) + geom_line() +
-  facet_grid(~Variable, scales="free_x") +
-  ylab("Expected Probability\nto Keep Vote Choice") + xlab("Value of independent variable")
-ggsave("../fig/prepost_exp.pdf",width=4,height=2)
-
-ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
-  #geom_errorbar(alpha=.5, width=0) +
-  geom_ribbon(alpha=0.5, lwd=.1, fill="blue") + geom_line() +
-  facet_grid(~Variable, scales="free_x") + xlab("Value of independent variable") +
-  ylab("Expected Probability\nto Keep Vote Choice") + theme(panel.border = element_rect(fill="white"))
-ggsave("../fig/prepost_empty.pdf",width=4,height=2)
+ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi, fill=Variable, lty=Variable)) + plot_default +
+  geom_ribbon(alpha=0.4, lwd=.1) + geom_line() +
+  facet_grid(~Year, scales="free_x") +
+  ylab("Expected Probability\nto Keep Vote Choice") + xlab("Value of Independent Variable")
+ggsave("../fig/prepost_exp.pdf",width=5,height=2)
 
 
 ###################
 ### Additional information: STM summaries
 ###################
 
-pdf("../fig/stm_labels.pdf")
-par(mfrow=c(1,2), mar=c(0.5,0.5,2.5,0.5))
-plot(stm_fit2012, "labels", topics=c(16,14,10,8), main="Sample Topics (2012 ANES)")
-plot(stm_fit2016, "labels", topics=c(1,10,19,17), main="Sample Topics (2016 ANES)")
-dev.off()
+summary(stm_fit2012)
+summary(stm_fit2016)
+topics2012 <- c("1: Compromise","2: Romney","3: Morality/Religion","4: Obama","5: Taxes"
+                ,"6: Inequality","7: Social Security","8: Middle class","9: Immigration","10: Government Debt"
+                ,"11: Abortion","12: Economic Policy","13: Foreign Policy","14: Evaluation/Sentiment","15: Values"
+                ,"16: Presidential Performance","17: Patriotism","18: Health Care","19: Miscellaneous","20: Parties")
+topics2016 <- c("1: Compromise","2: Romney","3: Morality/Religion","4: Obama","5: Taxes"
+                ,"6: Inequality","7: Social Security","8: Middle class","9: Immigration","10: Government Debt"
+                ,"11: Abortion","12: Economic Policy","13: Foreign Policy","14: Evaluation/Sentiment","15: Values"
+                ,"16: Presidential Performance","17: Patriotism","18: Health Care","19: Miscellaneous","20: Parties")
+
 
 pdf("../fig/stm_prop.pdf")
 par(mfrow=c(1,2), mar=c(4.2,0.5,2.5,0.5))
@@ -392,6 +311,11 @@ plot(stm_fit2012, main="2012 ANES")
 plot(stm_fit2016, main="2016 ANES")
 dev.off()
 
+pdf("../fig/stm_labels.pdf")
+par(mfrow=c(1,2), mar=c(0.5,0.5,2.5,0.5))
+plot(stm_fit2012, "labels", topics=c(16,14,10,8), main="Sample Topics (2012 ANES)")
+plot(stm_fit2016, "labels", topics=c(1,10,19,17), main="Sample Topics (2016 ANES)")
+dev.off()
 
 ########
 # topic differences b/w men and women
@@ -401,13 +325,6 @@ prep2012 <- estimateEffect(~ age + educ_cont + pid_cont + educ_pid + female
                            , stm_fit2012, meta = out2012$meta, uncertainty = "Global")
 prep2016 <- estimateEffect(~ age + educ_cont + pid_cont + educ_pid + female
                            , stm_fit2016, meta = out2016$meta, uncertainty = "Global")
-
-summary(stm_fit2012)
-summary(stm_fit2016)
-# topics <- c("1: Compromise","2: Romney","3: Morality/Religion","4: Obama","5: Taxes"
-#             ,"6: Inequality","7: Social Security","8: Middle class","9: Immigration","10: Government Debt"
-#             ,"11: Abortion","12: Economic Policy","13: Foreign Policy","14: Evaluation/Sentiment","15: Values"
-#             ,"16: Presidential Performance","17: Patriotism","18: Health Care","19: Miscellaneous","20: Parties")
 
 pdf("../fig/stm_gender.pdf")
 par(mfrow=c(1,2), mar=c(2.2,0.5,2.2,0.5))

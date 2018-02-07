@@ -354,17 +354,6 @@ know <- sophistication(stm_fit2016_full, out2016)
 data2016$polknow_text_mean_full <- (know$ntopics + know$distinct + data2016$ditem)/3
 
 
-### Compare 20 topic sophistication to 77 topic sophistication
-
-ggplot(data2016, aes(x=polknow_text_mean_full, y=polknow_text_mean)) +
-  geom_point(alpha=.05) + geom_smooth(method="lm") +
-  ylab("Discursive Sophistication\n(20 Topics)") + xlab("Discursive Sophistication\n(40 Topics)") +
-  annotate("text", x=0.1, y=.9, size=2
-           , label = paste0("r = ",round(cor(data2016$polknow_text_mean, data2016$polknow_text_mean_full), 2))) +
-  theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
-ggsave("fig/ktopic.pdf", width=3, height=3)
-
-
 #################
 ### Estimate hetreg models (in prep because it takes a long time)
 #################

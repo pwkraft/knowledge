@@ -173,52 +173,6 @@ ggsave("../fig/yg_determinants_empty.pdf",width=3,height=2.5)
 ########
 # NOTE: control for wordsum?
 
-m2 <- NULL
-m2[[1]] <- lm(know_dis ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig, data = data)
-m2[[2]] <- lm(know_dis ~ know_pol + female + educ + faminc + log(age) + black + relig, data = data)
-lapply(m2, summary)
-
-res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=range(data$polknow_text_mean)))
-                        , Variable="Discursive Sophistication")
-             , data.frame(sim(m2[[2]], iv=data.frame(know_pol=range(data$know_pol)))
-                          , Variable="Factual Knowledge"))
-
-ggplot(res, aes(y=Variable, x=mean, xmin=cilo,xmax=cihi)) +
-  geom_point() + geom_errorbarh(height=0) + 
-  geom_vline(xintercept = 0, color="grey") + 
-  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default
-
-
-res <- rbind(data.frame(sim(m2[[1]], iv=data.frame(polknow_text_mean=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10)))
-                        ,value=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10),Variable="Discursive Sophistication")
-             , data.frame(sim(m2[[2]], iv=data.frame(know_pol=seq(0,1,length=10)))
-                          ,value=seq(0,1,length=10),Variable="Factual Knowledge"))
-#res$model <- rep(c(1,2), each=nrow(res)/2)
-#res$model <- factor(res$model, labels = c("Individual Models","Combined Model"))
-
-ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
-  #geom_errorbar(alpha=.5, width=0) + 
-  geom_ribbon(alpha=0.5, lwd=.1, fill="blue") + geom_line() + 
-  facet_grid(~Variable) +
-  ylab("Information Retrieval") + xlab("Value of independent variable")
-ggsave("../fig/yg_disease.pdf",width=4,height=2)
-
-ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
-  #geom_errorbar(alpha=.5, width=0) + 
-  geom_ribbon(alpha=0.5, lwd=.1, fill="blue") + geom_line() + 
-  facet_grid(~Variable) + theme(panel.border = element_rect(fill="white")) +
-  ylab("Information Retrieval") + xlab("Value of independent variable")
-ggsave("../fig/yg_disease_empty.pdf",width=4,height=2)
-
-# ggplot(res, aes(x=value, y=mean, col=Gender,ymin=cilo,ymax=cihi, lty=Gender)) + 
-#   theme_classic(base_size = 8) + theme(panel.border = element_rect(fill="white")) +
-#   #geom_errorbar(alpha=.5, width=0) +
-#   geom_ribbon(alpha=0.1, lwd=.1) + geom_line() +
-#   facet_grid(dvlab~Variable, scale="free_y") +
-#   ylab("Expected sophistication") + xlab("Value of independent variable")
-# ggsave("../fig/yg_disease_empty.pdf",width=3,height=3)
-
-
 ### Joint model controlling for both measures
 
 m2full <- lm(know_dis ~ polknow_text_mean + know_pol + female + educ + faminc + log(age) + black + relig, data = data)
@@ -232,12 +186,10 @@ res <- rbind(data.frame(sim(m2full, iv=data.frame(polknow_text_mean=seq(min(data
                         ,value=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10),Variable="Discursive Sophistication")
              , data.frame(sim(m2full, iv=data.frame(know_pol=seq(0,1,length=10)))
                           ,value=seq(0,1,length=10),Variable="Factual Knowledge"))
-ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi)) + plot_default +
-  #geom_errorbar(alpha=.5, width=0) + 
-  geom_ribbon(alpha=0.5, lwd=.1, fill="blue") + geom_line() + 
-  facet_grid(~Variable) +
-  ylab("Information Retrieval") + xlab("Value of independent variable")
-ggsave("../fig/yg_disease_joint.pdf",width=4,height=2)
+ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_default +
+  geom_ribbon(alpha=0.4, lwd=.1) + geom_line() + 
+  ylab("Information Retrieval") + xlab("Value of Independent Variable")
+ggsave("../fig/yg_disease.pdf",width=4,height=2)
 
 
 ###################

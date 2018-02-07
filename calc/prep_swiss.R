@@ -26,7 +26,7 @@ raw <- read_dta(paste0(datasrc,"citizencompetence_colombo.dta"), encoding = "lat
 ### prep/recode survey data
 
 ## respondent id
-swiss <- select(raw, nummer, prostring1, prostring2, constring1, constring2)
+swiss <- dplyr::select(raw, nummer, prostring1, prostring2, constring1, constring2)
 
 ## language (-> separate dataset later)
 swiss$lang <- raw$sprache
@@ -46,6 +46,8 @@ swiss$ideol <- na_if(raw$P04, 11) %>% na_if(12)
 ## ideol * edu
 swiss$edu_ideol <- swiss$edu * swiss$ideol
 
+## gender
+swiss$female <- 1 - raw$male
 
 
 ### open-ended responses
@@ -102,7 +104,7 @@ swiss$opinionation <- apply(opend, 1, function(x){
 
 ## combine regular survey and open-ended data
 ## ADD: type of referendum as a meta-covariate
-meta <- c("age", "edu", "ideol", "edu_ideol")
+meta <- c("age", "edu", "ideol", "edu_ideol", "female")
 swiss$resp <- apply(select(swiss, prostring1:constring2),1,paste,collapse=' ')
   
 
