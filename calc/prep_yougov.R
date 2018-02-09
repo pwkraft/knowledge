@@ -138,6 +138,13 @@ opend <- data.frame(caseid = raw$caseid, opend, stringsAsFactors = F)
 
 ### add meta information about responses
 
+## function to compute shannon entropy (rescaled to 0-1??)
+shannon <- function(x, reversed = F){
+  out <- (- sum(log(x^x)/log(length(x))))
+  if(reversed) out <- 1 - out
+  out
+}
+
 ## overall response length
 yougov$wc <- apply(opend[,-1], 1, function(x){
   length(unlist(strsplit(x,"\\s+")))
@@ -150,7 +157,7 @@ yougov$nitem <- apply(opend[,-1] != "", 1, sum, na.rm = T)
 ## diversity in item response
 yougov$ditem <- apply(opend[,-1], 1, function(x){
   iwc <- unlist(lapply(strsplit(x,"\\s+"), length))
-  1 - ineq(iwc,type="Gini")
+  shannon(iwc/sum(iwc))
 })
 
 
@@ -180,60 +187,20 @@ data <- data[-processed$docs.removed,]
 
 ## quick fit (15 topics)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-               , K=15, init.type = "Spectral")
-
-## slow, smart fit: estimates about 80 topics, might be too large (also, K is not deterministic here)
-#stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-#               , K=0, init.type = "Spectral")
+               , K=20, init.type = "Spectral")
 
 
-### create new sophistication measures
+#######################
+### Discursive sophistication measure
+#######################
 
-## probability fits and transform for diversity score  
-doc_topic_prob <- stm_fit$theta
+## combine sophistication components with remaining data
+data <- cbind(data, sophistication(stm_fit, out))
 
-## topic diversity score
-data$topic_diversity <- apply(doc_topic_prob, 1, function(x) 1 - ineq(x,type="Gini"))
+## compute combined measures
+data$polknow_text <- data$ntopics * data$distinct * data$ditem
+data$polknow_text_mean <- (data$ntopics + data$distinct + data$ditem)/3
 
-## text-based sophistication measures
-data$polknow_text <- with(data, topic_diversity * lwc * ditem)
-data$polknow_text_mean <- with(data, (topic_diversity + lwc + ditem)/3)
-
-################
-### NEW MEASURE
-################
-
-## compute shannon entropy
-shannon <- function(x, reversed = F){
-  out <- (- sum(log(x^x)/log(length(x))))
-  if(reversed) out <- 1 - out
-  out
-}
-
-## which topic has highest likelihood for each word
-term_topic <- apply(stm_fit$beta$logbeta[[1]], 2, which.max)
-
-## shannon entropy of each term as a measure for its distinctiveness -> vague term or clear topic
-pseudop <- exp(stm_fit$beta$logbeta[[1]])
-term_entropy <- apply(pseudop, 2, max)
-
-## combine both measures with open-ended responses
-know <- data.frame(ntopics = rep(NA, length(out$documents))
-                   , entropy = rep(NA, length(out$documents)))
-for(doc in 1:length(out$documents)){
-  know$ntopics[doc] <- length(unique(term_topic[out$documents[[doc]][1,]]))
-  know$entropy[doc] <- log(sum(term_entropy[out$documents[[doc]][1,]] * out$documents[[doc]][2,]))
-}
-know$ntopics <- know$ntopic/max(know$ntopics)
-know$entropy <- (know$entropy-min(know$entropy))/(max(know$entropy)-min(know$entropy))
-data <- cbind(data, know)
-
-data$polknow_text <- data$ntopics * data$entropy * data$ditem
-data$polknow_text_mean <- (data$ntopics + data$entropy + data$ditem)/3
-
-###################
-### END NEW MEASURE
-###################
 
 ### save output
 

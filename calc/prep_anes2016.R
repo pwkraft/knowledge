@@ -243,9 +243,7 @@ anes2016$spanish <- as.numeric(cld2::detect_language(apply(anes2016opend[,-1],1,
 ## minor pre-processing
 anes2016spell <- apply(anes2016opend[,-1], 2, function(x){
   x <- char_tolower(x)
-  x <- gsub("(^\\s+|\\s+$)","", x)
   x <- gsub("//"," ", x , fixed = T)
-  x <- gsub("[[:punct:]]"," ", x)
   x <- gsub("\\s+"," ", x)
   x <- gsub("(^\\s+|\\s+$)","", x)
   return(x)

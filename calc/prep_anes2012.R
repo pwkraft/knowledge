@@ -255,32 +255,30 @@ anes2012opend <- read.csv(paste0(datasrc,"anes2012TS_openends.csv"), as.is = T) 
 ## minor pre-processing
 anes2012spell <- apply(anes2012opend[,-1], 2, function(x){
   x <- char_tolower(x)
-  x <- gsub("(^\\s+|\\s+$)","", x)
   x <- gsub("//"," ", x , fixed = T)
-  x <- gsub("[[:punct:]]"," ", x)
   x <- gsub("\\s+"," ", x)
   x <- gsub("(^\\s+|\\s+$)","", x)
   x[x %in% c("1 inapplicable","7 refused","n a","no","none","43042","i am","nome"
              ,"i refuse", "i rwfuse to disclose", "refuse to disclose"
-             ,"dk","skip","no5","don t know","same","not really"
-             ,"no idea", "can t say","no comment","no views","nope","not at all"
-             ,"no i can t","no i cant", "i don t know","iguess not","i dont know"
+             ,"dk","skip","no5","don't know","same","not really"
+             ,"no idea", "can't say","no comment","no views","nope","not at all"
+             ,"no i can't","no i cant", "i don't know","iguess not","i dont know"
              , "dont know", "dint care","no no comment","no not really", "again no"
              , "1", "1 dk","dk5","no answer","hi","i","not","no commont"
-             , "can t answer","no can not","dosen t know","he is not sure"
+             , "can't answer","no can not","dosen't know","he is not sure"
              , "its confidential","no answwer","not reaslly","lkjlkj","skjzhdkjhsd"
              , "you can", "even", "can","dont know dont talk about politics"
              , "dont knoiw","nono","not sure","do not know it","quit"
              , "doesnt know","she doesnt know","no not thinking","cant say"
-             , "i don t know much", "would rather not explain","past"
+             , "i don't know much", "would rather not explain","past"
              , "skipped question", "skip the question", "hjkdhfkjhdskjh"
              , "theuyidhfjdhkjdhfiaesjrhdjhflike shit", "dfdsjfksdjfkdsjf","dfsadfsf"
-             , "god knows no i can t","no comments","dont want to comment"
-             , "doesn t know","wants to skip","no not sure","no i caint", "not really no"
-             , "i really cant say let me think","nope i don t know what liberal is"
+             , "god knows no i can't","no comments","dont want to comment"
+             , "doesn't know","wants to skip","no not sure","no i caint", "not really no"
+             , "i really cant say let me think","nope i don't know what liberal is"
              , "dont know what a conservative is dont care","she cannot"
-             , "doesn t klnow", "no i cain t", "decline", "really can t"
-             , "i choose not to","no i don t want to","no skip")] <- ""
+             , "doesn't klnow", "no i cain't", "decline", "really can't"
+             , "i choose not to","no i don't want to","no skip")] <- ""
   return(x)
 })
 
