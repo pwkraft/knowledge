@@ -100,10 +100,10 @@ swiss$wc <- apply(opend, 1, function(x){
 swiss$lwc <- log(swiss$wc)/max(log(swiss$wc))
 
 ## number of items answered
-swiss$nitem <- apply(opend[,-1] != "", 1, sum, na.rm = T)
+swiss$nitem <- apply(opend != "", 1, sum, na.rm = T)
 
 ## diversity in item response (respondents either answered pro OR con, I should take that into account!!!)
-swiss$ditem <- apply(opend[,-1], 1, function(x){
+swiss$ditem <- apply(opend, 1, function(x){
   iwc <- unlist(lapply(strsplit(x,"\\s+"), length))
   shannon(iwc/sum(iwc))
 })
@@ -148,7 +148,7 @@ opend_german <- opend_german[-out$docs.removed,]
 
 ## quick fit (30 topics)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-              , K=30, init.type = "Spectral")
+              , K=20, init.type = "Spectral")
 
 
 ### Discursive sophistication measure
@@ -179,7 +179,7 @@ opend_french <- opend_french[-out$docs.removed,]
 
 ## quick fit (60 topics)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-              , K=30, init.type = "Spectral")
+              , K=20, init.type = "Spectral")
 
 
 ### Discursive sophistication measure
@@ -210,7 +210,7 @@ opend_italian <- opend_italian[-out$docs.removed,]
 
 ## quick fit (60 topics)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-              , K=30, init.type = "Spectral")
+              , K=20, init.type = "Spectral")
 
 
 ### Discursive sophistication measure
