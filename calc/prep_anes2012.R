@@ -256,11 +256,14 @@ anes2012opend <- read.csv(paste0(datasrc,"anes2012TS_openends.csv"), as.is = T) 
 anes2012spell <- apply(anes2012opend[,-1], 2, function(x){
   x <- char_tolower(x)
   x <- gsub("//"," ", x , fixed = T)
+  x <- gsub("\\"," ", x , fixed = T)
+  x <- gsub("..."," ", x, fixed = T)
+  x <- gsub("/"," ", x, fixed = T)
   x <- gsub("\\s+"," ", x)
   x <- gsub("(^\\s+|\\s+$)","", x)
-  x[x %in% c("1 inapplicable","7 refused","n a","no","none","43042","i am","nome"
+  x[x %in% c("-1 inapplicable","-7 refused","n/a","no","none","#(43042)","i am","nome"
              ,"i refuse", "i rwfuse to disclose", "refuse to disclose"
-             ,"dk","skip","no5","don't know","same","not really"
+             ,"dk","skip","no5","don't know","same","not really", "ditto"
              ,"no idea", "can't say","no comment","no views","nope","not at all"
              ,"no i can't","no i cant", "i don't know","iguess not","i dont know"
              , "dont know", "dint care","no no comment","no not really", "again no"
