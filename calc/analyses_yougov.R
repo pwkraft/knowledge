@@ -71,7 +71,7 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), 
 dev.off()
 
 
-datcor <- data[,c("ntopics","entropy","ditem")]
+datcor <- data[,c("ntopics","distinct","ditem")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 pdf("../fig/yg_corplot_components.pdf",width=3.3, height=3.3)

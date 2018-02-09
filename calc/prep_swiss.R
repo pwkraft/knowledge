@@ -11,6 +11,8 @@
 ### load raw data
 
 rm(list = ls())
+gc()
+
 library(car)
 library(dplyr)
 library(quanteda)
@@ -21,6 +23,7 @@ setwd("/data/Dropbox/Uni/Projects/2016/knowledge/")
 datasrc <- "/home/patrick/Dropbox/Uni/Data/colombo/"
 raw <- read_dta(paste0(datasrc,"citizencompetence_colombo.dta"), encoding = "latin 1")
 
+source("calc/func.R")
 
 
 ### prep/recode survey data

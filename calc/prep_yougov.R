@@ -11,6 +11,8 @@
 ### load raw data
 
 rm(list = ls())
+gc()
+
 library(car)
 library(dplyr)
 library(quanteda)
@@ -20,6 +22,8 @@ library(ggplot2)
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/")
 datasrc <- "/data/Dropbox/Uni/Data/YouGov2015/"
 raw <- read.csv(paste0(datasrc,"STBR0007_OUTPUT.csv"))
+
+source("calc/func.R")
 
 
 ### closed items in yougov data
