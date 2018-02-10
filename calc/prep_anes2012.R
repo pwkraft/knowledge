@@ -350,10 +350,16 @@ data2012 <- data2012[apply(!is.na(data2012[,meta2012]),1,prod)==1,]
 ## process for stm
 processed2012 <- textProcessor(data2012$resp, metadata = data2012[,meta2012]
                            , customstopwords = c("dont", "hes", "that", "etc"))
-out2012 <- prepDocuments(processed2012$documents, processed2012$vocab, processed2012$meta)
+out2012 <- prepDocuments(processed2012$documents, processed2012$vocab, processed2012$meta
+                         , lower.thresh = 10)
+
+out2012thresh <- prepDocuments(processed2012$documents, processed2012$vocab, processed2012$meta)
+
+out2012thresh$vocab
+out2012$vocab[!out2012$vocab %in% out2012thresh$vocab]
 
 ## remove discarded observations from data
-#data2012 <- data2012[-processed2012$docs.removed,]
+data2012 <- data2012[-processed2012$docs.removed,]
 data2012 <- data2012[-out2012$docs.removed,]
 
 ## stm fit with 20 topics

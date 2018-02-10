@@ -68,6 +68,7 @@ swiss$string2 <- tolower(paste(swiss$prostring2, swiss$constring2))
   
 ## minor pre-processing
 opend <- apply(swiss[,c("string1","string2")], 2, function(x){
+  x <- char_tolower(x)
   x <- gsub("(^\\s+|\\s+$)","", x)
   x[x %in% c("no","non","nein","rien","nichts","keinen","nsp","ka","n","prive","nono"
              ,"si","oooooooooooo","ooooooooooo","ooooooooooo","ooooooooooooooo"
@@ -148,7 +149,7 @@ opend_german <- opend_german[-out$docs.removed,]
 
 ## quick fit (30 topics)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-              , K=20, init.type = "Spectral")
+              , K=15, init.type = "Spectral")
 
 
 ### Discursive sophistication measure
@@ -179,7 +180,7 @@ opend_french <- opend_french[-out$docs.removed,]
 
 ## quick fit (60 topics)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-              , K=20, init.type = "Spectral")
+              , K=15, init.type = "Spectral")
 
 
 ### Discursive sophistication measure
@@ -210,13 +211,13 @@ opend_italian <- opend_italian[-out$docs.removed,]
 
 ## quick fit (60 topics)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-              , K=20, init.type = "Spectral")
+              , K=15, init.type = "Spectral")
 
 
 ### Discursive sophistication measure
 
 ## combine sophistication components with remaining data
-opend_italian <- cbind(opend_french, sophistication(stm_fit, out))
+opend_italian <- cbind(opend_italian, sophistication(stm_fit, out))
 
 ## compute combined measures
 opend_italian$polknow_text <- with(opend_italian, ntopics * distinct * ditem)
