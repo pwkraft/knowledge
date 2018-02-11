@@ -93,7 +93,7 @@ plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
 plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive sophistication", "Factual Knowledge"
                                                         , "Disease Information"))
 plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
-  summarize_each(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
+  summarise_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
   mutate(cilo = mean - 1.96*sd/sqrt(n)
          , cihi = mean + 1.96*sd/sqrt(n))
 

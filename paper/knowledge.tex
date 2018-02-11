@@ -247,8 +247,23 @@ Overall, while discursive sophistication and the alternative measures are clearl
 Each row in the table represents one of the open-ended responses (like/dislike for each candidate/party). Column A displays the responses of an individual who scored low on discursive sophistication and column B displays the responses of a high scoring individual. Cells are empty if a respondent refused to provide a response. Even though both individuals are measured to have equal factual political knowledge, there are systematic differences in their response behavior that can be attributed to their political sophistication. Overall, respondent A provided a less elaborate response, only focused on two issues (health care and student loans), and did not report attitudes on multiple items. Compared to respondent B, such a response pattern is suggestive of a less sophisticated political belief system. Overall, this initial result suggests that the variation in discursive sophistication captures meaningful differences in response behavior that clearly overlaps with traditional knowledge metrics while displaying some unique variation.
 
 
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[t]{1\textwidth}
+        \centering
+        \includegraphics{../fig/pretext2012.pdf}
+    \end{subfigure}%
+    \\
+    \begin{subfigure}[t]{1\textwidth}
+        \centering
+        \includegraphics{../fig/pretext2016.pdf}
+    \end{subfigure}
+    \caption{PreText analysis of preprocessing decisions.}\label{fig:pretext}
+\end{figure*}
+
+
 \begin{figure}[h]\centering
-\includegraphics{../fig/ktopic.pdf}
+\includegraphics{../fig/pretext_robustness.pdf}
 \caption{Comparison of different choices of topics}\label{fig:ktopic}
 \end{figure}
 
@@ -406,82 +421,82 @@ The findings presented in this paper show that conventional knowledge indices an
 \bibliographystyle{/data/Dropbox/Uni/Lit/apsr2006}
 \bibliography{/data/Dropbox/Uni/Lit/Literature}
 
-\clearpage
-\section*{Appendix A: Open-ended Responses in the 2012 ANES}
-\renewcommand\thefigure{A.\arabic{figure}}
-\renewcommand\thetable{A.\arabic{table}}
-\setcounter{figure}{0}
-\setcounter{table}{0}
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/wc.pdf}
-\caption{Histogram of total word count in the collection of open-ended responses for each individual. The dashed red line indicates the average response length. Most respondents provide brief statements when they describe their attitudes towards political parties and candidates. The mean response length to all 8 questions is about 75 words, so an average response to a single question consisted of less than 10 words, omitting respondents who did not provide any information.}\label{fig:wc}
-\end{figure}
-
-\begin{figure}[h]\centering
-\includegraphics[scale=.5]{../fig/stm_prop.pdf}
-\caption{Estimated topic proportions based on the structural topic model. The number of topics $k$ for the structural topic model is set to 20. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 77 topics).}\label{fig:stm_prop}
-\end{figure}
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/corplot_components.pdf}
-\caption{Correlation matrix of individual components of discursive sophistication. The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The spike at 0 for opinionation is due to the fact that some respondents only answered a single open-ended question.}\label{fig:components}
-\end{figure}
-
-
-
-% COMBINE: combine histograms etc. for different datasets in a single plot...
-% ADD: Specific information about the individual topic models etc.
-
-
-\clearpage
-\section*{Appendix B: Open-ended Responses in YouGov Data}
-\renewcommand\thefigure{B.\arabic{figure}}
-\renewcommand\thetable{B.\arabic{table}}
-\setcounter{figure}{0}
-\setcounter{table}{0}
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/yg_wc.pdf}
-\caption{Histogram of total word count in the collection of open-ended responses for each individual. The dashed red line indicates the average response length. Most respondents provide brief statements when they describe their attitudes towards political parties and candidates. The mean response length to all 4 questions is about 73 words, so an average response to a single question consisted of approximately 18 words, omitting respondents who did not provide any information.}\label{fig:yg_wc}
-\end{figure}
-
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/yg_corplot_components.pdf}
-\caption{Correlation matrix of individual components of discursive sophistication. The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The number of topics $k$ for the structural topic model is set to 20. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 73 topics). The spike at 0 for opinionation is due to the fact that some respondents only answered a single open-ended question.}\label{fig:yg_components}
-\end{figure}
-
-
-
-\clearpage
-\section*{Appendix C: Open-ended Responses in Swiss Referendum Data}
-\renewcommand\thefigure{B.\arabic{figure}}
-\renewcommand\thetable{B.\arabic{table}}
-\setcounter{figure}{0}
-\setcounter{table}{0}
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/swiss_wc.pdf}
-\caption{Histogram of total word count in the collection of open-ended responses for each individual. The dashed red line indicates the average response length. Most respondents provide brief statements when they describe their attitudes towards political parties and candidates. The mean response length to both questions is about 11 words, so an average response to a single question consisted of approximately 5 words, omitting respondents who did not provide any information.}\label{fig:swiss_wc}
-\end{figure}
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/swiss_corplot_german_components.pdf}
-\caption{Correlation matrix of individual components of discursive sophistication (German respondents). The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The number of topics $k$ for the structural topic model is set to 30. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 45 topics). The spike at 0 for opinionation is due to the fact that a large portion of respondents only answered a single open-ended question.}\label{fig:swiss_german_components}
-\end{figure}
-
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/swiss_corplot_french_components.pdf}
-\caption{Correlation matrix of individual components of discursive sophistication (French respondents). The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The number of topics $k$ for the structural topic model is set to 30. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 43 topics). The spike at 0 for opinionation is due to the fact that a large portion of respondents only answered a single open-ended question.}\label{fig:swiss_french_components}
-\end{figure}
-
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/swiss_corplot_italian_components.pdf}
-\caption{Correlation matrix of individual components of discursive sophistication (Italian respondents). The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The number of topics $k$ for the structural topic model is set to 30. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 47 topics). The spike at 0 for opinionation is due to the fact that a large portion of respondents only answered a single open-ended question.}\label{fig:swiss_italian_components}
-\end{figure}
+%\clearpage
+%\section*{Appendix A: Open-ended Responses in the 2012 ANES}
+%\renewcommand\thefigure{A.\arabic{figure}}
+%\renewcommand\thetable{A.\arabic{table}}
+%\setcounter{figure}{0}
+%\setcounter{table}{0}
+%
+%\begin{figure}[h]\centering
+%\includegraphics{../fig/wc.pdf}
+%\caption{Histogram of total word count in the collection of open-ended responses for each individual. The dashed red line indicates the average response length. Most respondents provide brief statements when they describe their attitudes towards political parties and candidates. The mean response length to all 8 questions is about 75 words, so an average response to a single question consisted of less than 10 words, omitting respondents who did not provide any information.}\label{fig:wc}
+%\end{figure}
+%
+%\begin{figure}[h]\centering
+%\includegraphics[scale=.5]{../fig/stm_prop.pdf}
+%\caption{Estimated topic proportions based on the structural topic model. The number of topics $k$ for the structural topic model is set to 20. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 77 topics).}\label{fig:stm_prop}
+%\end{figure}
+%
+%\begin{figure}[h]\centering
+%\includegraphics{../fig/corplot_components.pdf}
+%\caption{Correlation matrix of individual components of discursive sophistication. The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The spike at 0 for opinionation is due to the fact that some respondents only answered a single open-ended question.}\label{fig:components}
+%\end{figure}
+%
+%
+%
+%% COMBINE: combine histograms etc. for different datasets in a single plot...
+%% ADD: Specific information about the individual topic models etc.
+%
+%
+%\clearpage
+%\section*{Appendix B: Open-ended Responses in YouGov Data}
+%\renewcommand\thefigure{B.\arabic{figure}}
+%\renewcommand\thetable{B.\arabic{table}}
+%\setcounter{figure}{0}
+%\setcounter{table}{0}
+%
+%\begin{figure}[h]\centering
+%\includegraphics{../fig/yg_wc.pdf}
+%\caption{Histogram of total word count in the collection of open-ended responses for each individual. The dashed red line indicates the average response length. Most respondents provide brief statements when they describe their attitudes towards political parties and candidates. The mean response length to all 4 questions is about 73 words, so an average response to a single question consisted of approximately 18 words, omitting respondents who did not provide any information.}\label{fig:yg_wc}
+%\end{figure}
+%
+%
+%\begin{figure}[h]\centering
+%\includegraphics{../fig/yg_corplot_components.pdf}
+%\caption{Correlation matrix of individual components of discursive sophistication. The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The number of topics $k$ for the structural topic model is set to 20. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 73 topics). The spike at 0 for opinionation is due to the fact that some respondents only answered a single open-ended question.}\label{fig:yg_components}
+%\end{figure}
+%
+%
+%
+%\clearpage
+%\section*{Appendix C: Open-ended Responses in Swiss Referendum Data}
+%\renewcommand\thefigure{B.\arabic{figure}}
+%\renewcommand\thetable{B.\arabic{table}}
+%\setcounter{figure}{0}
+%\setcounter{table}{0}
+%
+%\begin{figure}[h]\centering
+%\includegraphics{../fig/swiss_wc.pdf}
+%\caption{Histogram of total word count in the collection of open-ended responses for each individual. The dashed red line indicates the average response length. Most respondents provide brief statements when they describe their attitudes towards political parties and candidates. The mean response length to both questions is about 11 words, so an average response to a single question consisted of approximately 5 words, omitting respondents who did not provide any information.}\label{fig:swiss_wc}
+%\end{figure}
+%
+%\begin{figure}[h]\centering
+%\includegraphics{../fig/swiss_corplot_german_components.pdf}
+%\caption{Correlation matrix of individual components of discursive sophistication (German respondents). The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The number of topics $k$ for the structural topic model is set to 30. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 45 topics). The spike at 0 for opinionation is due to the fact that a large portion of respondents only answered a single open-ended question.}\label{fig:swiss_german_components}
+%\end{figure}
+%
+%
+%\begin{figure}[h]\centering
+%\includegraphics{../fig/swiss_corplot_french_components.pdf}
+%\caption{Correlation matrix of individual components of discursive sophistication (French respondents). The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The number of topics $k$ for the structural topic model is set to 30. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 43 topics). The spike at 0 for opinionation is due to the fact that a large portion of respondents only answered a single open-ended question.}\label{fig:swiss_french_components}
+%\end{figure}
+%
+%
+%\begin{figure}[h]\centering
+%\includegraphics{../fig/swiss_corplot_italian_components.pdf}
+%\caption{Correlation matrix of individual components of discursive sophistication (Italian respondents). The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The number of topics $k$ for the structural topic model is set to 30. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 47 topics). The spike at 0 for opinionation is due to the fact that a large portion of respondents only answered a single open-ended question.}\label{fig:swiss_italian_components}
+%\end{figure}
 
 
 

@@ -109,28 +109,6 @@ dvnames <- c("Discursive\nSophistication","Factual\nKnowledge")
 ivnames <- c("Intercept", "Gender\n(Female)", "Media\nExposure", "Political\nDiscussions", "Education\n(College)"
              , "Income", "log(Age)", "Race\n(Black)", "Church\nAttendance", "Survey Mode\n(Online)")
 
-#########
-# Validation: compare number of topics
-#########
-
-p1 <- ggplot(data2012, aes(x=polknow_text_mean, y=polknow_text_mean_full)) +
-  geom_point(alpha=.05) + geom_smooth(method="lm") +  ggtitle("2012 ANES") +
-  xlab("Discursive Sophistication\n(20 Topics)") + ylab("Discursive Sophistication\n(40 Topics)") +
-  annotate("text", x=0.1, y=max(data2012$polknow_text_mean_full), size=2
-           , label = paste0("r = ",round(cor(data2012$polknow_text_mean, data2012$polknow_text_mean_full), 2))) +
-  theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
-
-p2 <- ggplot(data2016, aes(x=polknow_text_mean, y=polknow_text_mean_full)) +
-  geom_point(alpha=.05) + geom_smooth(method="lm") + ggtitle("2016 ANES") +
-  xlab("Discursive Sophistication\n(20 Topics)") + ylab("Discursive Sophistication\n(40 Topics)") +
-  annotate("text", x=.1, y=max(data2016$polknow_text_mean_full), size=2
-           , label = paste0("r = ",round(cor(data2016$polknow_text_mean, data2016$polknow_text_mean_full), 2))) +
-  theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
-
-(p0 <- grid.arrange(p1, p2, ncol=2))
-ggsave("../fig/ktopic.pdf", p0, width=6, height=3)
-
-
 
 ########
 # validation: effect on political engagement
