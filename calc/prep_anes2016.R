@@ -314,7 +314,8 @@ data2016 <- data2016[apply(!is.na(data2016[,meta2016]),1,prod)==1,]
 ## process for stm
 processed2016 <- textProcessor(data2016$resp, metadata = data2016[,meta2016]
                            , customstopwords = c("dont", "hes", "that", "etc"))
-out2016 <- prepDocuments(processed2016$documents, processed2016$vocab, processed2016$meta)
+out2016 <- prepDocuments(processed2016$documents, processed2016$vocab, processed2016$meta
+                         , lower.thresh = 10)
 
 ## remove discarded observations from data
 data2016 <- data2016[-processed2016$docs.removed,]
@@ -322,11 +323,7 @@ data2016 <- data2016[-out2016$docs.removed,]
 
 ## stm fit with 20 topics
 stm_fit2016 <- stm(out2016$documents, out2016$vocab, prevalence = as.matrix(out2016$meta)
-                , K=20, init.type = "Spectral")
-
-## stm fit with 50 topics (estimating number of topics gives ~70, but creates computational issues)
-stm_fit2016_full <- stm(out2016$documents, out2016$vocab, prevalence = as.matrix(out2016$meta)
-                    , K=40, init.type = "Spectral")
+                , K=0, init.type = "Spectral")
 
 
 #######################
@@ -339,17 +336,6 @@ data2016 <- cbind(data2016, sophistication(stm_fit2016, out2016))
 ## compute combined measures
 data2016$polknow_text <- data2016$ntopics * data2016$distinct * data2016$ditem
 data2016$polknow_text_mean <- (data2016$ntopics + data2016$distinct + data2016$ditem)/3
-
-
-###################
-### Replicate measure with larger number of topics
-###################
-
-## combine sophistication components with remaining data
-know <- sophistication(stm_fit2016_full, out2016)
-
-## compute combined measures
-data2016$polknow_text_mean_full <- (know$ntopics + know$distinct + data2016$ditem)/3
 
 
 #################
@@ -403,5 +389,5 @@ for(p in policies){
 ### save output
 
 save(anes2016, anes2016opend, anes2016spell, data2016, meta2016, processed2016, out2016
-     , stm_fit2016, stm_fit2016_full, hetreg_summary2016
+     , stm_fit2016, hetreg_summary2016
      , file="calc/out/anes2016.Rdata")

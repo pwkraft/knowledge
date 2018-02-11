@@ -183,15 +183,16 @@ data <- data[apply(!is.na(data[,meta]),1,prod)==1,]
 ## process for stm
 processed <- textProcessor(data$resp, metadata = data[,meta]
                            , customstopwords = c("dont", "just", "hes", "that"))
-out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta
+                     , lower.thresh = 10)
 
 ## remove discarded observations from data
 data <- data[-processed$docs.removed,]
-#data <- data[-out$docs.removed,]
+data <- data[-out$docs.removed,]
 
 ## quick fit (15 topics)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-               , K=15, init.type = "Spectral")
+               , K=0, init.type = "Spectral")
 
 
 #######################

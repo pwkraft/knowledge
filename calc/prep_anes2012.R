@@ -353,22 +353,13 @@ processed2012 <- textProcessor(data2012$resp, metadata = data2012[,meta2012]
 out2012 <- prepDocuments(processed2012$documents, processed2012$vocab, processed2012$meta
                          , lower.thresh = 10)
 
-out2012thresh <- prepDocuments(processed2012$documents, processed2012$vocab, processed2012$meta)
-
-out2012thresh$vocab
-out2012$vocab[!out2012$vocab %in% out2012thresh$vocab]
-
 ## remove discarded observations from data
 data2012 <- data2012[-processed2012$docs.removed,]
 data2012 <- data2012[-out2012$docs.removed,]
 
 ## stm fit with 20 topics
 stm_fit2012 <- stm(out2012$documents, out2012$vocab, prevalence = as.matrix(out2012$meta)
-                , K=20, init.type = "Spectral")
-
-## stm fit with 50 topics (estimating number of topics gives ~70, but creates computational issues)
-stm_fit2012_full <- stm(out2012$documents, out2012$vocab, prevalence = as.matrix(out2012$meta)
-                    , K=40, init.type = "Spectral")
+                , K=0, init.type = "Spectral")
 
 
 #######################
@@ -381,17 +372,6 @@ data2012 <- cbind(data2012, sophistication(stm_fit2012, out2012))
 ## compute combined measures
 data2012$polknow_text <- data2012$ntopics * data2012$distinct * data2012$ditem
 data2012$polknow_text_mean <- (data2012$ntopics + data2012$distinct + data2012$ditem)/3
-
-
-###################
-### Replicate measure with larger number of topics
-###################
-
-## combine sophistication components with remaining data
-know <- sophistication(stm_fit2012_full, out2012)
-
-## compute combined measures
-data2012$polknow_text_mean_full <- (know$ntopics + know$distinct + data2012$ditem)/3
 
 
 #################
@@ -453,5 +433,5 @@ for(p in policies){
 ### save output
 
 save(anes2012, anes2012opend, anes2012spell, data2012, meta2012, processed2012, out2012
-     , stm_fit2012, stm_fit2012_full, hetreg_summary2012
+     , stm_fit2012, hetreg_summary2012
      , file="calc/out/anes2012.Rdata")

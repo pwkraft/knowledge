@@ -49,6 +49,43 @@ regression_coefficient_plot(
 regression_coefficient_plot(
   preText_results2016, remove_intercept = TRUE)
 
+
+###################
+### Replicate measure without removing infrequent terms
+###################
+
+out2012thresh <- prepDocuments(processed2012$documents, processed2012$vocab, processed2012$meta)
+
+out2012thresh$vocab
+out2012$vocab[!out2012$vocab %in% out2012thresh$vocab]
+
+
+###################
+### Replicate measure with larger number of topics
+###################
+
+## stm fit with 50 topics (estimating number of topics gives ~70, but creates computational issues)
+stm_fit2016_full <- stm(out2016$documents, out2016$vocab, prevalence = as.matrix(out2016$meta)
+                        , K=40, init.type = "Spectral")
+
+## combine sophistication components with remaining data
+know <- sophistication(stm_fit2016_full, out2016)
+
+## compute combined measures
+data2016$polknow_text_mean_full <- (know$ntopics + know$distinct + data2016$ditem)/3
+
+
+## combine sophistication components with remaining data
+know <- sophistication(stm_fit2012_full, out2012)
+
+## compute combined measures
+data2012$polknow_text_mean_full <- (know$ntopics + know$distinct + data2012$ditem)/3
+
+## stm fit with 50 topics (estimating number of topics gives ~70, but creates computational issues)
+stm_fit2012_full <- stm(out2012$documents, out2012$vocab, prevalence = as.matrix(out2012$meta)
+                        , K=40, init.type = "Spectral")
+
+
 ## export results
 save(preprocessed_documents2012, preprocessed_documents2016
      , preText_results2012, preText_results2016

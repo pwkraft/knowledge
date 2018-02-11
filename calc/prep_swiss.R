@@ -141,7 +141,8 @@ opend_german <- data %>% filter(lang == 1)
 ## process for stm
 processed <- textProcessor(opend_german$resp, metadata = opend_german[,meta]
                            , language = "german")
-out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta
+                     , lower.thresh = 10)
 
 ## remove discarded observations from data
 opend_german <- opend_german[-processed$docs.removed,]
@@ -149,7 +150,7 @@ opend_german <- opend_german[-out$docs.removed,]
 
 ## quick fit (30 topics)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-              , K=15, init.type = "Spectral")
+              , K=0, init.type = "Spectral")
 
 
 ### Discursive sophistication measure
@@ -172,7 +173,8 @@ opend_french <- data %>% filter(lang == 2)
 ## process for stm
 processed <- textProcessor(opend_french$resp, metadata = opend_french[,meta]
                            , language = "french")
-out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta
+                     , lower.thresh = 10)
 
 ## remove discarded observations from data
 opend_french <- opend_french[-processed$docs.removed,]
@@ -180,7 +182,7 @@ opend_french <- opend_french[-out$docs.removed,]
 
 ## quick fit (60 topics)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-              , K=15, init.type = "Spectral")
+              , K=0, init.type = "Spectral")
 
 
 ### Discursive sophistication measure
@@ -203,7 +205,8 @@ opend_italian <- data %>% filter(lang == 3)
 ## process for stm
 processed <- textProcessor(opend_italian$resp, metadata = opend_italian[,meta]
                            , language = "italian")
-out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta
+                     , lower.thresh = 10)
 
 ## remove discarded observations from data
 opend_italian <- opend_italian[-processed$docs.removed,]
@@ -211,7 +214,7 @@ opend_italian <- opend_italian[-out$docs.removed,]
 
 ## quick fit (60 topics)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-              , K=15, init.type = "Spectral")
+              , K=0, init.type = "Spectral")
 
 
 ### Discursive sophistication measure
