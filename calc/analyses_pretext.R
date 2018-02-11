@@ -184,28 +184,28 @@ rm(data2016_thresh)
 
 p1 <- ggplot(data2012, aes(x=polknow_text_mean, y=polknow_text_mean_ktopic)) +
   geom_point(alpha=.05) + geom_smooth(method="lm") +  ggtitle("2012 ANES") +
-  xlab("Original Specification") + ylab("Reduced Number of Topics\n(k = 20)") +
+  xlab(" ") + ylab("Reduced Number of Topics\n(k = 20)") +
   annotate("text", x=0.1, y=max(data2012$polknow_text_mean_ktopic, na.rm = T), size=2
            , label = paste0("r = ",round(cor(data2012$polknow_text_mean, data2012$polknow_text_mean_ktopic, use="complete.obs"), 2))) +
   theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
 
 p2 <- ggplot(data2016, aes(x=polknow_text_mean, y=polknow_text_mean_ktopic)) +
   geom_point(alpha=.05) + geom_smooth(method="lm") + ggtitle("2016 ANES") +
-  xlab("Original Specification") + ylab("Reduced Number of Topics\n(k = 20)") +
+  xlab(" ") + ylab(" ") +
   annotate("text", x=.1, y=max(data2016$polknow_text_mean_ktopic, na.rm = T), size=2
            , label = paste0("r = ",round(cor(data2016$polknow_text_mean, data2016$polknow_text_mean_ktopic, use="complete.obs"), 2))) +
   theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
 
 p3 <- ggplot(data2012, aes(x=polknow_text_mean, y=polknow_text_mean_thresh)) +
-  geom_point(alpha=.05) + geom_smooth(method="lm") +  ggtitle("2012 ANES") +
+  geom_point(alpha=.05) + geom_smooth(method="lm") +  ggtitle(" ") +
   xlab("Original Specification") + ylab("Reduced Number of Topics\n+ Include Infrequent Terms") +
   annotate("text", x=0.1, y=max(data2012$polknow_text_mean_thresh), size=2
            , label = paste0("r = ",round(cor(data2012$polknow_text_mean, data2012$polknow_text_mean_thresh, use="complete.obs"), 2))) +
   theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
 
 p4 <- ggplot(data2016, aes(x=polknow_text_mean, y=polknow_text_mean_thresh)) +
-  geom_point(alpha=.05) + geom_smooth(method="lm") + ggtitle("2016 ANES") +
-  xlab("Original Specification") + ylab("Reduced Number of Topics\n+ Include Infrequent Terms") +
+  geom_point(alpha=.05) + geom_smooth(method="lm") + ggtitle(" ") +
+  xlab("Original Specification") + ylab(" ") +
   annotate("text", x=.1, y=max(data2016$polknow_text_mean_thresh), size=2
            , label = paste0("r = ",round(cor(data2016$polknow_text_mean, data2016$polknow_text_mean_thresh, use="complete.obs"), 2))) +
   theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
