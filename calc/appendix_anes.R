@@ -54,118 +54,6 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), 
 #dev.off()
 
 
-########
-# histograms comparing men and women
-########
-
-## histogram/density of weighted 
-plot_df <- data.frame(rbind(cbind(data$polknow_text_mean, data$female, 1)
-                      , cbind(data$polknow_factual, data$female, 2)
-                      , cbind(data$polknow_evalpre, data$female, 3))) %>% na.omit()
-colnames(plot_df) <- c("Knowledge","Gender","Variable")
-plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
-plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"
-                                                        , "Interviewer\nEvaluation (Pre)"))
-plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
-  summarize_each(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
-  mutate(cilo = mean - 1.96*sd/sqrt(n)
-         , cihi = mean + 1.96*sd/sqrt(n))
-
-## bar plots comparing men and women
-ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi)) + 
-  theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white")) +
-  geom_bar(stat="identity", fill="grey80") + geom_errorbar(width=.25) + 
-  facet_wrap(~Variable) + ylab("Mean Value on Knowledge Measure") +
-  geom_point(aes(y=max), col="white")
-ggsave("../fig/meandiff_empty.pdf", width=4.75, height=2.5)
-
-ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
-  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
-  facet_wrap(~Variable) + ylab("Mean Value on Knowledge Measure") +
-  geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired")
-ggsave("../fig/meandiff_pres_3.pdf", width=4.75, height=2.5)
-
-plot_means[plot_means$Variable=="Discursive\nSophistication",-1:-2] <- NA
-ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
-  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
-  facet_wrap(~Variable) + ylab("Mean Value on Knowledge Measure") +
-  geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired")
-ggsave("../fig/meandiff_pres_2.pdf", width=4.75, height=2.5)
-
-plot_means[plot_means$Variable=="Factual\nKnowledge",-1:-2] <- NA
-ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
-  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
-  facet_wrap(~Variable) + ylab("Mean Value on Knowledge Measure") +
-  geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired")
-ggsave("../fig/meandiff_pres_1.pdf", width=4.75, height=2.5)
-
-
-
-########
-# determinants of political knowledge
-########
-# NOTE: control for wordsum?
-# NOTE: rescale knowledge variables to unit variance?
-
-m1 <- NULL
-m1[[1]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data)
-m1[[2]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data)
-m1[[3]] <- lm(polknow_evalpre ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data)
-lapply(m1, summary)
-
-dvnames <- c("Discursive\nSophistication","Factual\nKnowledge", "Interviewer\nEvaluation (Pre)")
-ivnames <- c("Intercept", "Female", "Media", "Discussions", "College"
-             , "Income", "log(Age)", "Church", "Black", "Online")
-
-
-# prepare dataframe for plotting (sloppy code)
-dfplot <- data.frame()
-for(i in 1:length(m1)){
-  tmp <- data.frame(summary(m1[[i]])$coefficients[,1:2])
-  tmp$iv <- rownames(tmp)
-  tmp$ivnames <- ivnames[1:nrow(tmp)]
-  tmp$dv <- dvnames[i]
-  rownames(tmp) <- NULL
-  dfplot <- rbind(dfplot, tmp)
-  rm(tmp)
-}
-
-# create factor variables, remove intercept for plotting
-dfplot$ivnames <- factor(dfplot$ivnames, levels = rev(ivnames))
-dfplot$dv <- factor(dfplot$dv, levels = dvnames)
-dfplot <- dfplot[dfplot$ivnames!="Intercept",]
-
-ggplot(dfplot, aes(y=ivnames, x=Estimate
-                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
-  geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
-  geom_point(size=.75) + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=3) +
-  plot_default + xlim(-0.1,0.32)
-ggsave("../fig/determinants_3.pdf",width=4.75,height=3)
-
-dfplot[dfplot$dv=="Discursive\nSophistication",c(1,2)] <- NA
-ggplot(dfplot, aes(y=ivnames, x=Estimate
-                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
-  geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
-  geom_point(size=.75) + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=3) +
-  plot_default + xlim(-0.1,0.32)
-ggsave("../fig/determinants_2.pdf",width=4.75,height=3)
-
-dfplot[dfplot$dv=="Factual\nKnowledge",c(1,2)] <- NA
-ggplot(dfplot, aes(y=ivnames, x=Estimate
-                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
-  geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
-  geom_point(size=.75) + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=3) +
-  plot_default + xlim(-0.1,0.32)
-ggsave("../fig/determinants_1.pdf",width=4.75,height=3)
-
-dfplot[dfplot$dv=="Interviewer\nEvaluation (Pre)",c(1,2)] <- NA
-ggplot(dfplot, aes(y=ivnames, x=Estimate
-                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
-  geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
-  geom_point(size=.75) + geom_errorbarh(height = 0) + facet_wrap(~dv,ncol=3) +
-  plot_default + xlim(-0.1,0.32)
-ggsave("../fig/determinants_0.pdf",width=4.75,height=3)
-
 
 ########
 # robustness checks: determinants of willingness to respond?
@@ -212,8 +100,10 @@ summary(m3)
 # check validity of knowledge measure similar to Prior
 ########
 
-m2 <- lm(redist ~ tax * polknow_text + tax * polknow_factual + female + age + black + relig + educ + faminc + ideol_ct + pid_cont, data=data)
+m2 <- lm(redist ~ tax * polknow_text + tax * polknow_factual + female + age + black + relig + educ + faminc + ideol_ct + pid_cont, data=data2012)
 summary(m2)
+
+summary(lm(redist ~ tax * polknow_text + tax * polknow_factual + female + age + black + relig + educ + faminc + ideol_ct + pid_cont, data=data2016))
 
 ## prepare dataframe for plotting (sloppy code)
 dfplot <- summary(m2)$coefficients[c(2:4,13,14),1:2]

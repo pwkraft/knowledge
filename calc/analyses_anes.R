@@ -38,19 +38,6 @@ source("func.R")
 ## plot defaults
 plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
 
-## compare response behavior by gender
-ggplot(anes2012, aes(factor(female), y=as.numeric(wc!=0))) + 
-  stat_summary_bin(fun.y = "mean", geom="bar")
-
-ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + geom_point(alpha=.1, size=.1) + 
-  stat_summary(fun.data = "mean_cl_boot", col="red")
-
-ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + 
-  stat_summary(fun.data = "mean_cl_boot", col="red")
-
-table(anes2012$spanish==0)
-table(anes2012$wc!=0)
-
 
 ########
 # correlation matrices: compare with common measures
@@ -273,20 +260,11 @@ ggsave("../fig/prepost_exp.pdf",width=5,height=2)
 
 summary(stm_fit2012)
 summary(stm_fit2016)
-topics2012 <- c("1: Compromise","2: Romney","3: Morality/Religion","4: Obama","5: Taxes"
-                ,"6: Inequality","7: Social Security","8: Middle class","9: Immigration","10: Government Debt"
-                ,"11: Abortion","12: Economic Policy","13: Foreign Policy","14: Evaluation/Sentiment","15: Values"
-                ,"16: Presidential Performance","17: Patriotism","18: Health Care","19: Miscellaneous","20: Parties")
-topics2016 <- c("1: Compromise","2: Romney","3: Morality/Religion","4: Obama","5: Taxes"
-                ,"6: Inequality","7: Social Security","8: Middle class","9: Immigration","10: Government Debt"
-                ,"11: Abortion","12: Economic Policy","13: Foreign Policy","14: Evaluation/Sentiment","15: Values"
-                ,"16: Presidential Performance","17: Patriotism","18: Health Care","19: Miscellaneous","20: Parties")
 
-
-pdf("../fig/stm_prop.pdf")
+pdf("../fig/stm_prop.pdf", width=12, height=14)
 par(mfrow=c(1,2), mar=c(4.2,0.5,2.5,0.5))
-plot(stm_fit2012, main="2012 ANES")
-plot(stm_fit2016, main="2016 ANES")
+plot(stm_fit2012, main="2012 ANES", n=5, labeltype = "prob", text.cex = 1)
+plot(stm_fit2016, main="2016 ANES", n=5, labeltype = "prob", text.cex = 1)
 dev.off()
 
 pdf("../fig/stm_labels.pdf")
@@ -295,23 +273,3 @@ plot(stm_fit2012, "labels", topics=c(16,14,10,8), main="Sample Topics (2012 ANES
 plot(stm_fit2016, "labels", topics=c(1,10,19,17), main="Sample Topics (2016 ANES)")
 dev.off()
 
-########
-# topic differences b/w men and women
-########
-
-prep2012 <- estimateEffect(~ age + educ_cont + pid_cont + educ_pid + female
-                           , stm_fit2012, meta = out2012$meta, uncertainty = "Global")
-prep2016 <- estimateEffect(~ age + educ_cont + pid_cont + educ_pid + female
-                           , stm_fit2016, meta = out2016$meta, uncertainty = "Global")
-
-pdf("../fig/stm_gender.pdf")
-par(mfrow=c(1,2), mar=c(2.2,0.5,2.2,0.5))
-plot.estimateEffect(prep2012, covariate = "female", topics = 1:20, model = stm_fit2012
-                    , xlim = c(-.1,.05), method = "difference", cov.value1 = 1, cov.value2 = 0
-                    #, labeltype = "custom", custom.labels = topics
-                    , main = "Gender Differences in Topic Proportions")
-plot.estimateEffect(prep2016, covariate = "female", topics = 1:20, model = stm_fit2016
-                    , xlim = c(-.1,.05), method = "difference", cov.value1 = 1, cov.value2 = 0
-                    #, labeltype = "custom", custom.labels = topics
-                    , main = "Gender Differences in Topic Proportions")
-dev.off()
