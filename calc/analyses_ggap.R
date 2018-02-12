@@ -13,6 +13,7 @@ library(ggplot2)
 library(xtable)
 library(gridExtra)
 library(dplyr)
+library(stm)
 
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
@@ -113,7 +114,7 @@ p3 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) 
   geom_bar(stat="identity") + geom_errorbar(width=.25) + 
   facet_wrap(~Variable) + ylab("Average Values") +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
-  ggtitle("YouGov Data")
+  ggtitle("2015 YouGov Survey")
 
 
 ### Swiss Data
@@ -211,7 +212,7 @@ for(i in 1:length(m2)){
   dfplot2 <- rbind(dfplot2, tmp)
   rm(tmp)
 }
-dfplot2$source <- "YouGov"
+dfplot2$source <- "2015 YouGov Survey"
 
 # create factor variables, remove intercept for plotting
 dfplot2$ivnames <- factor(dfplot2$ivnames, levels = rev(ivnames_yg))
@@ -222,6 +223,7 @@ dfplot2 <- dfplot2[dfplot2$ivnames!="Intercept",]
 ### combine ANES and YouGov
 
 dfplot <- rbind(dfplot1, dfplot2)
+dfplot$source <- factor(dfplot$source, levels=c("2012 ANES", "2016 ANES", "2015 YouGov Survey"))
 
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 

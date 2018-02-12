@@ -255,6 +255,25 @@ ggsave("../fig/prepost_exp.pdf",width=5,height=2)
 
 
 ###################
+### Example Responses
+###################
+
+tmp  <- data2012 %>% 
+  filter(wc > (median(wc) - 5) & wc < (median(wc) + 5)
+         , polknow_factual == 0.6) %>%
+  arrange(polknow_text_mean)
+tmp_select <- c(head(tmp$caseid), tail(tmp$caseid))
+write.csv(anes2012spell[anes2012spell$caseid %in% tmp_select, ], file="tmp/select2012.csv")
+
+tmp  <- data2016 %>% 
+  filter(wc > (median(wc) - 5) & wc < (median(wc) + 5)
+         , polknow_factual == 0.75) %>%
+  arrange(polknow_text_mean)
+tmp_select <- c(head(tmp$caseid), tail(tmp$caseid))
+write.csv(anes2016spell[anes2016spell$caseid %in% tmp_select, ], file="tmp/select2016.csv")
+
+
+###################
 ### Additional information: STM summaries
 ###################
 
