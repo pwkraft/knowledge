@@ -22,7 +22,11 @@
 }}
 
 \title{Looking for Answers\\ %Alternative title: Talking Politics
-\large{A Naive Approach for Measuring Political Sophistication}\footnote{Previous versions of this manuscript have been presented at Polmeth 2016, MPSA 2017, EPSA 2017, and ISPP 2017. I thank Jennifer Jerit, Jason Barabas, Yanna Krupnikov, Stanley Feldman, Fabrizio Gilardi, Bill Jacoby, Scott Clifford, Andy Delton, and Peter DeScioli for helpful comments on previous versions of this manuscript. Special thanks to C{\'e}line Colombo, Jennifer Jerit, and Scott Clifford for sharing their data. The manuscript and code are available on GitHub: \url{https://github.com/pwkraft/knowledge}. % There are multiple other to add here as well.
+\large{A Naive Approach for Measuring Political Sophistication}\footnote{Previous versions of this manuscript have been presented at Polmeth 2016, MPSA 2017, EPSA 2017, and ISPP 2017.
+I thank Jason Barabas, Scott Clifford, Andy Delton, 
+%Kathy Dolan, 
+Peter DeScioli, Stanley Feldman, Fabrizio Gilardi, Bill Jacoby, Jennifer Jerit, Yanna Krupnikov, and Jamie Monogan for helpful comments on previous versions of this manuscript. Special thanks to C{\'e}line Colombo, Scott Clifford, and Jennifer Jerit for sharing their data. The manuscript and code are available on GitHub: \url{https://github.com/pwkraft/knowledge}. % There are multiple other to add here as well.
+% Additional people to mention: 
 }
 }
 \date{}
@@ -43,7 +47,7 @@ PLEASE DO NOT CITE OR REDISTRIBUTE WITHOUT PERMISSION
 
 \hfill
 \begin{abstract}\singlespacing
-This paper proposes a simple but powerful framework to assess political sophistication in verbatim responses to open-ended survey questions. The measure aims to capture the complexity of individual attitude expressions by examining their underlying number of considerations, descriptiveness in word choice, and opinionation. I validate the approach by comparing it to conventional political knowledge metrics in multiple studies using different batteries of open-ended items. The paper proceeds to illustrate how discursive sophistication can help refine previous insights from the literature such as the oft-cited gender gap in political knowledge.
+This paper proposes a simple but powerful framework to assess political sophistication in verbatim responses to open-ended survey questions using quantitative text analysis methods. The measure aims to capture the complexity of individual attitude expressions by examining their underlying number of considerations, characteristics of word choice, and the level of opinionation. I validate the approach by comparing it to conventional political knowledge metrics in multiple studies using different batteries of open-ended items. The paper proceeds to illustrate how discursive sophistication can help refine previous insights from the literature such as the oft-cited gender gap in political knowledge.
 % This is just a placholder abstract for now, needs some serious revisions.
 % QUESTION: measure can be based on different sets of items
 
@@ -57,10 +61,12 @@ This paper proposes a simple but powerful framework to assess political sophisti
 
 % REVISE: mention data sources earlier in the manuscript?
 % REPLACE: "recall" instead of "factual" knowledge questions
+% REVISE: work on transitions, what does each analysis bring to the table
+% ADD: literature on accuracy motivation in psychology
 
 Alarmingly high levels of voter ignorance have been one of the major recurring themes in public opinion research. Not too long ago, for example, \citet{bartels2005homer} attributed public support for the Bush administration's 2001 and 2003 tax cuts to a substantial lack of political information among voters \citep[but see][]{lupia2007were,bartels2007homer}. Similarly, Delli Carpini and Keeter's \citeyearpar{carpini1996americans} seminal book on political knowledge warned that widespread ignorance might jeopardize equal representation of citizens. Early influential scholars such as \citet{converse1964nature} also emphasized that large parts of the public lack a sufficient understanding of abstract ideological concepts and do not hold stable issue positions. Indeed, the finding that citizens know little about politics seems to go as far back in history as the systematic study of public opinion itself.
 
-Yet, not everyone agrees with this pessimistic assessment. Instead, there has been a lively debate about how to accurately assess political knowledge in the first place \citep[e.g.][]{mondak2000reconsidering,mondak2001asked,sturgis2008experiment,debell2013harder,pietryka2013analysis}. Most analyses rely on standard item batteries that assess individuals' factual knowledge about political institutions and officeholders \citep[e.g.,][]{carpini1996americans}. However, recent research points to important distinctions in types of political knowledge that have previously been disregarded \citep{barabas2014question}. Furthermore, scholars argue that recall-based measures of political knowledge do not necessarily capture how people structure their attitudes and beliefs \citep[e.g.,][]{luskin1987measuring} and may not be theoretically relevant for the development of informed preferences \citep[e.g.,][]{lupia2006elitism,gilens2001political}.
+Yet, not everyone agrees with this pessimistic assessment. Indeed, there has been a lively debate about how to accurately assess political knowledge in the first place \citep[e.g.][]{mondak2000reconsidering,mondak2001asked,sturgis2008experiment,debell2013harder,pietryka2013analysis}. Most analyses rely on standard item batteries that assess individuals' factual knowledge about political institutions and officeholders \citep[e.g.,][]{carpini1996americans}. Recent research, however, points to important distinctions in types of political knowledge that have previously been disregarded \citep{barabas2014question}. Scholars furthermore argue that recall-based measures of political knowledge do not necessarily capture how people structure their attitudes and beliefs \citep[e.g.,][]{luskin1987measuring} and may not be theoretically relevant for the development of informed preferences \citep[e.g.,][]{lupia2006elitism,gilens2001political}.
 
 % JENN: cut this para, cite gilens
 %The last point raises a fundamental question about the type of knowledge that is actually necessary for outcomes we view as desirable \citep[see also][]{lupia2015uninformed}: Do citizens really need to know specific details about US political institutions in order to successfully engage in politics? For example, precise knowledge of the official term lengths of U.S. Senators can hardly be viewed as necessary to cast an informed vote between two candidates running for President. This is especially the case since voters can rely on heuristics \citep{lupia1994shortcuts} or procedural knowledge \citep{prior2008money} when forming political preferences. Factual knowledge as measured in many public opinion surveys may therefore not be an ideal indicator for citizens' competence to engage in politics.
@@ -69,7 +75,7 @@ Yet, not everyone agrees with this pessimistic assessment. Instead, there has be
 This article develops an alternative measure of political sophistication that addresses this disconnect. Normative democratic theory suggests that voters should hold informed opinions about available candidates and relevant issues before casting a vote. Rather than relying on factual knowledge that is potentially unrelated to the task at hand, I examine how respondents discuss their political preferences and beliefs in their own words. For a given set of verbatim responses, the measure assesses political sophistication based on the number of considerations raised by individuals, the relative descriptiveness in word choice, as well as the level of opinionation. The approach is therefore \textit{naive} in that it does not presuppose pieces of information as necessary for political competence but rather examines the respondents' justification of their preferences at face value. The goal is to assess whether political attitudes relevant to perform a specific task are expressed in a more elaborate manner---a question that is not directly discernible when examining off-the-shelf factual knowledge items. %The discursive measure is therefore conceptually closer to the degree of structure and constraint in political belief systems \citep[see for example][]{tetlock1983cognitive,luskin1987measuring}. 
 
 % TODO: revise this section, predictor part comes out of nowhere
-The proposed measure is validated across multiple data sets by comparing it to conventional factual knowledge scores as predictors of competences relevant to perform political tasks. While the measures share a considerable amount of variance, they are far from equivalent. Indeed, discursive sophistication is a stronger predictor of internal turnout and other forms of political participation traditional measures. After validating the measurement approach, the paper illustrates how discursive sophistication can help refine previous insights in the literature by re-examining an oft-cited finding in empirical research---the gender gap in political knowledge. Contrary to previous research, I find no evidence for such a gap based on open-ended responses. While women might score lower than men on factual knowledge about political institutions and elites, there are no differences in the complexity of expressed political attitudes. More generally, the results suggest that developing valid measures of political sophistication based on open-ended responses can provide new opportunities to examine political knowledge across time and contexts. 
+The proposed measure is validated across multiple data sets by comparing it to conventional factual knowledge scores as predictors of competences relevant to perform political tasks. While the measures share a considerable amount of variance, they are far from equivalent. Indeed, discursive sophistication is a stronger predictor of turnout and other forms of political participation than traditional measures. After validating the measurement approach, the paper illustrates how discursive sophistication can help refine previous insights in the literature by re-examining an oft-cited finding in empirical research---the gender gap in political knowledge. Contrary to previous research, I find no evidence for such a gap based on open-ended responses. While women might score lower than men on factual knowledge about political institutions and elites, there are no differences in the complexity of expressed political attitudes. More generally, the results suggest that developing valid measures of political sophistication based on open-ended responses can provide new opportunities to examine political knowledge across time and contexts. 
 
 
 \section*{Factual Knowledge and Political Competence}
@@ -90,7 +96,7 @@ The proposed measure is validated across multiple data sets by comparing it to c
 %However, this is not the only recurring theme in the literature related to citizens' level of information. Instead, there are frequent debates about the proper measurement of political knowledge. For example, \citet{krosnick2008problems} emphasized problems related to the coding rules of common recall items included in the American National Election Study, which fail to properly capture partial knowledge \citep[see also][]{gibson2009knowing,debell2013harder}. \citet{mondak2000reconsidering} raised additional concerns by showing that individual performance on political knowledge items is influenced by differential probabilities to engage in guessing \citep[see also][]{mondak2001developing,mondak2001asked,miller2008experimenting}. While the question of measurement using knowledge items is certainly an important debate with noteworthy recent contributions \citep[e.g.,][]{pietryka2013analysis}, there is a more fundamental theoretical issue related political sophistication that is frequently overlooked: \textit{What do citizens need to know in order to participate effectively in the democratic process?}
 
 % THIS STILL NEEDS REVISIONS, especially the last part. maybe elaborate on barabas?
-The most important task for citizens in a modern democracy is to vote for candidates who represent their interests and hold their elected officials accountable. Arguably, survey items measuring political knowledge should therefore cover information that is necessary and/or sufficient to perform this essential task. However, determining such a set of items proves to be extremely difficult (if not impossible), especially since there are systematic differences in types of knowledge \citep{barabas2014question} and survey questions typically cannot capture important aspects such as visual cues \citep{prior2014visual}. In conceptualizing political knowledge, \citet{barabas2014question} distinguished both a temporal dimension (i.e., whether it is static or more contemporary) as well as a topical dimension (i.e., whether it is general or more policy-specific). Importantly, varying the types of questions on these dimensions leads to different conclusions regarding the nature and determinants of political knowledge. However, even within a given category, people may disagree about which facts are important due to inherent value differences \citep[c.f.,][]{lupia2015uninformed}. As such, even if we had strong theoretical reasons to focus on a certain set of questions according to the typology developed by \citet{barabas2014question} there would still be uncertainty about the specific set of facts deemed as necessary to perform a political task. Despite these difficulties, most empirical studies simply relied on a set of off-the-shelf knowledge questions that have been used in previous research rather than justifying their choices from a theoretical perspective. As \citet[219]{lupia2006elitism} explains, ``Most political knowledge questions are not derived from a replicable or transparent logic about how their answers bear on a voter's ability to make decisions of a particular quality.'' As such, information requested in conventional survey items often have no clear relevance to political participation. 
+The most important task for citizens in modern democracies is to vote for candidates who represent their interests and thereby hold their elected officials accountable. Arguably, survey items measuring political knowledge should therefore cover information that is necessary and/or sufficient to perform this essential task. However, determining such a set of items proves to be extremely difficult (if not impossible), especially since there are systematic differences in types of knowledge \citep{barabas2014question} and survey questions typically cannot capture important aspects such as visual cues \citep{prior2014visual}. In conceptualizing political knowledge, \citet{barabas2014question} distinguished both a temporal dimension (i.e., whether it is static or more contemporary) as well as a topical dimension (i.e., whether it is general or more policy-specific). Importantly, varying the types of questions on these dimensions leads to different conclusions regarding the nature and determinants of political knowledge. However, even within a given category, people may disagree about which facts are important due to inherent value differences \citep[c.f.,][]{lupia2015uninformed}. As such, even if we had strong theoretical reasons to focus on a certain set of questions according to the typology developed by \citet{barabas2014question} there would still be uncertainty about the specific set of facts deemed as necessary to perform a political task. Despite these difficulties, most empirical studies simply relied on a set of off-the-shelf knowledge questions that have been used in previous research rather than justifying their choices from a theoretical perspective. As \citet[219]{lupia2006elitism} explains, ``Most political knowledge questions are not derived from a replicable or transparent logic about how their answers bear on a voter's ability to make decisions of a particular quality.'' As such, information requested in conventional survey items often have no clear relevance to political participation. 
 
 \citet{lupia2006elitism} argues that instead of focusing on potentially irrelevant factual knowledge, researchers should concentrate on heuristics that directly help citizens to make competent political decisions or focus only on knowledge relevant to a specific task \citep[see also][]{lupia1994shortcuts,lupia2015uninformed}. After all, there is no need for individuals to know all available facts, but only to possess the skills and resources to be able to \textit{find} the information required in a specific context \citep{prior2008money}. \citet{druckman2014pathologies} makes a similar argument in a recent review of research on public opinion and democratic responsiveness. Since there is no apparent consensus about the precise measurement of political knowledge and it is unclear what information is necessary in the first place, the author proposes to direct the attention away from individual levels of political information as a measure of ``quality opinion.'' Instead, \citet[478, emphasis in the original]{druckman2014pathologies} advocates ``\textit{less} focus on the \textit{content/substance} of opinions (e.g., are they informed, constrained, based on strong frames, etc.?) and \textit{more} on the \textit{process} and specifically the \textit{motivation} that underlies the formation of those opinions.'' The framework proposed herein follows this call in attempting to measure political sophistication based on expressed attitudes related to a specific political task.
 % Make sure in the following discussion that it's clear that the measure focuses more on the structure and motivation as described by Druckman!
@@ -106,7 +112,7 @@ The most important task for citizens in a modern democracy is to vote for candid
 % Rather than using off-the-shelf item batteries to measure general knowledge, we can simply ask respondents to discuss their preferences in beliefs in a specific field of substantive interest and then go from there.
 % Discuss colombo article here
 
-Rather than trying to develop a new item battery that presupposes a set of facts as necessary for political competence---a task that is difficult to achieve---I propose to analyze how individuals discuss their attitudes and preferences related to a political task in their own words. Citizens have to engage in a lot of choices in democratic politics. For example, they can vote in local, state, or federal elections. Depending on the institutional setup, they may also directly decide on specific policies through referenda. In these contexts, we are often concerned whether citizens are able to make high quality decisions in accordance with their preferences. According to \citet{druckman2014pathologies}, scholars should concentrate on whether individuals are motivated to engage in accurate and objective processing when forming their opinions rather than trying to assess their level of factual knowledge. Importantly, a major approach to induce accuracy motivations discussed by \citet[478]{druckman2014pathologies} involves asking individuals to ``justify/provide reasons for one's opinions.'' Conversely, we may directly examine \textit{how} citizens justify their preferences in order to evaluate their level of sophistication in attitude expression. To the extent that respondents engage in accurate processing to form quality opinions, they should be able to discuss multiple considerations related to a political issue and show awareness of arguments for and against certain positions.
+Rather than trying to develop a new item battery that presupposes a set of facts as necessary for political competence---a task that is difficult to achieve---I propose to analyze how individuals discuss their attitudes and preferences related to a political task in their own words. Citizens have to engage in a lot of choices in democratic politics. For example, they can vote in local, state, or federal elections. Depending on the institutional setup, they may also directly decide on specific policies through referenda. In these contexts, we are often concerned whether citizens are able to make high quality decisions in accordance with their preferences. According to \citet{druckman2014pathologies}, scholars should concentrate on whether individuals are motivated to engage in accurate and objective processing when forming their opinions rather than trying to assess their level of factual knowledge. Importantly, a major approach to induce accuracy motivations discussed by \citet[478]{druckman2014pathologies} involves asking individuals to ``justify/provide reasons for one's opinions'' \citep[see also][]{tetlock1983cognitive,kunda1999motivated,redlawsk2002hot,bolsen2014influence}. Conversely, we may directly examine \textit{how} citizens justify their preferences in order to evaluate their level of sophistication in attitude expression. To the extent that respondents are motivated and able to engage in in-depth processing to form quality opinions, they should discuss multiple considerations related to a political issue and show awareness of arguments for and against certain positions.
 
 Such a perspective resembles influential theoretical accounts of political sophistication which focus on the \textit{structure} of belief systems rather than the content (or accuracy) of related considerations. In his seminal article, \citet{converse1964nature} emphasized the importance of the level of conceptualization as the main characteristic of sophistication rather than isolated pieces of factual information. Similarly, \citet{tetlock1983cognitive} used the term \textsl{integrative complexity} to describe the degree to which considerations related to an issue are interconnected. \citet{luskin1987measuring} also defined political sophistication based on the structure of individual belief systems, arguing that they can vary on three separate dimensions: (1) their \textsl{size} -- i.e. the number of cognitions, (2) their \textsl{range} -- i.e. the dispersion of cognition over categories, and (3) their \textsl{constraint} -- i.e. the extent to which cognitions are interconnected in a meaningful way. Political sophistication, in turn, is seen as the conjunction of these dimensions: ``A person is politically sophisticated to the extent to which his or her [political belief system] is large, wide-ranging, and highly constrained.'' \citep[860]{luskin1987measuring}. These differences in sophistication should be reflected in the way individuals describe, discuss, and justify their political beliefs.
 
@@ -125,20 +131,20 @@ Examining individual levels of justification in open-ended responses as a measur
 % ADD: differentiate from manual coding of integrative complexity (labor intensive) and dictionary-based methods (focus on linguistic characteristics, which could easily conflate general eloquence)
 
 
-How would a politically sophisticated person discuss his or her views compared to a less informed individual? Consider a survey where respondents are asked to describe their attitudes toward specific policies or candidates running for office in a set of open-ended items. In such a scenario, the structure of individual political belief systems (i.e., size, range, and constraint) as well as the level of motivation to engage in accurate opinion formation should be reflected in their verbatim responses. In the following, I discuss three different attributes of open-ended survey responses that should be indicative of individual political sophistication as described by previous scholars.
+How would a politically sophisticated person who engages in in-depth processing discuss his or her views compared to a less informed individual? Consider a survey where respondents are asked to describe their attitudes toward specific policies or candidates running for office in a set of open-ended items. In such a scenario, the structure of individual political belief systems (i.e., size, range, and constraint) as well as the level of motivation to engage in accurate opinion formation should be reflected in their verbatim responses. In the following, I discuss three different attributes of open-ended survey responses that should be indicative of individual political sophistication as described by previous scholars.
 
 % If a respondents holds more diverse cognitions towards political actors or policies, we should observe a wider range of topics addressed in their responses rather than a focus on single issues.
-First of all, sophisticated individuals should be able to elaborate more on their political attitudes. If people possess a large, wide-ranging, and constrained belief system, they should be able to recall a large number of \textbf{considerations} related to political actors or issues. I rely on the structural topic model framework \citep{roberts2014structural} to extract the number of topics mentioned by each respondent in a survey.\footnote{Open-ended responses are pre-processed by correcting spelling errors using an implementation of the Aspell spell-checking algorithm (\url{www.aspell.net}). Furthermore, all terms are converted to lower case and stemmed. Numbers, punctuation, stopwords, and infrequent terms are removed before extracting the topics.} First, denote $\mathcal{W}_i$ as the set of words contained in a response of individual $i$. Each word $w\in\mathcal{W}_i$ is assigned to a topic $t^* \in \{1,...,T\} $, such that $P(t^*|w,X_i) > P(t|w,X_i) \forall t\neq t^*$.\footnote{Note that $P(t|w,X_i)=\dfrac{P(w|t)P(t|X_i)}{P(w|X_i)}$. In the context of structural topic models, $X_i$ denotes the covariates used to predict individual topic prevalence \citep[see][for details]{roberts2014structural}.} In other words, each unique term in a response is assigned to the topic that has the highest likelihood of having generated that term, given the model. The set of topics that are mentioned by respondent $i$ across all words in $\mathcal{W}_i$ can then be denoted as $\mathcal{T}^*_i$ and the number of considerations can be written as:
+First of all, sophisticated individuals should be able to elaborate more on their political attitudes. If people possess a large, wide-ranging, and constrained belief system, they should be able to recall a large number of \textbf{considerations} related to political actors or issues. I rely on the structural topic model framework \citep{roberts2014structural} to extract the number of topics mentioned by each respondent in a survey.\footnote{See below for more information on the pre-processing of open-ended responses as well as the topic model} First, denote $\mathcal{W}_i$ as the set of words contained in a response of individual $i$. Each word $w\in\mathcal{W}_i$ is assigned to a topic $t^* \in \{1,...,T\} $, such that $P(t^*|w,X_i) > P(t|w,X_i) \forall t\neq t^*$.\footnote{Note that $P(t|w,X_i)=\dfrac{P(w|t)P(t|X_i)}{P(w|X_i)}$. In the context of structural topic models, $X_i$ denotes the covariates used to predict individual topic prevalence \citep[see][for details]{roberts2014structural}.} In other words, each unique term in a response is assigned to the topic that has the highest likelihood of having generated that term, given the model. The set of topics that are mentioned by respondent $i$ across all words in $\mathcal{W}_i$ can then be denoted as $\mathcal{T}^*_i$ and the number of considerations can be written as:
 \begin{equation}
 \text{considerations}_i = \dfrac{|\mathcal{T}^*_i|}{\max_i|\mathcal{T}^*_i|}.
 \end{equation}
-The measure is re-scaled to range from zero to one by dividing raw count of topics by the maximum number of topics observed in the data.
+The measure is re-scaled to range from zero to one by dividing raw count of topics by the maximum number of topics observed across individuals.
 
-However, sophisticated respondents should not only be able to mention a larger number of raw considerations when discussing politics. The level of sophistication should also be reflected in the \textbf{word choice} describing these considerations. Individuals who possess a wide-ranging and constrained system of beliefs should be more inclined to use terms that are highly descriptive of a given topic (e.g., the \textit{economy} or \textit{taxes}) rather than broad terms that could be attributed to any topic. Words that are very descriptive of a topic have a high likelihood to appear if that topic is mentioned. Highly descriptive word choice is therefore conceptualized as the sum of term likelihoods $P(w|t^*)$ given topic assignments over the entire set of words in $\mathcal{W}_i$:
+However, sophisticated respondents should not only be able to mention a larger number of raw considerations when discussing politics. The level of sophistication should also be reflected in the \textbf{word choice} describing the underlying issues. Individuals who possess a wide-ranging and constrained system of beliefs should be more inclined to use terms that are highly descriptive of a given topic (e.g., the \textit{economy} or \textit{taxes}) rather than broad terms that could be attributed to any topic. Words that are very descriptive of a topic have a high likelihood to appear if that topic is mentioned. Highly descriptive word choice is therefore conceptualized as the sum of term likelihoods $P(w|t^*)$ given topic assignments over the entire set of words in $\mathcal{W}_i$:
 \begin{equation}
 \text{word choice}_i = \dfrac{\sum_{\mathcal{W}_i} P(w|t^*)}{\max_i\left[\sum_{\mathcal{W}_i} P(w|t^*)\right]}
 \end{equation}
-Again, the measure is re-scaled to range from zero to one by dividing all values by the empirical maximum observed in the data.
+Again, the measure is re-scaled to range from zero to one by dividing all values by the empirical maximum observed across all individuals in the data.
 
 Lastly, sophisticated individuals should hold opinions about each political actor or policy that they are asked to discuss. As such, shophisticates should be able to express their attitudes towards each open-ended probe in terms of both approval or disapproval. Responses that reflect high levels of sophistication should therefore display a greater level of \textbf{opinionation}, which is conceptualized as the diversity of relative lengths for each open-ended response (specified as the Shannon entropy):
 \begin{equation}
@@ -167,9 +173,9 @@ The measure of discursive sophistication is validated using multiple surveys emp
 
 %[ADD GERMAN GENERAL SOCIAL SURVEY DATA?]
 
-\subsection*{American National Election Study 2012}
+\subsection*{2012 \& 2016 American National Election Study}
 
-The main analyses are based on the 2012 American National Election Study (ANES), which consists of a representative survey of 5914 adults in the months before the 2012 US Presidential election. 2054 respondents participated in face-to-face interviews while the remaining 3860 filled out the survey online. For the purpose of the present analyses, I rely on the pooled dataset while controlling for differences in survey mode. The measure of discursive sophistication is based on open-ended questions in which respondents were asked in the pre-election wave of the survey to list anything in particular that they like/dislike about the Democratic/Republican party as well as anything that might make them vote/not vote for either of the Presidential candidates. They were probed by the interviewer asking ``anything else?'' until the respondent answered ``no''. Overall, there are a total number of 8 open-ended responses where individuals described their beliefs and attitudes towards political actors. Individuals who did not respond to all of the open-ended items (417 individuals), or who responded in Spanish (228 individuals), were excluded from the analysis.\footnote{See Appendix A for more details on the structural topic model and descriptive information on the individual components of discursive sophistication.}
+The main analyses are based on the 2012 and 2016 wave of the American National Election Study (ANES), which consist of a representative survey of about 5000 adults in the months before the US Presidential election in each year. About 2000 respondents in both waves participated in face-to-face interviews while the remaining respondents filled out the survey online. For the purpose of the present analyses, I rely on the pooled datasets while controlling for differences in survey mode. The measure of discursive sophistication is based on open-ended questions in which respondents were asked in the pre-election wave of the survey to list anything in particular that they like/dislike about the Democratic/Republican party as well as anything that might make them vote/not vote for either of the Presidential candidates. They were probed by the interviewer asking ``anything else?'' until the respondent answered ``no''. Overall, there are a total number of 8 open-ended responses where individuals described their beliefs and attitudes towards political actors. Individuals who did not respond to all of the open-ended items (420 in 2012; 204 in 2016), or who responded in Spanish (228 in 2012; 43 in 2016), were excluded from the analysis.\footnote{See Appendix A for more details on the structural topic model and descriptive information on the individual components of discursive sophistication.}
 
 \subsection*{2015 YouGov Survey}
 
@@ -183,23 +189,47 @@ Second, the respondents reported on their attitudes towards the Affordable Care 
 \item Still thinking about the question you just answered, what thoughts came to mind while you were answering that question? Please try to list everything that came to mind.
 \item For decades, experts have observed that the United States spends far more per person on health care than any other country. However, the U.S. falls behind on most measures of health care outcomes, such as life expectancy. What factors do you think are responsible for the state of our health care system?
 \end{itemize}
-Here, discursive sophistication is computed based on the verbatim responses to the four preceding questions using the same procedures described above. Compared to the open-ended likes/dislikes items included in the 2012 ANES, the questions directly address considerations related to specific policy issues that were prominent in the political discourse at the time of the survey.\footnote{See Appendix B for descriptive information on the individual components of discursive sophistication.}
+Here, discursive sophistication is computed based on the verbatim responses to the four preceding questions using the same procedures described above. Compared to the open-ended likes/dislikes items included in the 2012 and 2016 ANES, the questions directly address considerations related to specific policy issues that were prominent in the political discourse at the time of the survey.\footnote{See Appendix B for descriptive information on the individual components of discursive sophistication.}
 
 % HOW MANY DID NOT RESPOND???
 
 
 
-\subsection*{Swiss Referendum Data}
+\subsection*{Swiss Referendum Survey}
 
-Lastly, I examine the data on Swiss citizens justifying their vote choices on multiple referenda used in the analyses presented by \citet{colombo2016justifications}. The author compiled a data set from cross-sectional surveys that were conducted in Switzerland after national popular votes on multiple policy propositions. The original surveys were conducted as representative samples after each of thirty-four national policy votes that were held between 2008 and 2012 resulting in a total of 26,621 observations. However, respondents were only asked to justify their decision for or against a given proposition in verbatim if they participated in the vote in the first place. As such, 4,917 individuals in the data set did not provide an open-ended response. The remaining respondents were asked to describe the main reason as well as additional justifications for their decision in two separate items. As before, discursive sophistication is computed based on the verbatim responses to both questions.\footnote{See Appendix C for descriptive information on the individual components of the measure of discursive sophistication.}
+Lastly, I examine survey data on Swiss citizens justifying their vote choices on multiple referenda used in the analyses presented by \citet{colombo2016justifications}. The author compiled a data set from cross-sectional surveys that were conducted in Switzerland after national popular votes on multiple policy propositions. The original surveys were conducted as representative samples after each of thirty-four national policy votes that were held between 2008 and 2012 resulting in a total of 26,621 observations. However, respondents were only asked to justify their decision for or against a given proposition in verbatim if they participated in the vote in the first place. As such, 4,917 individuals in the data set did not provide an open-ended response. The remaining respondents were asked to describe the main reason as well as additional justifications for their decision in two separate items. As before, discursive sophistication is computed based on the verbatim responses to both questions.\footnote{See Appendix C for descriptive information on the individual components of the measure of discursive sophistication.}
 % QUESTION wording for Swiss study?
 
+
+\section*{Robustness of Pre-Processing Choices}
+
+Open-ended responses are pre-processed by correcting spelling errors using an implementation of the Aspell spell-checking algorithm (\url{www.aspell.net}). Furthermore, all terms are converted to lower case and stemmed. Numbers, punctuation, stopwords, and infrequent terms are removed before extracting the topics.
+
+
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[t]{1\textwidth}
+        \centering
+        \includegraphics{../fig/pretext2012.pdf}
+    \end{subfigure}%
+    \\
+    \begin{subfigure}[t]{1\textwidth}
+        \centering
+        \includegraphics{../fig/pretext2016.pdf}
+    \end{subfigure}
+    \caption{PreText analysis of preprocessing decisions.}\label{fig:pretext}
+\end{figure*}
+
+
+\begin{figure}[h]\centering
+\includegraphics{../fig/pretext_robustness.pdf}
+\caption{Robustness of discursive sophistication measure for different pre-processing choices and topic model specifications.}\label{fig:pretext_robustness}
+\end{figure}
 
 
 \section*{Comparing Measures of Political Sophistication}
 
-
-Before turning to the validation, I begin by directly comparing discursive sophistication to alternative metrics of political knowledge in the 2012 ANES. The most common way to measure political knowledge in surveys is to ask a set of factual questions about political institutions. The ANES includes such a basic item battery, inquiring for example about the number of times an individual can be elected President of the United States, or how the current U.S. federal budget deficit compares to the deficit in the 1990s. I combine individual responses on these items to a standard additive measure of \textbf{factual knowledge} about politics. Additionally, the in-person sample of the 2012 ANES includes \textbf{interviewer assessments} of each respondent's political sophistication.
+Before turning to the validation, I begin by directly comparing discursive sophistication to alternative metrics of political knowledge in the 2012 and 2016 ANES. The most common way to measure political knowledge in surveys is to ask a set of factual questions about political institutions. The ANES includes such a basic item battery, inquiring for example about the number of times an individual can be elected President of the United States, or how the current U.S. federal budget deficit compares to the deficit in the 1990s. I combine individual responses on these items to a standard additive measure of \textbf{factual knowledge} about politics. Additionally, the in-person sample of the 2012 ANES includes \textbf{interviewer assessments} of each respondent's political sophistication.
 % TODO: add citation for use of both knowledge measures
 
 % EXTEND: add relationship with personality measures, examine relationship with extremity, ambivalence, etc.
@@ -245,27 +275,6 @@ Overall, while discursive sophistication and the alternative measures are clearl
 \end{table}
 
 Each row in the table represents one of the open-ended responses (like/dislike for each candidate/party). Column A displays the responses of an individual who scored low on discursive sophistication and column B displays the responses of a high scoring individual. Cells are empty if a respondent refused to provide a response. Even though both individuals are measured to have equal factual political knowledge, there are systematic differences in their response behavior that can be attributed to their political sophistication. Overall, respondent A provided a less elaborate response, only focused on two issues (health care and student loans), and did not report attitudes on multiple items. Compared to respondent B, such a response pattern is suggestive of a less sophisticated political belief system. Overall, this initial result suggests that the variation in discursive sophistication captures meaningful differences in response behavior that clearly overlaps with traditional knowledge metrics while displaying some unique variation.
-
-
-\begin{figure*}[t!]
-    \centering
-    \begin{subfigure}[t]{1\textwidth}
-        \centering
-        \includegraphics{../fig/pretext2012.pdf}
-    \end{subfigure}%
-    \\
-    \begin{subfigure}[t]{1\textwidth}
-        \centering
-        \includegraphics{../fig/pretext2016.pdf}
-    \end{subfigure}
-    \caption{PreText analysis of preprocessing decisions.}\label{fig:pretext}
-\end{figure*}
-
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/pretext_robustness.pdf}
-\caption{Comparison of different choices of topics}\label{fig:ktopic}
-\end{figure}
 
 \section*{Political Sophistication and Competence}
 
@@ -328,10 +337,10 @@ Political competence does not necessarily imply that citizens always stay consis
 
 \begin{figure}[h]\centering
 \includegraphics{../fig/yg_disease.pdf}
-\caption{Expected disease information retrieval in the 2015 YouGov Study as a function of political sophistication (including 95\% confidence intervals). Estimates are based on separate OLS models controlling for education, income, age, religiosity, gender, and race.}\label{fig:yg_corplot}
+\caption{Expected disease information retrieval in the 2015 YouGov Study as a function of political sophistication (including 95\% confidence intervals). Estimates are based on separate OLS models controlling for education, income, age, religiosity, gender, and race.}\label{fig:yg_disease}
 \end{figure}
 
-Figure~\ref{fig:yg_corplot} displays the effect of political sophistication on disease information retrieval in the 2015 YouGov study. Estimates are based on OLS models controlling for education, income, age, religiosity, gender, and race. As a benchmark for discursive sophistication, I again consider the effect of \textbf{factual knowledge} based on a battery of eight items similar to the knowledge questions in the ANES. Again, we observe that both, discursive sophistication as well as factual knowledge increase the amount of information individuals are able to recall from a news article discussing a fictional disease. Similar to the previous results, the effects appear to be slightly stronger for discursive sophistication.
+Figure~\ref{fig:yg_disease} displays the effect of political sophistication on disease information retrieval in the 2015 YouGov study. Estimates are based on OLS models controlling for education, income, age, religiosity, gender, and race. As a benchmark for discursive sophistication, I again consider the effect of \textbf{factual knowledge} based on a battery of eight items similar to the knowledge questions in the ANES. Again, we observe that both, discursive sophistication as well as factual knowledge increase the amount of information individuals are able to recall from a news article discussing a fictional disease. Similar to the previous results, the effects appear to be slightly stronger for discursive sophistication.
 
 
 \subsection*{Well-Justified Political Decisions}
@@ -371,6 +380,8 @@ Overall, the gender gap has been shown to be influenced by how we ask for politi
 
 How do men and women compare on the different metrics of political sophistication in the 2012 ANES? Figure~\ref{fig:meandiff} displays the average levels of discursive sophistication as well as conventional metrics comparing both genders. While we observe a sizable gender gap for factual knowledge and interviewer assessments, the difference is substantially smaller (and statistically indistinguishable from zero) for discursive sophistication. %Here, the gender gap is still statistically significant, but substantively inconsequential when compared to the remaining measures.
 
+The results regarding the gender gap are replicated in the YouGov data. Figure~\ref{fig:meandiff} also compares the alternative measures of political knowledge and sophistication for men and women. As before, we observe a significant gender gap in factual knowledge (middle panel), which disappears using the discursive measure (left panel). Furthermore, there is no apparent gender gap in disease information retrieval. If anything, women are able to recall slightly more accurate information about the infectious disease described in the news article. This result is consistent with recent research by \citet{jerit2017revisiting}, which suggests that knowledge gaps between men and women disappear upon receiving sufficient information.
+
 \begin{figure}[h]\centering
 \includegraphics{../fig/meandiff.pdf}
 \caption{The gender gap in political sophistication. The figure displays mean levels of sophistication for each measure comparing men and women (including 95\% confidence intervals). The y-axis is scaled to range up to the maximum value observed in the data for each sophistication metric. The gender differences in factual knowledge and interviewer evaluations are statistically significant with $p<.05$.}\label{fig:meandiff}
@@ -397,8 +408,7 @@ After controlling for common determinants, discursive sophistication reveals no 
 
 The patterns for the remaining determinants are quite similar across different dependent variables. Knowledge and sophistication is significantly higher among respondents who are more exposed to political news media, discuss politics frequently, are more educated, and have higher income. An interesting deviation, however, is the effect of survey mode. For factual knowledge questions, we observe that respondents in online surveys score significantly higher than individuals in face-to-face interviews. This difference could be explained by the fact that individuals are able to look up responses to factual knowledge questions while taking an online survey \citep[see also][]{clifford2016cheating}. For discursive sophistication, on the other hand, we see that individuals appear to score lower on sophistication in online surveys. Respondents in online surveys therefore seem less willing to elaborate on their attitudes. Overall, the fact that the determinants of political sophistication are very consistent across models lends additional validity to the open-ended measure.
 
-
-
+Again, this result is replicated when looking at data from the 2015 YouGov survey: men do not perform better than women on discursive sophistication or disease information retrieval in a multivariate setting. However, the gender gap in factual political knowledge persists and is substantively as well as statistically significant. The remaining determinants of sophistication/knowledge are similar across measures (except for family income). Interestingly, the observed pattern of effects on discursive sophistication is strikingly similar to the effects on information retrieval about the fictional disease. This result reinforces the conclusion that discursive sophistication and disease information retrieval in the YouGov study share common characteristics in the sense that they capture how individuals recall considerations that are relevant to their own attitudes rather than inquiring about facts related to political institutions and elites that are extraneous to the issues at hand.
 
 
 % REVISE: Make a reference to Jenn's study, which found that gender differences disappear if information is provided to respondents
@@ -421,7 +431,7 @@ The patterns for the remaining determinants are quite similar across different d
 
 Political scientists should worry less about pure levels of \textit{information}, but rather focus on the necessary conditions for individuals to make \textit{competent} decisions. Competence in the context of political decision-making and voting requires citizens to hold informed attitudes about their representatives. Factual knowledge about political institutions might be a useful proxy for competence in certain scenarios. However, it cannot address directly whether individuals hold well-considered opinions about political actors they try to hold accountable. In comparison, the measure of discursive sophistication proposed here is agnostic about the specific contents of individual beliefs, but directly captures the complexity of individual attitude expressions.
 
-The findings presented in this paper show that conventional knowledge indices and the discursive measure share a substantial amount of variance. However, they are far from being identical and capture different aspects of sophistication. Most importantly, using the discursive measure, any evidence for the gender gap commonly reported using factual knowledge scales disappears. Women might know fewer facts about political institutions, but they do not differ substantively in the complexity of their expressed political beliefs.
+The findings presented in this paper show that conventional knowledge indices and the discursive measure share a substantial amount of variance. However, they are far from being identical and capture different aspects of sophistication. Most importantly, using the discursive measure, any evidence for the gender gap commonly reported using factual knowledge scales disappears. Women might know fewer facts about political institutions, but they do not differ substantively in the complexity of their expressed political beliefs. The fact that women perform just as well as men on discursive sophistication across various surveys can be attributed to the fact that they focus on different considerations that are salient to them when evaluating political parties and candidates. This issue has long been recognized in the literature \citep[e.g.,][]{graber2001processing,dolan2011women}, but it cannot be properly addressed while relying exclusively on off-the-shelf political knowledge batteries. Looking for answers in open-ended responses and directly examining how individuals justify their political preferences, in turn, provides a solution that does not rely on strong assumptions about what citizens ought to know.
 
 %\clearpage
 \singlespacing
@@ -442,7 +452,7 @@ The findings presented in this paper show that conventional knowledge indices an
 
 \begin{figure}[h]\centering
 \includegraphics[width=\textwidth]{../fig/stm_prop.pdf}
-\caption{Estimated topic proportions based on the structural topic model. The number of topics $k$ for the structural topic model is set to 20. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 77 topics).}\label{fig:stm_prop}
+\caption{Estimated topic proportions based on the structural topic model. The number of topics $k$ for the structural topic model is selected using the algorithm proposed by \citet{lee2014low}. I use measures for age, gender, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is similar to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., setting the total number of topics to 20.}\label{fig:stm_prop}
 \end{figure}
 
 \begin{figure}[h]\centering
@@ -478,8 +488,8 @@ The findings presented in this paper show that conventional knowledge indices an
 
 \clearpage
 \section*{Appendix C: Open-ended Responses in Swiss Referendum Data}
-\renewcommand\thefigure{B.\arabic{figure}}
-\renewcommand\thetable{B.\arabic{table}}
+\renewcommand\thefigure{C.\arabic{figure}}
+\renewcommand\thetable{C.\arabic{table}}
 \setcounter{figure}{0}
 \setcounter{table}{0}
 
@@ -506,11 +516,12 @@ The findings presented in this paper show that conventional knowledge indices an
 \end{figure}
 
 
-
-
-
 \clearpage
-\section*{Appendix C: YouGov Correlation Matrix}
+\section*{Appendix D: YouGov Correlation Matrix}
+\renewcommand\thefigure{D.\arabic{figure}}
+\renewcommand\thetable{D.\arabic{table}}
+\setcounter{figure}{0}
+\setcounter{table}{0}
 
 Figure~\ref{fig:yg_corplot} examines the distribution of each measure of political knowledge as well as their respective correlations in the YouGov data. Again, we observe that discursive sophistication and factual political knowledge are positively correlated, which indicates that discursive sophistication overlaps with traditional knowledge metrics while capturing unique variation in individual response behavior. Interestingly, there appears to be a stronger relationship between discursive sophistication and disease information than between factual political knowledge and disease information.
 
@@ -522,32 +533,10 @@ Figure~\ref{fig:yg_corplot} examines the distribution of each measure of politic
 Recall that the disease information score can be interpreted as an indicator of the ability to retrieve specific information provided in a news article about a public health issue. It could be argued that discursive sophistication is more similar to the disease information score in that it captures the extent to which participants were able to recall political information that is relevant to their own attitudes. Conventional knowledge scores, on the other hand, inquire about specific that are not necessarily relevant to derive well-informed attitudes about political issues.
 
 
-
-%\subsection*{Appendix D: Gender Gap Replication -- 2015 YouGov Data}
-%
-%Next, I examine whether the results regarding the gender gap observed in Study 1 are replicated in the YouGov data. Figure~\ref{fig:yg_meandiff} compares the alternative measures of political knowledge and sophistication for men and women. As before, we observe a significant gender gap in factual knowledge (middle panel), which disappears using the discursive measure (left panel). Furthermore, there is no apparent gender gap in disease information retrieval. If anything, women are able to recall slightly more accurate information about the infectious disease described in the news article. This result is consistent with recent research by \citet{jerit2017revisiting}, which suggests that knowledge gaps between men and women disappear upon receiving sufficient information.
-%
-%\begin{figure}[h]\centering
-%\includegraphics{../fig/yg_meandiff.pdf}
-%\caption{YouGov data -- The gender gap in political sophistication. The figure displays mean levels of sophistication for each measure comparing men and women (including 95\% confidence intervals). The y-axis is scaled to range up to the maximum value observed in the data for each sophistication metric. The gender difference in factual knowledge is statistically significant with $p<.05$.}\label{fig:yg_meandiff}
-%\end{figure}
-%
-%A skeptical reader may again argue that the difference in factual knowledge between men and women could potentially be explained by systematic differences in resource-related factors. As such, we need to examine whether the gender gap persists even after controlling for covariates that might influence political knowledge. Similar to the analyses discussed in Study 1, Figure~\ref{fig:yg_determinants} presents the results of linear regressions predicting each measure as a function of gender, education, income, age, race, and religiosity.
-%
-%\begin{figure}[h]\centering
-%\includegraphics{../fig/yg_determinants.pdf}
-%\caption{Common determinants of political sophistication -- Replication using YouGov data. Estimates are OLS regression coefficients with 95\% confidence intervals. Dependent variables are discursive sophistication, factual political knowledge as well as knowledge about a fictional disease that was presented as part of the study. Full model results are presented in the appendix, Table~\ref{tab:yg_determinants}}\label{fig:yg_determinants}
-%\end{figure}
-%
-%As before, men do not perform better than women on discursive sophistication or disease information retrieval in a multivariate setting. However, the gender gap in factual political knowledge persists and is substantively as well as statistically significant. The remaining determinants of sophistication/knowledge are similar across measures (except for family income). Interestingly, the observed pattern of effects on discursive sophistication is strikingly similar to the effects on information retrieval about the fictional disease. This result reinforces the conclusion that discursive sophistication and disease information retrieval in the YouGov study share common characteristics in the sense that they capture how individuals recall considerations that are relevant to their own attitudes rather than inquiring about facts related to political institutions and elites that are extraneous to the issues at hand.
-
-
-
-
 %\clearpage
 %\section*{Appendix E: Tables of Model Estimates}
-%\renewcommand\thefigure{C.\arabic{figure}}
-%\renewcommand\thetable{C.\arabic{table}}
+%\renewcommand\thefigure{E.\arabic{figure}}
+%\renewcommand\thetable{E.\arabic{table}}
 %\setcounter{figure}{0}
 %\setcounter{table}{0}
 %
