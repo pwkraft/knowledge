@@ -120,10 +120,10 @@ anes2016$button <- Recode(raw2016$V162012, "2=0; lo:-1=NA")
 ## additive index non-conventional participation
 anes2016$part <- with(anes2016, protest + petition + button + letter)
 
-## vote choice (pre-election)
+## vote choice (pre-election, 1=Clinton, 2=Trump)
 anes2016$vc_pre <- Recode(raw2016$V161031,"lo:-1=NA; 1=1; 2=2; else=3")
 
-## vote choice (post-election)
+## vote choice (post-election, 1=Clinton, 2=Trump)
 anes2016$vc_post <- Recode(raw2016$V162034a, "lo:-1=NA; 1=1; 2=2; else=3")
 
 ## vote change (pre-post)

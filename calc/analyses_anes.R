@@ -8,6 +8,7 @@
 rm(list = ls())
 gc()
 
+library(MASS)
 library(car)
 library(quanteda)
 library(stm)
@@ -19,7 +20,6 @@ library(GGally)
 library(dplyr)
 library(pmisc)
 library(stargazer)
-library(MASS)
 library(rstan)
 
 rstan_options(auto_write = TRUE)
@@ -263,14 +263,27 @@ tmp  <- data2012 %>%
          , polknow_factual == 0.6) %>%
   arrange(polknow_text_mean)
 tmp_select <- c(head(tmp$caseid), tail(tmp$caseid))
-write.csv(anes2012spell[anes2012spell$caseid %in% tmp_select, ], file="tmp/select2012.csv")
+tmp <- anes2012opend %>% 
+  filter(caseid %in% tmp_select) %>%
+  mutate(polknow_text_mean = data2012$polknow_text_mean[data2012$caseid %in% tmp_select]) %>%
+  arrange(polknow_text_mean)
+write.csv(t(tmp), file="tmp/select2012.csv")
 
 tmp  <- data2016 %>% 
   filter(wc > (median(wc) - 5) & wc < (median(wc) + 5)
          , polknow_factual == 0.75) %>%
   arrange(polknow_text_mean)
 tmp_select <- c(head(tmp$caseid), tail(tmp$caseid))
-write.csv(anes2016spell[anes2016spell$caseid %in% tmp_select, ], file="tmp/select2016.csv")
+tmp <- anes2016opend %>% 
+  filter(V160001 %in% tmp_select) %>%
+  mutate(polknow_text_mean = data2016$polknow_text_mean[data2016$caseid %in% tmp_select]) %>%
+  arrange(polknow_text_mean)
+write.csv(t(tmp), file="tmp/select2016.csv")
+
+data2016 %>% 
+  filter(caseid %in% tmp_select) %>% 
+  arrange(polknow_text_mean) %>%
+  dplyr::select(caseid, pid, ideol, educ, vc_pre, vc_post, vc_change, polknow_text_mean, polknow_factual)
 
 
 ###################
