@@ -75,6 +75,14 @@ p1 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) 
   ggtitle("2012 ANES")
 
 
+### Gender gap in interviewer assessment for male/female interviewers?
+
+t.test(polknow_factual~female, data=data2012)
+t.test(polknow_text_mean~female, data=data2012)
+t.test(polknow_factual~female, data=data2012[data2012$iwr_female==0,])
+t.test(polknow_factual~female, data=data2012[data2012$iwr_female==1,])
+
+
 ### 2016 ANES
 
 plot_df <- data.frame(rbind(cbind(data2016$polknow_text_mean, data2016$female, 1)

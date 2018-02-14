@@ -230,6 +230,9 @@ anes2012$wordsum <- with(raw2012, (wordsum_setb == 5) + (wordsum_setd == 3)
                          + (wordsum_setj == 1) + (wordsum_setk == 1)
                          + (wordsum_setl == 4) + (wordsum_seto == 2))/10
 
+## gender of interviewe
+anes2012$iwr_female <- Recode(raw2012$iwrdesc_pre_gender,"lo:-1=NA")-1
+
 ## Pro-redistribution attitude: (new scale: 0-1)
 ## Services and spending tradeoff placement (1-7, max = increase spending)
 ## Standard of living (1-7, max = gov't should let each person get ahead on their own)
