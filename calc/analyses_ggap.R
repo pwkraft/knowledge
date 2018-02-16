@@ -57,12 +57,10 @@ ivnames <- c("Intercept", "Gender\n(Female)", "Media\nExposure", "Political\nDis
 ### 2012 ANES
 
 plot_df <- data.frame(rbind(cbind(data2012$polknow_text_mean, data2012$female, 1)
-                            , cbind(data2012$polknow_factual, data2012$female, 2)
-                            , cbind(data2012$polknow_evalpre, data2012$female, 3))) %>% na.omit()
+                            , cbind(data2012$polknow_factual, data2012$female, 2))) %>% na.omit()
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
-plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"
-                                                        , "Interviewer\nEvaluation (Pre)"))
+plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"))
 plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
   summarize_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
   mutate(cilo = mean - 1.96*sd/sqrt(n)
@@ -70,7 +68,7 @@ plot_means <- plot_df %>% group_by(Variable, Gender) %>%
 
 p1 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
   geom_bar(stat="identity") + geom_errorbar(width=.25) + 
-  facet_wrap(~Variable) + ylab("Average Values") +
+  facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
   ggtitle("2012 ANES")
 
@@ -86,12 +84,10 @@ t.test(polknow_factual~female, data=data2012[data2012$iwr_female==1,])
 ### 2016 ANES
 
 plot_df <- data.frame(rbind(cbind(data2016$polknow_text_mean, data2016$female, 1)
-                            , cbind(data2016$polknow_factual, data2016$female, 2)
-                            , cbind(data2016$polknow_evalpre, data2016$female, 3))) %>% na.omit()
+                            , cbind(data2016$polknow_factual, data2016$female, 2))) %>% na.omit()
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
-plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"
-                                                        , "Interviewer\nEvaluation (Pre)"))
+plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"))
 plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
   summarize_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
   mutate(cilo = mean - 1.96*sd/sqrt(n)
@@ -99,7 +95,7 @@ plot_means <- plot_df %>% group_by(Variable, Gender) %>%
 
 p2 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
   geom_bar(stat="identity") + geom_errorbar(width=.25) + 
-  facet_wrap(~Variable) + ylab("Average Values") +
+  facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
   ggtitle("2016 ANES")
 
@@ -107,12 +103,10 @@ p2 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) 
 ### Yougov Data
 
 plot_df <- data.frame(rbind(cbind(data$polknow_text_mean, data$female, 1)
-                            , cbind(data$know_pol, data$female, 2)
-                            , cbind(data$know_dis, data$female, 3))) %>% na.omit()
+                            , cbind(data$know_pol, data$female, 2))) %>% na.omit()
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
-plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"
-                                                        , "Disease\nInformation"))
+plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"))
 plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
   summarize_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
   mutate(cilo = mean - 1.96*sd/sqrt(n)
@@ -120,37 +114,70 @@ plot_means <- plot_df %>% group_by(Variable, Gender) %>%
 
 p3 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
   geom_bar(stat="identity") + geom_errorbar(width=.25) + 
-  facet_wrap(~Variable) + ylab("Average Values") +
+  facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
   ggtitle("2015 YouGov Survey")
 
 
-### Swiss Data
+### Swiss Data -  German
 
-plot_df <- data.frame(rbind(cbind(opend_german$polknow_text_mean, opend_german$female, 1, 1)
-                            , cbind(opend_german$loj, opend_german$female, 2, 1)
-                            , cbind(opend_french$polknow_text_mean, opend_french$female, 1, 2)
-                            , cbind(opend_french$loj, opend_french$female, 2, 2)
-                            , cbind(opend_italian$polknow_text_mean, opend_italian$female, 1, 3)
-                            , cbind(opend_italian$loj, opend_italian$female, 2, 3))) %>% na.omit()
-colnames(plot_df) <- c("Knowledge","Gender","Variable","Language")
+plot_df <- data.frame(rbind(cbind(opend_german$polknow_text_mean, opend_german$female, 1)
+                            , cbind(opend_german$loj, opend_german$female, 2))) %>% na.omit()
+colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
 plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Level of\nJustification"))
-plot_df$Language <- factor(plot_df$Language, labels = c("German","French","Italian"))
-plot_means <- plot_df %>% group_by(Variable, Gender, Language) %>% 
+plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
   summarize_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
   mutate(cilo = mean - 1.96*sd/sqrt(n)
          , cihi = mean + 1.96*sd/sqrt(n))
 
 p4 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
   geom_bar(stat="identity") + geom_errorbar(width=.25) + 
-  facet_grid(Variable~Language, scale = "free_y") + ylab("Average Values") +
+  facet_wrap(~Variable, scale="free_y") + 
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
-  ggtitle("Swiss Referendum Data")
+  labs(title="Swiss Survey", subtitle="German Respondents", y="Average Values", x=NULL)
 
 
-p0 <- grid.arrange(p1, p2, p3, p4, ncol=2)
-ggsave("../fig/meandiff.pdf", p0 ,width=6, height=5)
+### Swiss Data - French
+
+plot_df <- data.frame(rbind(cbind(opend_french$polknow_text_mean, opend_french$female, 1)
+                            , cbind(opend_french$loj, opend_french$female, 2))) %>% na.omit()
+colnames(plot_df) <- c("Knowledge","Gender","Variable")
+plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
+plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Level of\nJustification"))
+plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
+  summarize_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
+  mutate(cilo = mean - 1.96*sd/sqrt(n)
+         , cihi = mean + 1.96*sd/sqrt(n))
+
+p5 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
+  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
+  facet_wrap(~Variable, scale="free_y") + 
+  geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
+  labs(title=" ", subtitle="French Respondents", y="Average Values", x=NULL)
+
+
+### Swiss Data -  Italian
+
+plot_df <- data.frame(rbind(cbind(opend_italian$polknow_text_mean, opend_italian$female, 1)
+                            , cbind(opend_italian$loj, opend_italian$female, 2))) %>% na.omit()
+colnames(plot_df) <- c("Knowledge","Gender","Variable")
+plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
+plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Level of\nJustification"))
+plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
+  summarize_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
+  mutate(cilo = mean - 1.96*sd/sqrt(n)
+         , cihi = mean + 1.96*sd/sqrt(n))
+
+p6 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
+  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
+  facet_wrap(~Variable, scale="free_y") + 
+  geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
+  labs(title=" ", subtitle="Italian Respondents", y="Average Values", x=NULL)
+
+
+(p0 <- grid.arrange(p1, p2, p3, p4, p5, p6, ncol=3))
+ggsave("../fig/meandiff.pdf", p0 ,width=6.5, height=4)
 
 
 
