@@ -21,6 +21,7 @@
 *.bib.bak
 *.Rdata
 *.rds
+*.ps
 
 # History files
 .Rhistory
