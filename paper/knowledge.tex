@@ -113,7 +113,7 @@ Examining individual levels of justification in open-ended responses as a measur
 
 How would a politically sophisticated person who engages in in-depth processing discuss his or her views compared to a less informed individual? Consider a survey where respondents are asked to describe their attitudes toward specific policies or candidates running for office in a set of open-ended items. In such a scenario, the structure of individual political belief systems (i.e., size, range, and constraint) as well as the level of motivation to engage in accurate opinion formation should be reflected in their verbatim responses. In the following, I discuss three different attributes of open-ended survey responses that should be indicative of individual political sophistication as described by previous scholars.
 
-First of all, sophisticated individuals should be able to elaborate more on their political attitudes. If people possess a large, wide-ranging, and constrained belief system, they should be able to recall a large number of \textit{considerations} related to political actors or issues. I rely on the structural topic model framework \citep{roberts2014structural} to extract the number of topics mentioned by each respondent in a survey.\footnote{See below for more information on the pre-processing of open-ended responses as well as the topic model specification.} First, denote $\mathcal{W}_i$ as the set of words contained in a response of individual $i$. Each word $w\in\mathcal{W}_i$ is assigned to a topic $t^* \in \{1,...,T\} $, such that $P(t^*|w,X_i) > P(t|w,X_i) \forall t\neq t^*$.\footnote{Note that $P(t|w,X_i)=\dfrac{P(w|t)P(t|X_i)}{P(w|X_i)}$. In the context of structural topic models, $X_i$ denotes the covariates used to predict individual topic prevalence \citep[see][for details]{roberts2014structural}.} In other words, each unique term in a response is assigned to the topic that has the highest likelihood of having generated that term, given the model. The set of topics that are mentioned by respondent $i$ across all words in $\mathcal{W}_i$ can then be denoted as $\mathcal{T}^*_i$ and the number of considerations can be written as:
+First of all, sophisticated individuals should be able to elaborate more on their political attitudes. If people possess a large, wide-ranging, and constrained belief system, they should be able to recall a large number of \textit{considerations} related to political actors or issues. I rely on the structural topic model framework \citep{roberts2014structural} to extract the number of topics mentioned by each respondent in a survey.\footnote{See below for more information on the set of open-ended responses, pre-processing choices, as well as on the topic model specification.} First, denote $\mathcal{W}_i$ as the set of words contained in a response of individual $i$. Each word $w\in\mathcal{W}_i$ is assigned to a topic $t^* \in \{1,...,T\} $, such that $P(t^*|w,X_i) > P(t|w,X_i) \forall t\neq t^*$.\footnote{Note that $P(t|w,X_i)=\dfrac{P(w|t)P(t|X_i)}{P(w|X_i)}$. In the context of structural topic models, $X_i$ denotes the covariates used to predict individual topic prevalence \citep[see][for details]{roberts2014structural}.} In other words, each unique term in a response is assigned to the topic that has the highest likelihood of having generated that term, given the model. The set of topics that are mentioned by respondent $i$ across all words in $\mathcal{W}_i$ can then be denoted as $\mathcal{T}^*_i$ and the number of considerations can be written as:
 \begin{equation}
 \text{considerations}_i = \dfrac{|\mathcal{T}^*_i|}{\max_i|\mathcal{T}^*_i|}.
 \end{equation}
@@ -141,11 +141,11 @@ Overall, a highly sophisticated individual can be expected to respond to a set o
 
 \section*{An Overview of Data Sources and Open Ended Items}
 
-The measure of discursive sophistication is validated using multiple surveys employing different sets of open-ended questions. Each data set and the respective items used to compute discursive sophistication are briefly described below. %Please refer to the appendix for more detailed information on the data and methods, such as pre-processing the verbatim responses.
+The measure of discursive sophistication is validated using multiple surveys employing different sets of open-ended questions. Each data set and the respective items used to compute discursive sophistication are briefly described below.\footnote{See Appendix A for descriptive information on open-ended responses in each dataset, structural topic model results, and individual components of discursive sophistication. Appendix B contains further details on pre-processing steps and modeling choices for the structural topic models as well as robustness checks.} %Please refer to the appendix for more detailed information on the data and methods, such as pre-processing the verbatim responses.
 
 
 \subsection*{2012 \& 2016 American National Election Study}
-The main analyses are based on the 2012 and 2016 wave of the American National Election Study (ANES), which consist of a representative survey of about 5000 adults in the months before the US Presidential election in each year. About 2000 respondents in both waves participated in face-to-face interviews while the remaining respondents filled out the survey online. For the purpose of the present analyses, I rely on the pooled datasets while controlling for differences in survey mode. The measure of discursive sophistication is based on open-ended questions in which respondents were asked in the pre-election wave of the survey to list anything in particular that they like/dislike about the Democratic/Republican party as well as anything that might make them vote/not vote for either of the Presidential candidates. They were probed by the interviewer asking ``anything else?'' until the respondent answered ``no''. Overall, there are a total number of 8 open-ended responses where individuals described their beliefs and attitudes towards political actors. Individuals who did not respond to all of the open-ended items (420 in 2012; 204 in 2016), or who responded in Spanish (228 in 2012; 43 in 2016), were excluded from the analysis.\footnote{See Appendix A for more details on the structural topic model and descriptive information on the individual components of discursive sophistication.}
+The main analyses are based on the 2012 and 2016 wave of the American National Election Study (ANES), which consist of a representative survey of about 5000 adults in the months before the US Presidential election in each year. About 2000 respondents in both waves participated in face-to-face interviews while the remaining respondents filled out the survey online. For the purpose of the present analyses, I rely on the pooled datasets while controlling for differences in survey mode. The measure of discursive sophistication is based on open-ended questions in which respondents were asked in the pre-election wave of the survey to list anything in particular that they like/dislike about the Democratic/Republican party as well as anything that might make them vote/not vote for either of the Presidential candidates. They were probed by the interviewer asking ``anything else?'' until the respondent answered ``no''. Overall, there are a total number of 8 open-ended responses where individuals described their beliefs and attitudes towards political actors. Individuals who did not respond to all of the open-ended items (420 in 2012; 204 in 2016), or who responded in Spanish (228 in 2012; 43 in 2016), were excluded from the analysis.
 
 
 \subsection*{2015 YouGov Survey}
@@ -159,44 +159,12 @@ Second, the respondents reported on their attitudes towards the Affordable Care 
 \item Still thinking about the question you just answered, what thoughts came to mind while you were answering that question? Please try to list everything that came to mind.
 \item For decades, experts have observed that the United States spends far more per person on health care than any other country. However, the U.S. falls behind on most measures of health care outcomes, such as life expectancy. What factors do you think are responsible for the state of our health care system?
 \end{itemize}
-Here, discursive sophistication is computed based on the verbatim responses to the four preceding questions using the same procedures described above. Compared to the open-ended likes/dislikes items included in the 2012 and 2016 ANES, the questions directly address considerations related to specific policy issues that were prominent in the political discourse at the time of the survey. Respondents who did not provide an answer to any of the open-ended questions were removed from the analysis (48).\footnote{See Appendix B for descriptive information on the individual components of discursive sophistication.}
+Here, discursive sophistication is computed based on the verbatim responses to the four preceding questions using the same procedures described above. Compared to the open-ended likes/dislikes items included in the 2012 and 2016 ANES, the questions directly address considerations related to specific policy issues that were prominent in the political discourse at the time of the survey. Respondents who did not provide an answer to any of the open-ended questions were removed from the analysis (48).
 
 
 \subsection*{Swiss Referendum Survey}
-Lastly, I examine survey data on Swiss citizens justifying their vote choices on multiple referenda used in the analyses presented by \citet{colombo2016justifications}. The author compiled a data set from cross-sectional surveys that were conducted in Switzerland after national popular votes on multiple policy propositions. The original surveys were conducted as representative samples after each of thirty-four national policy votes that were held between 2008 and 2012 resulting in a total of 26,621 observations. However, respondents were only asked to justify their decision for or against a given proposition in verbatim if they participated in the vote in the first place. As such, 4,917 individuals in the data set did not provide an open-ended response. The remaining respondents were asked to describe the main reason as well as additional justifications for their decision in two separate items. As before, discursive sophistication is computed based on the verbatim responses to both questions.\footnote{See Appendix C for descriptive information on the individual components of discursive sophistication.}
+Lastly, I examine survey data on Swiss citizens justifying their vote choices on multiple referenda used in the analyses presented by \citet{colombo2016justifications}. The author compiled a data set from cross-sectional surveys that were conducted in Switzerland after national popular votes on multiple policy propositions. The original surveys were conducted as representative samples after each of thirty-four national policy votes that were held between 2008 and 2012 resulting in a total of 26,621 observations. However, respondents were only asked to justify their decision for or against a given proposition in verbatim if they participated in the vote in the first place. As such, 4,917 individuals in the data set did not provide an open-ended response. The remaining respondents were asked to describe the main reason as well as additional justifications for their decision in two separate items. As before, discursive sophistication is computed based on the verbatim responses to both questions.
 % QUESTION wording for Swiss study?
-
-
-\section*{Pre-Processing and Topic Model Specification}
-
-Two components of discursive sophistication (\textit{considerations} and \textit{word choice}) rely on quantities extracted from structural topic models \citep{roberts2014structural}. As with any other text-as-data approach, a necessary first step before estimating the topic model is to pre-process the raw text and convert it into a document term matrix \citep[DTM, see for example][]{manning2008introduction}. Common pre-processing procedures include stemming and lowercasing, as well as the removal of numbers, punctuation, stopwords, and infrequent terms. However, topic models and other unsupervised learning techniques can be sensitive to these pre-processing choices \citep[c.f.,][]{denny2018text}. To address this issue, \citet{denny2018text} recommend that researchers compare DTMs under all possible pre-processing regimes. The authors propose \textit{preText scores} as a measure to quantify the extent to which varying pre-processing regimes may yield unusual results compared to a baseline without any pre-processing.
-
-\begin{figure*}[h]
-    \centering
-    \begin{subfigure}[t]{1\textwidth}
-        \centering
-        \includegraphics{../fig/pretext2012.pdf}
-    \end{subfigure}%
-    \\
-    \begin{subfigure}[t]{1\textwidth}
-        \centering
-        \includegraphics{../fig/pretext2016.pdf}
-    \end{subfigure}
-    \caption{PreText analysis of pre-processing decisions of open-ended responses in the 2012 \& 2016 ANES. Regression coefficients display the effects of each of the six pre-processing choices on the resulting preText score.}\label{fig:pretext}
-\end{figure*}
-
-Following the procedure outlined in \citet{denny2018text}, Figure~\ref{fig:pretext} displays the results of a linear model regressing preText scores resulting from all possible pre-processing regimes on each individual step for a random subset of 500 open-ended responses in the 2012 and 2016 ANES. Significant coefficients indicate that the topic model results my be sensitive to the respective pre-processing step. As such, removing stopwords and punctuation, as well as removing infrequent terms (at least in 2016) might be problematic. \citet{denny2018text}, however, emphasize that the most important consideration in choosing pre-processing steps are theoretical. Given that the purpose of the topic model is to extract considerations related to political preferences, there are strong theoretical reasons to remove stopwords and punctuation from open-ended responses as they do not contain any relevant content. Furthermore, I apply lowercasing and stemming of terms to reduce resulting document term matrix to a computationally more manageable size and since these pre-processing steps should not be influential according to the preText analysis.
-
-It is less obvious from a theoretical perspective whether to remove infrequent terms from open-ended responses, although it is preferred in order to make the estimation of the discursive sophistication components computationally efficient. Since the preText analysis for 2016 suggests that this pre-processing step might be influential, I compare discursive sophistication for both alternative regimes below \citep[c.f.,][]{denny2018text}. Before turning to this sensitivity check, however, I consider another crucial modeling choice when working with topic models: determining the total number of topics $k$ to be estimated. For all analyses reported below, the number of topics was selected using the algorithm proposed by \citet{lee2014low} and implemented in the \texttt{stm} package in \texttt{R} \citep{roberts2014stm}.\footnote{I used measures for age, education, party identification, as well as an interaction between education and party identification as covariates for topic prevalence. This variable selection---with the exception of including gender---is equivalent to the procedure model specification described in \citet{roberts2014structural}.} 
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/pretext_robustness.pdf}
-\caption{Robustness of discursive sophistication measure for different pre-processing choices and topic model specifications.}\label{fig:pretext_robustness}
-\end{figure}
-
-Figure~\ref{fig:pretext_robustness} examines whether the proposed measure of discursive sophistication is sensitive to the removal of infrequent terms as well as the chosen number of topics $k$. The x-axis depicts the preferred pre-processing regime including all steps discussed above while the y-axis plots results for alternative specifications. The upper panels compare the preferred specification to discursive sophistication based on a reduced number of topics ($k=20$). The lower panels additionally include infrequent terms instead of removing them.\footnote{Calculating discursive sophistication with large numbers of topics while including infrequent terms is computationally prohibitive.} Results for the 2012 ANES are displayed on the left and results for the 2016 ANES are displayed in panels on the right. Across all four panels, discursive sophistication scores are highly correlated and therefore insensitive to pre-processing choices and varying numbers of topics.
-
-In summary, open-ended responses in the analyses reported below are pre-processed by stemming and lowercasing, as well as the removing numbers, punctuation, stopwords, and infrequent terms (i.e., terms that appear in fewer than 10 responses).\footnote{Prior to applying these pre-processing steps, open-ended responses in the 2012 \& 2016 ANES as well as the 2015 YouGov survey are cleaned by correcting spelling errors using an implementation of the Aspell spell-checking algorithm (\url{www.aspell.net}).} While the results discussed below are based on this preferred specification, the substantive results are robust for alternative pre-processing regimes or varying numbers of topics.
 
 
 
@@ -213,13 +181,13 @@ Figure~\ref{fig:corplot} compares discursive sophistication to the conventional 
     \centering
     \begin{subfigure}[t]{0.5\textwidth}
         \centering
-        \includegraphics{../fig/corplot_pres2012.pdf}
+        \includegraphics{../fig/anes2012_corplot.pdf}
         \caption{2012 ANES}
     \end{subfigure}%
     ~ 
     \begin{subfigure}[t]{0.5\textwidth}
         \centering
-        \includegraphics{../fig/corplot_pres2016.pdf}
+        \includegraphics{../fig/anes2016_corplot.pdf}
         \caption{2016 ANES}
     \end{subfigure}
     \caption{Correlation matrix of conventional political knowledge metrics and discursive sophistication. The plots on the diagonal display univariate densities for each variable. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. All correlations reported are statistically significant with $p<.05$.}\label{fig:corplot}
@@ -413,110 +381,135 @@ Political scientists should worry less about pure levels of \textit{information}
 
 The findings presented in this paper show that conventional knowledge indices and the discursive measure share a substantial amount of variance. However, they are far from being identical and capture different aspects of sophistication. Most importantly, using the discursive measure, any evidence for the gender gap commonly reported using factual knowledge scales disappears. Women might know fewer facts about political institutions, but they do not differ substantively in the complexity of their expressed political beliefs. The fact that women perform just as well as men on discursive sophistication across various surveys can be attributed to the fact that they focus on different considerations when evaluating political parties and candidates. This issue has long been recognized in the literature \citep[e.g.,][]{graber2001processing,dolan2011women}, but it cannot be properly addressed while relying exclusively on off-the-shelf political knowledge batteries. Directly examining how individuals justify their political preferences, in turn, provides a solution that does not rely on strong assumptions about what citizens ought to know.
 
-%\clearpage
+\clearpage
 \singlespacing
 \bibliographystyle{/data/Dropbox/Uni/Lit/apsr2006}
 \bibliography{/data/Dropbox/Uni/Lit/Literature}
 
 \clearpage
-\section*{Appendix A: Open-ended Responses in the 2012 \& 2016 ANES}
+\section*{Appendix A: Detailed Information on Open-Ended Responses and Discursive Sophistication Components}
 \renewcommand\thefigure{A.\arabic{figure}}
 \renewcommand\thetable{A.\arabic{table}}
 \setcounter{figure}{0}
 \setcounter{table}{0}
 
-\begin{figure}[h]\centering
-\includegraphics{../fig/wc.pdf}
-\caption{Histogram of total word count in the collection of open-ended responses for each individual. The dashed red line indicates the average response length. Most respondents provide brief statements when they describe their attitudes towards political parties and candidates. The mean response length to all 8 questions is about 75 words, so an average response to a single question consisted of less than 10 words, omitting respondents who did not provide any information.}\label{fig:wc}
-\end{figure}
-
-\begin{figure}[h]\centering
-\includegraphics[width=\textwidth]{../fig/stm_prop.pdf}
-\caption{Estimated topic proportions based on the structural topic model. The number of topics $k$ for the structural topic model is selected using the algorithm proposed by \citet{lee2014low}. I use measures for age, gender, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is similar to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., setting the total number of topics to 20.}\label{fig:stm_prop}
-\end{figure}
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/corplot_components.pdf}
-\caption{Correlation matrix of individual components of discursive sophistication. The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The spike at 0 for opinionation is due to the fact that some respondents only answered a single open-ended question.}\label{fig:components}
-\end{figure}
-
-
-
 % COMBINE: combine histograms etc. for different datasets in a single plot...
 % ADD: Specific information about the individual topic models etc.
+% ADD: 2016 ANES!!!
+
+\begin{figure*}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics{../fig/anes2012_wc.pdf}
+        \caption{2012 ANES}
+    \end{subfigure}%
+	\begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics{../fig/anes2016_wc.pdf}
+        \caption{2016 ANES}
+    \end{subfigure}%
+    
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics{../fig/yg_wc.pdf}
+        \caption{2015 YouGov}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.49\textwidth}
+         \centering
+         \includegraphics{../fig/swiss_wc.pdf}
+         \caption{Swiss Survey}
+    \end{subfigure}
+    \caption{Histograms of total word count in the collection of open-ended responses for each individual. The dashed red lines indicate the average response lengths in each survey.}\label{fig:wc}
+\end{figure*}
+
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{../fig/anes_stm_prop.pdf}
+\caption{Estimated topic proportions in the 2012 and 2016 ANES based on the structural topic model. See Appendix B for details on the model specification.}\label{fig:anes_stm_prop}
+\end{figure}
+
+\begin{figure}[h]\centering
+\includegraphics[width=.5\textwidth]{../fig/yg_stm_prop.pdf}
+\caption{Estimated topic proportions in the 2015 YouGov survey based on the structural topic model. See Appendix B for details on the model specification.}\label{fig:yg_stm_prop}
+\end{figure}
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{../fig/swiss_stm_prop.pdf}
+\caption{Estimated topic proportions in the Swiss survey based on the structural topic model. See Appendix B for details on the model specification.}\label{fig:swiss_stm_prop}
+\end{figure}
+
+
+\begin{figure*}[h]
+    \centering
+    \begin{subfigure}[h]{0.5\textwidth}
+        \centering
+        \includegraphics{../fig/anes2012_corplot_components.pdf}
+        \caption{2012 ANES}
+    \end{subfigure}%
+    \begin{subfigure}[h]{0.5\textwidth}
+         \centering
+         \includegraphics{../fig/anes2016_corplot_components.pdf}
+         \caption{2016 ANES}
+    \end{subfigure}%
+    
+    \begin{subfigure}[h]{0.49\textwidth}
+        \centering
+        \includegraphics{../fig/yg_corplot_components.pdf}
+        \caption{2015 YouGov}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.49\textwidth}
+         \centering
+         \includegraphics{../fig/swiss_corplot_components.pdf}
+         \caption{Swiss Survey}
+    \end{subfigure}
+    \caption{Correlation matrix of individual components of discursive sophistication. The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient.}\label{fig:components}
+\end{figure*}
+
+
 
 
 \clearpage
-\section*{Appendix B: Open-ended Responses in YouGov Data}
+\section*{Appendix B: Pre-Processing and Topic Model Specification}
 \renewcommand\thefigure{B.\arabic{figure}}
 \renewcommand\thetable{B.\arabic{table}}
 \setcounter{figure}{0}
 \setcounter{table}{0}
 
-\begin{figure}[h]\centering
-\includegraphics{../fig/yg_wc.pdf}
-\caption{Histogram of total word count in the collection of open-ended responses for each individual. The dashed red line indicates the average response length. Most respondents provide brief statements when they describe their attitudes towards political parties and candidates. The mean response length to all 4 questions is about 73 words, so an average response to a single question consisted of approximately 18 words, omitting respondents who did not provide any information.}\label{fig:yg_wc}
-\end{figure}
+Two components of discursive sophistication (\textit{considerations} and \textit{word choice}) rely on quantities extracted from structural topic models \citep{roberts2014structural}. As with any other text-as-data approach, a necessary first step before estimating the topic model is to pre-process the raw text and convert it into a document term matrix \citep[DTM, see for example][]{manning2008introduction}. Common pre-processing procedures include stemming and lowercasing, as well as the removal of numbers, punctuation, stopwords, and infrequent terms. However, topic models and other unsupervised learning techniques can be sensitive to these pre-processing choices \citep[c.f.,][]{denny2018text}. To address this issue, \citet{denny2018text} recommend that researchers compare DTMs under all possible pre-processing regimes. The authors propose \textit{preText scores} as a measure to quantify the extent to which varying pre-processing regimes may yield unusual results compared to a baseline without any pre-processing.
 
+\begin{figure*}[h]
+    \centering
+    \begin{subfigure}[t]{1\textwidth}
+        \centering
+        \includegraphics{../fig/pretext2012.pdf}
+    \end{subfigure}%
+    \\
+    \begin{subfigure}[t]{1\textwidth}
+        \centering
+        \includegraphics{../fig/pretext2016.pdf}
+    \end{subfigure}
+    \caption{PreText analysis of pre-processing decisions of open-ended responses in the 2012 \& 2016 ANES. Regression coefficients display the effects of each of the six pre-processing choices on the resulting preText score.}\label{fig:pretext}
+\end{figure*}
 
-\begin{figure}[h]\centering
-\includegraphics{../fig/yg_corplot_components.pdf}
-\caption{Correlation matrix of individual components of discursive sophistication. The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The number of topics $k$ for the structural topic model is set to 20. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 73 topics). The spike at 0 for opinionation is due to the fact that some respondents only answered a single open-ended question.}\label{fig:yg_components}
-\end{figure}
+Following the procedure outlined in \citet{denny2018text}, Figure~\ref{fig:pretext} displays the results of a linear model regressing preText scores resulting from all possible pre-processing regimes on each individual step for a random subset of 500 open-ended responses in the 2012 and 2016 ANES. Significant coefficients indicate that the topic model results my be sensitive to the respective pre-processing step. As such, removing stopwords and punctuation, as well as removing infrequent terms (at least in 2016) might be problematic. \citet{denny2018text}, however, emphasize that the most important consideration in choosing pre-processing steps are theoretical. Given that the purpose of the topic model is to extract considerations related to political preferences, there are strong theoretical reasons to remove stopwords and punctuation from open-ended responses as they do not contain any relevant content. Furthermore, I apply lowercasing and stemming of terms to reduce resulting document term matrix to a computationally more manageable size and since these pre-processing steps should not be influential according to the preText analysis.
 
-
-
-\clearpage
-\section*{Appendix C: Open-ended Responses in Swiss Referendum Data}
-\renewcommand\thefigure{C.\arabic{figure}}
-\renewcommand\thetable{C.\arabic{table}}
-\setcounter{figure}{0}
-\setcounter{table}{0}
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/swiss_wc.pdf}
-\caption{Histogram of total word count in the collection of open-ended responses for each individual. The dashed red line indicates the average response length. Most respondents provide brief statements when they describe their attitudes towards political parties and candidates. The mean response length to both questions is about 11 words, so an average response to a single question consisted of approximately 5 words, omitting respondents who did not provide any information.}\label{fig:swiss_wc}
-\end{figure}
+It is less obvious from a theoretical perspective whether to remove infrequent terms from open-ended responses, although it is preferred in order to make the estimation of the discursive sophistication components computationally efficient. Since the preText analysis for 2016 suggests that this pre-processing step might be influential, I compare discursive sophistication for both alternative regimes below \citep[c.f.,][]{denny2018text}. Before turning to this sensitivity check, however, I consider another crucial modeling choice when working with topic models: determining the total number of topics $k$ to be estimated. For all analyses reported below, the number of topics was selected using the algorithm proposed by \citet{lee2014low} and implemented in the \texttt{stm} package in \textbf{R} \citep{roberts2014stm}.\footnote{I used measures for age, gender, education, party identification, as well as an interaction between education and party identification as covariates for topic prevalence. This variable selection---with the exception of including gender---is equivalent to the procedure model specification described in \citet{roberts2014structural}.} 
 
 \begin{figure}[h]\centering
-\includegraphics{../fig/swiss_corplot_german_components.pdf}
-\caption{Correlation matrix of individual components of discursive sophistication (German respondents). The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The number of topics $k$ for the structural topic model is set to 30. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 45 topics). The spike at 0 for opinionation is due to the fact that a large portion of respondents only answered a single open-ended question.}\label{fig:swiss_german_components}
+\includegraphics{../fig/pretext_robustness.pdf}
+\caption{Robustness of discursive sophistication measure for different pre-processing choices and topic model specifications.}\label{fig:pretext_robustness}
 \end{figure}
 
+Figure~\ref{fig:pretext_robustness} examines whether the proposed measure of discursive sophistication is sensitive to the removal of infrequent terms as well as the chosen number of topics $k$. The x-axis depicts the preferred pre-processing regime including all steps discussed above while the y-axis plots results for alternative specifications. The upper panels compare the preferred specification to discursive sophistication based on a reduced number of topics ($k=20$). The lower panels additionally include infrequent terms instead of removing them.\footnote{Calculating discursive sophistication with large numbers of topics while including infrequent terms is computationally prohibitive.} Results for the 2012 ANES are displayed on the left and results for the 2016 ANES are displayed in panels on the right. Across all four panels, discursive sophistication scores are highly correlated and therefore insensitive to pre-processing choices and varying numbers of topics.
 
-\begin{figure}[h]\centering
-\includegraphics{../fig/swiss_corplot_french_components.pdf}
-\caption{Correlation matrix of individual components of discursive sophistication (French respondents). The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The number of topics $k$ for the structural topic model is set to 30. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 43 topics). The spike at 0 for opinionation is due to the fact that a large portion of respondents only answered a single open-ended question.}\label{fig:swiss_french_components}
-\end{figure}
-
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/swiss_corplot_italian_components.pdf}
-\caption{Correlation matrix of individual components of discursive sophistication (Italian respondents). The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. The number of topics $k$ for the structural topic model is set to 30. I use measures for age, education, party identification, as well as an interaction between education and party identification as covariates for individual topic prevalence, which is equivalent to the model specification described in \citet{roberts2014structural}. The results in the paper are robust for alternative specifications of $k$ (e.g., selecting $k$ using the algorithm proposed by \citet{lee2014low} results in total number of 47 topics). The spike at 0 for opinionation is due to the fact that a large portion of respondents only answered a single open-ended question.}\label{fig:swiss_italian_components}
-\end{figure}
-
-
-\clearpage
-\section*{Appendix D: YouGov Correlation Matrix}
-\renewcommand\thefigure{D.\arabic{figure}}
-\renewcommand\thetable{D.\arabic{table}}
-\setcounter{figure}{0}
-\setcounter{table}{0}
-
-Figure~\ref{fig:yg_corplot} examines the distribution of each measure of political knowledge as well as their respective correlations in the YouGov data. Again, we observe that discursive sophistication and factual political knowledge are positively correlated, which indicates that discursive sophistication overlaps with traditional knowledge metrics while capturing unique variation in individual response behavior. Interestingly, there appears to be a stronger relationship between discursive sophistication and disease information than between factual political knowledge and disease information.
-
-\begin{figure}[h]\centering
-\includegraphics{../fig/yg_corplot.pdf}
-\caption{YouGov data -- Correlation matrix of discursive sophistication, a conventional political knowledge metric, and disease information retrieval. The plots on the diagonal display univariate densities for each variable. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. All correlations reported are statistically significant with $p<.05$.}\label{fig:yg_corplot}
-\end{figure}
-
-Recall that the disease information score can be interpreted as an indicator of the ability to retrieve specific information provided in a news article about a public health issue. It could be argued that discursive sophistication is more similar to the disease information score in that it captures the extent to which participants were able to recall political information that is relevant to their own attitudes. Conventional knowledge scores, on the other hand, inquire about specific that are not necessarily relevant to derive well-informed attitudes about political issues.
+In summary, open-ended responses in the analyses reported below are pre-processed by stemming and lowercasing, as well as the removing numbers, punctuation, stopwords, and infrequent terms (i.e., terms that appear in fewer than 10 responses).\footnote{Prior to applying these pre-processing steps, open-ended responses in the 2012 \& 2016 ANES as well as the 2015 YouGov survey are cleaned by correcting spelling errors using an implementation of the Aspell spell-checking algorithm (\url{www.aspell.net}).} While the results discussed in the manuscript are based on this preferred specification, the substantive results are robust for alternative pre-processing regimes or varying numbers of topics.
 
 
 %\clearpage
-%\section*{Appendix E: Tables of Model Estimates}
-%\renewcommand\thefigure{E.\arabic{figure}}
-%\renewcommand\thetable{E.\arabic{table}}
+%\section*{Appendix C: Tables of Model Estimates}
+%\renewcommand\thefigure{C.\arabic{figure}}
+%\renewcommand\thetable{C.\arabic{table}}
 %\setcounter{figure}{0}
 %\setcounter{table}{0}
 %

@@ -190,7 +190,7 @@ ggsave("../fig/meandiff.pdf", p0 ,width=6.5, height=4)
 
 ### ANES data
 
-dvnames <- rep(c("Discursive\nSophistication","Factual\nKnowledge", "Interviewer\nEvaluation (Pre)"), 2)
+dvnames <- rep(c("Discursive\nSophistication","Factual\nKnowledge"), 2)
 ivnames <- c("Intercept", "Female", "Media", "Discussions", "College"
              , "Income", "log(Age)", "Church", "Black", "Online")
 
@@ -198,10 +198,8 @@ ivnames <- c("Intercept", "Female", "Media", "Discussions", "College"
 m1 <- NULL
 m1[[1]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data2012)
 m1[[2]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data2012)
-m1[[3]] <- lm(polknow_evalpre ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data2012)
-m1[[4]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data2016)
-m1[[5]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data2016)
-m1[[6]] <- lm(polknow_evalpre ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data2016)
+m1[[3]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data2016)
+m1[[4]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data2016)
 lapply(m1, summary)
 
 
@@ -265,7 +263,7 @@ ggplot(dfplot, aes(y=ivnames, x=Estimate
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point() + geom_errorbarh(height = 0) + facet_grid(source~dv, scale="free_x") +
   plot_default
-ggsave("../fig/determinants.pdf",width=6,height=4)
+ggsave("../fig/determinants.pdf",width=5,height=4)
 
 
 

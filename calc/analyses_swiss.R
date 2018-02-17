@@ -29,54 +29,40 @@ load("out/swiss.Rdata")
 source("func.R")
 
 ## plot defaults
-plot_default <- theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
-
-
+plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
 
 
 ########
-# correlation matrices: compare with common measures
+# Plot estimated topics
 ########
 
-datcor <- opend_german[,c("loj", "polknow_text_mean")]
-#datcor <- opend_german[,c("loj", "polknow_text_mean")]
-colnames(datcor) <- paste0("v",1:ncol(datcor))
-
-#pdf("../fig/corplot.pdf",width=5, height=5)
-ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), axisLabels="none"
-        #, columnLabels = c("Discursive\nSophistication","Factual\nKnowledge","Office\nRecognition"
-        #                   ,"Majorities\nin Congress", "Interviewer\nEvaluation (Pre)"
-        #                   , "Interviewer\nEvaluation (Post)")
-        ) + plot_default
-#dev.off()
-
-
-ggplot(opend_german, aes(x=loj, y=polknow_text_mean)) + geom_point(alpha=.1) + geom_smooth(method="lm") + plot_default
-
-
-datcor <- opend_german[,c("ntopics","distinct","ditem")]
-colnames(datcor) <- paste0("v",1:ncol(datcor))
-
-pdf("../fig/swiss_corplot_german_components.pdf",width=3.3, height=3.3)
-ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Considerations","Word Choice","Opinionation")) + plot_default
+pdf("../fig/swiss_stm_prop.pdf", width=12, height=7)
+par(mfrow=c(1,3), mar=c(4.2,0.5,2.5,0.5))
+plot(stm_fit_german
+     , main=paste0("German Respondents (k = ",stm_fit_german$settings$dim$K,")",collapse = "")
+     , n=5, labeltype = "prob", text.cex = 1)
+plot(stm_fit_french
+     , main=paste0("French Respondents (k = ",stm_fit_french$settings$dim$K,")",collapse = "")
+     , n=5, labeltype = "prob", text.cex = 1)
+plot(stm_fit_italian
+     , main=paste0("Italian Respondents (k = ",stm_fit_italian$settings$dim$K,")",collapse = "")
+     , n=5, labeltype = "prob", text.cex = 1)
 dev.off()
 
-datcor <- opend_french[,c("ntopics","distinct","ditem")]
+
+########
+# correlation matrices of individual components
+########
+
+datcor <- rbind(opend_german[,c("ntopics","distinct","ditem")]
+                , opend_french[,c("ntopics","distinct","ditem")]
+                , opend_italian[,c("ntopics","distinct","ditem")])
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
-pdf("../fig/swiss_corplot_french_components.pdf",width=3.3, height=3.3)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
         , columnLabels = c("Considerations","Word Choice","Opinionation")) + plot_default
-dev.off()
+ggsave("../fig/swiss_corplot_components.pdf",width=3.2, height=3.2)
 
-datcor <- opend_italian[,c("ntopics","distinct","ditem")]
-colnames(datcor) <- paste0("v",1:ncol(datcor))
-
-pdf("../fig/swiss_corplot_italian_components.pdf",width=3.3, height=3.3)
-ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Considerations","Word Choice","Opinionation")) + plot_default
-dev.off()
 
 
 ### ridge plots

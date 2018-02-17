@@ -33,6 +33,17 @@ source("func.R")
 plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
 
 
+########
+# Plot estimated topics
+########
+
+pdf("../fig/yg_stm_prop.pdf", width=6, height=10)
+par(mar=c(4.2,0.5,2.5,0.5))
+plot(stm_fit
+     , main=paste0("YouGov Survey (k = ",stm_fit$settings$dim$K,")",collapse = "")
+     , n=5, labeltype = "prob", text.cex = 1)
+dev.off()
+
 
 ########
 # Prelim results
@@ -74,10 +85,9 @@ dev.off()
 datcor <- data[,c("ntopics","distinct","ditem")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
-pdf("../fig/yg_corplot_components.pdf",width=3.3, height=3.3)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
         , columnLabels = c("Considerations","Word Choice","Opinionation")) + plot_default
-dev.off()
+ggsave("../fig/yg_corplot_components.pdf",width=3.2, height=3.2)
 
 
 ########

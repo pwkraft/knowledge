@@ -37,6 +37,7 @@ source("func.R")
 
 ## plot defaults
 plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
+plot_empty <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white"))
 
 
 ########
@@ -49,15 +50,7 @@ colnames(datcor) <- paste0("v",1:ncol(datcor))
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
               , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge"
                                  ,"Interviewer\nEvaluation (Pre)")) + plot_default
-ggsave("../fig/corplot_pres2012.pdf",width=3.2, height=3.2)
-
-## 2012 ANES (empty)
-pdf("../fig/corplot_empty.pdf",width=3.2, height=3.2)
-ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge"
-                           ,"Interviewer\nEvaluation (Pre)")) +
-  theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white"))
-dev.off()
+ggsave("../fig/anes2012_corplot.pdf",width=3.2, height=3.2)
 
 ## 2016 ANES
 datcor <- data2016[,c("polknow_text_mean","polknow_factual","polknow_evalpre")]
@@ -65,7 +58,7 @@ colnames(datcor) <- paste0("v",1:ncol(datcor))
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
               , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge"
                                  ,"Interviewer\nEvaluation (Pre)")) + plot_default
-ggsave("../fig/corplot_pres2016.pdf",width=3.2, height=3.2)
+ggsave("../fig/anes2016_corplot.pdf",width=3.2, height=3.2)
 
 
 ## ANES 2012 components
@@ -73,21 +66,14 @@ datcor <- data2012[,c("ntopics","distinct","ditem")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
         , columnLabels = c("Considerations","Word Choice","Opinionation")) + plot_default
-ggsave("../fig/corplot_components2012.pdf",width=3.3, height=3.3)
-
-## ANES 2012 components (empty)
-pdf("../fig/corplot_components0.pdf",width=3.3, height=3.3)
-ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Considerations","Word Choice","Opinionation")) + 
-  theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white"))
-dev.off()
+ggsave("../fig/anes2012_corplot_components.pdf",width=3.2, height=3.2)
 
 ## ANES 2016 components
 datcor <- data2016[,c("ntopics","distinct","ditem")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
         , columnLabels = c("Considerations","Word Choice","Opinionation")) + plot_default
-ggsave("../fig/corplot_components2016.pdf",width=3.3, height=3.3)
+ggsave("../fig/anes2016_corplot_components.pdf",width=3.2, height=3.2)
 
 
 
@@ -293,10 +279,14 @@ data2016 %>%
 summary(stm_fit2012)
 summary(stm_fit2016)
 
-pdf("../fig/stm_prop.pdf", width=12, height=14)
+pdf("../fig/anes_stm_prop.pdf", width=12, height=10)
 par(mfrow=c(1,2), mar=c(4.2,0.5,2.5,0.5))
-plot(stm_fit2012, main="2012 ANES", n=5, labeltype = "prob", text.cex = 1)
-plot(stm_fit2016, main="2016 ANES", n=5, labeltype = "prob", text.cex = 1)
+plot(stm_fit2012
+     , main=paste0("2012 ANES (k = ",stm_fit2012$settings$dim$K,")",collapse = "")
+     , n=5, labeltype = "prob", text.cex = 1)
+plot(stm_fit2016
+     , main=paste0("2016 ANES (k = ",stm_fit2016$settings$dim$K,")",collapse = "")
+     , n=5, labeltype = "prob", text.cex = 1)
 dev.off()
 
 pdf("../fig/stm_labels.pdf")

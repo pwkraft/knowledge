@@ -192,7 +192,7 @@ data <- data[-out$docs.removed,]
 
 ## quick fit (15 topics)
 stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-               , K=0, init.type = "Spectral")
+               , K=0, init.type = "Spectral", seed=123456)
 
 
 #######################

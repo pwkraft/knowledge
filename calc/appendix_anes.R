@@ -23,6 +23,7 @@ setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
 ## load data and stm results
 load("out/anes2012.Rdata")
+load("out/anes2016.Rdata")
 #load("../data/anes_old.Rdata")
 
 ## QUESTION: remove wc=0 and spanish=1?
@@ -32,6 +33,24 @@ source("func.R")
 ## plot defaults
 plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
 
+
+########
+# word count plots
+########
+
+wc_mean = mean(data2012$wc)
+ggplot(data2012, aes(wc)) + geom_histogram(fill = "grey", binwidth = 25) + theme_classic(base_size = 8) + 
+  theme(panel.border = element_rect(fill=NA)) + 
+  geom_vline(xintercept = wc_mean, colour="red", linetype = "longdash") +
+  ylab("Number of Respondents") + xlab("Word Count")
+ggsave("../fig/anes2012_wc.pdf", width = 3, height = 2)
+
+wc_mean = mean(data2016$wc)
+ggplot(data2016, aes(wc)) + geom_histogram(fill = "grey", binwidth = 25) + theme_classic(base_size = 8) + 
+  theme(panel.border = element_rect(fill=NA)) + 
+  geom_vline(xintercept = wc_mean, colour="red", linetype = "longdash") +
+  ylab("Number of Respondents") + xlab("Word Count")
+ggsave("../fig/anes2016_wc.pdf", width = 3, height = 2)
 
 ########
 # correlation matrices: compare with common measures

@@ -117,7 +117,7 @@ swiss$ditem <- apply(opend, 1, function(x){
 ## combine regular survey and open-ended data
 ## ADD: type of referendum as a meta-covariate
 meta <- c("age", "edu", "ideol", "edu_ideol", "female")
-swiss$resp <- apply(select(swiss, prostring1:constring2),1,paste,collapse=' ')
+swiss$resp <- apply(dplyr::select(swiss, prostring1:constring2),1,paste,collapse=' ')
   
 
 ## remove additional whitespaces
@@ -149,14 +149,14 @@ opend_german <- opend_german[-processed$docs.removed,]
 opend_german <- opend_german[-out$docs.removed,]
 
 ## quick fit (30 topics)
-stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-              , K=0, init.type = "Spectral")
+stm_fit_german <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+                      , K=0, init.type = "Spectral", seed=123456)
 
 
 ### Discursive sophistication measure
 
 ## combine sophistication components with remaining data
-opend_german <- cbind(opend_german, sophistication(stm_fit, out))
+opend_german <- cbind(opend_german, sophistication(stm_fit_german, out))
 
 ## compute combined measures
 opend_german$polknow_text <- with(opend_german, ntopics * distinct * ditem)
@@ -181,14 +181,14 @@ opend_french <- opend_french[-processed$docs.removed,]
 opend_french <- opend_french[-out$docs.removed,]
 
 ## quick fit (60 topics)
-stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-              , K=0, init.type = "Spectral")
+stm_fit_french <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+                      , K=0, init.type = "Spectral")
 
 
 ### Discursive sophistication measure
 
 ## combine sophistication components with remaining data
-opend_french <- cbind(opend_french, sophistication(stm_fit, out))
+opend_french <- cbind(opend_french, sophistication(stm_fit_french, out))
 
 ## compute combined measures
 opend_french$polknow_text <- with(opend_french, ntopics * distinct * ditem)
@@ -213,14 +213,14 @@ opend_italian <- opend_italian[-processed$docs.removed,]
 opend_italian <- opend_italian[-out$docs.removed,]
 
 ## quick fit (60 topics)
-stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-              , K=0, init.type = "Spectral")
+stm_fit_italian <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+                       , K=0, init.type = "Spectral")
 
 
 ### Discursive sophistication measure
 
 ## combine sophistication components with remaining data
-opend_italian <- cbind(opend_italian, sophistication(stm_fit, out))
+opend_italian <- cbind(opend_italian, sophistication(stm_fit_italian, out))
 
 ## compute combined measures
 opend_italian$polknow_text <- with(opend_italian, ntopics * distinct * ditem)
@@ -229,5 +229,6 @@ opend_italian$polknow_text_mean <- with(opend_italian, ntopics + distinct + dite
 
 ### save output
 
-save(swiss, opend_german, opend_french, opend_italian, data, meta, processed, out, stm_fit
+save(swiss, opend_german, opend_french, opend_italian, data, meta, processed, out
+     , stm_fit_german, stm_fit_french, stm_fit_italian
      , file="calc/out/swiss.Rdata")
