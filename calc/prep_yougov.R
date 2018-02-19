@@ -171,28 +171,28 @@ yougov$ditem <- apply(opend[,-1], 1, function(x){
 
 ## combine regular survey and open-ended data, remove spanish and empty responses
 meta <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
-data <- yougov %>% mutate(resp = apply(opend[,-1],1,paste,collapse=' '))
+data_yg <- yougov %>% mutate(resp = apply(opend[,-1],1,paste,collapse=' '))
 
 ## remove additional whitespaces
-data$resp <- gsub("\\s+"," ", data$resp)
-data$resp <- gsub("(^\\s+|\\s+$)","", data$resp)
+data_yg$resp <- gsub("\\s+"," ", data_yg$resp)
+data_yg$resp <- gsub("(^\\s+|\\s+$)","", data_yg$resp)
 
 ## remove missings on metadata
-data <- data[apply(!is.na(data[,meta]),1,prod)==1,]
+data_yg <- data_yg[apply(!is.na(data_yg[,meta]),1,prod)==1,]
 
 ## process for stm
-processed <- textProcessor(data$resp, metadata = data[,meta]
+processed_yougov <- textProcessor(data_yg$resp, metadata = data_yg[,meta]
                            , customstopwords = c("dont", "just", "hes", "that"))
-out <- prepDocuments(processed$documents, processed$vocab, processed$meta
+out_yougov <- prepDocuments(processed_yougov$documents, processed_yougov$vocab, processed_yougov$meta
                      , lower.thresh = 10)
 
 ## remove discarded observations from data
-data <- data[-processed$docs.removed,]
-data <- data[-out$docs.removed,]
+data_yg <- data_yg[-processed_yougov$docs.removed,]
+data_yg <- data_yg[-out_yougov$docs.removed,]
 
-## quick fit (15 topics)
-stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-               , K=0, init.type = "Spectral", seed=123456)
+## quick fit
+stm_fit <- stm(out_yougov$documents, out_yougov$vocab, prevalence = as.matrix(out_yougov$meta)
+               , K=0, init.type = "Spectral", seed=12345)
 
 
 #######################
@@ -200,14 +200,14 @@ stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
 #######################
 
 ## combine sophistication components with remaining data
-data <- cbind(data, sophistication(stm_fit, out))
+data_yg <- cbind(data_yg, sophistication(stm_fit, out_yougov))
 
 ## compute combined measures
-data$polknow_text <- data$ntopics * data$distinct * data$ditem
-data$polknow_text_mean <- (data$ntopics + data$distinct + data$ditem)/3
+data_yg$polknow_text <- data_yg$ntopics * data_yg$distinct * data_yg$ditem
+data_yg$polknow_text_mean <- (data_yg$ntopics + data_yg$distinct + data_yg$ditem)/3
 
 
 ### save output
 
-save(yougov, opend, spell, data, meta, processed, out, stm_fit
+save(yougov, opend, spell, data_yg, meta, processed_yougov, out_yougov, stm_fit
      , file="calc/out/yougov.Rdata")

@@ -323,7 +323,7 @@ data2016 <- data2016[-out2016$docs.removed,]
 
 ## stm fit with 20 topics
 stm_fit2016 <- stm(out2016$documents, out2016$vocab, prevalence = as.matrix(out2016$meta)
-                , K=0, init.type = "Spectral", seed=123456)
+                , K=0, init.type = "Spectral", seed=12345)
 
 
 #######################

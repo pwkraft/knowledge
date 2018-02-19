@@ -141,22 +141,22 @@ opend_german <- data %>% filter(lang == 1)
 ## process for stm
 processed <- textProcessor(opend_german$resp, metadata = opend_german[,meta]
                            , language = "german")
-out <- prepDocuments(processed$documents, processed$vocab, processed$meta
-                     , lower.thresh = 10)
+out_german <- prepDocuments(processed$documents, processed$vocab, processed$meta
+                            , lower.thresh = 10)
 
 ## remove discarded observations from data
 opend_german <- opend_german[-processed$docs.removed,]
-opend_german <- opend_german[-out$docs.removed,]
+opend_german <- opend_german[-out_german$docs.removed,]
 
 ## quick fit (30 topics)
-stm_fit_german <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
-                      , K=0, init.type = "Spectral", seed=123456)
+stm_fit_german <- stm(out_german$documents, out_german$vocab, prevalence = as.matrix(out_german$meta)
+                      , K=0, init.type = "Spectral", seed=12345)
 
 
 ### Discursive sophistication measure
 
 ## combine sophistication components with remaining data
-opend_german <- cbind(opend_german, sophistication(stm_fit_german, out))
+opend_german <- cbind(opend_german, sophistication(stm_fit_german, out_german))
 
 ## compute combined measures
 opend_german$polknow_text <- with(opend_german, ntopics * distinct * ditem)
@@ -173,22 +173,22 @@ opend_french <- data %>% filter(lang == 2)
 ## process for stm
 processed <- textProcessor(opend_french$resp, metadata = opend_french[,meta]
                            , language = "french")
-out <- prepDocuments(processed$documents, processed$vocab, processed$meta
+out_french <- prepDocuments(processed$documents, processed$vocab, processed$meta
                      , lower.thresh = 10)
 
 ## remove discarded observations from data
 opend_french <- opend_french[-processed$docs.removed,]
-opend_french <- opend_french[-out$docs.removed,]
+opend_french <- opend_french[-out_french$docs.removed,]
 
 ## quick fit (60 topics)
-stm_fit_french <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+stm_fit_french <- stm(out_french$documents, out_french$vocab, prevalence = as.matrix(out_french$meta)
                       , K=0, init.type = "Spectral")
 
 
 ### Discursive sophistication measure
 
 ## combine sophistication components with remaining data
-opend_french <- cbind(opend_french, sophistication(stm_fit_french, out))
+opend_french <- cbind(opend_french, sophistication(stm_fit_french, out_french))
 
 ## compute combined measures
 opend_french$polknow_text <- with(opend_french, ntopics * distinct * ditem)
@@ -205,22 +205,22 @@ opend_italian <- data %>% filter(lang == 3)
 ## process for stm
 processed <- textProcessor(opend_italian$resp, metadata = opend_italian[,meta]
                            , language = "italian")
-out <- prepDocuments(processed$documents, processed$vocab, processed$meta
+out_italian <- prepDocuments(processed$documents, processed$vocab, processed$meta
                      , lower.thresh = 10)
 
 ## remove discarded observations from data
 opend_italian <- opend_italian[-processed$docs.removed,]
-opend_italian <- opend_italian[-out$docs.removed,]
+opend_italian <- opend_italian[-out_italian$docs.removed,]
 
 ## quick fit (60 topics)
-stm_fit_italian <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+stm_fit_italian <- stm(out_italian$documents, out_italian$vocab, prevalence = as.matrix(out_italian$meta)
                        , K=0, init.type = "Spectral")
 
 
 ### Discursive sophistication measure
 
 ## combine sophistication components with remaining data
-opend_italian <- cbind(opend_italian, sophistication(stm_fit_italian, out))
+opend_italian <- cbind(opend_italian, sophistication(stm_fit_italian, out_italian))
 
 ## compute combined measures
 opend_italian$polknow_text <- with(opend_italian, ntopics * distinct * ditem)
@@ -229,6 +229,7 @@ opend_italian$polknow_text_mean <- with(opend_italian, ntopics + distinct + dite
 
 ### save output
 
-save(swiss, opend_german, opend_french, opend_italian, data, meta, processed, out
+save(swiss, opend_german, opend_french, opend_italian, meta, processed
+     , out_german, out_french, out_italian
      , stm_fit_german, stm_fit_french, stm_fit_italian
      , file="calc/out/swiss.Rdata")

@@ -23,18 +23,16 @@ plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(f
 ## load data and stm results
 load("out/anes2012.Rdata")
 load("out/anes2016.Rdata")
+load("out/yougov.Rdata")
+load("out/swiss.Rdata")
 
 ## select raw documents in anes
 opend2012 <- apply(anes2012opend[anes2012opend$caseid %in% data2012$caseid[1:500], -1]
                    , 1, paste, collapse=' ')
 opend2016 <- apply(anes2016opend[anes2016opend$V160001 %in% data2016$caseid[1:500], -1]
                    , 1, paste, collapse=' ')
-
-load("out/yougov.Rdata")
-opend_yougov <- apply(opend[opend$caseid %in% data$caseid[1:500], -1]
+opend_yougov <- apply(opend[opend$caseid %in% data_yg$caseid[1:500], -1]
                       , 1, paste, collapse=' ')
-
-load("out/swiss.Rdata")
 opend_german <- apply(cbind(opend_german$string1[1:500],opend_german$string2[1:500])
                       , 1, paste, collapse=' ')
 opend_french <- apply(cbind(opend_french$string1[1:500],opend_french$string2[1:500])
@@ -65,13 +63,13 @@ preText_results2012 <- preText(preprocessed_documents2012
 preText_results2016 <- preText(preprocessed_documents2016
                                , dataset_name = "2016 ANES", parallel = TRUE, cores = 7)
 preText_results_yougov <- preText(preprocessed_documents_yougov
-                               , dataset_name = "2016 ANES", parallel = TRUE, cores = 7)
+                                  , dataset_name = "2015 YouGov", parallel = TRUE, cores = 7)
 preText_results_german <- preText(preprocessed_documents_german
-                               , dataset_name = "2016 ANES", parallel = TRUE, cores = 7)
+                                  , dataset_name = "Swiss (German)", parallel = TRUE, cores = 7)
 preText_results_french <- preText(preprocessed_documents_french
-                               , dataset_name = "2016 ANES", parallel = TRUE, cores = 7)
+                                  , dataset_name = "Swiss (French)", parallel = TRUE, cores = 7)
 preText_results_italian <- preText(preprocessed_documents_italian
-                               , dataset_name = "2016 ANES", parallel = TRUE, cores = 7)
+                                   , dataset_name = "Swiss (Italian)", parallel = TRUE, cores = 7)
 
 ## generate preText score plot
 preText_score_plot(preText_results2012)
@@ -115,9 +113,9 @@ dev.off()
 
 ### 2012 ANES
 
-## stm fit with 20 topics (estimating number of topics gives ~70)
+## stm fit with 20 topics
 stm_fit2012_ktopic <- stm(out2012$documents, out2012$vocab, prevalence = as.matrix(out2012$meta)
-                          , K=20, init.type = "Spectral")
+                          , K=20, init.type = "Spectral", seed=12345)
 
 ## combine sophistication components with remaining data
 know <- sophistication(stm_fit2012_ktopic, out2012)
@@ -128,15 +126,67 @@ data2012$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + data2012$di
 
 ### 2016 ANES
 
-## stm fit with 20 topics (estimating number of topics gives ~70)
+## stm fit with 20 topics
 stm_fit2016_ktopic <- stm(out2016$documents, out2016$vocab, prevalence = as.matrix(out2016$meta)
-                        , K=20, init.type = "Spectral")
+                        , K=20, init.type = "Spectral", seed=12345)
 
 ## combine sophistication components with remaining data
 know <- sophistication(stm_fit2016_ktopic, out2016)
 
 ## compute combined measures
 data2016$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + data2016$ditem)/3
+
+
+### 2015 YouGov
+
+## stm fit with 20 topics
+stm_fit_yg_ktopic <- stm(out_yougov$documents, out_yougov$vocab, prevalence = as.matrix(out_yougov$meta)
+                          , K=20, init.type = "Spectral", seed=12345)
+
+## combine sophistication components with remaining data
+know <- sophistication(stm_fit_yg_ktopic, out_yougov)
+
+## compute combined measures
+data_yg$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + data_yg$ditem)/3
+
+
+### Swiss (German)
+
+## stm fit with 20 topics
+stm_fit_german_ktopic <- stm(out_german$documents, out_german$vocab, prevalence = as.matrix(out_german$meta)
+                         , K=20, init.type = "Spectral", seed=12345)
+
+## combine sophistication components with remaining data
+know <- sophistication(stm_fit_german_ktopic, out_german)
+
+## compute combined measures
+opend_german$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + opend_german$ditem)/3
+
+
+### Swiss (French)
+
+## stm fit with 20 topics
+stm_fit_french_ktopic <- stm(out_french$documents, out_french$vocab, prevalence = as.matrix(out_french$meta)
+                             , K=20, init.type = "Spectral", seed=12345)
+
+## combine sophistication components with remaining data
+know <- sophistication(stm_fit_french_ktopic, out_french)
+
+## compute combined measures
+opend_french$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + opend_french$ditem)/3
+
+
+### Swiss (italian)
+
+## stm fit with 20 topics
+stm_fit_italian_ktopic <- stm(out_italian$documents, out_italian$vocab, prevalence = as.matrix(out_italian$meta)
+                             , K=20, init.type = "Spectral", seed=12345)
+
+## combine sophistication components with remaining data
+know <- sophistication(stm_fit_italian_ktopic, out_italian)
+
+## compute combined measures
+opend_italian$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + opend_italian$ditem)/3
 
 
 
@@ -170,7 +220,7 @@ data2012_thresh <- data2012_thresh[-out2012_thresh$docs.removed,]
 # (computing sophistication components w/ large number of topics is computationally intractable w/ infrequent terms)
 stm_fit2012_thresh <- stm(out2012_thresh$documents, out2012_thresh$vocab
                           , prevalence = as.matrix(out2012_thresh$meta)
-                          , K=20, init.type = "Spectral")
+                          , K=20, init.type = "Spectral", seed=12345)
 
 ## combine sophistication components with remaining data
 know <- sophistication(stm_fit2012_thresh, out2012_thresh)
@@ -211,7 +261,7 @@ data2016_thresh <- data2016_thresh[-out2016_thresh$docs.removed,]
 # (computing sophistication components w/ large number of topics is computationally intractable w/ infrequent terms)
 stm_fit2016_thresh <- stm(out2016_thresh$documents, out2016_thresh$vocab
                           , prevalence = as.matrix(out2016_thresh$meta)
-                          , K=20, init.type = "Spectral")
+                          , K=20, init.type = "Spectral", seed=12345)
 
 ## combine sophistication components with remaining data
 know <- sophistication(stm_fit2016_thresh, out2016_thresh)
@@ -224,6 +274,41 @@ data2016 <- data2016_thresh %>%
   dplyr::select(caseid, polknow_text_mean_thresh) %>% 
   full_join(data2016)
 rm(data2016_thresh)
+
+
+
+### 2015 YouGov
+gc()
+
+## combine regular survey and open-ended data, remove spanish and empty responses
+data_yg_thresh <- yougov %>% mutate(resp = apply(opend[,-1],1,paste,collapse=' '))
+
+## remove missings on metadata
+data_yg_thresh <- data_yg_thresh[apply(!is.na(data_yg_thresh[,meta]),1,prod)==1,]
+
+## process for stm
+out_yougov_thresh <- prepDocuments(processed_yougov$documents, processed_yougov$vocab, processed_yougov$meta)
+
+## remove discarded observations from data
+data_yg_thresh <- data_yg_thresh[-processed_yougov$docs.removed,]
+data_yg_thresh <- data_yg_thresh[-out_yougov_thresh$docs.removed,]
+
+## stm fit with 20 topics 
+# (computing sophistication components w/ large number of topics is computationally intractable w/ infrequent terms)
+stm_fit_yg_thresh <- stm(out_yougov$documents, out_yougov$vocab, prevalence = as.matrix(out_yougov$meta)
+                         , K=20, init.type = "Spectral", seed=12345)
+
+## combine sophistication components with remaining data
+know <- sophistication(stm_fit_yg_thresh, out_yougov_thresh)
+
+## compute combined measures
+data_yg_thresh$polknow_text_mean_thresh <- (know$ntopics + know$distinct + data_yg_thresh$ditem)/3
+
+## merge with original data
+data_yg <- data_yg_thresh %>% 
+  dplyr::select(caseid, polknow_text_mean_thresh) %>% 
+  full_join(data_yg_thresh)
+rm(data_yg_thresh)
 
 
 
