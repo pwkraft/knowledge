@@ -190,7 +190,7 @@ ggsave("../fig/meandiff.pdf", p0 ,width=6.5, height=4)
 
 ### ANES data
 
-dvnames <- rep(c("Discursive\nSophistication","Factual\nKnowledge"), 2)
+dvnames <- rep(c("Discursive Sophistication","Factual Knowledge"), 2)
 ivnames <- c("Intercept", "Female", "Media", "Discussions", "College"
              , "Income", "log(Age)", "Church", "Black", "Online")
 
@@ -224,7 +224,7 @@ dfplot1 <- dfplot1[dfplot1$ivnames!="Intercept",]
 ### Add YouGov data
 ## Q: ADD POLITICAL INTEREST AS IV???
 
-dvnames_yg <- c("Discursive\nSophistication","Factual\nKnowledge")#, "Disease\nInformation")
+dvnames_yg <- c("Discursive Sophistication","Factual Knowledge")#, "Disease\nInformation")
 ivnames_yg <- c("Intercept", "Female", "College", "Income", "log(Age)", "Church", "Black")
 
 # model estimation

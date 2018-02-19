@@ -30,11 +30,31 @@ opend2012 <- apply(anes2012opend[anes2012opend$caseid %in% data2012$caseid[1:500
 opend2016 <- apply(anes2016opend[anes2016opend$V160001 %in% data2016$caseid[1:500], -1]
                    , 1, paste, collapse=' ')
 
+load("out/yougov.Rdata")
+opend_yougov <- apply(opend[opend$caseid %in% data$caseid[1:500], -1]
+                      , 1, paste, collapse=' ')
+
+load("out/swiss.Rdata")
+opend_german <- apply(cbind(opend_german$string1[1:500],opend_german$string2[1:500])
+                      , 1, paste, collapse=' ')
+opend_french <- apply(cbind(opend_french$string1[1:500],opend_french$string2[1:500])
+                      , 1, paste, collapse=' ')
+opend_italian <- apply(cbind(opend_italian$string1[1:500],opend_italian$string2[1:500])
+                       , 1, paste, collapse=' ')
+
 ## preprocess data
 preprocessed_documents2012 <- factorial_preprocessing(
   opend2012, use_ngrams = FALSE, parallel = TRUE, cores = 7)
 preprocessed_documents2016 <- factorial_preprocessing(
   opend2016, use_ngrams = FALSE, parallel = TRUE, cores = 7)
+preprocessed_documents_yougov <- factorial_preprocessing(
+  opend_yougov, use_ngrams = FALSE, parallel = TRUE, cores = 7)
+preprocessed_documents_german <- factorial_preprocessing(
+  opend_german, use_ngrams = FALSE, parallel = TRUE, cores = 7)
+preprocessed_documents_french <- factorial_preprocessing(
+  opend_french, use_ngrams = FALSE, parallel = TRUE, cores = 7)
+preprocessed_documents_italian <- factorial_preprocessing(
+  opend_italian, use_ngrams = FALSE, parallel = TRUE, cores = 7)
 
 ## remove intermediate dfms
 file.remove(dir()[grep("intermediate_dfm_\\d+\\.Rdata", dir())])
@@ -44,10 +64,22 @@ preText_results2012 <- preText(preprocessed_documents2012
                                , dataset_name = "2012 ANES", parallel = TRUE, cores = 7)
 preText_results2016 <- preText(preprocessed_documents2016
                                , dataset_name = "2016 ANES", parallel = TRUE, cores = 7)
+preText_results_yougov <- preText(preprocessed_documents_yougov
+                               , dataset_name = "2016 ANES", parallel = TRUE, cores = 7)
+preText_results_german <- preText(preprocessed_documents_german
+                               , dataset_name = "2016 ANES", parallel = TRUE, cores = 7)
+preText_results_french <- preText(preprocessed_documents_french
+                               , dataset_name = "2016 ANES", parallel = TRUE, cores = 7)
+preText_results_italian <- preText(preprocessed_documents_italian
+                               , dataset_name = "2016 ANES", parallel = TRUE, cores = 7)
 
 ## generate preText score plot
 preText_score_plot(preText_results2012)
 preText_score_plot(preText_results2016)
+preText_score_plot(preText_results_yougov)
+preText_score_plot(preText_results_german)
+preText_score_plot(preText_results_french)
+preText_score_plot(preText_results_italian)
 
 ## generate regression results
 pdf("../fig/pretext2012.pdf", width=5, height=2)
@@ -56,6 +88,22 @@ dev.off()
 
 pdf("../fig/pretext2016.pdf", width=5, height=2)
 regression_coefficient_plot(preText_results2016, remove_intercept = TRUE)
+dev.off()
+
+pdf("../fig/pretext_yougov.pdf", width=5, height=2)
+regression_coefficient_plot(preText_results_yougov, remove_intercept = TRUE)
+dev.off()
+
+pdf("../fig/pretext_german.pdf", width=5, height=2)
+regression_coefficient_plot(preText_results_german, remove_intercept = TRUE)
+dev.off()
+
+pdf("../fig/pretext_french.pdf", width=5, height=2)
+regression_coefficient_plot(preText_results_french, remove_intercept = TRUE)
+dev.off()
+
+pdf("../fig/pretext_italian.pdf", width=5, height=2)
+regression_coefficient_plot(preText_results_italian, remove_intercept = TRUE)
 dev.off()
 
 

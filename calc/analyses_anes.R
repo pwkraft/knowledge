@@ -109,9 +109,8 @@ res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
 res$ivlab <- factor(res$iv, labels = dvnames)
 res$Year <- rep(c("2012 ANES","2016 ANES"), each=8)
 
-ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
+ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + geom_vline(xintercept = 0, color="grey") +
   geom_point() + geom_errorbarh(height=0) + facet_grid(Year~dvlab, scale="free_x") +
-  geom_vline(xintercept = 0, color="grey") +
   xlab("Marginal Effect (-/+ 1 SD)") + ylab("Independent Variable") + plot_default +
   scale_y_discrete(limits = rev(levels(res$ivlab))) + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -140,9 +139,8 @@ res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
 res$ivlab <- factor(res$iv, labels = dvnames)
 res$Year <- rep(c("2012 ANES","2016 ANES"), each=8)
 
-ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
+ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + geom_vline(xintercept = 0, color="grey") +
   geom_point() + geom_errorbarh(height=0) + facet_grid(Year~dvlab, scale="free_x") +
-  geom_vline(xintercept = 0, color="grey") +
   xlab("Marginal Effect (-/+ 1 SD)") + ylab("Independent Variable") + plot_default +
   scale_y_discrete(limits = rev(levels(res$ivlab))) + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -171,9 +169,8 @@ res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
 res$ivlab <- factor(res$iv, labels = dvnames)
 res$Year <- rep(c("2012 ANES","2016 ANES"), each=8)
 
-ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
+ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + geom_vline(xintercept = 0, color="grey") +
   geom_point() + geom_errorbarh(height=0) + facet_grid(Year~dvlab, scale="free_x") +
-  geom_vline(xintercept = 0, color="grey") +
   xlab("Marginal Effect (-/+ 1 SD)") + ylab("Independent Variable") + plot_default +
   scale_y_discrete(limits = rev(levels(res$ivlab))) + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -196,18 +193,17 @@ hetreg_summary$measure <- factor(hetreg_summary$measure, levels = rev(levels(het
 hetreg_summary$target <- factor(hetreg_summary$target
                                 , labels = c("Mitt\nRomney","Barack\nObama"
                                              ,"Donald\nTrump","Hillary\nClinton"))
+hetreg_summary$Year <- rep(c("2012 ANES","2016 ANES"), each=nrow(hetreg_summary)/2)
 
-ggplot(hetreg_summary, aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) +
-  geom_point() + geom_errorbarh(height=0) + facet_grid(target~policy) +
-  geom_vline(xintercept = 0, color="grey") +
+ggplot(hetreg_summary, aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) + geom_vline(xintercept = 0, color="grey") +
+  geom_point() + geom_errorbarh(height=0) + facet_grid(Year+target~policy) +
   xlab("Error Variance Reduction (-/+ 1 SD)") + ylab("Independent Variable") + 
   plot_default + theme(axis.text.x = element_text(angle = 45, hjust = 1))
-ggsave("../fig/hetreg.pdf",width = 6.5, height = 3.3)
+ggsave("../fig/hetreg.pdf",width = 6.5, height = 3.5)
 
 hetreg_summary %>% filter(policy=="Ideology") %>%
-  ggplot(aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) +
+  ggplot(aes(y=measure, x=mean, xmin=cilo, xmax=cihi)) + geom_vline(xintercept = 0, color="grey") +
   geom_point() + geom_errorbarh(height=0) + facet_wrap(~target, ncol=2) +
-  geom_vline(xintercept = 0, color="grey") +
   xlab("Error Variance Reduction (-/+ 1 SD)") + ylab("Independent Variable") + plot_default
 ggsave("../fig/hetreg_pres.pdf",width = 4, height = 3)
 
