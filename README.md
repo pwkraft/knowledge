@@ -1,8 +1,8 @@
-# Women Also Know Stuff
-## Challenging the Gender Gap in Political Sophistication
+# Let's Talk Politics
+## A Naive Approach for Measuring Political Sophistication
 
 *WORKING PAPER: comments welcome!*
 
-Studies frequently found that on average, women appear to be less informed about politics than men. However, recent research raised theoretical as well as methodological concerns regarding conventional measures of political knowledge. This paper proposes an alternative approach to assess individual political sophistication in opinion surveys. Building on theoretical frameworks that focus on the structure of political belief systems rather than factual knowledge, I examine how individuals describe their political attitudes in open-ended responses using quantitative text analysis methods. The proposed measure aims to capture the complexity of verbatim responses based on their relative length, topic diversity, and opinion diversity. Compared to traditional knowledge metrics, the new measure behaves similarly as a predictor of political attitudes and behavior and shares common determinants - with one important exception. Contrary to previous research, there is no evidence for a gender gap in political sophistication using the text-based measure. While women might score lower than men on factual knowledge about political institutions and elites, there are no differences in the complexity of expressed political attitudes. %The paper proceeds to show how the new measure can improve our understanding of gender differences in political learning as well as the consequences of political sophistication. 
+This paper proposes a simple but powerful framework to measure political sophistication based on open-ended survey responses. *Discursive sophistication* utilizes quantitative text analysis methods to capture the complexity of individual attitude expression. I validate the approach by comparing it to conventional political knowledge metrics in multiple studies using different batteries of open-ended items. The paper proceeds to illustrate how the measure can help refine previous insights from the literature such as the oft-cited gender gap in political knowledge.
 
-*Keywords:* political sophistication, gender gap, measurement, open-ended responses, text analysis
+**Keywords:** political sophistication, measurement, open-ended responses, text analysis, gender gap
