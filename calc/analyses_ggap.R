@@ -293,9 +293,9 @@ par(mfrow=c(1,2), mar=c(2.2,0.5,2.2,0.5))
 plot.estimateEffect(prep2012, covariate = "female", topics = topics2012, model = stm_fit2012
                     , xlim = c(-.05,.015), method = "difference", cov.value1 = 1, cov.value2 = 0
                     , labeltype = "prob", n=5, verbose.labels = F, width=50
-                    , main = "2012 ANES")
+                    , main = "Gender Differences in Topic Proportions (2012 ANES)")
 plot.estimateEffect(prep2016, covariate = "female", topics = topics2016, model = stm_fit2016
                     , xlim = c(-.05,.015), method = "difference", cov.value1 = 1, cov.value2 = 0
                     , labeltype = "prob", n=5, verbose.labels = F, width=50
-                    , main = "2016 ANES")
+                    , main = "Gender Differences in Topic Proportions (2016 ANES)")
 dev.off()
