@@ -128,8 +128,9 @@ anes2012$button <- Recode(raw2012$mobilpo_sign, "c(2,5)=0; lo:-1=NA")
 ## additive index non-conventional participation
 anes2012$part <- with(anes2012, protest + petition + button + letter)
 
-## vote choice (pre-election)
+## vote choice (pre-election) (1=dpc, 2=rpc)
 anes2012$vc_pre <- Recode(raw2012$prevote_intpreswho,"lo:-1=NA; 1=1; 2=2; else=3")
+anes2012$vote_rep <- Recode(anes2012$vc_pre, "3=NA") - 1
 
 ## vote choice (post-election)
 anes2012$vc_post <- Recode(raw2012$postvote_presvtwho,"lo:-1=NA; 1=1; 2=2; else=3")
@@ -246,6 +247,39 @@ anes2012$tax <- ((-Recode(raw2012$milln_milltax_x, "lo:0 = NA") + 7)/3 + Recode(
 ## Personality characteristics: Extraversion
 anes2012$extraversion <- Recode(raw2012$tipi_extra, "lo:0 = NA")
 anes2012$reserved <- Recode(raw2012$tipi_resv, "lo:0 = NA")
+
+## Correct voting measure
+# (left out militaty, congress, supreme court, liberals, and conservatives as "social groups")
+table(anes2012$pid_cont)
+anes2012$ftgr_xian <- (Recode(raw2012$ftgr_xian, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_atheists <- (Recode(raw2012$ftgr_atheists, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_mormons <- (Recode(raw2012$ftgr_mormons, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_xfund <- (Recode(raw2012$ftgr_xfund, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_catholics <- (Recode(raw2012$ftgr_catholics, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_feminists <- (Recode(raw2012$ftgr_feminists, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_middle <- (Recode(raw2012$ftgr_middle, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_unions <- (Recode(raw2012$ftgr_unions, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_poor <- (Recode(raw2012$ftgr_poor, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_bigbus <- (Recode(raw2012$ftgr_bigbus, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_welfare <- (Recode(raw2012$ftgr_welfare, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_working <- (Recode(raw2012$ftgr_working, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_gay <- (Recode(raw2012$ftgr_gay, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_rich <- (Recode(raw2012$ftgr_rich, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_muslims <- (Recode(raw2012$ftgr_muslims, "-9:-1=NA") - 50) / 50
+anes2012$ftgr_tea <- (Recode(raw2012$ftgr_tea, "-9:-1=NA") - 50) / 50
+
+t.test(ftgr_atheists~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])$p.value
+t.test(ftgr_xian~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])$p.value
+t.test(ftgr_catholics~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
+t.test(ftgr_gay~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
+t.test(ftgr_rich~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
+t.test(ftgr_tea~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
+t.test(ftgr_poor~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
+t.test(ftgr_working~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
+t.test(ftgr_welfare~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
+t.test(ftgr_muslims~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
+# question: only include groups that are positive vs. negative?
+
 
 ### 2012 open-ended responses
 ### MORE WORK ON PRE-PROCESSING NEEDED, check all steps, spell checking, stopword removal etc.
