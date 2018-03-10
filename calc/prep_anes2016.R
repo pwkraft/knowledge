@@ -125,6 +125,7 @@ anes2016$vc_pre <- Recode(raw2016$V161031,"lo:-1=NA; 1=1; 2=2; else=3")
 
 ## vote choice (post-election, 1=Clinton, 2=Trump)
 anes2016$vc_post <- Recode(raw2016$V162034a, "lo:-1=NA; 1=1; 2=2; else=3")
+anes2016$vote_rep <- Recode(anes2016$vc_post, "3=NA") - 1
 
 ## vote change (pre-post)
 anes2016$vc_change <- as.numeric(anes2016$vc_pre == anes2016$vc_post)

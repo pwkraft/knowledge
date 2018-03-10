@@ -130,10 +130,10 @@ anes2012$part <- with(anes2012, protest + petition + button + letter)
 
 ## vote choice (pre-election) (1=dpc, 2=rpc)
 anes2012$vc_pre <- Recode(raw2012$prevote_intpreswho,"lo:-1=NA; 1=1; 2=2; else=3")
-anes2012$vote_rep <- Recode(anes2012$vc_pre, "3=NA") - 1
 
 ## vote choice (post-election)
 anes2012$vc_post <- Recode(raw2012$postvote_presvtwho,"lo:-1=NA; 1=1; 2=2; else=3")
+anes2012$vote_rep <- Recode(anes2012$vc_post, "3=NA") - 1
 
 ## vote change (pre-post)
 anes2012$vc_change <- anes2012$vc_pre == anes2012$vc_post
@@ -142,31 +142,28 @@ anes2012$vc_change[is.na(anes2012$vc_pre) & !is.na(anes2012$vc_post)] <- 0
 anes2012$vc_change[!is.na(anes2012$vc_pre) & is.na(anes2012$vc_post)] <- 0
 
 ## party/candidate placements
-anes2012$ideol_ego <- Recode(raw2012$libcpre_self, "lo:0=NA")
-anes2012$ideol_rpc <- Recode(raw2012$libcpre_rpc, "lo:0=NA")
-anes2012$ideol_dpc <- Recode(raw2012$libcpre_dpc, "lo:0=NA")
-anes2012$ideol_rep <- Recode(raw2012$libcpre_ptyr, "lo:0=NA")
-anes2012$ideol_dem <- Recode(raw2012$libcpre_ptyd, "lo:0=NA")
-anes2012$spsrvpr_ego <- Recode(raw2012$spsrvpr_ssself, "lo:0=NA")
-anes2012$spsrvpr_rpc <- Recode(raw2012$spsrvpr_ssrpc, "lo:0=NA")
-anes2012$spsrvpr_dpc <- Recode(raw2012$spsrvpr_ssdpc, "lo:0=NA")
-anes2012$spsrvpr_rep <- Recode(raw2012$spsrvpr_ssrep, "lo:0=NA")
-anes2012$spsrvpr_dem <- Recode(raw2012$spsrvpr_ssdem, "lo:0=NA")
-anes2012$defsppr_ego <- Recode(raw2012$defsppr_self, "lo:0=NA")
-anes2012$defsppr_rpc <- Recode(raw2012$defsppr_rpc, "lo:0=NA")
-anes2012$defsppr_dpc <- Recode(raw2012$defsppr_dpc, "lo:0=NA")
-anes2012$defsppr_rep <- Recode(raw2012$defsppr_rep, "lo:0=NA")
-anes2012$defsppr_dem <- Recode(raw2012$defsppr_dem, "lo:0=NA")
-anes2012$inspre_ego <- Recode(raw2012$inspre_self, "lo:0=NA")
-anes2012$inspre_rpc <- Recode(raw2012$inspre_rpc, "lo:0=NA")
-anes2012$inspre_dpc <- Recode(raw2012$inspre_dpc, "lo:0=NA")
-anes2012$inspre_rep <- Recode(raw2012$inspre_rep, "lo:0=NA")
-anes2012$inspre_dem <- Recode(raw2012$inspre_dem, "lo:0=NA")
-anes2012$guarpr_ego <- Recode(raw2012$guarpr_self, "lo:0=NA")
-anes2012$guarpr_rpc <- Recode(raw2012$guarpr_rpc, "lo:0=NA")
-anes2012$guarpr_dpc <- Recode(raw2012$guarpr_dpc, "lo:0=NA")
-anes2012$guarpr_rep <- Recode(raw2012$guarpr_rep, "lo:0=NA")
-anes2012$guarpr_dem <- Recode(raw2012$guarpr_dem, "lo:0=NA")
+anes2012$ideol_ego <- (Recode(raw2012$libcpre_self, "lo:0=NA") - 4)/3
+anes2012$spsrvpr_ego <- (Recode(raw2012$spsrvpr_ssself, "lo:0=NA") - 4)/3
+anes2012$defsppr_ego <- (Recode(raw2012$defsppr_self, "lo:0=NA") - 4)/3
+anes2012$inspre_ego <- (Recode(raw2012$inspre_self, "lo:0=NA") - 4)/3
+anes2012$guarpr_ego <- (Recode(raw2012$guarpr_self, "lo:0=NA") - 4)/3
+anes2012$aidblack_ego <- (Recode(raw2012$aidblack_self, "lo:0=NA") - 4)/3
+anes2012$envjob_ego <- (Recode(raw2012$envjob_self, "lo:0=NA") - 4)/3
+
+anes2012$ideol_rpc <- (Recode(raw2012$libcpre_rpc, "lo:0=NA") - 4)/3
+anes2012$ideol_dpc <- (Recode(raw2012$libcpre_dpc, "lo:0=NA") - 4)/3
+anes2012$spsrvpr_rpc <- (Recode(raw2012$spsrvpr_ssrpc, "lo:0=NA") - 4)/3
+anes2012$spsrvpr_dpc <- (Recode(raw2012$spsrvpr_ssdpc, "lo:0=NA") - 4)/3
+anes2012$defsppr_rpc <- (Recode(raw2012$defsppr_rpc, "lo:0=NA") - 4)/3
+anes2012$defsppr_dpc <- (Recode(raw2012$defsppr_dpc, "lo:0=NA") - 4)/3
+anes2012$inspre_rpc <- (Recode(raw2012$inspre_rpc, "lo:0=NA") - 4)/3
+anes2012$inspre_dpc <- (Recode(raw2012$inspre_dpc, "lo:0=NA") - 4)/3
+anes2012$guarpr_rpc <- (Recode(raw2012$guarpr_rpc, "lo:0=NA") - 4)/3
+anes2012$guarpr_dpc <- (Recode(raw2012$guarpr_dpc, "lo:0=NA") - 4)/3
+anes2012$aidblack_rpc <- (Recode(raw2012$aidblack_rpc, "lo:0=NA") - 4)/3
+anes2012$aidblack_dpc <- (Recode(raw2012$aidblack_dpc, "lo:0=NA") - 4)/3
+anes2012$envjob_rpc <- (Recode(raw2012$envjob_rpc, "lo:0=NA") - 4)/3
+anes2012$envjob_dpc <- (Recode(raw2012$envjob_dpc, "lo:0=NA") - 4)/3
 
 ## ideology (factor/dummies)
 anes2012$ideol <- factor(Recode(raw2012$libcpre_self, "1:3=1; 4=2; 5:7=3; else=NA")
@@ -248,14 +245,47 @@ anes2012$tax <- ((-Recode(raw2012$milln_milltax_x, "lo:0 = NA") + 7)/3 + Recode(
 anes2012$extraversion <- Recode(raw2012$tipi_extra, "lo:0 = NA")
 anes2012$reserved <- Recode(raw2012$tipi_resv, "lo:0 = NA")
 
+
+#########################
 ## Correct voting measure
-# (left out militaty, congress, supreme court, liberals, and conservatives as "social groups")
+
+
+
+## 1) Party identification (large values = Eepublican)
+
 table(anes2012$pid_cont)
-anes2012$ftgr_xian <- (Recode(raw2012$ftgr_xian, "-9:-1=NA") - 50) / 50
-anes2012$ftgr_atheists <- (Recode(raw2012$ftgr_atheists, "-9:-1=NA") - 50) / 50
-anes2012$ftgr_mormons <- (Recode(raw2012$ftgr_mormons, "-9:-1=NA") - 50) / 50
-anes2012$ftgr_xfund <- (Recode(raw2012$ftgr_xfund, "-9:-1=NA") - 50) / 50
-anes2012$ftgr_catholics <- (Recode(raw2012$ftgr_catholics, "-9:-1=NA") - 50) / 50
+
+## 2) Issue positions
+
+# expert positions
+expert <- anes2012 %>% 
+  filter(polknow_factual > median(polknow_factual)) %>%
+  summarize_at(vars(spsrvpr_rpc:envjob_dpc), mean, na.rm=T)
+
+## 3) Closeness to social groups
+# (left out military, congress, supreme court, liberals, and conservatives as "social groups")
+
+social_rep <- 0
+social_dem <- 0
+for(var in c("ftgr_xian","ftgr_catholics","ftgr_xfund","ftgr_mormons","ftgr_atheists")){
+  experts <- anes2012$polknow_factual > median(anes2012$polknow_factual)
+  tmp <- (Recode(raw2012[,var], "-9:-1=NA") - 50) / 50
+  res <- t.test(tmp[experts]~anes2012$vote_rep[experts])
+  ## select only social groups that:
+  ## - are positively evaluated by one voting block and negatively by the other
+  ## - show significant difference in evaluations
+  if((prod(res$estimate) < 0) & (res$p.value < .05)){}
+    if(diff(res$estimate)>0){
+      social_rep <- social_rep + tmp
+      social_dem <- social_dem - tmp
+    } else {
+      social_rep <- social_rep - tmp
+      social_dem <- social_dem + tmp
+    }
+  }
+
+
+## add more groups
 anes2012$ftgr_feminists <- (Recode(raw2012$ftgr_feminists, "-9:-1=NA") - 50) / 50
 anes2012$ftgr_middle <- (Recode(raw2012$ftgr_middle, "-9:-1=NA") - 50) / 50
 anes2012$ftgr_unions <- (Recode(raw2012$ftgr_unions, "-9:-1=NA") - 50) / 50
@@ -268,8 +298,8 @@ anes2012$ftgr_rich <- (Recode(raw2012$ftgr_rich, "-9:-1=NA") - 50) / 50
 anes2012$ftgr_muslims <- (Recode(raw2012$ftgr_muslims, "-9:-1=NA") - 50) / 50
 anes2012$ftgr_tea <- (Recode(raw2012$ftgr_tea, "-9:-1=NA") - 50) / 50
 
-t.test(ftgr_atheists~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])$p.value
-t.test(ftgr_xian~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])$p.value
+t.test(ftgr_atheists~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
+t.test(ftgr_xian~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
 t.test(ftgr_catholics~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
 t.test(ftgr_gay~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
 t.test(ftgr_rich~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
@@ -281,7 +311,22 @@ t.test(ftgr_muslims~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes
 # question: only include groups that are positive vs. negative?
 
 
+cv_rpc <- with(anes2012, pid_cont + 
+                 spsrvpr_ego * expert$spsrvpr_rpc + defsppr_ego * expert$defsppr_rpc +
+                 inspre_ego * expert$inspre_rpc + guarpr_ego * expert$guarpr_rpc + 
+                 aidblack_ego * expert$aidblack_rpc + envjob_ego * expert$envjob_rpc)
+               
+cv_dpc <- with(anes2012, - pid_cont + 
+                 spsrvpr_ego * spsrvpr_dpc + defsppr_ego * defsppr_dpc +
+                 inspre_ego * inspre_dpc + guarpr_ego * guarpr_dpc + 
+                 aidblack_ego * aidblack_dpc + envjob_ego * envjob_dpc)
+
+
+
+
+#############################
 ### 2012 open-ended responses
+#############################
 ### MORE WORK ON PRE-PROCESSING NEEDED, check all steps, spell checking, stopword removal etc.
 
 ## read original open-ended responses (downloaded from anes website)
