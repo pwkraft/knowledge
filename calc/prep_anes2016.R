@@ -45,7 +45,7 @@ anes2016$polknow_office <- with(raw2016, (Recode(V162072, "lo:-1=NA")
                                 + Recode(V162075b, "lo:-1=NA")
                                 + Recode(V162076b, "lo:-1=NA"))/5)
 
-## political knowledge (factual knowledge questions, pre-election)
+## political knowledge (factual knowledge questions, pre-election, -5 is interview breakoff, -9 is refusal)
 anes2016$polknow_factual <- with(raw2016, (Recode(V161513, "-5=NA; 6=1; else=0")
                                            + Recode(V161514, "-5=NA; 4=1; else=0")
                                            + Recode(V161515, "-5=NA; 2=1; else=0")
@@ -134,23 +134,29 @@ anes2016$vc_change[is.na(anes2016$vc_pre) & !is.na(anes2016$vc_post)] <- 0
 anes2016$vc_change[!is.na(anes2016$vc_pre) & is.na(anes2016$vc_post)] <- 0
 
 ## party/candidate placements
-anes2016$ideol_ego <- Recode(raw2016$V161126, "lo:0=NA; 99=NA")
-anes2016$ideol_dpc <- Recode(raw2016$V161128, "lo:0=NA")
-anes2016$ideol_rpc <- Recode(raw2016$V161129, "lo:0=NA")
-anes2016$ideol_dem <- Recode(raw2016$V161130, "lo:0=NA")
-anes2016$ideol_rep <- Recode(raw2016$V161131, "lo:0=NA")
-anes2016$spsrvpr_ego <- Recode(raw2016$V161178, "lo:0=NA; 99=NA")
-anes2016$spsrvpr_dpc <- Recode(raw2016$V161179, "lo:0=NA")
-anes2016$spsrvpr_rpc <- Recode(raw2016$V161180, "lo:0=NA")
-anes2016$defsppr_ego <- Recode(raw2016$V161181, "lo:0=NA; 99=NA")
-anes2016$defsppr_dpc <- Recode(raw2016$V161182, "lo:0=NA")
-anes2016$defsppr_rpc <- Recode(raw2016$V161183, "lo:0=NA")
-anes2016$inspre_ego <- Recode(raw2016$V161184, "lo:0=NA; 99=NA")
-anes2016$inspre_dpc <- Recode(raw2016$V161185, "lo:0=NA")
-anes2016$inspre_rpc <- Recode(raw2016$V161186, "lo:0=NA")
-anes2016$guarpr_ego <- Recode(raw2016$V161189, "lo:0=NA; 99=NA")
-anes2016$guarpr_dpc <- Recode(raw2016$V161190, "lo:0=NA")
-anes2016$guarpr_rpc <- Recode(raw2016$V161191, "lo:0=NA")
+anes2016$ideol_ego <- (Recode(raw2016$V161126, "lo:0=NA; 99=NA") - 4)/3
+anes2016$spsrvpr_ego <- (Recode(raw2016$V161178, "lo:0=NA; 99=NA") - 4)/3
+anes2016$defsppr_ego <- (Recode(raw2016$V161181, "lo:0=NA; 99=NA") - 4)/3
+anes2016$inspre_ego <- (Recode(raw2016$V161184, "lo:0=NA; 99=NA") - 4)/3
+anes2016$guarpr_ego <- (Recode(raw2016$V161189, "lo:0=NA; 99=NA") - 4)/3
+anes2016$aidblack_ego <- (Recode(raw2016$V161198, "lo:0=NA") - 4)/3
+anes2016$envjob_ego <- (Recode(raw2016$V161201, "lo:0=NA") - 4)/3
+
+anes2016$ideol_dpc <- (Recode(raw2016$V161128, "lo:0=NA") - 4)/3
+anes2016$ideol_rpc <- (Recode(raw2016$V161129, "lo:0=NA") - 4)/3
+anes2016$spsrvpr_dpc <- (Recode(raw2016$V161179, "lo:0=NA") - 4)/3
+anes2016$spsrvpr_rpc <- (Recode(raw2016$V161180, "lo:0=NA") - 4)/3
+anes2016$defsppr_dpc <- (Recode(raw2016$V161182, "lo:0=NA") - 4)/3
+anes2016$defsppr_rpc <- (Recode(raw2016$V161183, "lo:0=NA") - 4)/3
+anes2016$inspre_dpc <- (Recode(raw2016$V161185, "lo:0=NA") - 4)/3
+anes2016$inspre_rpc <- (Recode(raw2016$V161186, "lo:0=NA") - 4)/3
+anes2016$guarpr_dpc <- (Recode(raw2016$V161190, "lo:0=NA") - 4)/3
+anes2016$guarpr_rpc <- (Recode(raw2016$V161191, "lo:0=NA") - 4)/3
+anes2016$aidblack_dpc <- (Recode(raw2016$V161199, "lo:0=NA") - 4)/3
+anes2016$aidblack_rpc <- (Recode(raw2016$V161200, "lo:0=NA") - 4)/3
+anes2016$envjob_dpc <- (Recode(raw2016$V161202, "lo:0=NA") - 4)/3
+anes2016$envjob_rpc <- (Recode(raw2016$V161203, "lo:0=NA") - 4)/3
+
 
 ## ideology (factor/dummies)
 anes2016$ideol <- factor(Recode(raw2016$V161126, "1:3=1; 4=2; 5:7=3; else=NA")
@@ -232,7 +238,79 @@ anes2016$tax <- Recode(raw2016$V162140, "lo:-1=NA; 2=0; 3=0.5")
 anes2016$extraversion <- Recode(raw2016$V162333, "lo:0 = NA")
 anes2016$reserved <- Recode(raw2016$V162338, "lo:0 = NA")
 
+
+#########################
+## Correct voting measure
+
+
+## 1) Party identification (large values = Eepublican)
+
+pid <- Recode(anes2016$pid_cont, "NA=0")
+
+
+## 2) Issue positions
+
+# expert positions
+expert <- anes2016 %>% 
+  filter(polknow_factual > median(polknow_factual, na.rm = T)) %>%
+  summarize_at(vars(spsrvpr_dpc:envjob_rpc), mean, na.rm = T)
+
+# ego positions
+issue_rep <- Recode(anes2016$spsrvpr_ego, "NA=0") * expert$spsrvpr_rpc +
+  Recode(anes2016$defsppr_ego, "NA=0") * expert$defsppr_rpc +
+  Recode(anes2016$inspre_ego, "NA=0") * expert$inspre_rpc + 
+  Recode(anes2016$guarpr_ego, "NA=0") * expert$guarpr_rpc + 
+  Recode(anes2016$aidblack_ego, "NA=0") * expert$aidblack_rpc +
+  Recode(anes2016$envjob_ego, "NA=0") * expert$envjob_rpc
+
+issue_dem <- Recode(anes2016$spsrvpr_ego, "NA=0") * expert$spsrvpr_dpc +
+  Recode(anes2016$defsppr_ego, "NA=0") * expert$defsppr_dpc +
+  Recode(anes2016$inspre_ego, "NA=0") * expert$inspre_dpc + 
+  Recode(anes2016$guarpr_ego, "NA=0") * expert$guarpr_dpc + 
+  Recode(anes2016$aidblack_ego, "NA=0") * expert$aidblack_dpc +
+  Recode(anes2016$envjob_ego, "NA=0") * expert$envjob_dpc
+
+
+## 3) Closeness to social groups
+# (left out military, congress, supreme court, liberals, conservatives, and racial groups)
+
+social_rep <- 0
+social_rep_n <- 0
+social_dem <- 0
+social_dem_n <- 0
+experts <- anes2016$polknow_factual > median(anes2016$polknow_factual, na.rm = T)
+for(var in c("V162107","V162095","V162106","V162108", "V162096"
+             , "V162111", "V162098", "V162099","V162100","V162113"
+             , "V162110", "V162112", "V162103","V162105","V162109")){
+  tmp <- (Recode(raw2016[,var], "-9:-1=NA") - 50) / 50
+  res <- t.test(tmp[experts]~anes2016$vote_rep[experts])
+  tmp[is.na(tmp)] <- 0
+  ## select only social groups that:
+  ## - are positively evaluated by one voting block and negatively by the other
+  ## - show significant difference in evaluations
+  if((prod(res$estimate) < 0) & (res$p.value < .05)){
+    if(diff(res$estimate)>0){
+      social_rep <- social_rep + tmp
+      social_rep_n <- social_rep_n + 1
+    } else {
+      social_dem <- social_dem + tmp
+      social_dem_n <- social_dem_n + 1
+    }
+  }
+}
+
+## correct voting variables
+cv_rpc <- (pid + issue_rep + social_rep) / (7 + social_rep_n)
+cv_dpc <- (pid + issue_dem + social_dem) / (7 + social_dem_n)
+anes2016$correct_vote <- anes2016$vote_rep == as.numeric(cv_rpc > cv_dpc)
+
+table(anes2016$correct_vote)/sum(table(anes2016$correct_vote))
+
+
+
+#############################
 ### 2016 open-ended responses
+#############################
 ### MORE WORK ON PRE-PROCESSING NEEDED, check all steps, spell checking, stopword removal etc.
 
 ## read original open-ended responses (downloaded from anes website)
@@ -344,8 +422,8 @@ data2016$polknow_text_mean <- (data2016$ntopics + data2016$distinct + data2016$d
 #################
 
 
-policies <- c("ideol","spsrvpr","defsppr","inspre","guarpr")
-targets <- c("rpc","dpc")#,"rep","dem")
+policies <- c("ideol","spsrvpr","defsppr","inspre","guarpr","aidblack","envjob")
+targets <- c("rpc","dpc")
 m <- c("polknow_text_mean","polknow_factual","wordsum")
 
 polknow_hetreg <- function(policy, target, measure

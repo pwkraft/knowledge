@@ -44,7 +44,7 @@ anes2012$polknow_office <- with(raw2012, (Recode(ofcrec_speaker_correct, "lo:-1=
                                 + Recode(ofcrec_pmuk_correct, "lo:-1=NA")
                                 + Recode(ofcrec_cj_correct, "lo:-1=NA"))/4)
 
-## political knowledge (factual knowledge questions, pre-election)
+## political knowledge (factual knowledge questions, pre-election, only missings [-2,-9] are refusal, so 0)
 anes2012$polknow_factual <- with(raw2012, ((preknow_prestimes==2) + (preknow_sizedef==1)
                                  + (preknow_senterm==6) + (preknow_medicare==1)
                                  + (preknow_leastsp==1))/5)
@@ -150,20 +150,20 @@ anes2012$guarpr_ego <- (Recode(raw2012$guarpr_self, "lo:0=NA") - 4)/3
 anes2012$aidblack_ego <- (Recode(raw2012$aidblack_self, "lo:0=NA") - 4)/3
 anes2012$envjob_ego <- (Recode(raw2012$envjob_self, "lo:0=NA") - 4)/3
 
-anes2012$ideol_rpc <- (Recode(raw2012$libcpre_rpc, "lo:0=NA") - 4)/3
 anes2012$ideol_dpc <- (Recode(raw2012$libcpre_dpc, "lo:0=NA") - 4)/3
-anes2012$spsrvpr_rpc <- (Recode(raw2012$spsrvpr_ssrpc, "lo:0=NA") - 4)/3
+anes2012$ideol_rpc <- (Recode(raw2012$libcpre_rpc, "lo:0=NA") - 4)/3
 anes2012$spsrvpr_dpc <- (Recode(raw2012$spsrvpr_ssdpc, "lo:0=NA") - 4)/3
-anes2012$defsppr_rpc <- (Recode(raw2012$defsppr_rpc, "lo:0=NA") - 4)/3
+anes2012$spsrvpr_rpc <- (Recode(raw2012$spsrvpr_ssrpc, "lo:0=NA") - 4)/3
 anes2012$defsppr_dpc <- (Recode(raw2012$defsppr_dpc, "lo:0=NA") - 4)/3
-anes2012$inspre_rpc <- (Recode(raw2012$inspre_rpc, "lo:0=NA") - 4)/3
+anes2012$defsppr_rpc <- (Recode(raw2012$defsppr_rpc, "lo:0=NA") - 4)/3
 anes2012$inspre_dpc <- (Recode(raw2012$inspre_dpc, "lo:0=NA") - 4)/3
-anes2012$guarpr_rpc <- (Recode(raw2012$guarpr_rpc, "lo:0=NA") - 4)/3
+anes2012$inspre_rpc <- (Recode(raw2012$inspre_rpc, "lo:0=NA") - 4)/3
 anes2012$guarpr_dpc <- (Recode(raw2012$guarpr_dpc, "lo:0=NA") - 4)/3
-anes2012$aidblack_rpc <- (Recode(raw2012$aidblack_rpc, "lo:0=NA") - 4)/3
+anes2012$guarpr_rpc <- (Recode(raw2012$guarpr_rpc, "lo:0=NA") - 4)/3
 anes2012$aidblack_dpc <- (Recode(raw2012$aidblack_dpc, "lo:0=NA") - 4)/3
-anes2012$envjob_rpc <- (Recode(raw2012$envjob_rpc, "lo:0=NA") - 4)/3
+anes2012$aidblack_rpc <- (Recode(raw2012$aidblack_rpc, "lo:0=NA") - 4)/3
 anes2012$envjob_dpc <- (Recode(raw2012$envjob_dpc, "lo:0=NA") - 4)/3
+anes2012$envjob_rpc <- (Recode(raw2012$envjob_rpc, "lo:0=NA") - 4)/3
 
 ## ideology (factor/dummies)
 anes2012$ideol <- factor(Recode(raw2012$libcpre_self, "1:3=1; 4=2; 5:7=3; else=NA")
@@ -259,8 +259,8 @@ pid <- Recode(anes2012$pid_cont, "NA=0")
 
 # expert positions
 expert <- anes2012 %>% 
-  filter(polknow_factual > median(polknow_factual)) %>%
-  summarize_at(vars(spsrvpr_rpc:envjob_dpc), mean, na.rm=T)
+  filter(polknow_factual > median(polknow_factual, na.rm = T)) %>%
+  summarize_at(vars(spsrvpr_dpc:envjob_rpc), mean, na.rm = T)
 
 # ego positions
 issue_rep <- Recode(anes2012$spsrvpr_ego, "NA=0") * expert$spsrvpr_rpc +
@@ -279,13 +279,13 @@ issue_dem <- Recode(anes2012$spsrvpr_ego, "NA=0") * expert$spsrvpr_dpc +
 
 
 ## 3) Closeness to social groups
-# (left out military, congress, supreme court, liberals, and conservatives as "social groups")
+# (left out military, congress, supreme court, liberals, conservatives, and racial groups)
 
 social_rep <- 0
 social_rep_n <- 0
 social_dem <- 0
 social_dem_n <- 0
-experts <- anes2012$polknow_factual > median(anes2012$polknow_factual)
+experts <- anes2012$polknow_factual > median(anes2012$polknow_factual, na.rm = T)
 for(var in c("ftgr_xian","ftgr_catholics","ftgr_xfund","ftgr_mormons","ftgr_atheists"
              , "ftgr_feminists", "ftgr_middle", "ftgr_unions", "ftgr_poor","ftgr_bigbus"
              , "ftgr_welfare", "ftgr_working", "ftgr_gay","ftgr_rich","ftgr_muslims","ftgr_tea")){
@@ -311,6 +311,7 @@ cv_rpc <- (pid + issue_rep + social_rep) / (7 + social_rep_n)
 cv_dpc <- (pid + issue_dem + social_dem) / (7 + social_dem_n)
 anes2012$correct_vote <- anes2012$vote_rep == as.numeric(cv_rpc > cv_dpc)
 
+table(anes2012$correct_vote)/sum(table(anes2012$correct_vote))
 
 
 #############################
@@ -450,8 +451,8 @@ data2012$polknow_text_mean <- (data2012$ntopics + data2012$distinct + data2012$d
 #################
 
 
-policies <- c("ideol","spsrvpr","defsppr","inspre","guarpr")
-targets <- c("rpc","dpc")#),"rep","dem")
+policies <- c("ideol","spsrvpr","defsppr","inspre","guarpr","aidblack","envjob")
+targets <- c("rpc","dpc")
 m <- c("polknow_text_mean","polknow_factual","wordsum")
 
 polknow_hetreg <- function(policy, target, measure
