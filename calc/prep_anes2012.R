@@ -250,10 +250,10 @@ anes2012$reserved <- Recode(raw2012$tipi_resv, "lo:0 = NA")
 ## Correct voting measure
 
 
-
 ## 1) Party identification (large values = Eepublican)
 
-table(anes2012$pid_cont)
+pid <- Recode(anes2012$pid_cont, "NA=0")
+
 
 ## 2) Issue positions
 
@@ -262,65 +262,54 @@ expert <- anes2012 %>%
   filter(polknow_factual > median(polknow_factual)) %>%
   summarize_at(vars(spsrvpr_rpc:envjob_dpc), mean, na.rm=T)
 
+# ego positions
+issue_rep <- Recode(anes2012$spsrvpr_ego, "NA=0") * expert$spsrvpr_rpc +
+  Recode(anes2012$defsppr_ego, "NA=0") * expert$defsppr_rpc +
+  Recode(anes2012$inspre_ego, "NA=0") * expert$inspre_rpc + 
+  Recode(anes2012$guarpr_ego, "NA=0") * expert$guarpr_rpc + 
+  Recode(anes2012$aidblack_ego, "NA=0") * expert$aidblack_rpc +
+  Recode(anes2012$envjob_ego, "NA=0") * expert$envjob_rpc
+
+issue_dem <- Recode(anes2012$spsrvpr_ego, "NA=0") * expert$spsrvpr_dpc +
+  Recode(anes2012$defsppr_ego, "NA=0") * expert$defsppr_dpc +
+  Recode(anes2012$inspre_ego, "NA=0") * expert$inspre_dpc + 
+  Recode(anes2012$guarpr_ego, "NA=0") * expert$guarpr_dpc + 
+  Recode(anes2012$aidblack_ego, "NA=0") * expert$aidblack_dpc +
+  Recode(anes2012$envjob_ego, "NA=0") * expert$envjob_dpc
+
+
 ## 3) Closeness to social groups
 # (left out military, congress, supreme court, liberals, and conservatives as "social groups")
 
 social_rep <- 0
+social_rep_n <- 0
 social_dem <- 0
-for(var in c("ftgr_xian","ftgr_catholics","ftgr_xfund","ftgr_mormons","ftgr_atheists")){
-  experts <- anes2012$polknow_factual > median(anes2012$polknow_factual)
+social_dem_n <- 0
+experts <- anes2012$polknow_factual > median(anes2012$polknow_factual)
+for(var in c("ftgr_xian","ftgr_catholics","ftgr_xfund","ftgr_mormons","ftgr_atheists"
+             , "ftgr_feminists", "ftgr_middle", "ftgr_unions", "ftgr_poor","ftgr_bigbus"
+             , "ftgr_welfare", "ftgr_working", "ftgr_gay","ftgr_rich","ftgr_muslims","ftgr_tea")){
   tmp <- (Recode(raw2012[,var], "-9:-1=NA") - 50) / 50
   res <- t.test(tmp[experts]~anes2012$vote_rep[experts])
+  tmp[is.na(tmp)] <- 0
   ## select only social groups that:
   ## - are positively evaluated by one voting block and negatively by the other
   ## - show significant difference in evaluations
-  if((prod(res$estimate) < 0) & (res$p.value < .05)){}
+  if((prod(res$estimate) < 0) & (res$p.value < .05)){
     if(diff(res$estimate)>0){
       social_rep <- social_rep + tmp
-      social_dem <- social_dem - tmp
+      social_rep_n <- social_rep_n + 1
     } else {
-      social_rep <- social_rep - tmp
       social_dem <- social_dem + tmp
+      social_dem_n <- social_dem_n +1
     }
   }
+}
 
-
-## add more groups
-anes2012$ftgr_feminists <- (Recode(raw2012$ftgr_feminists, "-9:-1=NA") - 50) / 50
-anes2012$ftgr_middle <- (Recode(raw2012$ftgr_middle, "-9:-1=NA") - 50) / 50
-anes2012$ftgr_unions <- (Recode(raw2012$ftgr_unions, "-9:-1=NA") - 50) / 50
-anes2012$ftgr_poor <- (Recode(raw2012$ftgr_poor, "-9:-1=NA") - 50) / 50
-anes2012$ftgr_bigbus <- (Recode(raw2012$ftgr_bigbus, "-9:-1=NA") - 50) / 50
-anes2012$ftgr_welfare <- (Recode(raw2012$ftgr_welfare, "-9:-1=NA") - 50) / 50
-anes2012$ftgr_working <- (Recode(raw2012$ftgr_working, "-9:-1=NA") - 50) / 50
-anes2012$ftgr_gay <- (Recode(raw2012$ftgr_gay, "-9:-1=NA") - 50) / 50
-anes2012$ftgr_rich <- (Recode(raw2012$ftgr_rich, "-9:-1=NA") - 50) / 50
-anes2012$ftgr_muslims <- (Recode(raw2012$ftgr_muslims, "-9:-1=NA") - 50) / 50
-anes2012$ftgr_tea <- (Recode(raw2012$ftgr_tea, "-9:-1=NA") - 50) / 50
-
-t.test(ftgr_atheists~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
-t.test(ftgr_xian~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
-t.test(ftgr_catholics~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
-t.test(ftgr_gay~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
-t.test(ftgr_rich~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
-t.test(ftgr_tea~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
-t.test(ftgr_poor~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
-t.test(ftgr_working~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
-t.test(ftgr_welfare~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
-t.test(ftgr_muslims~vote_rep, data=anes2012[anes2012$polknow_factual>median(anes2012$polknow_factual),])
-# question: only include groups that are positive vs. negative?
-
-
-cv_rpc <- with(anes2012, pid_cont + 
-                 spsrvpr_ego * expert$spsrvpr_rpc + defsppr_ego * expert$defsppr_rpc +
-                 inspre_ego * expert$inspre_rpc + guarpr_ego * expert$guarpr_rpc + 
-                 aidblack_ego * expert$aidblack_rpc + envjob_ego * expert$envjob_rpc)
-               
-cv_dpc <- with(anes2012, - pid_cont + 
-                 spsrvpr_ego * spsrvpr_dpc + defsppr_ego * defsppr_dpc +
-                 inspre_ego * inspre_dpc + guarpr_ego * guarpr_dpc + 
-                 aidblack_ego * aidblack_dpc + envjob_ego * envjob_dpc)
-
+## correct voting variables
+cv_rpc <- (pid + issue_rep + social_rep) / (7 + social_rep_n)
+cv_dpc <- (pid + issue_dem + social_dem) / (7 + social_dem_n)
+anes2012$correct_vote <- anes2012$vote_rep == as.numeric(cv_rpc > cv_dpc)
 
 
 
