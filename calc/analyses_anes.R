@@ -217,18 +217,16 @@ ggsave("../fig/hetreg_pres.pdf",width = 4, height = 3)
 ### validation: pre-post consistency
 #########
 
-m5a <- glm(vc_change ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012, family=binomial("logit"))
-m5b <- glm(vc_change ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012, family=binomial("logit"))
-m5c <- glm(vc_change ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016, family=binomial("logit"))
-m5d <- glm(vc_change ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016, family=binomial("logit"))
+m5a <- glm(correct_vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012, family=binomial("logit"))
+m5b <- glm(correct_vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016, family=binomial("logit"))
 
 res <- rbind(data.frame(sim(m5a, iv=data.frame(polknow_text_mean=seq(min(data2012$polknow_text_mean),max(data2012$polknow_text_mean),length=10)))
                         , value=seq(min(data2012$polknow_text_mean),max(data2012$polknow_text_mean),length=10),Variable="Discursive Sophistication")
-             , data.frame(sim(m5b, iv=data.frame(polknow_factual=seq(0, 1,length=10)))
+             , data.frame(sim(m5a, iv=data.frame(polknow_factual=seq(0, 1,length=10)))
                           , value=seq(0, 1,length=10),Variable="Factual Knowledge")
-             , data.frame(sim(m5c, iv=data.frame(polknow_text_mean=seq(min(data2016$polknow_text_mean),max(data2016$polknow_text_mean),length=10)))
+             , data.frame(sim(m5b, iv=data.frame(polknow_text_mean=seq(min(data2016$polknow_text_mean),max(data2016$polknow_text_mean),length=10)))
                           , value=seq(min(data2016$polknow_text_mean),max(data2016$polknow_text_mean),length=10),Variable="Discursive Sophistication")
-             , data.frame(sim(m5d, iv=data.frame(polknow_factual=seq(0, 1,length=10)))
+             , data.frame(sim(m5b, iv=data.frame(polknow_factual=seq(0, 1,length=10)))
                           , value=seq(0, 1,length=10),Variable="Factual Knowledge"))
 res$ivlab <- factor(res$iv, labels = dvnames)
 res$Year <- rep(c("2012 ANES","2016 ANES"), each=20)
@@ -236,8 +234,8 @@ res$Year <- rep(c("2012 ANES","2016 ANES"), each=20)
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi, fill=Variable, lty=Variable)) + plot_default +
   geom_ribbon(alpha=0.4, lwd=.1) + geom_line() +
   facet_grid(~Year, scales="free_x") +
-  ylab("Expected Probability\nto Keep Vote Choice") + xlab("Value of Independent Variable")
-ggsave("../fig/prepost_exp.pdf",width=5,height=2)
+  ylab("Expected Probability\nof Correct Vote") + xlab("Value of Independent Variable")
+ggsave("../fig/correctvote.pdf",width=5,height=2)
 
 
 ###################
