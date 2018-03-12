@@ -64,8 +64,10 @@ file.remove(dir()[grep("intermediate_dfm_\\d+\\.Rdata", dir())])
 # preText_results_italian <- preText(preprocessed_documents_italian
 #                                    , dataset_name = "Swiss (Italian)", parallel = TRUE, cores = 7)
 
+c(1,2,3) %>% map(~c(rep(.,4),as.character(.)))
+
 ## generate preText score plot
-res %>% map(preText_score_plot)
+res %>% map(~(preText_score_plot(.) + ggtitle("test")))
 # preText_score_plot(preText_results2012)
 # preText_score_plot(preText_results2016)
 # preText_score_plot(preText_results_yougov)
@@ -104,6 +106,32 @@ dev.off()
 ### Replicate measure with smaller number of topics
 ###################
 
+
+replicateSophistication <- function(data, out, k, seed = 12345){
+  ## stm fit with 20 topics
+  stm_fit2012_ktopic <- stm(out2012$documents, out2012$vocab, prevalence = as.matrix(out2012$meta)
+                            , K=20, init.type = "Spectral", seed=12345)
+  
+  ## combine sophistication components with remaining data
+  know <- sophistication(stm_fit2012_ktopic, out2012)
+  
+  ## compute combined measures
+  data2012$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + data2012$ditem)/3
+  
+  
+  ### 2016 ANES
+  
+  ## stm fit with 20 topics
+  stm_fit2016_ktopic <- stm(out2016$documents, out2016$vocab, prevalence = as.matrix(out2016$meta)
+                            , K=20, init.type = "Spectral", seed=12345)
+  
+  ## combine sophistication components with remaining data
+  know <- sophistication(stm_fit2016_ktopic, out2016)
+  
+  ## compute combined measures
+  data2016$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + data2016$ditem)/3
+  
+}
 
 ### 2012 ANES
 

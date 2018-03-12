@@ -214,7 +214,7 @@ ggsave("../fig/hetreg_pres.pdf",width = 4, height = 3)
 
 
 #########
-### validation: pre-post consistency
+### validation: Correct Voting
 #########
 
 m5a <- glm(correct_vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012, family=binomial("logit"))
