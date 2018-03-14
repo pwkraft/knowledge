@@ -27,7 +27,7 @@ load("out/anes2016.Rdata")
 load("out/yougov.Rdata")
 load("out/swiss.Rdata")
 
-## select raw documents in anes
+## select raw documents
 data <- list()
 data$opend2012 <- apply(anes2012opend[anes2012opend$caseid %in% data2012$caseid[1:500], -1]
                         , 1, paste, collapse=' ')
@@ -50,31 +50,8 @@ res <- data %>%
 ## remove intermediate dfms
 file.remove(dir()[grep("intermediate_dfm_\\d+\\.Rdata", dir())])
 
-## run preText
-# preText_results2012 <- preText(preprocessed_documents2012
-#                                , dataset_name = "2012 ANES", parallel = TRUE, cores = 7)
-# preText_results2016 <- preText(preprocessed_documents2016
-#                                , dataset_name = "2016 ANES", parallel = TRUE, cores = 7)
-# preText_results_yougov <- preText(preprocessed_documents_yougov
-#                                   , dataset_name = "2015 YouGov", parallel = TRUE, cores = 7)
-# preText_results_german <- preText(preprocessed_documents_german
-#                                   , dataset_name = "Swiss (German)", parallel = TRUE, cores = 7)
-# preText_results_french <- preText(preprocessed_documents_french
-#                                   , dataset_name = "Swiss (French)", parallel = TRUE, cores = 7)
-# preText_results_italian <- preText(preprocessed_documents_italian
-#                                    , dataset_name = "Swiss (Italian)", parallel = TRUE, cores = 7)
-
-c(1,2,3) %>% map(~c(rep(.,4),as.character(.)))
-
 ## generate preText score plot
 res %>% map(preText_score_plot)
-# preText_score_plot(preText_results2012)
-# preText_score_plot(preText_results2016)
-# preText_score_plot(preText_results_yougov)
-# preText_score_plot(preText_results_german)
-# preText_score_plot(preText_results_french)
-# preText_score_plot(preText_results_italian)
-
 
 ## plot regression results
 extractData <- function(x){
@@ -88,35 +65,16 @@ extractData <- function(x){
 plot_df <- res %>% 
   map(regression_coefficient_plot, remove_intercept = TRUE) %>% 
   map("data") %>% map_dfr(extractData) %>% 
-  mutate(data = rep(names(res), each=nrow(.)/length(res)))
+  mutate(data = rep(names(res), each=nrow(.)/length(res))) %>%
+  mutate(datalab = factor(data, levels = c("opend2012","opend2016","opend_yougov"
+                                           ,"opend_german","opend_french","opend_italian")
+       , labels = c("2012 ANES","2016 ANES","2015 YouGov"
+                    ,"Swiss (German)","Swiss (French)","Swiss (Italian)")))
 
-ggplot(filter(plot_df, data=="opend_italian"), aes(x = xmean, xmin = x, xmax = xend, y = ylab)) +
-  geom_point() + geom_errorbarh(height=0) + labs(y=NULL, x = "Regression Coefficient") + theme_bw()
-
-
-pdf("../fig/pretext2012.pdf", width=5, height=2)
-regression_coefficient_plot(preText_results2012, remove_intercept = TRUE)
-dev.off()
-
-pdf("../fig/pretext2016.pdf", width=5, height=2)
-regression_coefficient_plot(preText_results2016, remove_intercept = TRUE)
-dev.off()
-
-pdf("../fig/pretext_yougov.pdf", width=5, height=2)
-regression_coefficient_plot(preText_results_yougov, remove_intercept = TRUE)
-dev.off()
-
-pdf("../fig/pretext_german.pdf", width=5, height=2)
-regression_coefficient_plot(preText_results_german, remove_intercept = TRUE)
-dev.off()
-
-pdf("../fig/pretext_french.pdf", width=5, height=2)
-regression_coefficient_plot(preText_results_french, remove_intercept = TRUE)
-dev.off()
-
-pdf("../fig/pretext_italian.pdf", width=5, height=2)
-regression_coefficient_plot(preText_results_italian, remove_intercept = TRUE)
-dev.off()
+ggplot(plot_df, aes(x = xmean, xmin = x, xmax = xend, y = ylab)) +
+  geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
+  facet_wrap(~datalab, ncol=2) + labs(y=NULL, x = "Regression Coefficient") + plot_default
+ggsave("../fig/pretext.pdf",width = 6, height = 4)
 
 
 
@@ -125,268 +83,126 @@ dev.off()
 ###################
 
 
-replicateSophistication <- function(data, out, k, seed = 12345){
-  ## stm fit with 20 topics
-  stm_fit2012_ktopic <- stm(out2012$documents, out2012$vocab, prevalence = as.matrix(out2012$meta)
-                            , K=20, init.type = "Spectral", seed=12345)
+robustSoph <- function(data, k, k_original, label
+                       , thresh = 10, stem = TRUE, lang = "english"
+                       , meta = c("age","educ_cont","pid_cont","educ_pid","female")
+                       , seed = 12345){
+  ### function to estimate stm and compute discursive sophistication w/ varying model specifications
+  # data: original dataset containing the following variables:
+  #       - polknow_text_mean: original discursive sophistication measure used in main analyses
+  #       - resp: merged open-ended responses (minor pre-processing applied)
+  #       - ditem: opinionation component of discursive sophistication
+  #       - all variables listed in [meta]
+  # k: number of topics used for stm estimation
+  # k_original: number of topics in original stm
+  # label: label for dataset
+  # thresh: lower threshold in prepDocuments for minimum number of docs each term has to appear in
+  # stem: (logical) whether or not to stem words in textProcessor
+  # lang: language used in textProcessor
+  # meta: variable names (in data) that are used as prevalence covariates in stm estimation
+  # seed: seed used for stm estimation
+  ###
   
-  ## combine sophistication components with remaining data
-  know <- sophistication(stm_fit2012_ktopic, out2012)
+  ### garbage collection
+  gc()
   
-  ## compute combined measures
-  data2012$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + data2012$ditem)/3
+  ## remove missings on metadata
+  data <- data[apply(!is.na(data[,meta]),1,prod)==1,]
   
+  ## process for stm
+  processed <- textProcessor(data$resp, metadata = data[,meta], stem = stem, language = lang
+                             , customstopwords = c("dont", "hes", "that", "etc"))
+  out <- prepDocuments(processed$documents, processed$vocab, processed$meta, lower.thresh = thresh)
   
-  ### 2016 ANES
+  ## remove discarded observations from data
+  if(length(processed$docs.removed)>0) data <- data[-processed$docs.removed,]
+  if(length(out$docs.removed)>0) data <- data[-out$docs.removed,]
   
-  ## stm fit with 20 topics
-  stm_fit2016_ktopic <- stm(out2016$documents, out2016$vocab, prevalence = as.matrix(out2016$meta)
-                            , K=20, init.type = "Spectral", seed=12345)
+  ## stm fit
+  stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+                 , K=k, init.type = "Spectral", seed=seed)
   
-  ## combine sophistication components with remaining data
-  know <- sophistication(stm_fit2016_ktopic, out2016)
+  ## compute sophistication components
+  know <- sophistication(stm_fit, out)
+  know$polknow_text_mean_rep <- (know$ntopics + know$distinct + data$ditem)/3
   
-  ## compute combined measures
-  data2016$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + data2016$ditem)/3
-  
+  ## compute discursive_sophistication
+  out <- tibble(polknow_text_mean = data$polknow_text_mean,
+                polknow_text_mean_rep = know$polknow_text_mean_rep,
+                k = paste0("Fewer Topics (k = ",k,")"),
+                k_original = paste0("k = ",k_original,collapse = ""),
+                datalab = label, thresh = thresh, stem = stem)
+  out
 }
 
-### 2012 ANES
-
-## stm fit with 20 topics
-stm_fit2012_ktopic <- stm(out2012$documents, out2012$vocab, prevalence = as.matrix(out2012$meta)
-                          , K=20, init.type = "Spectral", seed=12345)
-
-## combine sophistication components with remaining data
-know <- sophistication(stm_fit2012_ktopic, out2012)
-
-## compute combined measures
-data2012$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + data2012$ditem)/3
-
-
-### 2016 ANES
-
-## stm fit with 20 topics
-stm_fit2016_ktopic <- stm(out2016$documents, out2016$vocab, prevalence = as.matrix(out2016$meta)
-                        , K=20, init.type = "Spectral", seed=12345)
-
-## combine sophistication components with remaining data
-know <- sophistication(stm_fit2016_ktopic, out2016)
-
-## compute combined measures
-data2016$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + data2016$ditem)/3
-
-
-### 2015 YouGov
-
-## stm fit with 20 topics
-stm_fit_yg_ktopic <- stm(out_yougov$documents, out_yougov$vocab, prevalence = as.matrix(out_yougov$meta)
-                          , K=20, init.type = "Spectral", seed=12345)
-
-## combine sophistication components with remaining data
-know <- sophistication(stm_fit_yg_ktopic, out_yougov)
-
-## compute combined measures
-data_yg$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + data_yg$ditem)/3
-
-
-### Swiss (German)
-
-## stm fit with 20 topics
-stm_fit_german_ktopic <- stm(out_german$documents, out_german$vocab, prevalence = as.matrix(out_german$meta)
-                         , K=20, init.type = "Spectral", seed=12345)
-
-## combine sophistication components with remaining data
-know <- sophistication(stm_fit_german_ktopic, out_german)
-
-## compute combined measures
-opend_german$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + opend_german$ditem)/3
-
-
-### Swiss (French)
-
-## stm fit with 20 topics
-stm_fit_french_ktopic <- stm(out_french$documents, out_french$vocab, prevalence = as.matrix(out_french$meta)
-                             , K=20, init.type = "Spectral", seed=12345)
-
-## combine sophistication components with remaining data
-know <- sophistication(stm_fit_french_ktopic, out_french)
-
-## compute combined measures
-opend_french$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + opend_french$ditem)/3
-
-
-### Swiss (italian)
-
-## stm fit with 20 topics
-stm_fit_italian_ktopic <- stm(out_italian$documents, out_italian$vocab, prevalence = as.matrix(out_italian$meta)
-                             , K=20, init.type = "Spectral", seed=12345)
-
-## combine sophistication components with remaining data
-know <- sophistication(stm_fit_italian_ktopic, out_italian)
-
-## compute combined measures
-opend_italian$polknow_text_mean_ktopic <- (know$ntopics + know$distinct + opend_italian$ditem)/3
-
-
-
-###################
-### Replicate measure without removing infrequent terms
-###################
-
-
-### 2012 ANES
-gc()
-
-## combine regular survey and open-ended data, remove spanish and empty responses
-data2012_thresh <- anes2012 %>% mutate(resp = apply(anes2012spell[,-1],1,paste,collapse=' ')) %>%
-  filter(spanish == 0 & wc != 0)
-
-## remove missings on metadata
-data2012_thresh <- data2012_thresh[apply(!is.na(data2012_thresh[,meta2012]),1,prod)==1,]
-
-## process for stm
-out2012_thresh <- prepDocuments(processed2012$documents, processed2012$vocab, processed2012$meta)
-
-## check changes in vocabulary
-out2012_thresh$vocab
-out2012$vocab[!out2012$vocab %in% out2012_thresh$vocab]
-
-## remove discarded observations from data
-data2012_thresh <- data2012_thresh[-processed2012$docs.removed,]
-data2012_thresh <- data2012_thresh[-out2012_thresh$docs.removed,]
-
-## stm fit with 20 topics 
-# (computing sophistication components w/ large number of topics is computationally intractable w/ infrequent terms)
-stm_fit2012_thresh <- stm(out2012_thresh$documents, out2012_thresh$vocab
-                          , prevalence = as.matrix(out2012_thresh$meta)
-                          , K=20, init.type = "Spectral", seed=12345)
-
-## combine sophistication components with remaining data
-know <- sophistication(stm_fit2012_thresh, out2012_thresh)
-
-## compute combined measures
-data2012_thresh$polknow_text_mean_thresh <- (know$ntopics + know$distinct + data2012_thresh$ditem)/3
-
-## merge with original data
-data2012 <- data2012_thresh %>% 
-  dplyr::select(caseid, polknow_text_mean_thresh) %>% 
-  full_join(data2012)
-rm(data2012_thresh)
-
-
-
-### 2016 ANES
-gc()
-
-## combine regular survey and open-ended data, remove spanish and empty responses
-data2016_thresh <- anes2016 %>% mutate(resp = apply(anes2016spell[,-1],1,paste,collapse=' ')) %>%
-  filter(spanish == 0 & wc != 0)
-
-## remove missings on metadata
-data2016_thresh <- data2016_thresh[apply(!is.na(data2016_thresh[,meta2016]),1,prod)==1,]
-
-## process for stm
-out2016_thresh <- prepDocuments(processed2016$documents, processed2016$vocab, processed2016$meta)
-
-## check changes in vocabulary
-out2016_thresh$vocab
-out2016$vocab[!out2016$vocab %in% out2016_thresh$vocab]
-
-## remove discarded observations from data
-data2016_thresh <- data2016_thresh[-processed2016$docs.removed,]
-data2016_thresh <- data2016_thresh[-out2016_thresh$docs.removed,]
-
-## stm fit with 20 topics 
-# (computing sophistication components w/ large number of topics is computationally intractable w/ infrequent terms)
-stm_fit2016_thresh <- stm(out2016_thresh$documents, out2016_thresh$vocab
-                          , prevalence = as.matrix(out2016_thresh$meta)
-                          , K=20, init.type = "Spectral", seed=12345)
-
-## combine sophistication components with remaining data
-know <- sophistication(stm_fit2016_thresh, out2016_thresh)
-
-## compute combined measures
-data2016_thresh$polknow_text_mean_thresh <- (know$ntopics + know$distinct + data2016_thresh$ditem)/3
-
-## merge with original data
-data2016 <- data2016_thresh %>% 
-  dplyr::select(caseid, polknow_text_mean_thresh) %>% 
-  full_join(data2016)
-rm(data2016_thresh)
-
-
-
-### 2015 YouGov
-gc()
-
-## combine regular survey and open-ended data, remove spanish and empty responses
-data_yg_thresh <- yougov %>% mutate(resp = apply(opend[,-1],1,paste,collapse=' '))
-
-## remove missings on metadata
-data_yg_thresh <- data_yg_thresh[apply(!is.na(data_yg_thresh[,meta]),1,prod)==1,]
-
-## process for stm
-out_yougov_thresh <- prepDocuments(processed_yougov$documents, processed_yougov$vocab, processed_yougov$meta)
-
-## remove discarded observations from data
-data_yg_thresh <- data_yg_thresh[-processed_yougov$docs.removed,]
-data_yg_thresh <- data_yg_thresh[-out_yougov_thresh$docs.removed,]
-
-## stm fit with 20 topics 
-# (computing sophistication components w/ large number of topics is computationally intractable w/ infrequent terms)
-stm_fit_yg_thresh <- stm(out_yougov$documents, out_yougov$vocab, prevalence = as.matrix(out_yougov$meta)
-                         , K=20, init.type = "Spectral", seed=12345)
-
-## combine sophistication components with remaining data
-know <- sophistication(stm_fit_yg_thresh, out_yougov_thresh)
-
-## compute combined measures
-data_yg_thresh$polknow_text_mean_thresh <- (know$ntopics + know$distinct + data_yg_thresh$ditem)/3
-
-## merge with original data
-data_yg <- data_yg_thresh %>% 
-  dplyr::select(caseid, polknow_text_mean_thresh) %>% 
-  full_join(data_yg_thresh)
-rm(data_yg_thresh)
-
-
-
-#########
-# Validation: compare number of topics
-#########
-
-p1 <- ggplot(data2012, aes(x=polknow_text_mean, y=polknow_text_mean_ktopic)) +
-  geom_point(alpha=.05) + geom_smooth(method="lm") +  ggtitle("2012 ANES") + xlim(0,1) + ylim(0,1) +
-  xlab("") + ylab("Reduced Number of Topics\n(k = 20)") +
-  annotate("text", x=0.1, y=max(data2012$polknow_text_mean_ktopic, na.rm = T), size=2
-           , label = paste0("r = ",round(cor(data2012$polknow_text_mean, data2012$polknow_text_mean_ktopic, use="complete.obs"), 2))) +
-  theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
-
-p2 <- ggplot(data2016, aes(x=polknow_text_mean, y=polknow_text_mean_ktopic)) +
-  geom_point(alpha=.05) + geom_smooth(method="lm") + ggtitle("2016 ANES") + xlim(0,1) + ylim(0,1) +
-  xlab("") + ylab("") +
-  annotate("text", x=.1, y=max(data2016$polknow_text_mean_ktopic, na.rm = T), size=2
-           , label = paste0("r = ",round(cor(data2016$polknow_text_mean, data2016$polknow_text_mean_ktopic, use="complete.obs"), 2))) +
-  theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
-
-p3 <- ggplot(data2012, aes(x=polknow_text_mean, y=polknow_text_mean_thresh)) +
-  geom_point(alpha=.05) + geom_smooth(method="lm") + xlim(0,1) + ylim(0,1) +
-  xlab(paste0("Preferred Specification\n(k = ",stm_fit2012$settings$dim$K,")",collapse = "")) +
-  ylab("Reduced Number of Topics\n+ Include Infrequent Terms") +
-  annotate("text", x=0.1, y=max(data2012$polknow_text_mean_thresh), size=2
-           , label = paste0("r = ",round(cor(data2012$polknow_text_mean, data2012$polknow_text_mean_thresh, use="complete.obs"), 2))) +
-  theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
-
-p4 <- ggplot(data2016, aes(x=polknow_text_mean, y=polknow_text_mean_thresh)) +
-  geom_point(alpha=.05) + geom_smooth(method="lm") + xlim(0,1) + ylim(0,1) +
-  xlab(paste0("Preferred Specification\n(k = ",stm_fit2016$settings$dim$K,")",collapse = "")) + 
-  ylab("") +
-  annotate("text", x=.1, y=max(data2016$polknow_text_mean_thresh), size=2
-           , label = paste0("r = ",round(cor(data2016$polknow_text_mean, data2016$polknow_text_mean_thresh, use="complete.obs"), 2))) +
-  theme_classic(base_size=8) + theme(panel.border = element_rect(fill=NA))
-
-(p0 <- grid.arrange(p1, p2, p3, p4, ncol=2))
-ggsave("../fig/pretext_robustness.pdf", p0, width=4, height=4)
-
+## compare discursive sophistication for different model specifications (save intermediate steps)
+plot_df <- bind_rows(
+  robustSoph(data2012, 20, stm_fit2012$settings$dim$K, "2012 ANES")
+  , robustSoph(data2016, 20, stm_fit2016$settings$dim$K, "2016 ANES")
+  , robustSoph(data_yg, 20, stm_fit$settings$dim$K, "2015 YouGov"))
+save(plot_df, file = "tmp/tmp01.Rdata")
+
+plot_df <- plot_df %>% bind_rows(
+  robustSoph(opend_german, 20, stm_fit_german$settings$dim$K, "Swiss (German)"
+             , lang = "german", meta = c("age", "edu", "ideol", "edu_ideol", "female"))
+  , robustSoph(opend_french, 20, stm_fit_french$settings$dim$K, "Swiss (French)"
+               , lang = "french", meta = c("age", "edu", "ideol", "edu_ideol", "female"))
+  , robustSoph(opend_italian, 20, stm_fit_italian$settings$dim$K, "Swiss (Italian)"
+               , lang = "italian", meta = c("age", "edu", "ideol", "edu_ideol", "female")))
+save(plot_df, file = "tmp/tmp02.Rdata")  
+  
+plot_df <- plot_df %>% bind_rows(
+  robustSoph(data2012, 20, stm_fit2012$settings$dim$K, "2012 ANES", thresh=1)
+  , robustSoph(data2016, 20, stm_fit2016$settings$dim$K, "2016 ANES", thresh=1)
+  , robustSoph(data_yg, 20, stm_fit$settings$dim$K, "2015 YouGov", thresh=1))
+save(plot_df, file = "tmp/tmp03.Rdata")  
+
+plot_df <- plot_df %>% bind_rows(
+  robustSoph(opend_german, 20, stm_fit_german$settings$dim$K, "Swiss (German)", thresh=1
+             , lang = "german", meta = c("age", "edu", "ideol", "edu_ideol", "female"))
+  , robustSoph(opend_french, 20, stm_fit_french$settings$dim$K, "Swiss (French)", thresh=1
+               , lang = "french", meta = c("age", "edu", "ideol", "edu_ideol", "female"))
+  , robustSoph(opend_italian, 20, stm_fit_italian$settings$dim$K, "Swiss (Italian)", thresh=1
+               , lang = "italian", meta = c("age", "edu", "ideol", "edu_ideol", "female")))
+save(plot_df, file = "tmp/tmp04.Rdata")  
+
+plot_df <- plot_df %>% bind_rows(
+  robustSoph(data2012, 20, stm_fit2012$settings$dim$K, "2012 ANES", stem = FALSE)
+  , robustSoph(data2016, 20, stm_fit2016$settings$dim$K, "2016 ANES", stem = FALSE)
+  , robustSoph(data_yg, 20, stm_fit$settings$dim$K, "2015 YouGov", stem = FALSE))
+save(plot_df, file = "tmp/tmp05.Rdata")
+
+plot_df <- plot_df %>% bind_rows(
+  robustSoph(opend_german, 20, stm_fit_german$settings$dim$K, "Swiss (German)", stem = FALSE
+             , lang = "german", meta = c("age", "edu", "ideol", "edu_ideol", "female"))
+  , robustSoph(opend_french, 20, stm_fit_french$settings$dim$K, "Swiss (French)", stem = FALSE
+               , lang = "french", meta = c("age", "edu", "ideol", "edu_ideol", "female"))
+  , robustSoph(opend_italian, 20, stm_fit_italian$settings$dim$K, "Swiss (Italian)", stem = FALSE
+               , lang = "italian", meta = c("age", "edu", "ideol", "edu_ideol", "female")))
+save(plot_df, file = "tmp/tmp06.Rdata")
+
+## prepare data for plotting
+plot_df <- plot_df %>% 
+  mutate(datalab = factor(datalab, levels = c("2012 ANES","2016 ANES","2015 YouGov"
+                                              ,"Swiss (French)","Swiss (German)","Swiss (Italian)"
+                                              ))
+         , condition = factor(stem + thresh, levels = c("11","2","10")
+                              , labels = c("","+ Include Infrequent Terms"
+                                           ,"+ No Stemming"))
+         , combined = paste(k, condition, sep="\n"))
+
+## compute correlations for subgroups
+plot_cor <- plot_df %>%
+  group_by(datalab, k_original, combined) %>%
+  summarize(cor = paste0("r = ",round(cor(polknow_text_mean, polknow_text_mean_rep), 2))) %>%
+  mutate(polknow_text_mean = .9, polknow_text_mean_rep = .1)
+
+## generate plot
+ggplot(plot_df, aes(y=polknow_text_mean, x=polknow_text_mean_rep)) + 
+  geom_point(alpha=.05) + geom_smooth(method="lm") + facet_grid(datalab+k_original~combined) + 
+  geom_text(data=plot_cor, aes(label=cor), size=2) + xlim(0,1) + ylim(0,1) + 
+  labs(y = "Discursive Sophistication (Preferred Specification)",
+       x = "Discursive Sophistication (Alternative Specifications)") + 
+  plot_default
+ggsave("../fig/pretext_robustness.pdf", width=6, height=6)
 

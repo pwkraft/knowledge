@@ -63,8 +63,8 @@ swiss$constring1[swiss$constring1 %in% c(99999997,99999998)] <- ""
 swiss$constring2[swiss$constring2 %in% c(99999997,99999998)] <- ""
 
 ## combine pro and con
-swiss$string1 <- tolower(paste(swiss$prostring1, swiss$constring1))
-swiss$string2 <- tolower(paste(swiss$prostring2, swiss$constring2))
+swiss$string1 <- paste(swiss$prostring1, swiss$constring1)
+swiss$string2 <- paste(swiss$prostring2, swiss$constring2)
   
 ## minor pre-processing
 opend <- apply(swiss[,c("string1","string2")], 2, function(x){
@@ -117,8 +117,7 @@ swiss$ditem <- apply(opend, 1, function(x){
 ## combine regular survey and open-ended data
 ## ADD: type of referendum as a meta-covariate
 meta <- c("age", "edu", "ideol", "edu_ideol", "female")
-swiss$resp <- apply(dplyr::select(swiss, prostring1:constring2),1,paste,collapse=' ')
-  
+swiss$resp <- apply(dplyr::select(opend, string1:string2),1,paste,collapse=' ')
 
 ## remove additional whitespaces
 swiss$resp <- gsub("\\s+"," ", swiss$resp)
