@@ -67,7 +67,7 @@ file.remove(dir()[grep("intermediate_dfm_\\d+\\.Rdata", dir())])
 c(1,2,3) %>% map(~c(rep(.,4),as.character(.)))
 
 ## generate preText score plot
-res %>% map(~(preText_score_plot(.) + ggtitle("test")))
+res %>% map(preText_score_plot)
 # preText_score_plot(preText_results2012)
 # preText_score_plot(preText_results2016)
 # preText_score_plot(preText_results_yougov)
@@ -75,7 +75,25 @@ res %>% map(~(preText_score_plot(.) + ggtitle("test")))
 # preText_score_plot(preText_results_french)
 # preText_score_plot(preText_results_italian)
 
-## generate regression results
+
+## plot regression results
+extractData <- function(x){
+  out <- x[[2]]
+  out$xmean <- x[[3]]$x
+  out$ylab <- factor(out$y, labels = c("Lowercase","Remove Infrequent Terms","Remove Numbers"
+                                       ,"Remove Punctuation","Remove Stopwords","Stemming"))
+  out
+}
+
+plot_df <- res %>% 
+  map(regression_coefficient_plot, remove_intercept = TRUE) %>% 
+  map("data") %>% map_dfr(extractData) %>% 
+  mutate(data = rep(names(res), each=nrow(.)/length(res)))
+
+ggplot(filter(plot_df, data=="opend_italian"), aes(x = xmean, xmin = x, xmax = xend, y = ylab)) +
+  geom_point() + geom_errorbarh(height=0) + labs(y=NULL, x = "Regression Coefficient") + theme_bw()
+
+
 pdf("../fig/pretext2012.pdf", width=5, height=2)
 regression_coefficient_plot(preText_results2012, remove_intercept = TRUE)
 dev.off()
