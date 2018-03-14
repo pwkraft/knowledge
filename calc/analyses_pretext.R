@@ -135,6 +135,12 @@ robustSoph <- function(data, k, k_original, label
   out
 }
 
+## remove data
+try(rm(anes2012, anes2012opend, anes2012spell, anes2016, anes2016opend, anes2016spell
+       , data, extractData, hetreg_summary2012, hetreg_summary2016, latexTable, meta, meta2012
+       , meta2016, opend, out, out_yougov, out2012, out2016, plot_df, processed, processed_yougov
+       , processed2012, processed2016, res, swiss, yougov))
+
 ## compare discursive sophistication for different model specifications (save intermediate steps)
 plot_df <- bind_rows(
   robustSoph(data2012, 20, stm_fit2012$settings$dim$K, "2012 ANES")
