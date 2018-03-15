@@ -8,40 +8,40 @@
     \centering
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics{../fig/anes2012_wc.pdf}
+        \includegraphics{/data/Dropbox/Uni/Projects/2016/knowledge/fig/anes2012_wc.pdf}
         \caption{2012 ANES}
     \end{subfigure}%
 	\begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics{../fig/anes2016_wc.pdf}
+        \includegraphics{/data/Dropbox/Uni/Projects/2016/knowledge/fig/anes2016_wc.pdf}
         \caption{2016 ANES}
     \end{subfigure}%
     
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
-        \includegraphics{../fig/yg_wc.pdf}
+        \includegraphics{/data/Dropbox/Uni/Projects/2016/knowledge/fig/yg_wc.pdf}
         \caption{2015 YouGov}
     \end{subfigure}
     \begin{subfigure}[t]{0.49\textwidth}
          \centering
-         \includegraphics{../fig/swiss_wc.pdf}
+         \includegraphics{/data/Dropbox/Uni/Projects/2016/knowledge/fig/swiss_wc.pdf}
          \caption{Swiss Survey}
     \end{subfigure}
     \caption{Histograms of total word count in the collection of open-ended responses for each individual. The dashed red lines indicate the average response lengths in each survey.}\label{fig:wc}
 \end{figure*}
 
 \begin{figure}[h]\centering
-\includegraphics[width=\textwidth]{../fig/anes_stm_prop.pdf}
+\includegraphics[width=\textwidth]{/data/Dropbox/Uni/Projects/2016/knowledge/fig/anes_stm_prop.pdf}
 \caption{Estimated topic proportions in the 2012 and 2016 ANES based on the structural topic model. See Appendix B for details on the model specification.}\label{fig:anes_stm_prop}
 \end{figure}
 
 \begin{figure}[h]\centering
-\includegraphics[width=.5\textwidth]{../fig/yg_stm_prop.pdf}
+\includegraphics[width=.5\textwidth]{/data/Dropbox/Uni/Projects/2016/knowledge/fig/yg_stm_prop.pdf}
 \caption{Estimated topic proportions in the 2015 YouGov survey based on the structural topic model. See Appendix B for details on the model specification.}\label{fig:yg_stm_prop}
 \end{figure}
 
 \begin{figure}[h]\centering
-\includegraphics[width=\textwidth]{../fig/swiss_stm_prop.pdf}
+\includegraphics[width=\textwidth]{/data/Dropbox/Uni/Projects/2016/knowledge/fig/swiss_stm_prop.pdf}
 \caption{Estimated topic proportions in the Swiss survey based on the structural topic model. See Appendix B for details on the model specification.}\label{fig:swiss_stm_prop}
 \end{figure}
 
@@ -49,23 +49,23 @@
     \centering
     \begin{subfigure}[h]{0.5\textwidth}
         \centering
-        \includegraphics{../fig/anes2012_corplot_components.pdf}
+        \includegraphics{/data/Dropbox/Uni/Projects/2016/knowledge/fig/anes2012_corplot_components.pdf}
         \caption{2012 ANES}
     \end{subfigure}%
     \begin{subfigure}[h]{0.5\textwidth}
          \centering
-         \includegraphics{../fig/anes2016_corplot_components.pdf}
+         \includegraphics{/data/Dropbox/Uni/Projects/2016/knowledge/fig/anes2016_corplot_components.pdf}
          \caption{2016 ANES}
     \end{subfigure}%
     
     \begin{subfigure}[h]{0.49\textwidth}
         \centering
-        \includegraphics{../fig/yg_corplot_components.pdf}
+        \includegraphics{/data/Dropbox/Uni/Projects/2016/knowledge/fig/yg_corplot_components.pdf}
         \caption{2015 YouGov}
     \end{subfigure}
     \begin{subfigure}[h]{0.49\textwidth}
          \centering
-         \includegraphics{../fig/swiss_corplot_components.pdf}
+         \includegraphics{/data/Dropbox/Uni/Projects/2016/knowledge/fig/swiss_corplot_components.pdf}
          \caption{Swiss Survey}
     \end{subfigure}
     \caption{Correlation matrix of individual components of discursive sophistication. The plots on the diagonal display univariate densities for each component. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient.}\label{fig:components}
@@ -83,7 +83,7 @@
 Two components of discursive sophistication (\textit{considerations} and \textit{word choice}) rely on quantities extracted from structural topic models \citep{roberts2014structural}. As with any other text-as-data approach, a necessary first step before estimating the topic model is to pre-process the raw text and convert it into a document term matrix \citep[DTM, see for example][]{manning2008introduction}. Common pre-processing procedures include stemming and lowercasing, as well as the removal of numbers, punctuation, stopwords, and infrequent terms. However, topic models and other unsupervised learning techniques can be sensitive to these pre-processing choices \citep[c.f.,][]{denny2018text}. To address this issue, \citet{denny2018text} recommend that researchers compare DTMs under all possible pre-processing regimes. The authors propose \textit{preText scores} as a measure to quantify the extent to which varying pre-processing regimes may yield unusual results compared to a baseline without any pre-processing.
 
 \begin{figure}[h]
-\centering\includegraphics{../fig/pretext.pdf}
+\centering\includegraphics{/data/Dropbox/Uni/Projects/2016/knowledge/fig/pretext.pdf}
     \caption{PreText analysis of pre-processing decisions of open-ended responses across all datasets. Regression coefficients display the effects of each of the six pre-processing choices on the resulting preText score.}\label{fig:pretext}
 \end{figure}
 
@@ -92,7 +92,7 @@ Following the procedure outlined in \citet{denny2018text}, Figure~\ref{fig:prete
 It is less obvious from a theoretical perspective whether to remove infrequent terms from open-ended responses, although it is preferred in order to make the estimation of the discursive sophistication components computationally efficient. Since the preText analysis for 2016 suggests that this pre-processing step might be influential, I compare discursive sophistication for both alternative regimes below \citep[c.f.,][]{denny2018text}. Before turning to this sensitivity check, however, I consider another crucial modeling choice when working with topic models: determining the total number of topics $k$ to be estimated. For all analyses reported below, the number of topics was selected using the algorithm proposed by \citet{lee2014low} and implemented in the \texttt{stm} package in \textbf{R} \citep{roberts2014stm}.\footnote{I used measures for age, gender, education, party identification, as well as an interaction between education and party identification as covariates for topic prevalence. This variable selection---with the exception of including gender---is equivalent to the procedure model specification described in \citet{roberts2014structural}.} 
 
 \begin{figure}[h]\centering
-\includegraphics{../fig/pretext_robustness.pdf}
+\includegraphics{/data/Dropbox/Uni/Projects/2016/knowledge/fig/pretext_robustness.pdf}
 \caption{Robustness of discursive sophistication measure for different pre-processing choices and topic model specifications.}\label{fig:pretext_robustness}
 \end{figure}
 

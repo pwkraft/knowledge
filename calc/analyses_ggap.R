@@ -202,7 +202,6 @@ m1[[3]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + 
 m1[[4]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data2016)
 lapply(m1, summary)
 
-
 # prepare dataframe for plotting (sloppy code)
 dfplot1 <- data.frame()
 for(i in 1:length(m1)){
