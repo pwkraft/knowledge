@@ -79,7 +79,7 @@ ggsave("../fig/pretext.pdf",width = 6, height = 4)
 
 
 ###################
-### Replicate measure with smaller number of topics
+### Replicate measure with varying model specifications + pre-processing choices
 ###################
 
 
@@ -135,11 +135,12 @@ robustSoph <- function(data, k, k_original, label
   out
 }
 
-## remove data
+## clear workspace
 try(rm(anes2012, anes2012opend, anes2012spell, anes2016, anes2016opend, anes2016spell
        , data, extractData, hetreg_summary2012, hetreg_summary2016, latexTable, meta, meta2012
        , meta2016, opend, out, out_yougov, out2012, out2016, plot_df, processed, processed_yougov
        , processed2012, processed2016, res, swiss, yougov))
+gc()
 
 ## compare discursive sophistication for different model specifications (save intermediate steps)
 plot_df <- bind_rows(
@@ -190,8 +191,7 @@ save(plot_df, file = "tmp/tmp06.Rdata")
 ## prepare data for plotting
 plot_df <- plot_df %>% 
   mutate(datalab = factor(datalab, levels = c("2012 ANES","2016 ANES","2015 YouGov"
-                                              ,"Swiss (French)","Swiss (German)","Swiss (Italian)"
-                                              ))
+                                              ,"Swiss (French)","Swiss (German)","Swiss (Italian)"))
          , condition = factor(stem + thresh, levels = c("11","2","10")
                               , labels = c("","+ Include Infrequent Terms"
                                            ,"+ No Stemming"))
@@ -210,5 +210,5 @@ ggplot(plot_df, aes(y=polknow_text_mean, x=polknow_text_mean_rep)) +
   labs(y = "Discursive Sophistication (Preferred Specification)",
        x = "Discursive Sophistication (Alternative Specifications)") + 
   plot_default
-ggsave("../fig/pretext_robustness.pdf", width=6, height=6)
+ggsave("../fig/pretext_robustness.pdf", width=6, height=8)
 
