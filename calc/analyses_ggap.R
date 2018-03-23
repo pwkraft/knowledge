@@ -102,8 +102,8 @@ p2 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) 
 
 ### Yougov Data
 
-plot_df <- data.frame(rbind(cbind(data$polknow_text_mean, data$female, 1)
-                            , cbind(data$know_pol, data$female, 2))) %>% na.omit()
+plot_df <- data.frame(rbind(cbind(data_yg$polknow_text_mean, data_yg$female, 1)
+                            , cbind(data_yg$know_pol, data$female, 2))) %>% na.omit()
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
 plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"))
@@ -217,7 +217,7 @@ dfplot1$source <- rep(c("2012 ANES", "2016 ANES"), each=nrow(dfplot1)/2)
 
 # create factor variables, remove intercept for plotting
 dfplot1$ivnames <- factor(dfplot1$ivnames, levels = rev(ivnames))
-dfplot1$dv <- factor(dfplot1$dv, levels = dvnames[1:3])
+dfplot1$dv <- factor(dfplot1$dv, levels = dvnames[1:2])
 dfplot1 <- dfplot1[dfplot1$ivnames!="Intercept",]
 
 ### Add YouGov data
@@ -228,9 +228,9 @@ ivnames_yg <- c("Intercept", "Female", "College", "Income", "log(Age)", "Church"
 
 # model estimation
 m2 <- NULL
-m2[[1]] <- lm(polknow_text_mean ~ female + educ + faminc + log(age) + relig + black, data = data)
-m2[[2]] <- lm(know_pol ~ female + educ + faminc + log(age) + relig + black, data = data)
-#m2[[3]] <- lm(know_dis ~ female + educ + faminc + log(age) + relig  + black, data = data)
+m2[[1]] <- lm(polknow_text_mean ~ female + educ + faminc + log(age) + relig + black, data = data_yg)
+m2[[2]] <- lm(know_pol ~ female + educ + faminc + log(age) + relig + black, data = data_yg)
+#m2[[3]] <- lm(know_dis ~ female + educ + faminc + log(age) + relig  + black, data = data_yg)
 lapply(m2, summary)
 
 # prepare dataframe for plotting (sloppy code)
