@@ -41,8 +41,8 @@ plot_empty <- theme_classic(base_size=9) + theme(panel.border = element_rect(fil
 
 
 ### Check more comprehensive sophistication measure instead of pure factual knowledge
-#data2012$polknow_factual <- with(data2012, polknow_factual + polint + polmedia + poldisc)/3
-#data2016$polknow_factual <- with(data2016, polknow_factual + polint + polmedia + poldisc)/3
+#data2012$polknow_factual <- with(data2012, polknow_factual + educ + faminc)/3
+#data2016$polknow_factual <- with(data2016, polknow_factual + educ + faminc)/3
 
 ########
 # correlation matrices: compare with common measures
