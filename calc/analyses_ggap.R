@@ -103,7 +103,7 @@ p2 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) 
 ### Yougov Data
 
 plot_df <- data.frame(rbind(cbind(data_yg$polknow_text_mean, data_yg$female, 1)
-                            , cbind(data_yg$know_pol, data$female, 2))) %>% na.omit()
+                            , cbind(data_yg$know_pol, data_yg$female, 2))) %>% na.omit()
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
 plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"))
