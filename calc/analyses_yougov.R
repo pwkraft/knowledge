@@ -50,15 +50,15 @@ dev.off()
 ########
 
 ### compare measures
-summary(lm(know_dis ~ polknow_text_mean + know_pol, data=data))
-summary(lm(know_dis ~ polknow_text_mean + know_pol + female + log(age) + black + relig + educ + faminc, data=data))
+summary(lm(know_dis ~ polknow_text_mean + know_pol, data=data_yg))
+summary(lm(know_dis ~ polknow_text_mean + know_pol + female + log(age) + black + relig + educ + faminc, data=data_yg))
 ## argument: Discursive sophistication is a better measure of competence in the sense that the respondents pick up 
 ## information about the disease
 
 ## closing gender gap is replicated!
-summary(lm(polknow_text_mean ~ female + educ + log(age) + black + relig + educ + faminc, data=data))
-summary(lm(know_pol ~ female + educ + log(age) + black + relig + educ + faminc, data=data))
-summary(lm(know_dis ~ female + educ + log(age) + black + relig + educ + faminc, data=data))
+summary(lm(polknow_text_mean ~ female + educ + log(age) + black + relig + educ + faminc, data=data_yg))
+summary(lm(know_pol ~ female + educ + log(age) + black + relig + educ + faminc, data=data_yg))
+summary(lm(know_dis ~ female + educ + log(age) + black + relig + educ + faminc, data=data_yg))
 
 
 
@@ -66,7 +66,7 @@ summary(lm(know_dis ~ female + educ + log(age) + black + relig + educ + faminc, 
 # correlation matrices: compare with common measures
 ########
 
-datcor <- data[,c("polknow_text_mean","know_pol", "know_dis")]
+datcor <- data_yg[,c("polknow_text_mean","know_pol", "know_dis")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 pdf("../fig/yg_corplot.pdf",width=2.5, height=2.5)
@@ -82,12 +82,12 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), 
 dev.off()
 
 
-datcor <- data[,c("ntopics","distinct","ditem")]
+datcor <- data_yg[,c("ntopics","distinct","ditem")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
         , columnLabels = c("Considerations","Word Choice","Opinionation")) + plot_default
-ggsave("../fig/yg_corplot_components.pdf",width=3.2, height=3.2)
+ggsave("../fig/yg_corplot_components.pdf",width=2.6, height=2.6)
 
 
 ########
@@ -97,16 +97,16 @@ ggsave("../fig/yg_corplot_components.pdf",width=3.2, height=3.2)
 
 ### Joint model controlling for both measures
 
-m2full <- lm(know_dis ~ polknow_text_mean + know_pol + female + educ + faminc + log(age) + black + relig, data = data)
+m2full <- lm(know_dis ~ polknow_text_mean + know_pol + female + educ + faminc + log(age) + black + relig, data = data_yg)
 
-res <- rbind(data.frame(sim(m2full, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean)))
+res <- rbind(data.frame(sim(m2full, iv=data.frame(polknow_text_mean=range(data_yg$polknow_text_mean)))
                         , Variable="Discursive Sophistication")
-             , data.frame(sim(m2full, iv=data.frame(know_pol=range(data$know_pol)))
+             , data.frame(sim(m2full, iv=data.frame(know_pol=range(data_yg$know_pol)))
                           , Variable="Factual Knowledge"))
 
-res <- rbind(data.frame(sim(m2full, iv=data.frame(polknow_text_mean=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10)))
-                        ,value=seq(min(data$polknow_text_mean),max(data$polknow_text_mean),length=10),Variable="Discursive Sophistication")
-             , data.frame(sim(m2full, iv=data.frame(know_pol=seq(0,1,length=10)))
+res <- rbind(data.frame(sim(m2full, iv=data.frame(polknow_text_mean=seq(min(data_yg$polknow_text_mean),max(data_yg$polknow_text_mean),length=10)))
+                        ,value=seq(min(data_yg$polknow_text_mean),max(data_yg$polknow_text_mean),length=10),Variable="Discursive Sophistication")
+             , data.frame(sim(m2full, iv=data_yg.frame(know_pol=seq(0,1,length=10)))
                           ,value=seq(0,1,length=10),Variable="Factual Knowledge"))
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_default +
   geom_ribbon(alpha=0.4, lwd=.1) + geom_line() + 
