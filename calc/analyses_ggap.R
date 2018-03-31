@@ -260,8 +260,8 @@ dfplot$source <- factor(dfplot$source, levels=c("2012 ANES", "2016 ANES", "2015 
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
-  geom_point() + geom_errorbarh(height = 0) + facet_grid(source~dv, scale="free_x") +
-  plot_default
+  geom_point() + geom_errorbarh(height = 0) + facet_grid(source~dv, scale="free") +
+  plot_default + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ggsave("../fig/determinants.pdf",width=5,height=4)
 
 
