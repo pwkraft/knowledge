@@ -56,7 +56,7 @@ ggsave("../fig/anes2016_wc.pdf", width = 3, height = 2)
 # correlation matrices: compare with common measures
 ########
 
-datcor <- data[,c("polknow_text_mean","polknow_factual","polknow_evalpre")]
+datcor <- data2012[,c("polknow_text_mean","polknow_factual","polknow_evalpre")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 #pdf("../fig/corplot_pres.pdf",width=3.3, height=3.3)
@@ -267,12 +267,12 @@ m2 <- glm(as.numeric(wc>0) ~ female + polmedia + poldisc + educ + faminc + log(a
 summary(m2)
 
 ## gender differences in willingness to respond & length of response
-mean(data$wc)
-t.test(wc~female, data=data)
+mean(data2012$wc)
+t.test(wc~female, data=data2012)
 t.test(as.numeric(wc>0)~female, data=anes2012)
 
 ## prep data for heckit model
-heck_tmp <- data.frame(caseid=data$caseid, polknow_text_mean=data$polknow_text_mean)
+heck_tmp <- data.frame(caseid=data2012$caseid, polknow_text_mean=data2012$polknow_text_mean)
 heck_tmp <- merge(anes2012, heck_tmp, all=TRUE)
 heck_tmp$select <- as.numeric(!is.na(heck_tmp$polknow_text_mean))
 
@@ -447,6 +447,44 @@ stargazer(m4d, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 
                                "Wordsum Score","Word Count (log)","Constant"),
           keep.stat = c("n", "rsq", "ll"),
           out = "../tab/knoweff2016_lwc.tex", label = "tab:knoweff2016_lwc", type="text")
+
+
+### Fig 4: Precise positioning of candidates
+
+colnames(hetreg_summary2012) <- gsub("gamma_cihio","gamma_cihi",colnames(hetreg_summary2012))
+colnames(hetreg_summary2016) <- gsub("gamma_cihio","gamma_cihi",colnames(hetreg_summary2016))
+
+hetreg_summary2012 %>%
+  transmute('Policy Position' = factor(policy, labels = c("Ideology","Government Spending","Defense Spending",
+                                                          "Insurance Policy","Job Guarantee","Aid to Blacks",
+                                                          "Environment vs Jobs")),
+            'Candidate' = factor(target, labels = c("Romney","Obama")),
+            'Independent Var.' = factor(measure, labels = c("Factual Knowl.", "Discursive Soph.")),
+            'E[$\\gamma$]' = round(gamma, 3),
+            '$\\text{sd}(\\gamma)$' = round(sd, 3),
+            '95\\% Cred. Int.' = paste0("(",round(gamma_cilo,3),"; ",round(gamma_cihi,3),")"),
+            '$\\hat{R}$' = round(Rhat, 3)) %>% 
+  xtable(caption = "Error variance reduction in candidate placements on multiple issues in the 2012 ANES. 
+         Estimates are used for Figure 4 in the main text.",
+         label="app:hetreg2012") %>% 
+  print(file = "../tab/hetreg2012.tex", caption.placement = "top",
+        include.rownames=FALSE, sanitize.colnames.function = function(x){x})
+  
+hetreg_summary2016 %>%
+  transmute('Policy Position' = factor(policy, labels = c("Ideology","Government Spending","Defense Spending",
+                                                          "Insurance Policy","Job Guarantee","Aid to Blacks",
+                                                          "Environment vs Jobs")),
+            'Candidate' = factor(target, labels = c("Trump","Clinton")),
+            'Independent Var.' = factor(measure, labels = c("Factual Knowl.", "Discursive Soph.")),
+            'E[$\\gamma$]' = round(gamma, 3),
+            '$\\text{sd}(\\gamma)$' = round(sd, 3),
+            '95\\% Cred. Int.' = paste0("(",round(gamma_cilo,3),"; ",round(gamma_cihi,3),")"),
+            '$\\hat{R}$' = round(Rhat, 3)) %>% 
+  xtable(caption = "Error variance reduction in candidate placements on multiple issues in the 2016 ANES.
+         Estimates are used for Figure 4 in the main text.",
+         label="app:hetreg2016") %>% 
+  print(file = "../tab/hetreg2016.tex", caption.placement = "top",
+        include.rownames=FALSE, sanitize.colnames.function = function(x){x})
 
 
 ### Fig 6: Correct voting

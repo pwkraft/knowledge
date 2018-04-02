@@ -192,7 +192,7 @@ hetreg_summary <- rbind(hetreg_summary2012, mutate(hetreg_summary2016, target=pa
 hetreg_summary$policy <- factor(hetreg_summary$policy
                                 , labels = c("Ideology","Government\nSpending","Defense\nSpending"
                                              ,"Insurance\nPolicy","Job\nGuarantee","Aid to\nBlacks","Environment\nvs Jobs"))
-hetreg_summary$measure <- factor(hetreg_summary$measure, levels = rev(levels(hetreg_summary$measure))
+hetreg_summary$measure <- factor(hetreg_summary$measure, levels = c("polknow_factual", "polknow_text_mean")
                                  , labels = c("Factual\nKnowledge", "Discursive\nSophistication"))
 hetreg_summary$target <- factor(hetreg_summary$target
                                 , labels = c("Mitt\nRomney","Barack\nObama"

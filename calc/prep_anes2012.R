@@ -486,10 +486,13 @@ for(p in policies){
     tmp_sigmadif2 <- extract(tmp, par="sigmadif2")[[1]]
     tmp_df <- data.frame(policy = p, target = t, measure = m[1:2]
                          , mean = c(mean(tmp_sigmadif1), mean(tmp_sigmadif2))
-                         , sd = c(sd(tmp_sigmadif1), sd(tmp_sigmadif2))
                          , cilo = c(quantile(tmp_sigmadif1, .025), quantile(tmp_sigmadif2, .025))
                          , cihi = c(quantile(tmp_sigmadif1, .975), quantile(tmp_sigmadif2, .975))
-                         , Rhat = summary(tmp)$summary[c("sigmadif1","sigmadif2"),"Rhat"])
+                         , gamma = summary(tmp)$summary[c("gamma[1]","gamma[2]"),"mean"]
+                         , sd = summary(tmp)$summary[c("gamma[1]","gamma[2]"),"sd"]
+                         , gamma_cilo = summary(tmp)$summary[c("gamma[1]","gamma[2]"),"2.5%"]
+                         , gamma_cihi = summary(tmp)$summary[c("gamma[1]","gamma[2]"),"97.5%"]
+                         , Rhat = summary(tmp)$summary[c("gamma[1]","gamma[2]"),"Rhat"])
     hetreg_summary2012 <- rbind(hetreg_summary2012, tmp_df)
   }
 }
