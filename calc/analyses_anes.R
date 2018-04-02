@@ -94,14 +94,14 @@ ivnames <- c("Intercept", "Gender\n(Female)", "Media\nExposure", "Political\nDis
 ### Joint model controlling for both measures + wordsum index
 
 m4a <- m4b <- NULL
-m4a[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012)
-m4a[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012)
-m4a[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012)
-m4a[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012, family=binomial("logit"))
-m4b[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
-m4b[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
-m4b[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
-m4b[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016, family=binomial("logit"))
+m4a[[1]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012, family=binomial("logit"))
+m4a[[2]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012)
+m4a[[3]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012)
+m4a[[4]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012)
+m4b[[1]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016, family=binomial("logit"))
+m4b[[2]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
+m4b[[3]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
+m4b[[4]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
 
 res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean)))
              , sim(m4a, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
@@ -123,20 +123,20 @@ ggsave("../fig/knoweff_pres.pdf", width=6.5, height=2.2)
 
 ### Robustness check: Joint model controlling for both measures + word count
 
-m4a <- m4b <- NULL
-m4a[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2012)
-m4a[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2012)
-m4a[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2012)
-m4a[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2012, family=binomial("logit"))
-m4b[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2016)
-m4b[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2016)
-m4b[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2016)
-m4b[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2016, family=binomial("logit"))
+m4c <- m4d <- NULL
+m4c[[1]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2012, family=binomial("logit"))
+m4c[[2]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2012)
+m4c[[3]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2012)
+m4c[[4]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2012)
+m4d[[1]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2016, family=binomial("logit"))
+m4d[[2]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2016)
+m4d[[3]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2016)
+m4d[[4]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + lwc, data = data2016)
 
-res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean)))
-             , sim(m4a, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
-             , sim(m4b, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean)))
-             , sim(m4b, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))))
+res <- rbind(sim(m4c, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean)))
+             , sim(m4c, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
+             , sim(m4d, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean)))
+             , sim(m4d, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))))
 res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
                     , labels = c("Turnout","Non-conv. Participation"
                                  , "Internal Efficacy","External Efficacy"))
@@ -153,20 +153,20 @@ ggsave("../fig/knoweff_lwc.pdf", width=6.5, height=2.2)
 
 ### Robustness check: Joint model controlling for personality (extraversion and being reserved)
 
-m4a <- m4b <- NULL
-m4a[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2012)
-m4a[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2012)
-m4a[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2012)
-m4a[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2012, family=binomial("logit"))
-m4b[[1]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2016)
-m4b[[2]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2016)
-m4b[[3]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2016)
-m4b[[4]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2016, family=binomial("logit"))
+m4e <- m4f <- NULL
+m4e[[1]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2012, family=binomial("logit"))
+m4e[[2]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2012)
+m4e[[3]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2012)
+m4e[[4]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2012)
+m4f[[1]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2016, family=binomial("logit"))
+m4f[[2]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2016)
+m4f[[3]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2016)
+m4f[[4]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum + extraversion + reserved, data = data2016)
 
-res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean)))
-             , sim(m4a, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
-             , sim(m4b, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean)))
-             , sim(m4b, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))))
+res <- rbind(sim(m4e, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean)))
+             , sim(m4e, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual)))
+             , sim(m4f, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean)))
+             , sim(m4f, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))))
 res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
                     , labels = c("Turnout","Non-conv. Participation"
                                  , "Internal Efficacy","External Efficacy"))
@@ -264,6 +264,39 @@ tmp <- anes2016opend %>%
   arrange(polknow_text_mean)
 write.csv(t(tmp), file="tmp/select2016.csv")
 
+## high/low considerations
+tmp  <- data2016 %>% 
+  filter(wc > (median(wc) - 5) & wc < (median(wc) + 5)) %>%
+  arrange(ntopics)
+tmp_select <- c(head(tmp$caseid, 10), tail(tmp$caseid, 10))
+tmp <- anes2016opend %>% 
+  filter(V160001 %in% tmp_select) %>%
+  mutate(ntopics = data2016$ntopics[data2016$caseid %in% tmp_select]) %>%
+  arrange(ntopics)
+write.csv(t(tmp), file="tmp/select2016considerations.csv")
+
+## high/low word choice
+tmp  <- data2016 %>% 
+  filter(wc > (median(wc) - 5) & wc < (median(wc) + 5)) %>%
+  arrange(distinct)
+tmp_select <- c(head(tmp$caseid, 10), tail(tmp$caseid, 10))
+tmp <- anes2016opend %>% 
+  filter(V160001 %in% tmp_select) %>%
+  mutate(distinct = data2016$distinct[data2016$caseid %in% tmp_select]) %>%
+  arrange(distinct)
+write.csv(t(tmp), file="tmp/select2016wordchoice.csv")
+
+## high/low ditem
+tmp  <- data2016 %>% 
+  filter(wc > (median(wc) - 5) & wc < (median(wc) + 5)) %>%
+  arrange(ditem)
+tmp_select <- c(head(tmp$caseid, 10), tail(tmp$caseid, 10))
+tmp <- anes2016opend %>% 
+  filter(V160001 %in% tmp_select) %>%
+  mutate(ditem = data2016$ditem[data2016$caseid %in% tmp_select]) %>%
+  arrange(ditem)
+write.csv(t(tmp), file="tmp/select2016opinionation.csv")
+
 data2016 %>% 
   filter(caseid %in% tmp_select) %>% 
   arrange(polknow_text_mean) %>%
@@ -293,3 +326,9 @@ plot(stm_fit2012, "labels", topics=c(16,14,10,8), main="Sample Topics (2012 ANES
 plot(stm_fit2016, "labels", topics=c(1,10,19,17), main="Sample Topics (2016 ANES)")
 dev.off()
 
+
+###################
+### Save results for appendix
+###################
+
+save(m4a, m4b, m4c, m4d, m4e, m4f, m5a, m5b, hetreg_summary, file="out/anes_res.Rdata")

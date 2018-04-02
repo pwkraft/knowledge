@@ -34,18 +34,6 @@ plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(f
 
 
 ########
-# Plot estimated topics
-########
-
-pdf("../fig/yg_stm_prop.pdf", width=6, height=8)
-par(mar=c(4.2,0.5,2.5,0.5))
-plot(stm_fit
-     , main=paste0("YouGov Survey (k = ",stm_fit$settings$dim$K,")",collapse = "")
-     , n=5, labeltype = "prob", text.cex = 1)
-dev.off()
-
-
-########
 # Prelim results
 ########
 
@@ -106,7 +94,7 @@ res <- rbind(data.frame(sim(m2full, iv=data.frame(polknow_text_mean=range(data_y
 
 res <- rbind(data.frame(sim(m2full, iv=data.frame(polknow_text_mean=seq(min(data_yg$polknow_text_mean),max(data_yg$polknow_text_mean),length=10)))
                         ,value=seq(min(data_yg$polknow_text_mean),max(data_yg$polknow_text_mean),length=10),Variable="Discursive Sophistication")
-             , data.frame(sim(m2full, iv=data_yg.frame(know_pol=seq(0,1,length=10)))
+             , data.frame(sim(m2full, iv=data.frame(know_pol=seq(0,1,length=10)))
                           ,value=seq(0,1,length=10),Variable="Factual Knowledge"))
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_default +
   geom_ribbon(alpha=0.4, lwd=.1) + geom_line() + 
@@ -118,46 +106,29 @@ ggsave("../fig/yg_disease.pdf",width=4,height=2)
 ### Additional information: STM summaries
 ###################
 
-##### Generate tables for appendix
+pdf("../fig/yg_stm_prop.pdf", width=6, height=8)
+par(mar=c(4.2,0.5,2.5,0.5))
+plot(stm_fit
+     , main=paste0("YouGov Survey (k = ",stm_fit$settings$dim$K,")",collapse = "")
+     , n=5, labeltype = "prob", text.cex = 1)
+dev.off()
 
-## create labels
-dvlabs <- c("Discursive","Factual","Disease")
-ivlabs <- c("Sex (Female)","Education (College)","Income","log(Age)","Race (Black)"
-            ,"Church Attendance")
 
+###################
+###  Generate tables for appendix
+###################
 
-## Determinants of Political Knowledge
-stargazer(m1, type="text", keep.stat = c("n","rsq")
-          , covariate.labels = ivnames[-1]
-          , dep.var.labels = dvlabs
-          , dep.var.caption = "Dependent Variable: Political Knowledge Measure"
-          , align = TRUE, label="tab:yg_determinants"
-          , model.numbers = FALSE, no.space = T
-          , star.cutoffs = c(.05,.01,.001)
-          , title="Determinants of political knowledge (YouGov data) -- OLS models predicting 
-          political sophistication and disease information retrieval.
-          Positive coefficients indicate higher sophistication. 
-          Standard errors in parentheses. Estimates are used for Figure~\\ref{fig:yg_determinants} 
-          in the main text."
-          , out="../tab/yg_determinants.tex"
-          , font.size = "scriptsize"
-          , column.sep.width = "-5pt"
-          , table.placement="ht")
+## print summary
+summary(m2full)
 
-## Predicting disease information retrieval
-stargazer(m2, type="text", keep.stat = c("n","rsq")
-          , covariate.labels = c("Discursive Sophistication", "Factual Knowledge", ivnames[-1])
-          , dep.var.labels = "Disease Information Retrieval"
-          #, dep.var.caption = ""
-          , align = TRUE, label="tab:yg_disease"
-          , model.numbers = TRUE, no.space = T
-          , star.cutoffs = c(.05,.01,.001)
-          , title="Effects of sophistication (YouGov data) -- OLS models predicting disease 
-          information retrieval.
-          Positive coefficients indicate higher sophistication. 
-          Standard errors in parentheses. Estimates are used for 
-          Figure~\\ref{fig:yg_disease} in the main text."
-          , out="../tab/yg_disease.tex"
-          , font.size = "scriptsize"
-          , column.sep.width = "-5pt"
-          , table.placement="ht")
+## create table
+stargazer(m2full, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          title="Effects of sophistication on information retrieval in the 2015 YouGov study.
+          Standard errors in parentheses. Estimates are used for Figure 3 in the main text.",
+          column.labels = "Information Retrieval",
+          covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
+                               "College Degree","Family Income","Age (log)",
+                               "African American","Church Attendance","Constant"),
+          keep.stat = c("n", "rsq"),
+          out = "../tab/yg_disease.tex", label = "tab:yg_disease", type="text")

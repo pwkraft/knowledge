@@ -73,6 +73,190 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), 
 #dev.off()
 
 
+########
+# distribution of control variables
+########
+
+### Histograms of dependent variables (ANES 2012)
+desc <- list(NULL)
+desc[[1]] <- ggplot(anes2012, aes(x=factor(vote, labels=c("No","Yes")))) + 
+  geom_bar(stat="count") + labs(y="Count", x="Voted in Election") + plot_default
+desc[[2]] <- ggplot(anes2012, aes(x=part)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Non-conv. Participation") + plot_default
+desc[[3]] <- ggplot(anes2012, aes(x=effic_int)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Internal Efficacy") + plot_default
+desc[[4]] <- ggplot(anes2012, aes(x=effic_ext)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Exterbal Efficacy") + plot_default
+desc[[5]] <- ggplot(anes2012, aes(x=factor(correct_vote, labels=c("No","Yes")))) + 
+  geom_bar(stat="count") + labs(y="Count", x="Correct Vote") + plot_default
+desc[[6]] <- ggplot(anes2012, aes(x=ideol_rpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Ideology (Romney)") + plot_default
+desc[[7]] <- ggplot(anes2012, aes(x=ideol_dpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Ideology (Obama)") + plot_default
+desc[[8]] <- ggplot(anes2012, aes(x=spsrvpr_rpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Government Spending (Romney)") + plot_default
+desc[[9]] <- ggplot(anes2012, aes(x=spsrvpr_dpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Government Spending (Obama)") + plot_default
+desc[[10]] <- ggplot(anes2012, aes(x=defsppr_rpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Defense Spending (Romney)") + plot_default
+desc[[11]] <- ggplot(anes2012, aes(x=defsppr_dpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Defense Spending (Obama)") + plot_default
+desc[[12]] <- ggplot(anes2012, aes(x=inspre_rpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Insurance Policy (Romney)") + plot_default
+desc[[13]] <- ggplot(anes2012, aes(x=inspre_dpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Insurance Policy (Obama)") + plot_default
+desc[[14]] <- ggplot(anes2012, aes(x=guarpr_rpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Job Guarantee (Romney)") + plot_default
+desc[[15]] <- ggplot(anes2012, aes(x=guarpr_dpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Job Guarantee (Obama)") + plot_default
+desc[[16]] <- ggplot(anes2012, aes(x=aidblack_rpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Aid to Blacks (Romney)") + plot_default
+desc[[17]] <- ggplot(anes2012, aes(x=aidblack_dpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Aid to Blacks (Obama)") + plot_default
+desc[[18]] <- ggplot(anes2012, aes(x=envjob_rpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Environment vs Jobs (Romney)") + plot_default
+desc[[19]] <- ggplot(anes2012, aes(x=envjob_dpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Environment vs Jobs (Obama)") + plot_default
+pdf("../fig/descriptives_anes2012dv.pdf", width=9, height=9)
+grid.arrange(grobs=desc,ncol=4)
+dev.off()
+
+### Histograms of dependent variables (ANES 2016)
+desc <- list(NULL)
+desc[[1]] <- ggplot(anes2016, aes(x=factor(vote, labels=c("No","Yes")))) + 
+  geom_bar(stat="count") + labs(y="Count", x="Voted in Election") + plot_default
+desc[[2]] <- ggplot(anes2016, aes(x=part)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Non-conv. Participation") + plot_default
+desc[[3]] <- ggplot(anes2016, aes(x=effic_int)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Internal Efficacy") + plot_default
+desc[[4]] <- ggplot(anes2016, aes(x=effic_ext)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Exterbal Efficacy") + plot_default
+desc[[5]] <- ggplot(anes2016, aes(x=factor(correct_vote, labels=c("No","Yes")))) + 
+  geom_bar(stat="count") + labs(y="Count", x="Correct Vote") + plot_default
+desc[[6]] <- ggplot(anes2016, aes(x=ideol_rpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Ideology (Trump)") + plot_default
+desc[[7]] <- ggplot(anes2016, aes(x=ideol_dpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Ideology (Clinton)") + plot_default
+desc[[8]] <- ggplot(anes2016, aes(x=spsrvpr_rpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Government Spending (Trump)") + plot_default
+desc[[9]] <- ggplot(anes2016, aes(x=spsrvpr_dpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Government Spending (Clinton)") + plot_default
+desc[[10]] <- ggplot(anes2016, aes(x=defsppr_rpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Defense Spending (Trump)") + plot_default
+desc[[11]] <- ggplot(anes2016, aes(x=defsppr_dpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Defense Spending (Clinton)") + plot_default
+desc[[12]] <- ggplot(anes2016, aes(x=inspre_rpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Insurance Policy (Trump)") + plot_default
+desc[[13]] <- ggplot(anes2016, aes(x=inspre_dpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Insurance Policy (Clinton)") + plot_default
+desc[[14]] <- ggplot(anes2016, aes(x=guarpr_rpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Job Guarantee (Trump)") + plot_default
+desc[[15]] <- ggplot(anes2016, aes(x=guarpr_dpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Job Guarantee (Clinton)") + plot_default
+desc[[16]] <- ggplot(anes2016, aes(x=aidblack_rpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Aid to Blacks (Trump)") + plot_default
+desc[[17]] <- ggplot(anes2016, aes(x=aidblack_dpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Aid to Blacks (Clinton)") + plot_default
+desc[[18]] <- ggplot(anes2016, aes(x=envjob_rpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Environment vs Jobs (Trump)") + plot_default
+desc[[19]] <- ggplot(anes2016, aes(x=envjob_dpc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Environment vs Jobs (Clinton)") + plot_default
+pdf("../fig/descriptives_anes2016dv.pdf", width=9, height=9)
+grid.arrange(grobs=desc,ncol=4)
+dev.off()
+
+### Histograms of independent variables (ANES 2012)
+desc <- list(NULL)
+desc[[1]] <- ggplot(anes2012, aes(x=factor(female,labels=c("Male","Female")))) + 
+  geom_bar(stat="count") + labs(y="Count", x="Gender") + plot_default
+desc[[2]] <- ggplot(anes2012, aes(x=factor(educ, labels=c("No College","College")))) + 
+  geom_bar(stat="count") + labs(y="Count", x="Education") + plot_default
+desc[[3]] <- ggplot(anes2012, aes(x=faminc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Family Income") + plot_default
+desc[[4]] <- ggplot(anes2012, aes(x=age)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Age") + plot_default
+desc[[5]] <- ggplot(anes2012, aes(x=factor(black,labels=c("Other","Black non-Hispanic")))) + 
+  geom_bar(stat="count") + labs(y="Count", x="Race/Ethnicity") + plot_default
+desc[[6]] <- ggplot(anes2012, aes(x=relig)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Church Attendance") + plot_default
+desc[[7]] <- ggplot(anes2012, aes(x=factor(mode, labels=c("Face-to-Face","Online")))) + 
+  geom_bar(stat="count") + labs(y="Count", x="Survey Mode") + plot_default
+desc[[8]] <- ggplot(anes2012, aes(x=wordsum)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Wordsum Literacy Test") + plot_default
+desc[[9]] <- ggplot(anes2012, aes(x=polmedia)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Political Media Exposure") + plot_default
+desc[[10]] <- ggplot(anes2012, aes(x=poldisc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Political Discussions") + plot_default
+desc[[11]] <- ggplot(anes2012, aes(x=factor(vote, labels=c("No","Yes")))) + 
+  geom_bar(stat="count") + labs(y="Count", x="Voted in 2012") + plot_default
+desc[[12]] <- ggplot(anes2012, aes(x=ideol_ego)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Ideology (Ego)") + plot_default
+desc[[13]] <- ggplot(anes2012, aes(x=spsrvpr_ego)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Government Spending (Ego)") + plot_default
+desc[[14]] <- ggplot(anes2012, aes(x=defsppr_ego)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Defense Spending (Ego)") + plot_default
+desc[[15]] <- ggplot(anes2012, aes(x=inspre_ego)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Insurance Policy (Ego)") + plot_default
+desc[[16]] <- ggplot(anes2012, aes(x=guarpr_ego)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Job Guarantee (Ego)") + plot_default
+desc[[17]] <- ggplot(anes2012, aes(x=aidblack_ego)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Aid to Blacks (Ego)") + plot_default
+desc[[18]] <- ggplot(anes2012, aes(x=envjob_ego)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Environment vs Jobs (Ego)") + plot_default
+desc[[19]] <- ggplot(anes2012, aes(x=extraversion)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Personality: Extraversion") + plot_default
+desc[[20]] <- ggplot(anes2012, aes(x=reserved)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Personality: Reserved") + plot_default
+pdf("../fig/descriptives_anes2012iv.pdf", width=9, height=9)
+grid.arrange(grobs=desc,ncol=4)
+dev.off()
+
+### Histograms of independent variables (ANES 2016)
+desc <- list(NULL)
+desc[[1]] <- ggplot(anes2016, aes(x=factor(female,labels=c("Male","Female")))) + 
+  geom_bar(stat="count") + labs(y="Count", x="Gender") + plot_default
+desc[[2]] <- ggplot(anes2016, aes(x=factor(educ, labels=c("No College","College")))) + 
+  geom_bar(stat="count") + labs(y="Count", x="Education") + plot_default
+desc[[3]] <- ggplot(anes2016, aes(x=faminc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Family Income") + plot_default
+desc[[4]] <- ggplot(anes2016, aes(x=age)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Age") + plot_default
+desc[[5]] <- ggplot(anes2016, aes(x=factor(black,labels=c("Other","Black non-Hispanic")))) + 
+  geom_bar(stat="count") + labs(y="Count", x="Race/Ethnicity") + plot_default
+desc[[6]] <- ggplot(anes2016, aes(x=relig)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Church Attendance") + plot_default
+desc[[7]] <- ggplot(anes2016, aes(x=factor(mode, labels=c("Face-to-Face","Online")))) + 
+  geom_bar(stat="count") + labs(y="Count", x="Survey Mode") + plot_default
+desc[[8]] <- ggplot(anes2016, aes(x=wordsum)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Wordsum Literacy Test") + plot_default
+desc[[9]] <- ggplot(anes2016, aes(x=polmedia)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Political Media Exposure") + plot_default
+desc[[10]] <- ggplot(anes2016, aes(x=poldisc)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Political Discussions") + plot_default
+desc[[11]] <- ggplot(anes2016, aes(x=factor(vote, labels=c("No","Yes")))) + 
+  geom_bar(stat="count") + labs(y="Count", x="Voted in 2016") + plot_default
+desc[[12]] <- ggplot(anes2016, aes(x=ideol_ego)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Ideology (Ego)") + plot_default
+desc[[13]] <- ggplot(anes2016, aes(x=spsrvpr_ego)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Government Spending (Ego)") + plot_default
+desc[[14]] <- ggplot(anes2016, aes(x=defsppr_ego)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Defense Spending (Ego)") + plot_default
+desc[[15]] <- ggplot(anes2016, aes(x=inspre_ego)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Insurance Policy (Ego)") + plot_default
+desc[[16]] <- ggplot(anes2016, aes(x=guarpr_ego)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Job Guarantee (Ego)") + plot_default
+desc[[17]] <- ggplot(anes2016, aes(x=aidblack_ego)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Aid to Blacks (Ego)") + plot_default
+desc[[18]] <- ggplot(anes2016, aes(x=envjob_ego)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Environment vs Jobs (Ego)") + plot_default
+desc[[19]] <- ggplot(anes2016, aes(x=extraversion)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Personality: Extraversion") + plot_default
+desc[[20]] <- ggplot(anes2016, aes(x=reserved)) + geom_bar(stat="count") + 
+  labs(y="Count", x="Personality: Reserved") + plot_default
+pdf("../fig/descriptives_anes2016iv.pdf", width=9, height=9)
+grid.arrange(grobs=desc,ncol=4)
+dev.off()
+
 
 ########
 # robustness checks: determinants of willingness to respond?
@@ -142,43 +326,148 @@ ggplot(dfplot, aes(y=ivname, x=Estimate
 ggsave("../fig/redistribution.pdf",height=2.5,width=4)
 
 
-########
-# sophistication as an independent variable: no gender interaction
-########
 
-m4a <- m4b <- m4c <- NULL
-m4a[[1]] <- lm(effic_int ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data)
-m4a[[2]] <- lm(effic_ext ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data)
-m4a[[3]] <- lm(part ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data)
-m4a[[4]] <- glm(vote ~ polknow_text_mean + female + educ + faminc + log(age) + black + relig + mode, data = data, family=binomial("logit"))
-m4b[[1]] <- lm(effic_int ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data)
-m4b[[2]] <- lm(effic_ext ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data)
-m4b[[3]] <- lm(part ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data)
-m4b[[4]] <- glm(vote ~ polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data, family=binomial("logit"))
-m4c[[1]] <- lm(effic_int ~ polknow_evalpre + female + educ + faminc + log(age) + black + relig, data = data)
-m4c[[2]] <- lm(effic_ext ~ polknow_evalpre + female + educ + faminc + log(age) + black + relig, data = data)
-m4c[[3]] <- lm(part ~ polknow_evalpre + female + educ + faminc + log(age) + black + relig, data = data)
-m4c[[4]] <- glm(vote ~ polknow_evalpre + female + educ + faminc + log(age) + black + relig, data = data, family=binomial("logit"))
+#############################
+### Tables of Model Estimates
 
-res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=range(data$polknow_text_mean, na.rm = T)))
-             , sim(m4b, iv=data.frame(polknow_factual=range(data$polknow_factual, na.rm = T)))
-             , sim(m4c, iv=data.frame(polknow_evalpre=range(data$polknow_evalpre, na.rm = T))))
-res$dvlab <- factor(res$dv, labels = c("Internal Efficacy","External Efficacy"
-                                       ,"Non-conv. Participation","Turnout"))
-res$ivlab <- factor(res$iv, labels = dvnames)
+### ANES analyses
+load("out/anes_res.Rdata")
 
-ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + 
-  geom_point() + geom_errorbarh(height=0) + facet_wrap(~dvlab, scale="free_x") +
-  geom_vline(xintercept = 0, color="grey") + 
-  xlab("Marginal Effect") + ylab("Independent Variable") + plot_default +
-  scale_y_discrete(limits = rev(levels(res$ivlab)))
-#ggsave("../fig/knoweff_pres.pdf", width=4, height=3)
 
-ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + 
-  geom_point() + geom_errorbarh(height=0) + facet_wrap(~dvlab, scale="free_x") +
-  xlab("Marginal Effect") + ylab("Independent Variable") +
-  theme_classic(base_size = 9) + theme(panel.border = element_rect(fill="white")) +
-  geom_vline(xintercept = 0, color="grey") + 
-  scale_y_discrete(limits = rev(levels(res$ivlab)))
-#ggsave("../fig/knoweff_empty.pdf", width=4, height=3)
+### Fig 2: Engagement and participation in politics
+
+## print summary
+stargazer(m4a, type="text")
+
+## create table
+stargazer(m4a, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
+          and external efficacy in the 2012 ANES. Standard errors in parentheses. Estimates are used for
+          Figure 2 in the main text.",
+          column.labels = c("Turnout","Participation","Internal Efficacy","External Efficacy"),
+          covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
+                               "College Degree","Family Income","Age (log)",
+                               "African American","Church Attendance","Mode: Online",
+                               "Wordsum Score","Constant"),
+          keep.stat = c("n", "rsq", "ll"),
+          out = "../tab/knoweff2012.tex", label = "tab:knoweff2012", type="text")
+
+## print summary
+stargazer(m4b, type="text")
+
+## create table
+stargazer(m4b, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
+          and external efficacy in the 2016 ANES. Standard errors in parentheses. Estimates are used for
+          Figure 2 in the main text.",
+          column.labels = c("Turnout","Participation","Internal Efficacy","External Efficacy"),
+          covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
+                               "College Degree","Family Income","Age (log)",
+                               "African American","Church Attendance","Mode: Online",
+                               "Wordsum Score","Constant"),
+          keep.stat = c("n", "rsq", "ll"),
+          out = "../tab/knoweff2016.tex", label = "tab:knoweff2016", type="text")
+
+
+### Robustenss check for Fig.2: Control for personality characteristics
+
+## print summary
+stargazer(m4e, type="text")
+
+## create table
+stargazer(m4e, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
+          and external efficacy controlling for personality characteristics in the 2012 ANES. 
+          Standard errors in parentheses. Estimates are used for Figure \\ref{fig:knoweff_personality} 
+          in the appendix.",
+          column.labels = c("Turnout","Participation","Internal Efficacy","External Efficacy"),
+          covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
+                               "College Degree","Family Income","Age (log)",
+                               "African American","Church Attendance","Mode: Online",
+                               "Wordsum Score","Extraversion","Reserved","Constant"),
+          keep.stat = c("n", "rsq", "ll"),
+          out = "../tab/knoweff2012_personality.tex", label = "tab:knoweff2012_personality", type="text")
+
+## print summary
+stargazer(m4f, type="text")
+
+## create table
+stargazer(m4f, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
+          and external efficacy controlling for personality characteristics in the 2016 ANES. 
+          Standard errors in parentheses. Estimates are used for Figure \\ref{fig:knoweff_personality} 
+          in the appendix.",
+          column.labels = c("Turnout","Participation","Internal Efficacy","External Efficacy"),
+          covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
+                               "College Degree","Family Income","Age (log)",
+                               "African American","Church Attendance","Mode: Online",
+                               "Wordsum Score","Extraversion","Reserved","Constant"),
+          keep.stat = c("n", "rsq", "ll"),
+          out = "../tab/knoweff2016_personality.tex", label = "tab:knoweff2016_personality", type="text")
+
+
+### Robustenss check for Fig.2: Control for individual response length
+
+## print summary
+stargazer(m4c, type="text")
+
+## create table
+stargazer(m4c, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
+          and external efficacy controlling for individual response length in the 2012 ANES. 
+          Standard errors in parentheses. Estimates are used for Figure \\ref{fig:knoweff_lwc} 
+          in the appendix.",
+          column.labels = c("Turnout","Participation","Internal Efficacy","External Efficacy"),
+          covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
+                               "College Degree","Family Income","Age (log)",
+                               "African American","Church Attendance","Mode: Online",
+                               "Wordsum Score","Word Count (log)","Constant"),
+          keep.stat = c("n", "rsq", "ll"),
+          out = "../tab/knoweff2012_lwc.tex", label = "tab:knoweff2012_lwc", type="text")
+
+## print summary
+stargazer(m4d, type="text")
+
+## create table
+stargazer(m4d, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
+          and external efficacy controlling for individual response length in the 2016 ANES. 
+          Standard errors in parentheses. Estimates are used for Figure \\ref{fig:knoweff_lwc} 
+          in the appendix.",
+          column.labels = c("Turnout","Participation","Internal Efficacy","External Efficacy"),
+          covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
+                               "College Degree","Family Income","Age (log)",
+                               "African American","Church Attendance","Mode: Online",
+                               "Wordsum Score","Word Count (log)","Constant"),
+          keep.stat = c("n", "rsq", "ll"),
+          out = "../tab/knoweff2016_lwc.tex", label = "tab:knoweff2016_lwc", type="text")
+
+
+### Fig 6: Correct voting
+
+## print summary
+stargazer(m5a, m5b, type = "text")
+
+## create table
+stargazer(m5a, m5b, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+          model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
+          title="Effects of sophistication on the probability of casting a correct vote in the 
+          2012 and 2016 ANES (estimated via logistic regression). Standard errors in parentheses.
+          Estimates are used for Figure 6 in the main text.",
+          dep.var.labels = "Correct Vote",
+          column.labels = c("2012 ANES","2016 ANES"),
+          covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
+                               "College Degree","Family Income","Age (log)",
+                               "African American","Church Attendance","Mode: Online",
+                               "Wordsum Score","Constant"),
+          keep.stat = c("n", "ll"),
+          out = "../tab/correctvote.tex", label = "tab:correctvote", type="text")
+
+
 

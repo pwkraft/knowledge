@@ -139,8 +139,8 @@ anes2016$spsrvpr_ego <- (Recode(raw2016$V161178, "lo:0=NA; 99=NA") - 4)/3
 anes2016$defsppr_ego <- (Recode(raw2016$V161181, "lo:0=NA; 99=NA") - 4)/3
 anes2016$inspre_ego <- (Recode(raw2016$V161184, "lo:0=NA; 99=NA") - 4)/3
 anes2016$guarpr_ego <- (Recode(raw2016$V161189, "lo:0=NA; 99=NA") - 4)/3
-anes2016$aidblack_ego <- (Recode(raw2016$V161198, "lo:0=NA") - 4)/3
-anes2016$envjob_ego <- (Recode(raw2016$V161201, "lo:0=NA") - 4)/3
+anes2016$aidblack_ego <- (Recode(raw2016$V161198, "lo:0=NA; 99=NA") - 4)/3
+anes2016$envjob_ego <- (Recode(raw2016$V161201, "lo:0=NA; 99=NA") - 4)/3
 
 anes2016$ideol_dpc <- (Recode(raw2016$V161128, "lo:0=NA") - 4)/3
 anes2016$ideol_rpc <- (Recode(raw2016$V161129, "lo:0=NA") - 4)/3
@@ -457,8 +457,10 @@ for(p in policies){
     tmp_sigmadif2 <- extract(tmp, par="sigmadif2")[[1]]
     tmp_df <- data.frame(policy = p, target = t, measure = m[1:2]
                          , mean = c(mean(tmp_sigmadif1), mean(tmp_sigmadif2))
+                         , sd = c(sd(tmp_sigmadif1), sd(tmp_sigmadif2))
                          , cilo = c(quantile(tmp_sigmadif1, .025), quantile(tmp_sigmadif2, .025))
-                         , cihi = c(quantile(tmp_sigmadif1, .975), quantile(tmp_sigmadif2, .975)))
+                         , cihi = c(quantile(tmp_sigmadif1, .975), quantile(tmp_sigmadif2, .975))
+                         , Rhat = summary(tmp)$summary[c("sigmadif1","sigmadif2"),"Rhat"])
     hetreg_summary2016 <- rbind(hetreg_summary2016, tmp_df)
   }
 }

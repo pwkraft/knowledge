@@ -14,6 +14,7 @@ library(xtable)
 library(gridExtra)
 library(dplyr)
 library(stm)
+library(stargazer)
 
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
@@ -190,16 +191,16 @@ ggsave("../fig/meandiff.pdf", p0 ,width=6.5, height=4)
 
 ### ANES data
 
-dvnames <- rep(c("Discursive Sophistication","Factual Knowledge"), 2)
+dvnames <- rep(c("Discursive Sophistication","Factual Knowledge"), each=2)
 ivnames <- c("Intercept", "Female", "Media", "Discussions", "College"
-             , "Income", "log(Age)", "Church", "Black", "Online")
+             , "Income", "log(Age)", "Black", "Church", "Online")
 
 # model estimation
 m1 <- NULL
-m1[[1]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data2012)
-m1[[2]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data2012)
-m1[[3]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data2016)
-m1[[4]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + relig + black + mode, data = data2016)
+m1[[1]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data2012)
+m1[[2]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data2016)
+m1[[3]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data2012)
+m1[[4]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data2016)
 lapply(m1, summary)
 
 # prepare dataframe for plotting (sloppy code)
@@ -213,23 +214,23 @@ for(i in 1:length(m1)){
   dfplot1 <- rbind(dfplot1, tmp)
   rm(tmp)
 }
-dfplot1$source <- rep(c("2012 ANES", "2016 ANES"), each=nrow(dfplot1)/2)
+dfplot1$source <- rep(c("2012 ANES", "2016 ANES"), each=nrow(dfplot1)/4)
 
 # create factor variables, remove intercept for plotting
 dfplot1$ivnames <- factor(dfplot1$ivnames, levels = rev(ivnames))
-dfplot1$dv <- factor(dfplot1$dv, levels = dvnames[1:2])
+dfplot1$dv <- factor(dfplot1$dv, levels = dvnames[c(1,3)])
 dfplot1 <- dfplot1[dfplot1$ivnames!="Intercept",]
 
 ### Add YouGov data
 ## Q: ADD POLITICAL INTEREST AS IV???
 
 dvnames_yg <- c("Discursive Sophistication","Factual Knowledge")#, "Disease\nInformation")
-ivnames_yg <- c("Intercept", "Female", "College", "Income", "log(Age)", "Church", "Black")
+ivnames_yg <- c("Intercept", "Female", "College", "Income", "log(Age)", "Black", "Church")
 
 # model estimation
 m2 <- NULL
-m2[[1]] <- lm(polknow_text_mean ~ female + educ + faminc + log(age) + relig + black, data = data_yg)
-m2[[2]] <- lm(know_pol ~ female + educ + faminc + log(age) + relig + black, data = data_yg)
+m2[[1]] <- lm(polknow_text_mean ~ female + educ + faminc + log(age) + black + relig, data = data_yg)
+m2[[2]] <- lm(know_pol ~ female + educ + faminc + log(age) + black + relig, data = data_yg)
 #m2[[3]] <- lm(know_dis ~ female + educ + faminc + log(age) + relig  + black, data = data_yg)
 lapply(m2, summary)
 
@@ -298,3 +299,44 @@ plot.estimateEffect(prep2016, covariate = "female", topics = topics2016, model =
                     , labeltype = "prob", n=5, verbose.labels = F, width=50
                     , main = "Gender Differences in Topic Proportions (2016 ANES)")
 dev.off()
+
+
+
+###############
+# Generate tables for appendix
+###############
+
+## print summary
+stargazer(m1, type = "text")
+
+## create table
+stargazer(m1, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+          model.names=FALSE, dep.var.labels.include = TRUE, star.cutoffs = c(.05,.01,.001),
+          title="Effects of gender on discursive sophistication and factual knowledge in the 
+          2012 ANES and 2016 ANES. Standard errors in parentheses. Estimates are used for 
+          Figure 8 in the main text.",
+          column.labels = c("2012 ANES","2016 ANES","2012 ANES","2016 ANES"),
+          dep.var.labels = c("Discursive Sophistication","Factual Knowledge"),
+          covariate.labels = c("Female","Media Exposure","Discussion Freqency",
+                               "College Degree","Family Income","Age (log)",
+                               "African American","Church Attendance",
+                               "Mode: Online","Constant"),
+          keep.stat = c("n", "rsq"),
+          out = "../tab/determinants_anes.tex", label = "tab:determinants_anes", type="text")
+
+
+## print summary
+stargazer(m2, type = "text")
+
+## create table
+stargazer(m2, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          title="Effects of gender on discursive sophistication and factual knowledge in the 
+          2015 YouGov Study. Standard errors in parentheses. Estimates are used for 
+          Figure 8 in the main text.",
+          column.labels = c("Discursive Sophistication","Factual Knowledge"),
+          #dep.var.labels = c("Discursive Sophistication","Factual Knowledge"),
+          covariate.labels = c("Female","College Degree","Family Income","Age (log)",
+                               "African American","Church Attendance","Constant"),
+          keep.stat = c("n", "rsq"),
+          out = "../tab/determinants_yg.tex", label = "tab:determinants_yg", type="text")

@@ -116,24 +116,94 @@ Figure~\ref{fig:pretext_robustness} examines whether the proposed measure of dis
 
 In summary, open-ended responses in the analyses reported below are pre-processed by stemming and lowercasing, as well as the removing numbers, punctuation, stopwords, and infrequent terms (i.e., terms that appear in fewer than 10 responses).\footnote{Prior to applying these pre-processing steps, open-ended responses in the 2012 \& 2016 ANES as well as the 2015 YouGov survey are cleaned by correcting spelling errors using an implementation of the Aspell spell-checking algorithm (\url{www.aspell.net}).} While the results discussed in the manuscript are based on this preferred specification, the substantive results are robust for alternative pre-processing regimes or varying numbers of topics.
 
-%\clearpage
-%\section*{Appendix C: Correct Voting Measure}
-%\renewcommand\thefigure{C.\arabic{figure}}
-%\renewcommand\thetable{C.\arabic{table}}
-%\setcounter{figure}{0}
-%\setcounter{table}{0}
 
-%\clearpage
-%\section*{Appendix D: Tables of Model Estimates}
-%\renewcommand\thefigure{D.\arabic{figure}}
-%\renewcommand\thetable{D.\arabic{table}}
-%\setcounter{figure}{0}
-%\setcounter{table}{0}
-%
-%\input{../tab/inteff}
-%\input{../tab/exteff}
-%\input{../tab/nonconv}
-%\input{../tab/turnout}
-%\input{../tab/determinants}
-%\input{../tab/closing}
-%\input{../tab/yg_determinants}
+\clearpage
+\section{Additional Information on Remaining Variables}
+\renewcommand\thefigure{C.\arabic{figure}}
+\renewcommand\thetable{C.\arabic{table}}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\subsection{Variable Recoding}
+
+
+\clearpage
+\subsection{2012 ANES}
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{/data/Dropbox/Uni/Projects/2016/knowledge/fig/descriptives_anes2012dv.pdf}
+\caption{Histogram of dependent variables included in 2012 ANES.}\label{fig:descriptives_anes2012dv}
+\end{figure}
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{/data/Dropbox/Uni/Projects/2016/knowledge/fig/descriptives_anes2012iv.pdf}
+\caption{Histogram of independent variables included in 2012 ANES.}\label{fig:descriptives_anes2012iv}
+\end{figure}
+
+\clearpage
+\subsection{2016 ANES}
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{/data/Dropbox/Uni/Projects/2016/knowledge/fig/descriptives_anes2016dv.pdf}
+\caption{Histogram of dependent variables included in 2016 ANES.}\label{fig:descriptives_anes2016dv}
+\end{figure}
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{/data/Dropbox/Uni/Projects/2016/knowledge/fig/descriptives_anes2016iv.pdf}
+\caption{Histogram of independent variables included in 2016 ANES.}\label{fig:descriptives_anes2016iv}
+\end{figure}
+
+\clearpage
+\subsection{2015 YouGov}
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{/data/Dropbox/Uni/Projects/2016/knowledge/fig/descriptives_yg.pdf}
+\caption{Histogram of variables included in 2015 YouGov survey.}\label{fig:descriptives_yg}
+\end{figure}
+
+
+\clearpage
+\section{Robustness Checks}
+\renewcommand\thefigure{D.\arabic{figure}}
+\renewcommand\thetable{D.\arabic{table}}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\subsection{Controlling for Personality Characteristics}
+\begin{figure}[h]\centering
+\includegraphics{/data/Dropbox/Uni/Projects/2016/knowledge/fig/knoweff_personality.pdf}
+\caption[Effects of sophistication on internal efficacy, external efficacy, non-conventional participation, and turnout in the 2012 and 2016 ANES]{Effects of sophistication on internal efficacy, external efficacy, non-conventional participation, and turnout in the 2012 and 2016 ANES. For each dependent variable, the figure displays the change in expected values after increasing each sophistication measure from -1 to +1 standard deviation from its mean (including 95\% confidence intervals). Model estimates are based on logistic regression (turnout) or OLS (internal efficacy, external efficacy, non-conventional participation). Both sophistication measure are included simultaneously while controlling for gender, education, income, age, race, church attendance, survey mode, Wordsum vocabulary scores, as well as personality characteristics (extraversion and being reserved).
+%Full model results ar presented in the appendix, Tables \ref{tab:inteff} through \ref{tab:turnout}
+}\label{fig:knoweff_personality}
+\end{figure}
+
+\clearpage
+\subsection{Controlling for Individual Response Length}
+\begin{figure}[h]\centering
+\includegraphics{/data/Dropbox/Uni/Projects/2016/knowledge/fig/knoweff_lwc.pdf}
+\caption[Effects of sophistication on internal efficacy, external efficacy, non-conventional participation, and turnout in the 2012 and 2016 ANES]{Effects of sophistication on internal efficacy, external efficacy, non-conventional participation, and turnout in the 2012 and 2016 ANES. For each dependent variable, the figure displays the change in expected values after increasing each sophistication measure from -1 to +1 standard deviation from its mean (including 95\% confidence intervals). Model estimates are based on logistic regression (turnout) or OLS (internal efficacy, external efficacy, non-conventional participation). Both sophistication measure are included simultaneously while controlling for gender, education, income, age, race, church attendance, survey mode, Wordsum vocabulary scores, as well as the logged word count across open-ended responses.
+%Full model results ar presented in the appendix, Tables \ref{tab:inteff} through \ref{tab:turnout}
+}\label{fig:knoweff_lwc}
+\end{figure}
+
+
+\clearpage
+\section{Tables of Model Estimates}
+\renewcommand\thefigure{E.\arabic{figure}}
+\renewcommand\thetable{E.\arabic{table}}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\subsection{Main Analyses}
+\input{/data/Dropbox/Uni/Projects/2016/knowledge/tab/knoweff2012}
+\input{/data/Dropbox/Uni/Projects/2016/knowledge/tab/knoweff2016}
+\input{/data/Dropbox/Uni/Projects/2016/knowledge/tab/yg_disease}
+\input{/data/Dropbox/Uni/Projects/2016/knowledge/tab/correctvote}
+\input{/data/Dropbox/Uni/Projects/2016/knowledge/tab/determinants_anes}
+\input{/data/Dropbox/Uni/Projects/2016/knowledge/tab/determinants_yg}
+
+\clearpage
+\subsection{Robustness Checks}
+\input{/data/Dropbox/Uni/Projects/2016/knowledge/tab/knoweff2012_personality}
+\input{/data/Dropbox/Uni/Projects/2016/knowledge/tab/knoweff2016_personality}
+\input{/data/Dropbox/Uni/Projects/2016/knowledge/tab/knoweff2012_lwc}
+\input{/data/Dropbox/Uni/Projects/2016/knowledge/tab/knoweff2016_lwc}
+
