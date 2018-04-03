@@ -282,7 +282,7 @@ experts <- anes2016$polknow_factual > median(anes2016$polknow_factual, na.rm = T
 for(var in c("V162107","V162095","V162106","V162108", "V162096"
              , "V162111", "V162098", "V162099","V162100","V162113"
              , "V162110", "V162112", "V162103","V162105","V162109")){
-  tmp <- (Recode(raw2016[,var], "-9:-1=NA") - 50) / 50
+  tmp <- (Recode(raw2016[,var], "lo:-1=NA; 101:hi=NA") - 50) / 50
   res <- t.test(tmp[experts]~anes2016$vote_rep[experts])
   tmp[is.na(tmp)] <- 0
   ## select only social groups that:
@@ -302,7 +302,7 @@ for(var in c("V162107","V162095","V162106","V162108", "V162096"
 ## correct voting variables
 cv_rpc <- (pid + issue_rep + social_rep) / (7 + social_rep_n)
 cv_dpc <- (pid + issue_dem + social_dem) / (7 + social_dem_n)
-anes2016$correct_vote <- anes2016$vote_rep == as.numeric(cv_rpc > cv_dpc)
+anes2016$correct_vote <- anes2016$vote_rep == as.numeric(cv_rpc >= cv_dpc)
 
 table(anes2016$correct_vote)/sum(table(anes2016$correct_vote))
 
@@ -392,7 +392,8 @@ data2016 <- data2016[apply(!is.na(data2016[,meta2016]),1,prod)==1,]
 
 ## process for stm
 processed2016 <- textProcessor(data2016$resp, metadata = data2016[,meta2016]
-                           , customstopwords = c("dont", "hes", "that", "etc"))
+                           , customstopwords = c("dont", "hes", "that", "etc",
+                                                 "hillary","clinton","donald","trump"))
 out2016 <- prepDocuments(processed2016$documents, processed2016$vocab, processed2016$meta
                          , lower.thresh = 10)
 
