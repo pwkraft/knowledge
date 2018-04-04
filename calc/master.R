@@ -15,11 +15,11 @@ source("/home/patrick/Dropbox/Uni/Projects/2016/knowledge/calc/analyses_swiss.R"
        , echo=T, max.deparse.length=10000)
 source("/home/patrick/Dropbox/Uni/Projects/2016/knowledge/calc/analyses_ggap.R"
        , echo=T, max.deparse.length=10000)
-source("/home/patrick/Dropbox/Uni/Projects/2016/knowledge/calc/analyses_pretext.R"
-       , echo=T, max.deparse.length=10000)
 source("/home/patrick/Dropbox/Uni/Projects/2016/knowledge/calc/appendix_anes.R"
        , echo=T, max.deparse.length=10000)
 source("/home/patrick/Dropbox/Uni/Projects/2016/knowledge/calc/appendix_yougov.R"
        , echo=T, max.deparse.length=10000)
 source("/home/patrick/Dropbox/Uni/Projects/2016/knowledge/calc/appendix_swiss.R"
+       , echo=T, max.deparse.length=10000)
+source("/home/patrick/Dropbox/Uni/Projects/2016/knowledge/calc/analyses_pretext.R"
        , echo=T, max.deparse.length=10000)

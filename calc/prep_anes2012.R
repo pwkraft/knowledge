@@ -421,8 +421,8 @@ data2012 <- data2012[apply(!is.na(data2012[,meta2012]),1,prod)==1,]
 
 ## process for stm
 processed2012 <- textProcessor(data2012$resp, metadata = data2012[,meta2012]
-                           , customstopwords = c("dont", "hes", "that", "etc",
-                                                 "barack","obama","mitt","romney"))
+                           #, customstopwords = c("dont", "hes", "that", "etc","barack","obama","mitt","romney")
+                           )
 out2012 <- prepDocuments(processed2012$documents, processed2012$vocab, processed2012$meta
                          , lower.thresh = 10)
 
@@ -432,7 +432,7 @@ data2012 <- data2012[-out2012$docs.removed,]
 
 ## stm fit with 20 topics
 stm_fit2012 <- stm(out2012$documents, out2012$vocab, prevalence = as.matrix(out2012$meta)
-                , K=0, init.type = "Spectral", seed=12345)
+                   , K=49, seed=12345)
 
 
 #######################

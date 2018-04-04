@@ -182,7 +182,8 @@ data_yg <- data_yg[apply(!is.na(data_yg[,meta]),1,prod)==1,]
 
 ## process for stm
 processed_yougov <- textProcessor(data_yg$resp, metadata = data_yg[,meta]
-                           , customstopwords = c("dont", "just", "hes", "that"))
+                           #, customstopwords = c("dont", "just", "hes", "that")
+                           )
 out_yougov <- prepDocuments(processed_yougov$documents, processed_yougov$vocab, processed_yougov$meta
                      , lower.thresh = 10)
 
@@ -192,7 +193,7 @@ data_yg <- data_yg[-out_yougov$docs.removed,]
 
 ## quick fit
 stm_fit <- stm(out_yougov$documents, out_yougov$vocab, prevalence = as.matrix(out_yougov$meta)
-               , K=0, init.type = "Spectral", seed=12345)
+               , K=47, seed=12345)
 
 
 #######################

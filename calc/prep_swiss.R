@@ -149,7 +149,7 @@ opend_german <- opend_german[-out_german$docs.removed,]
 
 ## quick fit (30 topics)
 stm_fit_german <- stm(out_german$documents, out_german$vocab, prevalence = as.matrix(out_german$meta)
-                      , K=0, init.type = "Spectral", seed=12345)
+                      , K=53, seed=12345)
 
 
 ### Discursive sophistication measure
@@ -181,7 +181,7 @@ opend_french <- opend_french[-out_french$docs.removed,]
 
 ## quick fit (60 topics)
 stm_fit_french <- stm(out_french$documents, out_french$vocab, prevalence = as.matrix(out_french$meta)
-                      , K=0, init.type = "Spectral")
+                      , K=44, seed=12345)
 
 
 ### Discursive sophistication measure
@@ -213,7 +213,7 @@ opend_italian <- opend_italian[-out_italian$docs.removed,]
 
 ## quick fit (60 topics)
 stm_fit_italian <- stm(out_italian$documents, out_italian$vocab, prevalence = as.matrix(out_italian$meta)
-                       , K=0, init.type = "Spectral")
+                       , K=36, seed=12345)
 
 
 ### Discursive sophistication measure
