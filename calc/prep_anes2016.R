@@ -300,8 +300,8 @@ for(var in c("V162107","V162095","V162106","V162108", "V162096"
 }
 
 ## correct voting variables
-cv_rpc <- (pid + issue_rep + social_rep) / (7 + social_rep_n)
-cv_dpc <- (-pid + issue_dem + social_dem) / (7 + social_dem_n)
+cv_rpc <- (pid + issue_rep/6 + social_rep/social_rep_n)
+cv_dpc <- (-pid + issue_dem/6 + social_dem/social_dem_n)
 anes2016$correct_vote <- anes2016$vote_rep == as.numeric(cv_rpc >= cv_dpc)
 
 table(anes2016$correct_vote)/sum(table(anes2016$correct_vote))

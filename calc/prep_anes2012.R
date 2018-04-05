@@ -307,8 +307,8 @@ for(var in c("ftgr_xian","ftgr_catholics","ftgr_xfund","ftgr_mormons","ftgr_athe
 }
 
 ## correct voting variables
-cv_rpc <- (pid + issue_rep + social_rep) / (7 + social_rep_n)
-cv_dpc <- (-pid + issue_dem + social_dem) / (7 + social_dem_n)
+cv_rpc <- (pid + issue_rep/6 + social_rep/social_rep_n)
+cv_dpc <- (-pid + issue_dem/6 + social_dem/social_dem_n)
 anes2012$correct_vote <- anes2012$vote_rep == as.numeric(cv_rpc >= cv_dpc)
 
 table(anes2012$correct_vote)/sum(table(anes2012$correct_vote))

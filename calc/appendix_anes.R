@@ -87,36 +87,36 @@ desc[[3]] <- ggplot(anes2012, aes(x=effic_int)) + geom_bar(stat="count") +
   labs(y="Count", x="Internal Efficacy") + plot_default
 desc[[4]] <- ggplot(anes2012, aes(x=effic_ext)) + geom_bar(stat="count") + 
   labs(y="Count", x="Exterbal Efficacy") + plot_default
-desc[[5]] <- ggplot(anes2012, aes(x=factor(correct_vote, labels=c("No","Yes")))) + 
-  geom_bar(stat="count") + labs(y="Count", x="Correct Vote") + plot_default
-desc[[6]] <- ggplot(anes2012, aes(x=ideol_rpc)) + geom_bar(stat="count") + 
+desc[[5]] <- ggplot(anes2012, aes(x=ideol_rpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Ideology (Romney)") + plot_default
-desc[[7]] <- ggplot(anes2012, aes(x=ideol_dpc)) + geom_bar(stat="count") + 
+desc[[6]] <- ggplot(anes2012, aes(x=ideol_dpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Ideology (Obama)") + plot_default
-desc[[8]] <- ggplot(anes2012, aes(x=spsrvpr_rpc)) + geom_bar(stat="count") + 
+desc[[7]] <- ggplot(anes2012, aes(x=spsrvpr_rpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Government Spending (Romney)") + plot_default
-desc[[9]] <- ggplot(anes2012, aes(x=spsrvpr_dpc)) + geom_bar(stat="count") + 
+desc[[8]] <- ggplot(anes2012, aes(x=spsrvpr_dpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Government Spending (Obama)") + plot_default
-desc[[10]] <- ggplot(anes2012, aes(x=defsppr_rpc)) + geom_bar(stat="count") + 
+desc[[9]] <- ggplot(anes2012, aes(x=defsppr_rpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Defense Spending (Romney)") + plot_default
-desc[[11]] <- ggplot(anes2012, aes(x=defsppr_dpc)) + geom_bar(stat="count") + 
+desc[[10]] <- ggplot(anes2012, aes(x=defsppr_dpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Defense Spending (Obama)") + plot_default
-desc[[12]] <- ggplot(anes2012, aes(x=inspre_rpc)) + geom_bar(stat="count") + 
+desc[[11]] <- ggplot(anes2012, aes(x=inspre_rpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Insurance Policy (Romney)") + plot_default
-desc[[13]] <- ggplot(anes2012, aes(x=inspre_dpc)) + geom_bar(stat="count") + 
+desc[[12]] <- ggplot(anes2012, aes(x=inspre_dpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Insurance Policy (Obama)") + plot_default
-desc[[14]] <- ggplot(anes2012, aes(x=guarpr_rpc)) + geom_bar(stat="count") + 
+desc[[13]] <- ggplot(anes2012, aes(x=guarpr_rpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Job Guarantee (Romney)") + plot_default
-desc[[15]] <- ggplot(anes2012, aes(x=guarpr_dpc)) + geom_bar(stat="count") + 
+desc[[14]] <- ggplot(anes2012, aes(x=guarpr_dpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Job Guarantee (Obama)") + plot_default
-desc[[16]] <- ggplot(anes2012, aes(x=aidblack_rpc)) + geom_bar(stat="count") + 
+desc[[15]] <- ggplot(anes2012, aes(x=aidblack_rpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Aid to Blacks (Romney)") + plot_default
-desc[[17]] <- ggplot(anes2012, aes(x=aidblack_dpc)) + geom_bar(stat="count") + 
+desc[[16]] <- ggplot(anes2012, aes(x=aidblack_dpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Aid to Blacks (Obama)") + plot_default
-desc[[18]] <- ggplot(anes2012, aes(x=envjob_rpc)) + geom_bar(stat="count") + 
+desc[[17]] <- ggplot(anes2012, aes(x=envjob_rpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Environment vs Jobs (Romney)") + plot_default
-desc[[19]] <- ggplot(anes2012, aes(x=envjob_dpc)) + geom_bar(stat="count") + 
+desc[[18]] <- ggplot(anes2012, aes(x=envjob_dpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Environment vs Jobs (Obama)") + plot_default
+# desc[[19]] <- ggplot(anes2012, aes(x=factor(correct_vote, labels=c("No","Yes")))) + 
+#   geom_bar(stat="count") + labs(y="Count", x="Correct Vote") + plot_default
 pdf("../fig/descriptives_anes2012dv.pdf", width=9, height=9)
 grid.arrange(grobs=desc,ncol=4)
 dev.off()
@@ -131,36 +131,36 @@ desc[[3]] <- ggplot(anes2016, aes(x=effic_int)) + geom_bar(stat="count") +
   labs(y="Count", x="Internal Efficacy") + plot_default
 desc[[4]] <- ggplot(anes2016, aes(x=effic_ext)) + geom_bar(stat="count") + 
   labs(y="Count", x="Exterbal Efficacy") + plot_default
-desc[[5]] <- ggplot(anes2016, aes(x=factor(correct_vote, labels=c("No","Yes")))) + 
-  geom_bar(stat="count") + labs(y="Count", x="Correct Vote") + plot_default
-desc[[6]] <- ggplot(anes2016, aes(x=ideol_rpc)) + geom_bar(stat="count") + 
+desc[[5]] <- ggplot(anes2016, aes(x=ideol_rpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Ideology (Trump)") + plot_default
-desc[[7]] <- ggplot(anes2016, aes(x=ideol_dpc)) + geom_bar(stat="count") + 
+desc[[6]] <- ggplot(anes2016, aes(x=ideol_dpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Ideology (Clinton)") + plot_default
-desc[[8]] <- ggplot(anes2016, aes(x=spsrvpr_rpc)) + geom_bar(stat="count") + 
+desc[[7]] <- ggplot(anes2016, aes(x=spsrvpr_rpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Government Spending (Trump)") + plot_default
-desc[[9]] <- ggplot(anes2016, aes(x=spsrvpr_dpc)) + geom_bar(stat="count") + 
+desc[[8]] <- ggplot(anes2016, aes(x=spsrvpr_dpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Government Spending (Clinton)") + plot_default
-desc[[10]] <- ggplot(anes2016, aes(x=defsppr_rpc)) + geom_bar(stat="count") + 
+desc[[9]] <- ggplot(anes2016, aes(x=defsppr_rpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Defense Spending (Trump)") + plot_default
-desc[[11]] <- ggplot(anes2016, aes(x=defsppr_dpc)) + geom_bar(stat="count") + 
+desc[[10]] <- ggplot(anes2016, aes(x=defsppr_dpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Defense Spending (Clinton)") + plot_default
-desc[[12]] <- ggplot(anes2016, aes(x=inspre_rpc)) + geom_bar(stat="count") + 
+desc[[11]] <- ggplot(anes2016, aes(x=inspre_rpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Insurance Policy (Trump)") + plot_default
-desc[[13]] <- ggplot(anes2016, aes(x=inspre_dpc)) + geom_bar(stat="count") + 
+desc[[12]] <- ggplot(anes2016, aes(x=inspre_dpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Insurance Policy (Clinton)") + plot_default
-desc[[14]] <- ggplot(anes2016, aes(x=guarpr_rpc)) + geom_bar(stat="count") + 
+desc[[13]] <- ggplot(anes2016, aes(x=guarpr_rpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Job Guarantee (Trump)") + plot_default
-desc[[15]] <- ggplot(anes2016, aes(x=guarpr_dpc)) + geom_bar(stat="count") + 
+desc[[14]] <- ggplot(anes2016, aes(x=guarpr_dpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Job Guarantee (Clinton)") + plot_default
-desc[[16]] <- ggplot(anes2016, aes(x=aidblack_rpc)) + geom_bar(stat="count") + 
+desc[[15]] <- ggplot(anes2016, aes(x=aidblack_rpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Aid to Blacks (Trump)") + plot_default
-desc[[17]] <- ggplot(anes2016, aes(x=aidblack_dpc)) + geom_bar(stat="count") + 
+desc[[16]] <- ggplot(anes2016, aes(x=aidblack_dpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Aid to Blacks (Clinton)") + plot_default
-desc[[18]] <- ggplot(anes2016, aes(x=envjob_rpc)) + geom_bar(stat="count") + 
+desc[[17]] <- ggplot(anes2016, aes(x=envjob_rpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Environment vs Jobs (Trump)") + plot_default
-desc[[19]] <- ggplot(anes2016, aes(x=envjob_dpc)) + geom_bar(stat="count") + 
+desc[[18]] <- ggplot(anes2016, aes(x=envjob_dpc)) + geom_bar(stat="count") + 
   labs(y="Count", x="Environment vs Jobs (Clinton)") + plot_default
+# desc[[19]] <- ggplot(anes2016, aes(x=factor(correct_vote, labels=c("No","Yes")))) + 
+#   geom_bar(stat="count") + labs(y="Count", x="Correct Vote") + plot_default
 pdf("../fig/descriptives_anes2016dv.pdf", width=9, height=9)
 grid.arrange(grobs=desc,ncol=4)
 dev.off()
