@@ -106,7 +106,7 @@ ggsave("../fig/yg_disease.pdf",width=4,height=2)
 ### Additional information: STM summaries
 ###################
 
-pdf("../fig/yg_stm_prop.pdf", width=6, height=8)
+pdf("../fig/yg_stm_prop.pdf", width=6, height=9)
 par(mar=c(4.2,0.5,2.5,0.5))
 plot(stm_fit
      , main=paste0("YouGov Survey (k = ",stm_fit$settings$dim$K,")",collapse = "")

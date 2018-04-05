@@ -53,7 +53,7 @@ datcor <- data2012[,c("polknow_text_mean","polknow_factual","polknow_evalpre")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
               , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge"
-                                 ,"Interviewer\nEvaluation (Pre)")) + plot_default
+                                 ,"Interviewer\nEvaluation")) + plot_default
 ggsave("../fig/anes2012_corplot.pdf",width=3.2, height=3.2)
 
 ## 2016 ANES
@@ -61,7 +61,7 @@ datcor <- data2016[,c("polknow_text_mean","polknow_factual","polknow_evalpre")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
               , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge"
-                                 ,"Interviewer\nEvaluation (Pre)")) + plot_default
+                                 ,"Interviewer\nEvaluation")) + plot_default
 ggsave("../fig/anes2016_corplot.pdf",width=3.2, height=3.2)
 
 

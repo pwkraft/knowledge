@@ -149,7 +149,7 @@ opend_german <- opend_german[-out_german$docs.removed,]
 
 ## quick fit (30 topics)
 stm_fit_german <- stm(out_german$documents, out_german$vocab, prevalence = as.matrix(out_german$meta)
-                      , K=53, seed=12345)
+                      , K=49, seed=12345)
 
 
 ### Discursive sophistication measure

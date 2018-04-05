@@ -78,7 +78,7 @@ anes2012$polmedia <- with(raw2012, Recode(prmedia_wkinews, "lo:-4=NA; -1=0")
 
 ## political discussion
 anes2012$poldisc <- Recode(raw2012$discuss_discpstwk, "lo:-1 = NA")/7
-anes2012$poldisc[raw2012$discuss_disc>1] <- 0
+anes2012$poldisc[raw2012$discuss_disc==2] <- 0
 
 ## political interest (pay attention to politics)
 anes2012$polint_att <- (5 - Recode(raw2012$interest_attention, "lo:-1 = NA"))/4
@@ -250,7 +250,7 @@ anes2012$reserved <- Recode(raw2012$tipi_resv, "lo:0 = NA")
 ## Correct voting measure
 
 
-## 1) Party identification (large values = Eepublican)
+## 1) Party identification (large values = Republican)
 
 pid <- Recode(anes2012$pid_cont, "NA=0")
 
@@ -308,7 +308,7 @@ for(var in c("ftgr_xian","ftgr_catholics","ftgr_xfund","ftgr_mormons","ftgr_athe
 
 ## correct voting variables
 cv_rpc <- (pid + issue_rep + social_rep) / (7 + social_rep_n)
-cv_dpc <- (pid + issue_dem + social_dem) / (7 + social_dem_n)
+cv_dpc <- (-pid + issue_dem + social_dem) / (7 + social_dem_n)
 anes2012$correct_vote <- anes2012$vote_rep == as.numeric(cv_rpc >= cv_dpc)
 
 table(anes2012$correct_vote)/sum(table(anes2012$correct_vote))
@@ -421,8 +421,7 @@ data2012 <- data2012[apply(!is.na(data2012[,meta2012]),1,prod)==1,]
 
 ## process for stm
 processed2012 <- textProcessor(data2012$resp, metadata = data2012[,meta2012]
-                           #, customstopwords = c("dont", "hes", "that", "etc","barack","obama","mitt","romney")
-                           )
+                               , customstopwords = c("dont", "hes", "shes", "that", "etc"))
 out2012 <- prepDocuments(processed2012$documents, processed2012$vocab, processed2012$meta
                          , lower.thresh = 10)
 

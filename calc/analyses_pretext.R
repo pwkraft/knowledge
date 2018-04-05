@@ -111,7 +111,7 @@ robustSoph <- function(data, k, k_original, label
   
   ## process for stm
   processed <- textProcessor(data$resp, metadata = data[,meta], stem = stem, language = lang
-                             #, customstopwords = c("dont", "hes", "that", "etc","barack","obama","mitt","romney","hillary","clinton","donald","trump")
+                             , customstopwords = c("dont", "hes", "shes", "that", "etc")
                              )
   out <- prepDocuments(processed$documents, processed$vocab, processed$meta, lower.thresh = thresh)
   

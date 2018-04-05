@@ -75,7 +75,7 @@ anes2016$polmedia <- Recode(raw2016$V161008, "lo:-1=NA")/7
 
 ## political discussion
 anes2016$poldisc <- Recode(raw2016$V162174a, "lo:-1=NA")/7
-anes2016$poldisc[raw2016$raw2016$V162174c==2] <- 0
+anes2016$poldisc[raw2016$V162174==2] <- 0
 
 ## political interest (pay attention to politics)
 anes2016$polint_att <- (5 - Recode(raw2016$V161003, "lo:-1 = NA"))/4
@@ -301,7 +301,7 @@ for(var in c("V162107","V162095","V162106","V162108", "V162096"
 
 ## correct voting variables
 cv_rpc <- (pid + issue_rep + social_rep) / (7 + social_rep_n)
-cv_dpc <- (pid + issue_dem + social_dem) / (7 + social_dem_n)
+cv_dpc <- (-pid + issue_dem + social_dem) / (7 + social_dem_n)
 anes2016$correct_vote <- anes2016$vote_rep == as.numeric(cv_rpc >= cv_dpc)
 
 table(anes2016$correct_vote)/sum(table(anes2016$correct_vote))
@@ -392,8 +392,7 @@ data2016 <- data2016[apply(!is.na(data2016[,meta2016]),1,prod)==1,]
 
 ## process for stm
 processed2016 <- textProcessor(data2016$resp, metadata = data2016[,meta2016]
-                           #, customstopwords = c("dont", "hes", "that", "etc","hillary","clinton","donald","trump")
-                           )
+                               , customstopwords = c("dont", "hes", "shes", "that", "etc"))
 out2016 <- prepDocuments(processed2016$documents, processed2016$vocab, processed2016$meta
                          , lower.thresh = 10)
 

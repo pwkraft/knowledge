@@ -182,8 +182,7 @@ data_yg <- data_yg[apply(!is.na(data_yg[,meta]),1,prod)==1,]
 
 ## process for stm
 processed_yougov <- textProcessor(data_yg$resp, metadata = data_yg[,meta]
-                           #, customstopwords = c("dont", "just", "hes", "that")
-                           )
+                                  , customstopwords = c("dont", "hes", "shes", "that", "etc"))
 out_yougov <- prepDocuments(processed_yougov$documents, processed_yougov$vocab, processed_yougov$meta
                      , lower.thresh = 10)
 
