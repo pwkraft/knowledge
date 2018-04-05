@@ -314,7 +314,7 @@ stargazer(m1, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3
           model.names=FALSE, dep.var.labels.include = TRUE, star.cutoffs = c(.05,.01,.001),
           title="Effects of gender on discursive sophistication and factual knowledge in the 
           2012 ANES and 2016 ANES. Standard errors in parentheses. Estimates are used for 
-          Figure 8 in the main text.",
+          Figure 7 in the main text.",
           column.labels = c("2012 ANES","2016 ANES","2012 ANES","2016 ANES"),
           dep.var.labels = c("Discursive Sophistication","Factual Knowledge"),
           covariate.labels = c("Female","Media Exposure","Discussion Freqency",
@@ -333,7 +333,7 @@ stargazer(m2, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
           title="Effects of gender on discursive sophistication and factual knowledge in the 
           2015 YouGov Study. Standard errors in parentheses. Estimates are used for 
-          Figure 8 in the main text.",
+          Figure 7 in the main text.",
           column.labels = c("Discursive Sophistication","Factual Knowledge"),
           #dep.var.labels = c("Discursive Sophistication","Factual Knowledge"),
           covariate.labels = c("Female","College Degree","Family Income","Age (log)",
