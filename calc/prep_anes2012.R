@@ -429,7 +429,7 @@ out2012 <- prepDocuments(processed2012$documents, processed2012$vocab, processed
 data2012 <- data2012[-processed2012$docs.removed,]
 data2012 <- data2012[-out2012$docs.removed,]
 
-## stm fit with 20 topics
+## stm fit with 49 topics
 stm_fit2012 <- stm(out2012$documents, out2012$vocab, prevalence = as.matrix(out2012$meta)
                    , K=49, seed=12345)
 
