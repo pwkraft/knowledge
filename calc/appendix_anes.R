@@ -341,10 +341,10 @@ stargazer(m4a, type="text")
 
 ## create table
 stargazer(m4a, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
-          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
-          title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
+          title=c("Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
           and external efficacy in the 2012 ANES. Standard errors in parentheses. Estimates are used for
-          Figure 2 in the main text.",
+          Figure 2 in the main text."),
           column.labels = c("Turnout","Participation","Internal Efficacy","External Efficacy"),
           covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
                                "College Degree","Family Income","Age (log)",
@@ -358,7 +358,7 @@ stargazer(m4b, type="text")
 
 ## create table
 stargazer(m4b, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
-          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
           and external efficacy in the 2016 ANES. Standard errors in parentheses. Estimates are used for
           Figure 2 in the main text.",
@@ -378,7 +378,7 @@ stargazer(m4e, type="text")
 
 ## create table
 stargazer(m4e, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
-          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
           and external efficacy controlling for personality characteristics in the 2012 ANES. 
           Standard errors in parentheses. Estimates are used for Figure \\ref{fig:knoweff_personality} 
@@ -396,7 +396,7 @@ stargazer(m4f, type="text")
 
 ## create table
 stargazer(m4f, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
-          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
           and external efficacy controlling for personality characteristics in the 2016 ANES. 
           Standard errors in parentheses. Estimates are used for Figure \\ref{fig:knoweff_personality} 
@@ -417,7 +417,7 @@ stargazer(m4c, type="text")
 
 ## create table
 stargazer(m4c, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
-          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
           and external efficacy controlling for individual response length in the 2012 ANES. 
           Standard errors in parentheses. Estimates are used for Figure \\ref{fig:knoweff_lwc} 
@@ -435,7 +435,7 @@ stargazer(m4d, type="text")
 
 ## create table
 stargazer(m4d, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
-          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
           and external efficacy controlling for individual response length in the 2016 ANES. 
           Standard errors in parentheses. Estimates are used for Figure \\ref{fig:knoweff_lwc} 
@@ -494,7 +494,7 @@ stargazer(m5a, m5b, type = "text")
 
 ## create table
 stargazer(m5a, m5b, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
-          model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
+          model.names=FALSE, dep.var.labels.include = T, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of sophistication on the probability of casting a correct vote in the 
           2012 and 2016 ANES (estimated via logistic regression). Standard errors in parentheses.
           Estimates are used for Figure 6 in the main text.",
