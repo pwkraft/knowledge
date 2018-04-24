@@ -310,7 +310,7 @@ dev.off()
 stargazer(m1, type = "text")
 
 ## create table
-stargazer(m1, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+stargazer(m1, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
           model.names=FALSE, dep.var.labels.include = TRUE, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of gender on discursive sophistication and factual knowledge in the 
           2012 ANES and 2016 ANES. Standard errors in parentheses. Estimates are used for 
@@ -329,7 +329,7 @@ stargazer(m1, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3
 stargazer(m2, type = "text")
 
 ## create table
-stargazer(m2, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+stargazer(m2, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of gender on discursive sophistication and factual knowledge in the 
           2015 YouGov Study. Standard errors in parentheses. Estimates are used for 

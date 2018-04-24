@@ -340,7 +340,7 @@ load("out/anes_res.Rdata")
 stargazer(m4a, type="text")
 
 ## create table
-stargazer(m4a, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+stargazer(m4a, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
           title=c("Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
           and external efficacy in the 2012 ANES. Standard errors in parentheses. Estimates are used for
@@ -357,7 +357,7 @@ stargazer(m4a, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 
 stargazer(m4b, type="text")
 
 ## create table
-stargazer(m4b, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+stargazer(m4b, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
           and external efficacy in the 2016 ANES. Standard errors in parentheses. Estimates are used for
@@ -377,7 +377,7 @@ stargazer(m4b, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 
 stargazer(m4e, type="text")
 
 ## create table
-stargazer(m4e, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+stargazer(m4e, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
           and external efficacy controlling for personality characteristics in the 2012 ANES. 
@@ -395,7 +395,7 @@ stargazer(m4e, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 
 stargazer(m4f, type="text")
 
 ## create table
-stargazer(m4f, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+stargazer(m4f, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
           and external efficacy controlling for personality characteristics in the 2016 ANES. 
@@ -416,7 +416,7 @@ stargazer(m4f, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 
 stargazer(m4c, type="text")
 
 ## create table
-stargazer(m4c, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+stargazer(m4c, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
           and external efficacy controlling for individual response length in the 2012 ANES. 
@@ -434,7 +434,7 @@ stargazer(m4c, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 
 stargazer(m4d, type="text")
 
 ## create table
-stargazer(m4d, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+stargazer(m4d, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of sophistication on turnout, non-conventional participation, internal efficacy, 
           and external efficacy controlling for individual response length in the 2016 ANES. 
@@ -493,7 +493,7 @@ hetreg_summary2016 %>%
 stargazer(m5a, m5b, type = "text")
 
 ## create table
-stargazer(m5a, m5b, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+stargazer(m5a, m5b, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of sophistication on the probability of casting a correct vote in the 
           2012 and 2016 ANES (estimated via logistic regression). Standard errors in parentheses.

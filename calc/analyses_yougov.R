@@ -122,7 +122,7 @@ dev.off()
 summary(m2full)
 
 ## create table
-stargazer(m2full, align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+stargazer(m2full, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of sophistication on information retrieval in the 2015 YouGov study.
           Standard errors in parentheses. Estimates are used for Figure 3 in the main text.",
