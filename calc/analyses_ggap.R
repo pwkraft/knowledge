@@ -74,6 +74,12 @@ p1 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) 
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
   ggtitle("2012 ANES")
 
+p1_empty <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_empty + 
+  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
+  facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+  geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
+  ggtitle("2012 ANES")
+
 
 ### Gender gap in interviewer assessment for male/female interviewers?
 
@@ -101,6 +107,12 @@ p2 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) 
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
   ggtitle("2016 ANES")
 
+p2_empty <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_empty + 
+  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
+  facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+  geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
+  ggtitle("2016 ANES")
+
 
 ### Yougov Data
 
@@ -115,6 +127,12 @@ plot_means <- plot_df %>% group_by(Variable, Gender) %>%
          , cihi = mean + 1.96*sd/sqrt(n))
 
 p3 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
+  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
+  facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+  geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
+  ggtitle("2015 YouGov Survey")
+
+p3_empty <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_empty + 
   geom_bar(stat="identity") + geom_errorbar(width=.25) + 
   facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
@@ -181,6 +199,11 @@ p6 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) 
 (p0 <- grid.arrange(p1, p2, p3, p4, p5, p6, ncol=3))
 ggsave("../fig/meandiff.pdf", p0 ,width=6.5, height=4)
 
+(p0 <- grid.arrange(p1, p2, p3, ncol=3))
+ggsave("../fig/meandiff_pres.pdf", p0 ,width=6.5, height=3)
+
+(p0 <- grid.arrange(p1_empty, p2_empty, p3_empty, ncol=3))
+ggsave("../fig/meandiff_pres_empty.pdf", p0 ,width=6.5, height=3)
 
 
 ########
