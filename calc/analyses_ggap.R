@@ -30,6 +30,7 @@ source("func.R")
 
 ## plot defaults
 plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
+plot_empty <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white"))
 
 ## compare response behavior by gender
 ggplot(anes2012, aes(factor(female), y=as.numeric(wc!=0))) + 
@@ -265,6 +266,12 @@ ggplot(dfplot, aes(y=ivnames, x=Estimate
   plot_default + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ggsave("../fig/determinants.pdf",width=5,height=4)
 
+ggplot(dfplot, aes(y=ivnames, x=Estimate
+                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
+  geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
+  geom_point() + geom_errorbarh(height = 0) + facet_grid(source~dv, scale="free") +
+  plot_empty + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggsave("../fig/determinants_empty.pdf",width=5,height=4)
 
 
 ########

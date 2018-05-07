@@ -120,6 +120,14 @@ ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + geom_vline(xintercept 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ggsave("../fig/knoweff_pres.pdf", width=6.5, height=2.2)
 
+ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + geom_vline(xintercept = 0, color="grey") +
+  geom_point() + geom_errorbarh(height=0) + facet_grid(Year~dvlab, scale="free_x") +
+  xlab("Marginal Effect (-/+ 1 SD)") + ylab("Independent Variable") + plot_empty +
+  scale_y_discrete(limits = rev(levels(res$ivlab))) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggsave("../fig/knoweff_pres_empty.pdf", width=6.5, height=2.2)
+
+
 
 ### Robustness check: Joint model controlling for both measures + word count
 
