@@ -228,7 +228,7 @@ sim <- function(models, iv, robust=F, ci=c(0.025,0.975), nsim = 1000){
 
 
 latexTable <- function(x, caption=NULL, label=NULL, align=NULL, digits=3
-                       , varlabs=NULL, mlabs=NULL, ...){
+                       , varlabs=NULL, mlabs=NULL, cluster=NULL,...){
   ############################################################################################
   ### Function to print model results in latex table
   ### replaces stargazer for unsupported models
@@ -250,7 +250,11 @@ latexTable <- function(x, caption=NULL, label=NULL, align=NULL, digits=3
     ## extract varnames, coefs and se
     vars <- names(coef(x[[m]]))
     coefs <- round(coef(x[[m]]), digits)
-    se <- paste0("(",round(sqrt(diag(vcov(x[[m]]))), digits),")")
+    if(!is.null(cluster)){
+      se <- paste0("(",round(sqrt(diag(vcovCL(x[[m]], cluster=cluster))), digits),")")
+    } else {
+      se <- paste0("(",round(sqrt(diag(vcov(x[[m]]))), digits),")")
+    }
     tmp <- data.frame(vars,coefs,se)
     colnames(tmp) <- c("vars",paste0(c("coefs","se"),m))
     
