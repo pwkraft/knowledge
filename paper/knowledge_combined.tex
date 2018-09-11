@@ -1,0 +1,84 @@
+\documentclass[12pt]{article}
+\usepackage[margin = 1in]{geometry}
+\usepackage[USenglish]{babel}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{lscape}
+\usepackage{dcolumn}
+\usepackage{xcolor}
+\usepackage{subcaption}
+\usepackage{enumerate}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{arydshln}
+\usepackage{dcolumn}
+\usepackage[toc,page,title]{appendix}
+\usepackage{titletoc}
+\usepackage[colorlinks=true,citecolor=red!50!black,urlcolor=blue!50!black,linkcolor=red!50!black]{hyperref}
+\usepackage{chngcntr}
+
+\author{Patrick W. Kraft\footnote{Assistant Professor, University of Wisconsin-Milwaukee, \href{mailto:kraftp@uwm.edu}{kraftp@uwm.edu}.}}
+
+\title{Let's Talk Politics\\
+%Alternative titles: Talking Politics; Looking for Answers; Why do Women Know Less About Politics? They Don't.
+\large{A Naive Approach for Measuring Political Sophistication}\footnote{Previous versions of this manuscript have been presented at Polmeth 2016, MPSA 2017, EPSA 2017, ISPP 2017, and APSA 2017. I thank Talbot Andrews, Alexa Bankert, Jason Barabas, Scott Clifford, Andy Delton, Kathy Dolan, Peter DeScioli, Stanley Feldman, Fabrizio Gilardi, Bill Jacoby, Jennifer Jerit, Yanna Krupnikov, Jamie Monogan, Hannah Nam, the Nam Lab, Michael Peress, and Arthur Spirling for helpful comments on previous versions of this manuscript. Special thanks to C{\'e}line Colombo, Scott Clifford, and Jennifer Jerit for sharing their data. The manuscript and code are available on GitHub: \url{https://github.com/pwkraft/knowledge}.
+}
+}
+\date{}
+
+% sans serif font
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+\maketitle
+\doublespacing
+\thispagestyle{empty}
+
+%\begin{center}
+%-- WORK IN PROGRESS -- \\
+%PLEASE DO NOT CITE OR REDISTRIBUTE WITHOUT PERMISSION
+%\end{center} 
+
+\hfill
+\begin{abstract}\singlespacing
+\noindent \input{knowledge_abstract}
+
+
+\vspace{\baselineskip}
+\noindent \textit{Keywords}: political sophistication, open-ended responses, text analysis, gender gap
+
+\vspace{\baselineskip}
+\noindent \textit{Word count}: 5873 (via TeXcount)
+\end{abstract}
+\hfill
+
+\newpage\setcounter{page}{1}
+\input{knowledge_maintext}
+
+\clearpage
+\singlespacing
+\bibliographystyle{/data/Dropbox/Uni/Lit/apsr2006}
+\bibliography{/data/Dropbox/Uni/Lit/Literature}
+
+\clearpage
+\renewcommand\thesubsection{\Roman{subsection}}
+\counterwithin{figure}{section}
+\setcounter{page}{1}
+\appendices
+\textit{Online Appendix:}\\
+\textbf{Let's Talk Politics -- A Naive Approach for Measuring Political Sophistication}
+
+%\thispagestyle{empty}
+\startcontents[sections]
+\printcontents[sections]{l}{1}{\setcounter{tocdepth}{2}}
+\clearpage
+
+\input{knowledge_appendix_maintext}
+
+
+
+\end{document}
