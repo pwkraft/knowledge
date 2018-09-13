@@ -296,6 +296,13 @@ ggplot(dfplot, aes(y=ivnames, x=Estimate
   plot_empty + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ggsave("../fig/determinants_empty.pdf",width=5,height=4)
 
+ggplot(dfplot, aes(y=ivnames, x=Estimate
+                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
+  geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
+  geom_point(size=.5) + geom_errorbarh(height = 0) + facet_grid(source~dv, scale="free") +
+  plot_default + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggsave("../fig/determinants_poster.pdf",width=4,height=4)
+
 
 ########
 # topic differences b/w men and women (ANES)
@@ -320,6 +327,18 @@ topics2016 <- c(head(tmp2016$topics), tail(tmp2016$topics))
 
 pdf("../fig/stm_gender.pdf", height=5, width=12)
 par(mfrow=c(1,2), mar=c(2.2,0.5,2.2,0.5))
+plot.estimateEffect(prep2012, covariate = "female", topics = topics2012, model = stm_fit2012
+                    , xlim = c(-.05,.015), method = "difference", cov.value1 = 1, cov.value2 = 0
+                    , labeltype = "prob", n=5, verbose.labels = F, width=50
+                    , main = "Gender Differences in Topic Proportions (2012 ANES)")
+plot.estimateEffect(prep2016, covariate = "female", topics = topics2016, model = stm_fit2016
+                    , xlim = c(-.05,.015), method = "difference", cov.value1 = 1, cov.value2 = 0
+                    , labeltype = "prob", n=5, verbose.labels = F, width=50
+                    , main = "Gender Differences in Topic Proportions (2016 ANES)")
+dev.off()
+
+pdf("../fig/stm_gender_poster.pdf", height=8, width=6.5)
+par(mfrow=c(2,1), mar=c(2.2,0.5,2.2,0.5))
 plot.estimateEffect(prep2012, covariate = "female", topics = topics2012, model = stm_fit2012
                     , xlim = c(-.05,.015), method = "difference", cov.value1 = 1, cov.value2 = 0
                     , labeltype = "prob", n=5, verbose.labels = F, width=50

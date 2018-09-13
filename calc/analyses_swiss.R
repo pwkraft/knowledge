@@ -166,6 +166,14 @@ ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
   ylab("Level of Justification") + xlab("Discursive sophistication")
 ggsave("../fig/swiss_ggridges_empty.pdf",width=2.5,height=5)
 
+ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
+  geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
+  scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
+  scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=1) +
+  geom_text(data=opend_cor, aes(label=cor),size=2,vjust=-9) +
+  ylab("Level of Justification") + xlab("Discursive sophistication")
+ggsave("../fig/swiss_ggridges_poster.pdf",width=4,height=4)
+
 
 ######################
 ### Is there a gender gap in manually coded level of justification?
