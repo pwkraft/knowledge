@@ -69,7 +69,7 @@ Department of Political Science\\ % Address
 %\faPhone\hspace{.2em} +1 (631) 371-1607\\ % Phone number
 \faEnvelope\hspace{.2em} \texttt{kraftp@uwm.edu}\\ % Email address
 \faTwitter\hspace{.2em} \texttt{@patrickwkraft}\\ % Twitter
-\faGlobe\hspace{.2em} \texttt{http://pwkraft@github.io} % Website
+\faGlobe\hspace{.2em} \texttt{pwkraft.github.io} % Website
 \end{minipage}
 %
 \begin{minipage}[b]{0.25\linewidth}
@@ -107,8 +107,8 @@ This paper proposes a simple but powerful framework to measure political sophist
 
 %\color{DarkSlateGray} % DarkSlateGray color for the rest of the content
 \color{Black} % DarkSlateGray color for the rest of the content
-\section*{Discursive sophistication captures complexity in open-ended responses}
-Facing a set of questions on various political issues, sophisticated respondents should be able to express a larger number of considerations, use words that are highly descriptive of each topic, and be able to express an opinion on each issue.
+\section*{Discursive sophistication captures the complexity in open-ended responses}
+Facing a set of questions on various political issues, sophisticated respondents should be able to express a larger number of considerations, use words that are highly descriptive of each topic, and be able to voice their opinion on each issue.
 \begin{align*}
 \text{considerations}_i &= \dfrac{|\mathcal{T}^*_i|}{\max_i|\mathcal{T}^*_i|}\\
 \text{word choice}_i &= \dfrac{\sum_{\mathcal{W}_i} P(w|t^*)}{\max_i\left[\sum_{\mathcal{W}_i} P(w|t^*)\right]}\\
@@ -120,9 +120,9 @@ Facing a set of questions on various political issues, sophisticated respondents
 \toprule 
 $i$ & Individual respondent \\
 $\mathcal{T}^*_i$ & Set of topics mentioned by respondent $i$ (via STM, see \citealt{roberts2014structural}) \\
-$\mathcal{W}_i$ & Set of words contained in a response of person $i$\\
-$w\in\mathcal{W}_i$ & Individual word that is assigned to a topic $t^* \in \{1,...,T\} $ \\
-$p_{ij}$ & Proportion of words in person $i$'s response of to question $j\in \{1,...,J\}$ relative to the overall response length across all questions. \\
+$\mathcal{W}_i$ & Complete set of words contained in all responses of person $i$\\
+$w\in\mathcal{W}_i$ & Individual word in a response, each assigned to a topic $t^* \in \{1,...,T\} $ \\
+$p_{ij}$ & Proportion of words in person $i$'s response to question $j\in \{1,...,J\}$ relative to the overall response length across all questions. \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -148,10 +148,10 @@ Disc. Soph. 	& 0.162 														& 0.461 \\\bottomrule
 \end{center}
 
 
-\section*{Discursive sophistication is correlated with traditional measures...}
+\section*{Discursive sophistication is correlated with conventional knowledge measures...}
 \begin{center}\footnotesize
 \includegraphics[width=\linewidth]{../fig/anes2016_corplot.pdf}
-\captionof{figure}{\color{Green} Correlation matrix of discursive sophistication and conventional political knowledge metrics and . The plots on the diagonal display univariate densities for each variable. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. All correlations are statistically significant with $p<.05$.}
+\captionof{figure}{\color{Green} Correlation matrix of discursive sophistication and conventional political knowledge metrics. The plots on the diagonal display univariate densities for each variable. The panels in the lower triangular display the scatter plot of two measures as well as a linear fit. The upper triangular displays the correlation coefficient. All correlations are statistically significant with $p<.05$.}
 \end{center}
 
 
@@ -173,7 +173,7 @@ Disc. Soph. 	& 0.162 														& 0.461 \\\bottomrule
 \section*{Application: No evidence for a gender gap in discursive sophistication}
 \begin{center}
 \includegraphics[width=\linewidth]{../fig/determinants_poster.pdf}
-\captionof{figure}{\color{Green} Common determinants of political sophistication. Estimates are OLS regression coefficients with 95\% confidence intervals. Dependent variables are discursive sophistication as well as conventional metrics of political knowledge.}
+\captionof{figure}{\color{Green} Common determinants of political sophistication. Estimates are OLS regression coefficients with 95\% confidence intervals. Dependent variables are discursive sophistication as well as factual political knowledge.}
 \end{center}
 
 
