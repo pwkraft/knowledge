@@ -68,7 +68,7 @@ ggsave("../fig/anes2016_corplot.pdf",width=3.2, height=3.2)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
         , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge"
                            ,"Interviewer\nEvaluation")) + plot_default
-ggsave("../fig/anes2016_corplot.pdf",width=4, height=4)
+#ggsave("../fig/anes2016_corplot.pdf",width=4, height=4)
 
 
 ## ANES 2012 components
