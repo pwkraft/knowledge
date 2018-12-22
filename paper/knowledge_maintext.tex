@@ -81,25 +81,42 @@ In contrast, I propose to target the underlying reasoning that gives rise to an 
 
 From a theoretical perspective, political sophistication usually characterizes a particular \textit{structure} of an individual's system of beliefs about politics. For example, \citet{converse1964nature} emphasizes the importance of the level of conceptualization as the main characteristic of sophistication rather than isolated pieces of factual information. Similarly, \citet{tetlock1983cognitive,tetlock1993cognitive} uses the term \textsl{integrative complexity} to describe the degree to which considerations related to an issue are interconnected. \citet{luskin1987measuring} also defines political sophistication based on the structure of individual belief systems, arguing that they can vary on three separate dimensions: (1) their \textsl{size} -- i.e. the number of cognitions, (2) their \textsl{range} -- i.e. the dispersion of cognition over categories, and (3) their \textsl{constraint} -- i.e. the extent to which cognitions are interconnected in a meaningful way. Political sophistication, in turn, is seen as the conjunction of these dimensions: ``A person is politically sophisticated to the extent to which his or her [political belief system] is large, wide-ranging, and highly constrained'' \citep[860]{luskin1987measuring}. A sophisticated open-ended response based on elaborate reasoning should reflect this notion of complex belief systems.\footnote{It should be no surprise that Converse and others examined open-ended responses in their early studies--albeit from a slightly different perspective than the approach outlined here. Importantly, instead of relying on manual coding of open-ended responses, I develop an automated framework that is easily reproducible and can directly be applied to large surveys.}
 
-Consider again the scenario of multiple open-ended questions about candidate and party preferences in a survey. A response to a set of open-ended questions
+Consider again the scenario of multiple open-ended questions about candidate and party preferences in a survey. In characterizing sophisticated responses that are indicative of elaborate reasoning, we can leverage three levels of variation---between responses to different questions, in the topics raised, and in how a given topic is discussed in terms of word choice. For each dimension, we can make the following assumptions about how sophistication manifests itself in verbatim responses.
 
-Lastly, sophisticated individuals should hold opinions about each political actor or policy that they are asked to discuss. Given a set of multiple open-ended probes focusing on different issues, sophisticates should be able to express their attitudes towards each question in terms of both approval or disapproval.
+First, we consider response variation between different questions. Individuals who engage in elaborate processing should hold opinions about each political actor or policy that they are asked to discuss. Given a set of multiple open-ended probes focusing on different targets of evaluation, a sophisticated respondent should be able to express their attitudes towards each question in terms of both approval or disapproval.
 
+% 1) Distribution between answers
 \begin{assumption}[Opinionation]
-Answer all the questions!
+Sophisticated respondents hold various opinions and are therefore able to respond to each query.
 \end{assumption}
 
-Sophisticated individuals should be able to elaborate more on their political attitudes. If people possess a large, wide-ranging, and constrained belief system, they should be able to recall a large number of \textit{considerations} related to political actors or issues. 
+Next, the level of elaboration should also affect the number of distinct considerations that are raised when answering a set of open-ended questions.
 
+Beyond the ability to form an opinion towards each target of the open-ended question, sophisticated individuals should be able to elaborate more on the nature of their political attitudes for each target. 
+
+ to recall a large number of \textit{considerations} related to political actors or issues. 
+
+Number of considerations within answers
+
+% 2) Distribution across topics/considerations
 \begin{assumption}[Considerations]
 Mention many different topics!
 \end{assumption}
 
 However, sophisticated respondents should not only be able to mention a larger number of raw considerations when discussing politics. The level of sophistication should also be reflected in the \textit{word choice} describing the underlying issues. Individuals who possess a constrained system of beliefs should be more inclined to use terms that are highly descriptive of a given topic (e.g., the \textit{economy} or \textit{taxes}) rather than broad terms that could be attributed to any topic and are not clearly related to politics.
 
+% 3) Distribution within topics
+
+How you talk about each consideration.
+
 \begin{assumption}[Word Choice]
 Talk about each topic in a reasonable way!
 \end{assumption}
+
+Overall, a highly sophisticated individual can be expected to respond to a set of open-ended items by giving a more elaborate response that focuses on multiple considerations using terms that are highly descriptive of each topic and addresses his or her attitudes towards all relevant political actors or policies more or less equally.
+
+Overall, differences in sophistication should be reflected in the way individuals describe and justify their political beliefs. Crucially, a measure of sophistication that is based on how individuals discuss their preferences in their own words can be directly applied in various settings to target specific political tasks such as choosing between candidates, parties, or policy propositions. Rather than having to devise a new set of questions that attempt to capture information necessary to make competent decisions, we can simply analyze how respondents elaborate on their related preferences in verbatim.
+
 
 In the following, I discuss these three different attributes of open-ended survey responses that should be indicative of sophistication in attitude expression in more detail.
 % TODO: more needs to be done here! Work on theoretical motivation
@@ -169,9 +186,6 @@ Together, the three measures form a composite metric of sophistication in politi
 \begin{equation}
 \text{discursive sophistication}_i = \tfrac{1}{3}(\text{considerations}_i + \text{word choice}_i + \text{opinionation}_i).
 \end{equation}
-Overall, a highly sophisticated individual can be expected to respond to a set of open-ended items by giving a more elaborate response that focuses on multiple considerations using terms that are highly descriptive of each topic and addresses his or her attitudes towards all relevant political actors or policies more or less equally.
-
-Overall, differences in sophistication should be reflected in the way individuals describe and justify their political beliefs. Crucially, a measure of sophistication that is based on how individuals discuss their preferences in their own words can be directly applied in various settings to target specific political tasks such as choosing between candidates, parties, or policy propositions. Rather than having to devise a new set of questions that attempt to capture information necessary to make competent decisions, we can simply analyze how respondents elaborate on their related preferences in verbatim.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
