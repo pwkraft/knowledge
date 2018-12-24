@@ -18,7 +18,7 @@ I validate the measure across multiple data sets by comparing it to conventional
 
 
 
-\section*{Elaborate Reasoning and Attitude Expression}
+\section*{Attitude Expression and Elaborate Reasoning}
 % Style over Substance?
 % In-Depth Processing and Attitude Expression
 
@@ -111,14 +111,14 @@ Discursive sophistication in attitude expression is then defined as the conjunct
 
 
 %\clearpage
-\section*{An Overview of Data Sources and Open Ended Items}
+\section*{Overview of Data Sources and Open Ended Items}
 % CUTS: This section should start on page 6
 
-In the following, I apply the framework to measure discursive sophistication using multiple surveys employing different sets of open-ended questions. Each survey focuses on sophistication in the context of distinct political tasks, namely the evaluation of (1) candidates running for public office, (2) broad issue areas such as health care and gun legislation, and (3) policy referenda. The data sets survey items are briefly described below.
+In the following, I apply the theoretical framework outlined above to examine discursive sophistication in multiple surveys employing different sets of open-ended questions. Each survey focuses on sophistication in the context of distinct political tasks, namely the evaluation of (1) candidates running for public office, (2) broad issue areas such as health care and gun legislation, and (3) specific legislative policy referenda. The data sets are briefly described below.
 
 
 \subsection*{2012 \& 2016 American National Election Study}
-The main analyses are based on the 2012 and 2016 wave of the American National Election Study (ANES), which consist of a representative survey of about 5000 adults in the months before the US Presidential election in each year. About 2000 respondents in both waves participated in face-to-face interviews while the remaining respondents filled out the survey online. For the purpose of the present analyses, I rely on the pooled datasets while controlling for differences in survey mode. The measure of discursive sophistication is based on open-ended questions in which respondents were asked in the pre-election wave of the survey to list anything in particular that they like/dislike about the Democratic/Republican party as well as anything that might make them vote/not vote for either of the Presidential candidates. They were probed by the interviewer asking ``anything else?'' until the respondent answered ``no.'' Overall, there are a total number of 8 open-ended responses where individuals described their beliefs and attitudes towards political actors. Individuals who did not respond to all of the open-ended items (420 in 2012; 204 in 2016), or who responded in Spanish (228 in 2012; 43 in 2016), are excluded from the analysis.
+The main analyses are based on the 2012 and 2016 wave of the American National Election Study (ANES), each of which consists of a representative survey of about 5000 adults in the months before the US Presidential election in each year. About 2000 respondents in both waves participated in face-to-face interviews while the remaining respondents filled out the survey online. For the purpose of the present analyses, I rely on pooled datasets while controlling for differences in survey mode. Discursive sophistication is evaluated using a set of open-ended questions in which respondents were asked to list anything in particular that they like/dislike about the Democratic/Republican party as well as anything that might make them vote/not vote for either of the Presidential candidates. They were probed by the interviewer asking ``anything else?'' until the respondent answered ``no.'' Overall, there are a total number of 8 open-ended responses where individuals described their beliefs and attitudes towards political actors. Individuals who did not respond to all of the open-ended items (420 in 2012; 204 in 2016), or who responded in Spanish (228 in 2012; 43 in 2016), are excluded from the analysis.
 
 
 \subsection*{2015 YouGov Survey}
@@ -132,30 +132,33 @@ Second, the respondents reported on their attitudes towards the Affordable Care 
 \item Still thinking about the question you just answered, what thoughts came to mind while you were answering that question? Please try to list everything that came to mind.
 \item For decades, experts have observed that the United States spends far more per person on health care than any other country. However, the U.S. falls behind on most measures of health care outcomes, such as life expectancy. What factors do you think are responsible for the state of our health care system?
 \end{itemize}
-Here, discursive sophistication is computed based on the verbatim responses to the four preceding questions using the same procedures described above. Compared to the open-ended likes/dislikes items included in the 2012 and 2016 ANES, the questions directly address considerations related to specific policy issues that were prominent in the political discourse at the time of the survey. Respondents who did not provide an answer to any of the open-ended questions were removed from the analysis (48).
+Here, discursive sophistication is evaluated based on the verbatim responses to the four preceding questions using the same procedures described above. Compared to the open-ended likes/dislikes items included in the 2012 and 2016 ANES, the questions directly address considerations related to specific policy issues that were prominent in the political discourse at the time of the survey. Respondents who did not provide an answer to any of the open-ended questions were removed from the analysis (48).
 
 
 \subsection*{Swiss Referendum Survey}
-Lastly, I examine survey data on Swiss citizens justifying their vote choices on multiple referenda used in a recent analysis by \citet{colombo2016justifications}. The author compiled a data set of cross-sectional surveys administered in Switzerland after national popular votes on multiple policy propositions. The original surveys were conducted as representative samples after each of thirty-four national policy votes that were held between 2008 and 2012 resulting in a total of about 27,000 observations. However, respondents were only asked to justify their decision for or against a given proposition in verbatim if they participated in the vote in the first place. As such, about 5,000 individuals in the data set did not provide an open-ended response. The remaining respondents were asked to describe the main reason as well as additional justifications for their decision in two separate items. As before, discursive sophistication is computed based on verbatim responses to both questions.
+Lastly, I examine survey data on Swiss citizens justifying their vote choices on multiple referenda used in a recent analysis by \citet{colombo2016justifications}. The author compiled a data set of cross-sectional surveys administered in Switzerland after national popular votes on multiple policy propositions. The original surveys were conducted as representative samples after each of thirty-four national policy votes that were held between 2008 and 2012 resulting in a total of about 27,000 observations. However, respondents were only asked to justify their decision for or against a given proposition in verbatim if they participated in the vote in the first place. As such, about 5,000 individuals in the data set did not provide an open-ended response. The remaining respondents were asked to describe the main reason as well as additional justifications for their decision in two separate items. As before, discursive sophistication is evaluated based on verbatim responses to both questions.
 % QUESTION wording for Swiss study?
 
 
 
 \section*{A First Look at Discursive Sophistication}
 
-Responses that reflect high levels of sophistication should therefore display a greater level of \textit{opinionation}, which is conceptualized as the diversity of relative lengths for each open-ended response (specified as the Shannon entropy):
+%Discursive sophistication is conceptualized based on three levels of variation in a set of open-ended responses.
+In order to measure discursive sophistication in these different context, we need to quantify the individual-level variation on each of the three dimensions outlined above. First, when looking at response patterns across questions, high levels of elaboration should display a greater level of \textit{opinionation}, which is based on the degree to which individuals are able to respond to each query presented in a survey more or less equally. We can conceptualize this diversity in relative lengths for each open-ended response as the Shannon entropy across survey items.
 \begin{equation}
 \text{opinionation}_i = \dfrac{-\sum_{j=1}^J p_{ij} \ln p_{ij}}{\ln J}
 \end{equation}
 where $p_{ij}$ is the proportion of words in the response of individual $i$ to question $j\in \{1,...,J\}$ relative to the overall size of the individuals' response. The variable ranges from 0 (only one question was answered) to 1 (all questions were answered with the same word length per answer).
 
-I rely on the structural topic model framework \citep{roberts2014structural} to extract the number of topics mentioned by each respondent in a survey.\footnote{See below for more information on the set of open-ended responses, pre-processing choices, as well as on the topic model specification.} First, denote $\mathcal{W}_i$ as the set of words contained in a response of individual $i$. Each word $w\in\mathcal{W}_i$ is assigned to a topic $t^* \in \{1,...,T\} $, such that $P(t^*|w,X_i) > P(t|w,X_i) \forall t\neq t^*$.\footnote{Note that $P(t|w,X_i)=\dfrac{P(w|t)P(t|X_i)}{P(w|X_i)}$. In the context of structural topic models, $X_i$ denotes the covariates used to predict individual topic prevalence \citep[see][for details]{roberts2014structural}.} In other words, each unique term in a response is assigned to the topic that has the highest likelihood of having generated that term, given the model. The set of topics that are mentioned by respondent $i$ across all words in $\mathcal{W}_i$ can then be denoted as $\mathcal{T}^*_i$ and the number of considerations can be written as:
+Second, we need to quantify the number of \textit{considerations} discussed by each individual. I rely on the structural topic model framework \citep{roberts2014structural} to extract the number of topics mentioned by each respondent in a survey.\footnote{See below for more information on the set of open-ended responses, pre-processing choices, as well as on the topic model specification.} Denote $\mathcal{W}_i$ as the set of words contained in a response of individual $i$. Each word $w\in\mathcal{W}_i$ is assigned to a topic $t^* \in \{1,...,T\} $, such that $P(t^*|w,X_i) > P(t|w,X_i) \forall t\neq t^*$.\footnote{Note that $P(t|w,X_i)=\dfrac{P(w|t)P(t|X_i)}{P(w|X_i)}$. In the context of structural topic models, $X_i$ denotes the covariates used to predict individual topic prevalence \citep[see][for details]{roberts2014structural}.} In other words, each unique term in a response is assigned to the topic that has the highest likelihood of having generated that term, given the model. The set of topics that are mentioned by respondent $i$ across all words in $\mathcal{W}_i$ can then be described as $\mathcal{T}^*_i$ and the number of considerations can be written as:
 \begin{equation}
 \text{considerations}_i = \dfrac{|\mathcal{T}^*_i|}{\max|\mathcal{T}^*_i|}.
 \end{equation}
 The measure is re-scaled to range from zero to one by dividing raw count of topics by the maximum number of topics observed across individuals.
 
 %There's a connection between the Benoit Google Scholar argument and the word choice measure, although with opposite conclusions...
+
+The last sophistication component discussed above concerns the way individuals talk about each consideration.
 
 Highly descriptive word choice is conceptualized as the sum of term likelihoods $P(w|t^*)$ given topic assignments over the entire set of words in $\mathcal{W}_i$:
 \begin{equation}
