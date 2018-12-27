@@ -7,6 +7,7 @@
 
 rm(list = ls())
 library(car)
+library(nFactors)
 library(quanteda)
 library(stm)
 library(corrplot)
@@ -71,6 +72,45 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), 
                            ,"Interviewer\nEvaluation (Pre)")) + 
   theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white"))
 #dev.off()
+
+
+########
+# factor analysis of individual components
+########
+
+datcor2012 <- data2012[,c("ditem","ntopics","distinct","polknow_factual","polknow_evalpre")]
+datcor2016 <- data2016[,c("ditem","ntopics","distinct","polknow_factual","polknow_evalpre")]
+
+fit2012 <- factanal(datcor2012[,1:3], 1, rotation="varimax")
+fit2016 <- factanal(datcor2016[,1:3], 1, rotation="varimax")
+
+tibble(Variable = c("Opinionation","Considerations", "Word Choice"),
+       `2012` = fit2012$loadings[,1],
+       `2016` = fit2016$loadings[,1]) %>%
+  xtable(caption = "Factor Loadings of Discursive Sophistication Components
+         in the American National Election Study (ANES)",
+         label = "app:factload", digits = 3) %>%
+  print(file = "../tab/factload.tex", 
+        caption.placement = "top",
+        include.rownames = FALSE)
+
+## check factor analysis including conventional measures
+(fit <- factanal(na.omit(datcor2012), 2, rotation="varimax"))
+(fit <- factanal(na.omit(datcor2016), 2, rotation="varimax"))
+
+## Determine the number of factors (including conventional measures)
+ev <- eigen(cor(datcor2012, use = "complete.obs")) # get eigenvalues
+ap <- parallel(subject=nrow(datcor2012),var=ncol(datcor2012),
+               rep=100,cent=.05)
+nS <- nScree(x=ev$values, aparallel=ap$eigen$qevpea)
+plotnScree(nS) 
+
+ev <- eigen(cor(datcor2016, use = "complete.obs")) # get eigenvalues
+ap <- parallel(subject=nrow(datcor2016),var=ncol(datcor2016),
+               rep=100,cent=.05)
+nS <- nScree(x=ev$values, aparallel=ap$eigen$qevpea)
+plotnScree(nS) 
+
 
 
 ########

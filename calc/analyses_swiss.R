@@ -54,14 +54,14 @@ dev.off()
 # correlation matrices of individual components
 ########
 
-datcor <- rbind(opend_german[,c("ntopics","distinct","ditem")]
-                , opend_french[,c("ntopics","distinct","ditem")]
-                , opend_italian[,c("ntopics","distinct","ditem")]
+datcor <- rbind(opend_german[,c("ditem","ntopics","distinct")]
+                , opend_french[,c("ditem","ntopics","distinct")]
+                , opend_italian[,c("ditem","ntopics","distinct")]
                 )
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Considerations","Word Choice","Opinionation")) + plot_default
+        , columnLabels = c("Opinionation","Considerations","Word Choice")) + plot_default
 ggsave("../fig/swiss_corplot_components.pdf",width=2.6, height=2.6)
 
 
