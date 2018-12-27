@@ -91,7 +91,7 @@ tibble(Variable = c("Opinionation","Considerations", "Word Choice"),
          in the American National Election Study (ANES)",
          label = "app:factload", digits = 3) %>%
   print(file = "../tab/factload.tex", 
-        caption.placement = "top",
+        caption.placement = "bottom",
         include.rownames = FALSE)
 
 ## check factor analysis including conventional measures
