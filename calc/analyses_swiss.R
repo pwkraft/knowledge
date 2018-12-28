@@ -147,16 +147,16 @@ opend_combined <- rbind(data.frame(opend_german, language = "German")
 opend_cor <- rbind(data.frame(cor = paste0("r = ",round(cor(opend_german$polknow_text_mean, opend_german$loj), 2)), language = "German")
                    , data.frame(cor = paste0("r = ",round(cor(opend_french$polknow_text_mean, opend_french$loj), 2)), language = "French")
                    , data.frame(cor = paste0("r = ",round(cor(opend_italian$polknow_text_mean, opend_italian$loj), 2)), language = "Italian"))
-opend_cor$polknow_text_mean <- 0
+opend_cor$polknow_text_mean <- 0.05
 opend_cor$loj <- 4
 
 ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
   scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
-  scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=1) +
+  scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=3) +
   geom_text(data=opend_cor, aes(label=cor),size=2,vjust=-9) +
   ylab("Level of Justification") + xlab("Discursive sophistication")
-ggsave("../fig/swiss_ggridges.pdf",width=2.5,height=5)
+ggsave("../fig/swiss_ggridges.pdf",width=6,height=2)
 
 ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
