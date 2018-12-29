@@ -146,7 +146,7 @@ Lastly, I examine survey data on Swiss citizens justifying their vote choices on
 
 \section*{A First Look at Discursive Sophistication}
 
-In order to measure discursive sophistication in open-ended responses, it is necessary to quantify the individual-level variation on each of the three dimensions discussed above. I begin by describing the measurement approach in more detail and explore a first set of results based on data from the 2012 and 2016 ANES. The same procedures are applied with the remaining datasets and additional information for these is provided in the appendix.
+In order to measure discursive sophistication in open-ended responses according to the theoretical framework outlined above, we need to quantify the individual-level variation on each of the three dimensions. I begin by describing the measurement approach for each in more detail and explore a first set of results based on data from the 2012 and 2016 ANES. The same procedures are applied to the remaining datasets and additional information for these is provided in the appendix.
 
 First, regarding response patterns across questions, high levels of elaboration have been argued to display a greater level of \textit{opinionation}, which is based on the degree to which individuals are able to respond to each query presented in a survey more or less equally. I quantify this diversity in relative lengths for each open-ended response as the Shannon entropy across survey items:
 \begin{equation}
@@ -158,17 +158,17 @@ The next component considers the number of \textit{considerations} discussed by 
 \begin{equation}
 \text{considerations}_i = \dfrac{|\mathcal{T}^*_i|}{\max|\mathcal{T}^*_i|}.
 \end{equation}
-The measure is re-scaled to range from zero to one by dividing raw count of topics by the maximum number of topics observed across individuals.
+I re-scale the measure to range from zero to one by dividing raw count of topics by the maximum number of topics observed across individuals.
 
 %There's a connection between the Benoit Google Scholar argument and the word choice measure, although with opposite conclusions...
 
-The last component of discursive sophistication addresses the way individuals talk about each consideration. More specifically, I argue that when talking about a specific topic, sophisticated respondents should use words that are clearly associated with that topic. We can rely on the same structural topic model as before to summarize the extent to which word choice tends to consist of highly descriptive terms for each topic or not. Highly descriptive \textit{word choice} is thereby conceptualized as the sum of term likelihoods $P(w|t^*)$ given topic assignments over the entire set of words in $\mathcal{W}_i$:
+The last component of discursive sophistication addresses the way individuals talk about each consideration. More specifically, I argue that when talking about a specific topic, sophisticated respondents should use words that are clearly associated with that topic. We can again rely on the structural topic model result to summarize the extent to which \textit{word choice} consists of highly descriptive terms for each topic or not. Highly descriptive word choice is thereby conceptualized as the sum of term likelihoods $P(w|t^*)$ given topic assignments over the entire set of words in $\mathcal{W}_i$:
 \begin{equation}
 \text{word choice}_i = \dfrac{\sum_{\mathcal{W}_i} P(w|t^*)}{\max\left[\sum_{\mathcal{W}_i} P(w|t^*)\right]}
 \end{equation}
-Again, the measure is re-scaled to range from zero to one by dividing all values by the empirical maximum observed across all individuals in the data.
+Again, I re-scale the measure to range from zero to one by dividing all values by the empirical maximum observed across all individuals in the data.
 
-All three components are positively correlated.\footnote{See Appendix~\ref{app:oeinfo} for correlation matrices between individual components.} Taking both waves of the ANES as an example, an exploratory factor analysis confirms that all three components load on a single factor with all loadings exceeding 0.5. Detailed results are presented in Table~\ref{app:factload}.
+Applying this approach to both waves of the ANES shows that all three components are highly correlated.\footnote{See Appendix~\ref{app:oeinfo} for correlation matrices between individual components for the ANES as well as the remaining two datasets.} Furthermore, an exploratory factor analysis confirms that all three components load on a single factor with all loadings exceeding 0.5. Detailed results are presented in Table~\ref{app:factload}.
 
 \input{/data/Dropbox/Uni/Projects/2016/knowledge/tab/factload}
 
