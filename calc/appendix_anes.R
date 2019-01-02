@@ -310,6 +310,7 @@ summary(m2)
 mean(data2012$wc)
 t.test(wc~female, data=data2012)
 t.test(as.numeric(wc>0)~female, data=anes2012)
+t.test(as.numeric(wc>0)~female, data=anes2016)
 
 ## prep data for heckit model
 heck_tmp <- data.frame(caseid=data2012$caseid, polknow_text_mean=data2012$polknow_text_mean)
