@@ -312,6 +312,10 @@ t.test(wc~female, data=data2012)
 t.test(as.numeric(wc>0)~female, data=anes2012)
 t.test(as.numeric(wc>0)~female, data=anes2016)
 
+prop.test(table(anes2012$female,anes2012$wc==0))
+prop.test(table(anes2016$female,anes2016$wc==0))
+
+
 ## prep data for heckit model
 heck_tmp <- data.frame(caseid=data2012$caseid, polknow_text_mean=data2012$polknow_text_mean)
 heck_tmp <- merge(anes2012, heck_tmp, all=TRUE)
