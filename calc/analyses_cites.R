@@ -2,7 +2,7 @@
 ### Measuring Political Sophistication using Open-ended Responses ###
 ### Patrick Kraft                                                 ###
 ### ============================================================= ###
-## analyzing citations of 
+## analyzing citations of Delli Carpini/Keeter
 
 
 rm(list = ls())
@@ -44,6 +44,8 @@ raw %>%
   summarise(Citations = n()) %>%
   ggplot(aes(x = Year, y = Citations)) +
   geom_line() +
+  ylab("Citations per Year") +
+  xlab("") +
   theme_classic(base_size=9) + 
   theme(panel.border = element_rect(fill=NA)) +
   scale_x_continuous(breaks=seq(1995,2015,5))
