@@ -1,0 +1,171 @@
+\section{Measuring Discursive Sophistication}
+
+\subsection{Item Wording}
+\begin{frame}{Factual Knowledge Questions}
+\begin{itemize}
+\item \emph{\cite{carpini1993measuring}}: House majority, veto override percent, party ideological location, judicial review, identifying the vice president
+\item \emph{2012 ANES}: Number of times president can be elected, size of federal deficit, full term of senator, meaning of medicare, federal government spending
+\item \emph{2015 YouGov}: Speaker of the House, TTIP, Chair of Federal Reserve Board, unemployment rate, veto override percent, common core, largest electricity source, Senate majority
+\end{itemize}
+\end{frame}
+% Carpini: 780 citations
+
+\begin{frame}{Open-Ended Items: 2012 ANES}
+\begin{itemize}
+\item Is there anything in particular about [CANDIDATE] that might make you want to vote for him? [...] What is that?
+\item Is there anything in particular about [CANDIDATE] that might make you want to vote against him? [...] What is that?
+\item Is there anything in particular that you like about [PARTY]? [...] What is that?
+\item Is there anything in particular that you don't like about [PARTY]? [...] What is that?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Open-Ended Items: 2015 YouGov}
+\begin{itemize}
+\item Do you favor or oppose stricter gun control laws? [...] Still thinking about the question you just answered, what thoughts came to mind while you were answering that question? Please try to list everything that came to mind.
+\item Thinking about the mass shootings that have occurred in the U.S. in the last few years, what factors do you think are responsible for the shootings?
+\item Do you support or oppose the health care law passed by the President and Congress in 2010?
+[...] Still thinking about the question you just answered, what thoughts came to mind while you were answering that question? Please try to list everything that came to mind.
+\item For decades, experts have observed that the United States spends far more per person on health care than any other country. However, the U.S. falls behind on most measures of health care outcomes, such as life expectancy. What factors do you think are responsible for the state of our health care system?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Open-Ended Items: 2008--2012 Swiss Referenda}
+\begin{itemize}
+\item Which are your main reasons for accepting/rejecting the proposal [X]?
+\item What are additional reasons for accepting/rejecting the proposal [X]?
+\end{itemize}
+\end{frame}
+
+\subsection{Considerations}
+\begin{frame}{\hyperlink{components}{Considerations}}\label{elaboration}\centering
+\emph{Considerations}$_i$ = $\dfrac{|\mathcal{T}^*_i|}{\max_i|\mathcal{T}^*_i|}$
+\vspace{1em}\\
+\begin{tabular}{lp{8.5cm}}
+\toprule
+$i$ & Respondent \\
+$\mathcal{T}^*_i $ & Topic representation of response set $\mathcal{W}_i$, such that $w\rightarrow t^*\forall w \in \mathcal{W}_i$ \\
+$w \in \mathcal{W}_i$ & Individual word $w$ in response set $\mathcal{W}_i$\\
+
+$t^* \in \{1,...,T\} $ & Topic $t^*$ out of total number of topics $T$ assigned to $w$ such that $P(t^*|w,X_i) > P(t|w,X_i) \forall t\neq t^*$\\
+& $P(t|w,X_i)=\dfrac{P(w|t)P(t|X_i)}{P(w|X_i)}$ \\
+$X_i$ & Covariates used in structural topic model
+\end{tabular}
+\end{frame}
+
+\subsection{Word Choice}
+\begin{frame}{\hyperlink{components}{Word Choice}}\label{eloquence}\centering
+\emph{Word Choice$_i$} = $\dfrac{\log\sum_{\mathcal{W}_i} P(w|t^*)}{\max_i\left[\log\sum_{\mathcal{W}_i} P(w|t^*)\right]}$
+% estimated max topic probabilities of terms
+\vspace{1em}\\
+\begin{tabular}{lp{8.5cm}}
+\toprule
+$i$ & Respondent \\
+$w \in \mathcal{W}_i$ & Individual word $w$ in response set $\mathcal{W}_i$\\
+%$P(w|t^*)$ & Probability of word $w$ for assigned topic $t^*$ \\
+$t^* \in \{1,...,T\} $ & Topic $t^*$ out of total number of topics $T$ assigned to $w$ such that $P(t^*|w,X_i) > P(t|w,X_i) \forall t\neq t^*$\\
+& $P(t|w,X_i)=\dfrac{P(w|t)P(t|X_i)}{P(w|X_i)}$ \\
+%&$P(t|w,X_i)=\dfrac{P(w|t)P(t|X_i)}{\sum_{j=1}^{T}P(w|t_j,X_i)P(t_j|X_i)}$ \\
+$X_i$ & Covariates used in structural topic model
+\end{tabular}
+\end{frame}
+% Is a respondent using high probability terms for each topic?
+
+\subsection{Opinionation}
+\begin{frame}{\hyperlink{components}{Opinionation}}\label{opinionation}\centering
+\emph{Opinionation$_i$} = $\dfrac{-\sum_{j=1}^J p_{ij} \ln p_{ij}}{\ln J}$
+\vspace{1em}\\
+\begin{tabular}{lp{9cm}}
+\toprule
+$i$ & Respondent \\
+$j \in \{1,...,J\}$ & Open-ended items \\
+$p_{ij}$ & Proportion of words in the response of individual $i$ to question $j$ relative to the overall size of the individual's response\\
+\end{tabular}
+\end{frame}
+
+
+\subsection{}
+\begin{frame} %[allowframebreaks]
+\frametitle{\hyperlink{corplot_components}{Comparison with Conventional Measures -- 2012 ANES}}\label{corplot}
+  \begin{figure}
+  %\only<1>{\includegraphics[height=.85\textheight]{fig/corplot_empty.pdf}}
+  \only<1>{\includegraphics[height=.85\textheight]{fig/corplot_pres.pdf}}
+  \end{figure}
+\end{frame}
+% Now we want to look at desireable characteristics that should be associated with political sophistication -> political engagement as one standard validation check
+
+
+\section{Robustness Checks}
+
+\subsection{Choosing the Number of Topics}
+\begin{frame}{Choosing the Number of Topics (2012 ANES)}\label{ktopics}
+  \begin{figure}
+  \includegraphics{fig/ktopic.pdf}
+  \end{figure}
+\end{frame}
+
+\subsection{Gender Differences in Topic Proportions}
+\begin{frame}{Gender Differences in Topic Proportions (2012 ANES)}\label{stm_gender}
+  \begin{figure}
+  \includegraphics[height=.85\textheight]{fig/stm_gender.pdf}
+  \end{figure}
+\end{frame}
+
+\subsection{Engagement and Participation -- Joint Model}
+\begin{frame}{\hyperlink{engagement}{Engagement and Participation -- Joint Model}}\label{engagement_joint}
+  \begin{figure}
+  \includegraphics{fig/knoweff_joint.pdf}
+  \end{figure}
+\end{frame}
+
+\subsection{Control for WORDSUM}
+\begin{frame}{\hyperlink{engagement}{Engagement and Participation -- Control for WORDSUM}}\label{engagement_wordsum}
+  \begin{figure}
+  \includegraphics{fig/knoweff_wordsum.pdf}
+  \end{figure}
+\end{frame}
+
+\subsection{Control for Word Count}
+\begin{frame}{\hyperlink{engagement}{Engagement and Participation -- Control for Word Count}}\label{engagement_lwc}
+  \begin{figure}
+  \includegraphics{fig/knoweff_lwc.pdf}
+  \end{figure}
+\end{frame}
+
+\subsection{Control for Personality}
+\begin{frame}{\hyperlink{engagement}{Engagement and Participation -- Control for Personality}}\label{engagement_personality}
+  \begin{figure}
+  \includegraphics{fig/knoweff_personality.pdf}
+  \end{figure}
+\end{frame}
+
+\subsection{Accurate Information Retrieval -- Joint Model}
+\begin{frame}{\hyperlink{retrieval}{Accurate Information Retrieval -- Joint Model}}\label{retrieval_joint}
+  \begin{figure}
+  \includegraphics{fig/yg_disease_joint.pdf}
+  \end{figure}
+\end{frame}
+
+
+\section{Additional Analyses}
+
+\subsection{Precision in Perceived Ideological Position}
+\begin{frame}{Precision in Perceived Ideological Position (2012 ANES)}\label{hetreg}
+  \begin{figure}
+  \includegraphics{fig/hetreg_pres.pdf}
+  \end{figure}
+\end{frame}
+
+\subsection{Consistency with Initial Vote Intention}
+\begin{frame}{Consistency with Initial Vote Intention (2012 ANES)}\label{prepost}
+  \begin{figure}
+  \includegraphics{fig/prepost_exp.pdf}
+  \end{figure}
+\end{frame}
+
+\subsection{Issue-Consistency: Support for Redistribution}
+\begin{frame}{Issue-Consistency: Support for Redistribution (2012 ANES)}\label{redistribution}
+  \begin{figure}
+  \includegraphics{fig/redistribution.pdf}
+  \end{figure}
+\end{frame}
+% Prior (2014): Visual Political Knowledge
