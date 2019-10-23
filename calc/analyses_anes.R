@@ -78,6 +78,11 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), 
         , columnLabels = c("Opinionation","Considerations","Word Choice")) + plot_default
 ggsave("../fig/anes2012_corplot_components.pdf",width=2.6, height=2.6)
 
+## empty plot
+ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
+        , columnLabels = c("Opinionation","Considerations","Word Choice")) + plot_empty
+ggsave("../fig/anes2012_corplot_components0.pdf",width=2.6, height=2.6)
+
 ## ANES 2016 components
 datcor <- data2016[,c("ditem","ntopics","distinct")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
@@ -133,7 +138,22 @@ ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + geom_vline(xintercept 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ggsave("../fig/knoweff_pres_empty.pdf", width=6.5, height=2.2)
 
+## additional plots for presentation
+filter(res, Year == "2012 ANES") %>%
+  ggplot(aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + geom_vline(xintercept = 0, color="grey") +
+  geom_point() + geom_errorbarh(height=0) + facet_wrap(.~dvlab, scale="free_x", ncol=2) +
+  xlab("Marginal Effect (-/+ 1 SD)") + ylab("Independent Variable") + plot_default +
+  scale_y_discrete(limits = rev(levels(res$ivlab)))
+ggsave("../fig/knoweff_pres1.pdf", width=4, height=3)
 
+filter(res, Year == "2012 ANES") %>%
+  ggplot(aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) + geom_vline(xintercept = 0, color="grey") +
+  geom_point() + geom_errorbarh(height=0) + facet_wrap(.~dvlab, scale="free_x", ncol=2) +
+  xlab("Marginal Effect (-/+ 1 SD)") + ylab("Independent Variable") + plot_empty +
+  scale_y_discrete(limits = rev(levels(res$ivlab)))
+ggsave("../fig/knoweff_pres0.pdf", width=4, height=3)
+
+## plot for poster
 res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
                     , labels = c("Turnout","Non-conv.\nParticip."
                                  , "Internal\nEfficacy","External\nEfficacy"))

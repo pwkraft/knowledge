@@ -349,6 +349,19 @@ plot.estimateEffect(prep2016, covariate = "female", topics = topics2016, model =
                     , main = "Gender Differences in Topic Proportions (2016 ANES)")
 dev.off()
 
+pdf("../fig/stm_gender_pres0.pdf", height=5, width=7.5)
+par(mfrow=c(1,1), mar=c(2.2,0.5,2.2,0.5))
+plot(x=0, y =0, type = "n", xlim = c(-.05,.015), ylab = NA, yaxt='n', main = "Gender Differences in Topic Proportions (2012 ANES)")
+abline(v=0, lty=2)
+dev.off()
+
+pdf("../fig/stm_gender_pres1.pdf", height=5, width=7.5)
+par(mfrow=c(1,1), mar=c(2.2,0.5,2.2,0.5))
+plot.estimateEffect(prep2012, covariate = "female", topics = topics2012, model = stm_fit2012
+                    , xlim = c(-.05,.015), method = "difference", cov.value1 = 1, cov.value2 = 0
+                    , labeltype = "prob", n=5, verbose.labels = F, width=50
+                    , main = "Gender Differences in Topic Proportions (2012 ANES)")
+dev.off()
 
 
 ###############

@@ -36,9 +36,21 @@
 \end{itemize}
 \end{frame}
 
+\subsection{Opinionation}
+\begin{frame}{\hyperlink{components}{Opinionation}}\label{opinionation}\centering
+\emph{Opinionation$_i$} = $\dfrac{-\sum_{j=1}^J p_{ij} \ln p_{ij}}{\ln J}$
+\vspace{1em}\\
+\begin{tabular}{lp{9cm}}
+	\toprule
+	$i$ & Respondent \\
+	$j \in \{1,...,J\}$ & Open-ended items \\
+	$p_{ij}$ & Proportion of words in the response of individual $i$ to question $j$ relative to the overall size of the individual's response\\
+\end{tabular}
+\end{frame}
+
 \subsection{Considerations}
 \begin{frame}{\hyperlink{components}{Considerations}}\label{elaboration}\centering
-\emph{Considerations}$_i$ = $\dfrac{|\mathcal{T}^*_i|}{\max_i|\mathcal{T}^*_i|}$
+\emph{Considerations}$_i$ = $\dfrac{|\mathcal{T}^*_i|}{\max|\mathcal{T}^*_i|}$
 \vspace{1em}\\
 \begin{tabular}{lp{8.5cm}}
 \toprule
@@ -54,7 +66,7 @@ $X_i$ & Covariates used in structural topic model
 
 \subsection{Word Choice}
 \begin{frame}{\hyperlink{components}{Word Choice}}\label{eloquence}\centering
-\emph{Word Choice$_i$} = $\dfrac{\log\sum_{\mathcal{W}_i} P(w|t^*)}{\max_i\left[\log\sum_{\mathcal{W}_i} P(w|t^*)\right]}$
+\emph{Word Choice$_i$} = $\dfrac{\log\sum_{\mathcal{W}_i} P(w|t^*)}{\max\left[\log\sum_{\mathcal{W}_i} P(w|t^*)\right]}$
 % estimated max topic probabilities of terms
 \vspace{1em}\\
 \begin{tabular}{lp{8.5cm}}
@@ -70,17 +82,6 @@ $X_i$ & Covariates used in structural topic model
 \end{frame}
 % Is a respondent using high probability terms for each topic?
 
-\subsection{Opinionation}
-\begin{frame}{\hyperlink{components}{Opinionation}}\label{opinionation}\centering
-\emph{Opinionation$_i$} = $\dfrac{-\sum_{j=1}^J p_{ij} \ln p_{ij}}{\ln J}$
-\vspace{1em}\\
-\begin{tabular}{lp{9cm}}
-\toprule
-$i$ & Respondent \\
-$j \in \{1,...,J\}$ & Open-ended items \\
-$p_{ij}$ & Proportion of words in the response of individual $i$ to question $j$ relative to the overall size of the individual's response\\
-\end{tabular}
-\end{frame}
 
 
 \subsection{}
@@ -88,84 +89,98 @@ $p_{ij}$ & Proportion of words in the response of individual $i$ to question $j$
 \frametitle{\hyperlink{corplot_components}{Comparison with Conventional Measures -- 2012 ANES}}\label{corplot}
   \begin{figure}
   %\only<1>{\includegraphics[height=.85\textheight]{fig/corplot_empty.pdf}}
-  \only<1>{\includegraphics[height=.85\textheight]{fig/corplot_pres.pdf}}
+  \only<1>{\includegraphics[height=.85\textheight]{../fig/anes2012_corplot.pdf}}
   \end{figure}
 \end{frame}
 % Now we want to look at desireable characteristics that should be associated with political sophistication -> political engagement as one standard validation check
 
+\section{Additional Results}
+
+\subsection{Topic Proportions -- 2012 \& 2016 ANES}
+\begin{frame}{Topic Proportions -- 2012 \& 2016 ANES}\label{stm}
+\begin{figure}
+	\includegraphics[height=.9\textheight]{../fig/anes_stm_prop.pdf}
+\end{figure}
+\end{frame}
+
+\subsection{2008--2012 Swiss Referendum Survey}
+% Here, we will look at political sophistication and competence
+% Manual coding would be the ideal, Colombo as the gold standard
+
+\begin{frame} %[allowframebreaks]
+\frametitle{Comparison with Manually Coded Levels of Justification}
+\emph{Data source}: 2008--2012 Swiss Referendum Survey, N = 26,621 (phone)
+\begin{figure}
+	\includegraphics[width=\textwidth]{../fig/swiss_ggridges.pdf}
+\end{figure}
+\end{frame}
+%Non-response: 4,917
+% Manually coding would be the gold standard... How would it compare across 3 different languages -> very hard test!!!
+
+\subsection{2015 YouGov Study}
+% Here, we will look at political sophistication and competence
+% Introduce the main point here!!
+
+\begin{frame} %[allowframebreaks]
+\frametitle{\hyperlink{retrieval_joint}{Accurate Information Retrieval}}\label{retrieval}
+\emph{Data source}: 2015 YouGov Study, N = 1000 (online)
+\begin{figure}
+\includegraphics{../fig/yg_disease.pdf}
+\end{figure}
+\end{frame}
+%Non-response: 48
+
 
 \section{Robustness Checks}
 
-\subsection{Choosing the Number of Topics}
-\begin{frame}{Choosing the Number of Topics (2012 ANES)}\label{ktopics}
-  \begin{figure}
-  \includegraphics{fig/ktopic.pdf}
-  \end{figure}
-\end{frame}
-
-\subsection{Gender Differences in Topic Proportions}
-\begin{frame}{Gender Differences in Topic Proportions (2012 ANES)}\label{stm_gender}
-  \begin{figure}
-  \includegraphics[height=.85\textheight]{fig/stm_gender.pdf}
-  \end{figure}
-\end{frame}
-
-\subsection{Engagement and Participation -- Joint Model}
-\begin{frame}{\hyperlink{engagement}{Engagement and Participation -- Joint Model}}\label{engagement_joint}
-  \begin{figure}
-  \includegraphics{fig/knoweff_joint.pdf}
-  \end{figure}
-\end{frame}
-
-\subsection{Control for WORDSUM}
-\begin{frame}{\hyperlink{engagement}{Engagement and Participation -- Control for WORDSUM}}\label{engagement_wordsum}
-  \begin{figure}
-  \includegraphics{fig/knoweff_wordsum.pdf}
-  \end{figure}
-\end{frame}
+%\subsection{Choosing the Number of Topics}
+%\begin{frame}{Choosing the Number of Topics (2012 ANES)}\label{ktopics}
+%  \begin{figure}
+%  \includegraphics{fig/ktopic.pdf}
+%  \end{figure}
+%\end{frame}
 
 \subsection{Control for Word Count}
 \begin{frame}{\hyperlink{engagement}{Engagement and Participation -- Control for Word Count}}\label{engagement_lwc}
   \begin{figure}
-  \includegraphics{fig/knoweff_lwc.pdf}
+  \includegraphics[width=\textwidth]{../fig/knoweff_lwc.pdf}
   \end{figure}
 \end{frame}
 
 \subsection{Control for Personality}
 \begin{frame}{\hyperlink{engagement}{Engagement and Participation -- Control for Personality}}\label{engagement_personality}
   \begin{figure}
-  \includegraphics{fig/knoweff_personality.pdf}
+  \includegraphics[width=\textwidth]{../fig/knoweff_personality.pdf}
   \end{figure}
 \end{frame}
 
-\subsection{Accurate Information Retrieval -- Joint Model}
-\begin{frame}{\hyperlink{retrieval}{Accurate Information Retrieval -- Joint Model}}\label{retrieval_joint}
-  \begin{figure}
-  \includegraphics{fig/yg_disease_joint.pdf}
-  \end{figure}
+\subsection{Determinants of Sophistication}
+\begin{frame}{Determinants of Sophistication}
+\begin{figure}
+	\includegraphics[height=.9\textheight]{../fig/determinants.pdf}
+\end{figure}
 \end{frame}
 
-
-\section{Additional Analyses}
-
-\subsection{Precision in Perceived Ideological Position}
-\begin{frame}{Precision in Perceived Ideological Position (2012 ANES)}\label{hetreg}
-  \begin{figure}
-  \includegraphics{fig/hetreg_pres.pdf}
-  \end{figure}
-\end{frame}
-
-\subsection{Consistency with Initial Vote Intention}
-\begin{frame}{Consistency with Initial Vote Intention (2012 ANES)}\label{prepost}
-  \begin{figure}
-  \includegraphics{fig/prepost_exp.pdf}
-  \end{figure}
-\end{frame}
-
-\subsection{Issue-Consistency: Support for Redistribution}
-\begin{frame}{Issue-Consistency: Support for Redistribution (2012 ANES)}\label{redistribution}
-  \begin{figure}
-  \includegraphics{fig/redistribution.pdf}
-  \end{figure}
-\end{frame}
-% Prior (2014): Visual Political Knowledge
+%\section{Additional Analyses}
+%
+%\subsection{Precision in Perceived Ideological Position}
+%\begin{frame}{Precision in Perceived Ideological Position (2012 ANES)}\label{hetreg}
+%  \begin{figure}
+%  \includegraphics{fig/hetreg_pres.pdf}
+%  \end{figure}
+%\end{frame}
+%
+%\subsection{Consistency with Initial Vote Intention}
+%\begin{frame}{Consistency with Initial Vote Intention (2012 ANES)}\label{prepost}
+%  \begin{figure}
+%  \includegraphics{fig/prepost_exp.pdf}
+%  \end{figure}
+%\end{frame}
+%
+%\subsection{Issue-Consistency: Support for Redistribution}
+%\begin{frame}{Issue-Consistency: Support for Redistribution (2012 ANES)}\label{redistribution}
+%  \begin{figure}
+%  \includegraphics{fig/redistribution.pdf}
+%  \end{figure}
+%\end{frame}
+%% Prior (2014): Visual Political Knowledge

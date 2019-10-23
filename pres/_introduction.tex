@@ -1,29 +1,29 @@
 % INTRODUCTION:
 % Thank you very much, my name is Patrick Kraft and I am a PhD Candidate at the Department for Political Science at Stony Brook University. My research is located at the intersection of political behavior and methodology. In my dissertation, I analyze how citizens discuss their political beliefs in their own words. Verbally expressing your attitudes toward an issue is one of the most ubiquitous ways to engage in politics. Yet little research directly studies this basic feature of day-to-day political life. Building on recent advances in quantitative text analysis methods, I develop measures to systematically examine verbatim political attitude expression. A key argument in my thesis is that by analyzing how citizens describe their beliefs and discuss them with peers, we can make inferences about the nature of their attitudes. The research that I want to present today is one chapter out of my dissertations which focuses on political sophistication. I propose a new measure of political sophistication based on verbatim attitude expression in open-ended survey items.
 
-\begin{frame}{Introduction}
-\begin{itemize}
-\item Verbally \emph{expressing your attitudes} toward an issue is one of the most ubiquitous---yet rarely studied---ways to engage in politics.
-\item<2-> We can leverage how citizens talk about politics to make inferences about the \emph{nature of their attitudes}.
-\vspace{1em}
-\visible<3->{\begin{center}
-\emph{Words} do the work of \emph{politics}\\{\tiny\citep{graham2009liberals}}
-\end{center}}
-\vspace{1em}
-\item<4-> \emph{Research} program:
-\begin{enumerate}
-\item<5-> Study \emph{moralization} in political attitude expression
-\item \only<6-7>{Utilize open-ended responses to measure political \emph{sophistication}}\only<8>{\textbf{Utilize open-ended responses to measure political \emph{sophistication}}}
-\item<7-> Map \emph{social influence} processes in political \emph{discussions}
-\end{enumerate}
-\end{itemize}
-\end{frame}
+%\begin{frame}{Introduction}
+%\begin{itemize}
+%\item Verbally \emph{expressing your attitudes} toward an issue is one of the most ubiquitous---yet rarely studied---ways to engage in politics.
+%\item<2-> We can leverage how citizens talk about politics to make inferences about the \emph{nature of their attitudes}.
+%\vspace{1em}
+%\visible<3->{\begin{center}
+%\emph{Words} do the work of \emph{politics}\\{\tiny\citep{graham2009liberals}}
+%\end{center}}
+%\vspace{1em}
+%\item<4-> \emph{Research} program:
+%\begin{enumerate}
+%\item<5-> Study \emph{moralization} in political attitude expression
+%\item \only<6-7>{Utilize open-ended responses to measure political \emph{sophistication}}\only<8>{\textbf{Utilize open-ended responses to measure political \emph{sophistication}}}
+%\item<7-> Map \emph{social influence} processes in political \emph{discussions}
+%\end{enumerate}
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}{Overview}
+%\tableofcontents[hideallsubsections]
+%\end{frame}
 
-\begin{frame}{Overview}
-\tableofcontents[hideallsubsections]
-\end{frame}
-
-\begin{frame}{Illustration -- Who scores higher on political knowledge?}
+\begin{frame}{Who scores higher on political knowledge?}
     \begin{center}
         \begin{tikzpicture}
             \node<1>[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=.9\textwidth]{fig/Respondents0.png}};
@@ -99,7 +99,7 @@
 Verbatim political \emph{attitude expression}:
 \begin{itemize}[<+->]
 \item \emph{Communication} and information diffusion
-\item Response pattern related to \emph{accuracy motivation}
+\item Reflects \emph{political belief system} \& \emph{accuracy motivation}
 \item Capture \emph{salient} issues, available \emph{frames}, and related \emph{considerations}
 \item Measure sophistication related to specific \emph{political tasks}
 %\\\emph{\faArrowRight\hspace{.1em}}Structure of \emph{political belief systems}
@@ -125,17 +125,22 @@ Verbatim political \emph{attitude expression}:
 \end{frame}
 
 % INTRODUCTION
-% Work on transition for discrusive sophistication
+% Work on transition for discursive sophistication
 
-\begin{frame}{Discursive Sophistication\visible<3->{ -- Structural Topic Model}}\label{overview_stm}
+\begin{frame}{Discursive Sophistication
+	\only<1-3>{-- Components}\only<4-5>{-- Structural Topic Model}\label{overview_stm}\only<6->{-- Components}}
 \begin{center}
         \begin{tikzpicture}
-            \node<1-3>[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=\textwidth]{fig/lda_empty.pdf}};
-            \node<2>[align=left] (image) at (8.4,4) {
-                        \emph{Attributes of Sophistication}:\\
-                        \emph{\faCaretRight} Political Belief System\\
-                        \emph{\faCaretRight} Accuracy motivation};
-            \node<3>[align=left] (image) at (9,4) {
+            \node<1-4>[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=\textwidth]{fig/lda_empty.pdf}};
+            \node<2-3>[align=left] (image) at (9,4) {
+            	\only<2->{\emph{\faCaretRight} \hyperlink{opinionation}{\emph{Opinionation}}\\
+            	Does a respondent discuss all questions?}\\\\
+            	\only<3->{\emph{\faCaretRight} \hyperlink{elaboration}{\emph{Considerations}}\\
+            	How many topics are mentioned?}\\\\
+            	\only<5->{\emph{\faCaretRight} \hyperlink{eloquence}{\emph{Word Choice}}\\
+            	Are terms highly descriptive of topics?}
+        		};
+            \node<4>[align=left] (image) at (9,4) {
             \emph{Processing} open-ended responses:\\
             \emph{\faCaretRight} Automatic spell checking\\
             \emph{\faCaretRight} Lower case\\
@@ -144,70 +149,74 @@ Verbatim political \emph{attitude expression}:
             \emph{\faCaretRight} Infrequent terms\\
             \emph{\faCaretRight} Aggregation \vspace{1em}\\
             \emph{\faArrowRight} \emph{Structural topic model}\\ {\footnotesize\citep{roberts2014structural}}};
-            \node<4>[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=\textwidth]{fig/lda.pdf}};
+            \node<5>[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=\textwidth]{fig/lda.pdf}};
+            \node<6->[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=\textwidth]{fig/lda_empty.pdf}};
+            \node<6->[align=left] (image) at (9,4) {
+            	\only<6->{\emph{\faCaretRight} \hyperlink{opinionation}{\emph{Opinionation}}\\
+            		Does a respondent discuss all questions?}\\\\
+            	\only<6->{\emph{\faCaretRight} \hyperlink{elaboration}{\emph{Considerations:}}\\
+            		How many topics are mentioned?}\\\\
+            	\only<6->{\emph{\faCaretRight} \hyperlink{eloquence}{\emph{Word Choice:}}\\
+            		Are terms highly descriptive of topics?}
+            };
         \end{tikzpicture}
     \end{center}
 %\visible<2>{\flushright\small \cite{roberts2014structural}}
 %\flushright{\footnotesize\texttt{\textcolor{gray}{\hyperlink{components}{[back]}}}}
 \end{frame}
 
-\begin{frame}{Topic Proportions -- 2012 ANES}\label{stm}
-  \begin{figure}
-  \includegraphics[height=.85\textheight]{fig/stm_prop.pdf}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Discursive Sophistication -- Components}\label{components}
-\visible<1->{Extracted \emph{Quantities}:
-\begin{enumerate}
-\item \hyperlink{elaboration}{\emph{Considerations:}} How many topics are mentioned?
-\item<3-> \hyperlink{eloquence}{\emph{Word Choice:}} Are terms highly descriptive of topics? 
-\item<5-> \hyperlink{opinionation}{\emph{Opinionation:}} Does a respondent discuss all questions?
-\end{enumerate}}
-
-\only<2>{
-\begin{textblock*}{54mm}(7mm,0.65\textheight)
-\begin{exampleblock}{Few Considerations}
-    {\color{green!50!black}{Represents all people.}}
-    \\{\color{red}{Represent the rich.}}
-    \\{\color{green!50!black}{Represents the working class.}}
-    \\{\color{red}{Represents the wealthy.}}
-\end{exampleblock}
-\end{textblock*}
-\begin{textblock*}{54mm}(67mm,0.65\textheight)
-\begin{exampleblock}{Many Considerations}
-	{\color{green!50!black}{Everything.}}
-	\\{\color{red}{Attitude toward women's rights, view on taxes mainly.}}
-	\\{\color{green!50!black}{Has more people that I trust.}}
-	\\{\color{red}{Too conservative.}}
-\end{exampleblock}
-\end{textblock*}
-} % Answers between 10 and 20 terms, min vs. max elaboration
-
-\only<4>{
-\begin{textblock*}{54mm}(7mm,0.65\textheight)
-\begin{exampleblock}{Low Descriptiveness}
-  enthus\\standoffish\\endless
-\end{exampleblock}
-\end{textblock*}
-\begin{textblock*}{54mm}(67mm,0.65\textheight)
-\begin{exampleblock}{High Descriptiveness}
-  health\\tax\\economi
-\end{exampleblock}
-\end{textblock*}
-} % Individual terms ranked highest and lowest on distinctiveness
-
-\end{frame}
-% add examples for each dimension here
+%\begin{frame}{Discursive Sophistication -- Components}\label{components}
+%\visible<1->{Extracted \emph{Quantities}:
+%\begin{enumerate}
+%\item \hyperlink{opinionation}{\emph{Opinionation:}} Does a respondent discuss all questions?
+%\item<2-> \hyperlink{elaboration}{\emph{Considerations:}} How many topics are mentioned?
+%\item<4-> \hyperlink{eloquence}{\emph{Word Choice:}} Are terms highly descriptive of topics? 
+%
+%\end{enumerate}}
+%
+%\only<3>{
+%\begin{textblock*}{54mm}(7mm,0.65\textheight)
+%\begin{exampleblock}{Few Considerations}
+%    {\color{green!50!black}{Represents all people.}}
+%    \\{\color{red}{Represent the rich.}}
+%    \\{\color{green!50!black}{Represents the working class.}}
+%    \\{\color{red}{Represents the wealthy.}}
+%\end{exampleblock}
+%\end{textblock*}
+%\begin{textblock*}{54mm}(67mm,0.65\textheight)
+%\begin{exampleblock}{Many Considerations}
+%	{\color{green!50!black}{Everything.}}
+%	\\{\color{red}{Attitude toward women's rights, view on taxes mainly.}}
+%	\\{\color{green!50!black}{Has more people that I trust.}}
+%	\\{\color{red}{Too conservative.}}
+%\end{exampleblock}
+%\end{textblock*}
+%} % Answers between 10 and 20 terms, min vs. max elaboration
+%
+%\only<5>{
+%\begin{textblock*}{54mm}(7mm,0.65\textheight)
+%\begin{exampleblock}{Low Descriptiveness}
+%  enthus\\standoffish\\endless
+%\end{exampleblock}
+%\end{textblock*}
+%\begin{textblock*}{54mm}(67mm,0.65\textheight)
+%\begin{exampleblock}{High Descriptiveness}
+%  health\\tax\\economi
+%\end{exampleblock}
+%\end{textblock*}
+%} % Individual terms ranked highest and lowest on distinctiveness
+%
+%\end{frame}
+%% add examples for each dimension here
 
 
 %\subsection{Relationship Between Individual Sophistication Components}
 \begin{frame}{\hyperlink{corplot}{Discursive Sophistication -- Components (2012 ANES)}}\label{corplot_components}
 \begin{center}
         \begin{tikzpicture}
-            \node<1>[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[height=.85\textheight]{fig/corplot_components0.pdf}};
-            \node<2->[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[height=.85\textheight]{fig/corplot_components.pdf}};
-            \node<3>[align=center,draw opacity=0,fill opacity=0.8,text opacity=1, white, fill=beamer@sbred] at (image.center) {Discursive Sophistication\\=\\ $\tfrac{1}{3}$(Considerations + Word Choice + Opinionation)};
+            \node<1>[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[height=.85\textheight]{../fig/anes2012_corplot_components0.pdf}};
+            \node<2->[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[height=.85\textheight]{../fig/anes2012_corplot_components.pdf}};
+            \node<3>[align=center,draw opacity=0,fill opacity=0.8,text opacity=1, white, fill=beamer@sbred] at (image.center) {Discursive Sophistication\\=\\ $\tfrac{1}{3}$(Opinionation + Considerations + Word Choice)};
         \end{tikzpicture}
     \end{center}
 %\visible<2>{\flushright\small \cite{roberts2014structural}}
