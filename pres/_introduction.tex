@@ -128,7 +128,7 @@ Verbatim political \emph{attitude expression}:
 % Work on transition for discursive sophistication
 
 \begin{frame}{Discursive Sophistication
-	\only<1-3>{-- Components}\only<4-5>{-- Structural Topic Model}\label{overview_stm}\only<6->{-- Components}}
+	\only<1-3>{-- Components}\only<4>{-- Structural Topic Model}\label{overview_stm}\only<5->{-- Components}}
 \begin{center}
         \begin{tikzpicture}
             \node<1-4>[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=\textwidth]{fig/lda_empty.pdf}};
@@ -140,23 +140,14 @@ Verbatim political \emph{attitude expression}:
             	\only<5->{\emph{\faCaretRight} \hyperlink{eloquence}{\emph{Word Choice}}\\
             	Are terms highly descriptive of topics?}
         		};
-            \node<4>[align=left] (image) at (9,4) {
-            \emph{Processing} open-ended responses:\\
-            \emph{\faCaretRight} Automatic spell checking\\
-            \emph{\faCaretRight} Lower case\\
-            \emph{\faCaretRight} Stopwords, Numbers, Punctuation\\
-            \emph{\faCaretRight} Stemming\\
-            \emph{\faCaretRight} Infrequent terms\\
-            \emph{\faCaretRight} Aggregation \vspace{1em}\\
-            \emph{\faArrowRight} \emph{Structural topic model}\\ {\footnotesize\citep{roberts2014structural}}};
-            \node<5>[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=\textwidth]{fig/lda.pdf}};
-            \node<6->[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=\textwidth]{fig/lda_empty.pdf}};
-            \node<6->[align=left] (image) at (9,4) {
-            	\only<6->{\emph{\faCaretRight} \hyperlink{opinionation}{\emph{Opinionation}}\\
+            \node<4>[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=\textwidth]{fig/lda.pdf}};
+            \node<5->[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=\textwidth]{fig/lda_empty.pdf}};
+            \node<5->[align=left] (image) at (9,4) {
+            	\only<5->{\emph{\faCaretRight} \hyperlink{opinionation}{\emph{Opinionation}}\\
             		Does a respondent discuss all questions?}\\\\
-            	\only<6->{\emph{\faCaretRight} \hyperlink{elaboration}{\emph{Considerations:}}\\
+            	\only<5->{\emph{\faCaretRight} \hyperlink{elaboration}{\emph{Considerations:}}\\
             		How many topics are mentioned?}\\\\
-            	\only<6->{\emph{\faCaretRight} \hyperlink{eloquence}{\emph{Word Choice:}}\\
+            	\only<5->{\emph{\faCaretRight} \hyperlink{eloquence}{\emph{Word Choice:}}\\
             		Are terms highly descriptive of topics?}
             };
         \end{tikzpicture}
