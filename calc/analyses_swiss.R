@@ -19,7 +19,7 @@ library(pmisc)
 library(stargazer)
 library(ggridges)
 
-setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
+setwd("/data/Dropbox/Uni/projects/2016/knowledge/calc")
 
 ## load data and stm results
 load("out/swiss.Rdata")

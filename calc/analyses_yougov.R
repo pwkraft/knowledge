@@ -31,6 +31,7 @@ source("func.R")
 
 ## plot defaults
 plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
+plot_empty <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white"))
 
 
 ########
@@ -100,6 +101,12 @@ ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variabl
   geom_ribbon(alpha=0.4, lwd=.1) + geom_line() + 
   ylab("Information Retrieval") + xlab("Value of Independent Variable")
 ggsave("../fig/yg_disease.pdf",width=4,height=2)
+
+ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_empty +
+  geom_ribbon(alpha=0.4, lwd=.1) + geom_line() + 
+  ylab("Information Retrieval") + xlab("Value of Independent Variable")
+ggsave("../fig/yg_disease0.pdf",width=4,height=2)
+
 
 
 ###################
