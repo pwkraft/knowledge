@@ -50,5 +50,6 @@ raw %>%
   theme(panel.border = element_rect(fill=NA)) +
   scale_x_continuous(breaks=seq(1995,2015,5))
 ggsave("../fig/cites.pdf", width=3.5, height=2.2)
+ggsave("../fig/cites.png", width=3.5, height=2.2)
 
 
