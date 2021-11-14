@@ -12,32 +12,33 @@ sdrange <- function(x){
 }
 
 
-### Compute discursive sophistication components based on stm results
+### Compute number of topics based on stm results
 #' built: 2018-01-11, Patrick Kraft
+#' updated: 2021-06-18, Patrick Kraft
 #' @import stm
 #' @param x: stm model result
 #' @return data.frame: estimated number of topics and distinctiveness of word choice
 #' @export
 
-sophistication <- function(x, docs){
+ntopics <- function(x, docs){
   if(class(x)!="STM") stop("x must be an STM object")
-  
+
   ## P(t|X): probability of topic t given covariates X [nobs,ntopics]
   pt_x <- x$theta
-  
+
   ## P(w|t): probability of word w given topic t [ntopics,nwords]
   pw_t <- exp(x$beta$logbeta[[1]])
   # logbeta: list containing the log of the word probabilities for each topic
-  
+
   ## P(w|X) = sum_j(P(w|t_j)P(t_j|X)): probability of word w across all topics [nobs,nwords]
   pw_x <- pt_x %*% pw_t
-  
+
   ## P(t_i|w,X) = P(w|t_i)P(t_i|X)/P(w|X): probability of topic t given word w and covariates X
   nobs <- nrow(pt_x)
   nwords <- ncol(pw_t)
   ntopics <- ncol(pt_x)
   pt_wx <- array(NA, c(nobs, nwords, ntopics))
-  
+
   cat("\nComputing P(t_i|w,X):\n")
   pb <- txtProgressBar(min = 1, max = nwords, style = 3)
   for(w in 1:nwords){
@@ -47,7 +48,59 @@ sophistication <- function(x, docs){
     setTxtProgressBar(pb, w)
   }
   close(pb)
-  
+
+  ## compute sophistication components
+  cat("\nComputing sophistication components:\n")
+  ntopics <- rep(NA, nobs)
+  pb <- txtProgressBar(min = 1, max = nobs, style = 3)
+  for(n in 1:nobs){
+    maxtopic_wx <- apply(pt_wx[n,,],1,which.max) # which topic has the highest probability for each word (given X)
+    ntopics[n] <- length(unique(maxtopic_wx[docs$documents[[n]][1,]])) # number of topics in response
+    setTxtProgressBar(pb, n)
+  }
+  cat("\n\n")
+
+  ## return rescaled measure
+  return(ntopics/max(ntopics))
+}
+
+
+### Compute discursive sophistication components based on stm results
+#' built: 2018-01-11, Patrick Kraft
+#' @import stm
+#' @param x: stm model result
+#' @return data.frame: estimated number of topics and distinctiveness of word choice
+#' @export
+
+sophistication <- function(x, docs){
+  if(class(x)!="STM") stop("x must be an STM object")
+
+  ## P(t|X): probability of topic t given covariates X [nobs,ntopics]
+  pt_x <- x$theta
+
+  ## P(w|t): probability of word w given topic t [ntopics,nwords]
+  pw_t <- exp(x$beta$logbeta[[1]])
+  # logbeta: list containing the log of the word probabilities for each topic
+
+  ## P(w|X) = sum_j(P(w|t_j)P(t_j|X)): probability of word w across all topics [nobs,nwords]
+  pw_x <- pt_x %*% pw_t
+
+  ## P(t_i|w,X) = P(w|t_i)P(t_i|X)/P(w|X): probability of topic t given word w and covariates X
+  nobs <- nrow(pt_x)
+  nwords <- ncol(pw_t)
+  ntopics <- ncol(pt_x)
+  pt_wx <- array(NA, c(nobs, nwords, ntopics))
+
+  cat("\nComputing P(t_i|w,X):\n")
+  pb <- txtProgressBar(min = 1, max = nwords, style = 3)
+  for(w in 1:nwords){
+    for(t in 1:ntopics){
+      pt_wx[,w,t] <- pw_t[t,w] * pt_x[,t] / pw_x[,w]
+    }
+    setTxtProgressBar(pb, w)
+  }
+  close(pb)
+
   ## compute sophistication components
   cat("\nComputing sophistication components:\n")
   know <- data.frame(ntopics = rep(NA, nobs), distinct = rep(NA, nobs))
@@ -55,19 +108,19 @@ sophistication <- function(x, docs){
   for(n in 1:nobs){
     maxtopic_wx <- apply(pt_wx[n,,],1,which.max) # which topic has the highest probability for each word (given X)
     wordprob_t <- diag(pw_t[maxtopic_wx,]) # what is the probability of the word given the assigned topic
-    
+
     know$ntopics[n] <- length(unique(maxtopic_wx[docs$documents[[n]][1,]])) # number of topics in response
     know$distinct[n] <- sum(wordprob_t[docs$documents[[n]][1,]] * docs$documents[[n]][2,]) # sum of word probabilities
     setTxtProgressBar(pb, n)
   }
   cat("\n\n")
-  
+
   ## rescaling
   know$ntopics <- know$ntopics/max(know$ntopics)
   know$distinct <- know$distinct/max(know$distinct)
   # scale minimum to zero?
   # know$distinct <- (know$distinct-min(know$distinct))/(max(know$distinct)-min(know$distinct))
-  
+
   know
 }
 
@@ -83,11 +136,11 @@ sophistication <- function(x, docs){
 #' @export
 
 sim <- function(models, iv, robust=F, ci=c(0.025,0.975), nsim = 1000){
-  
+
   ## prepare output object, convert input to model list
   out <- NULL
   if(class(models)[1] != "list") models <- list(models)
-  
+
   for(i in 1:length(models)){
     ## simulate betas from sampling distribution
     if(robust == T){
@@ -95,12 +148,12 @@ sim <- function(models, iv, robust=F, ci=c(0.025,0.975), nsim = 1000){
     } else {
       betas <- MASS::mvrnorm(nsim, coef(models[[i]]), vcov(models[[i]]))
     }
-    
+
     ## extract variable names
     vars <- names(coef(models[[i]]))
     int <- grep("[^)]:", vars)
     varsInt <- strsplit(vars[int], ":")
-    
+
     ## generate matrix of covariates
     X <- matrix(1, nrow=length(vars), ncol=nrow(iv))
     X[vars %in% names(iv),] <- t(iv[vars[vars %in% names(iv)]])
@@ -115,14 +168,14 @@ sim <- function(models, iv, robust=F, ci=c(0.025,0.975), nsim = 1000){
                      , 2, mean, na.rm=T)
     } else stop("Model type not supported")
     X[vars %in% names(means),] <- means
-    
+
     ## calculate interaction effects
     if(length(varsInt)>0){
       for(j in 1:length(varsInt)){
         X[int[j],] <- apply(X[vars %in% varsInt[[j]],],2,prod)
       }
     }
-    
+
     ## calculate expected values
     if(class(models[[i]])[1]=="lm"){
       evs <- betas %*% X
@@ -140,11 +193,11 @@ sim <- function(models, iv, robust=F, ci=c(0.025,0.975), nsim = 1000){
       if(unique(models[[i]]@misc$Upper)!=Inf) stop("Upper limit not supported")
       if(unique(models[[i]]@misc$Lower)!=0) warning("Limit != 0 not testes yet!")
       loLim <- unique(models[[i]]@misc$Lower)[1,1]
-      
+
       ## expected values for z>0
       evsTemp <- betas[,-2] %*% X[-2,]
       evs <- evsTemp + exp(betas[,2]) * dnorm(evsTemp/exp(betas[,2])) / pnorm(evsTemp/exp(betas[,2]))
-      
+
       ## probability of z>0
       pvs <- array(dim = c(nsim,ncol(X),nsim))
       for(j in 1:nrow(pvs)){
@@ -153,9 +206,9 @@ sim <- function(models, iv, robust=F, ci=c(0.025,0.975), nsim = 1000){
       }
       prob <- apply(pvs, 2, function(x) apply(x, 1, function(x) mean(x>loLim)))
     } else stop("Model type not supported")
-    
+
     skip <- F
-    
+
     if(nrow(iv)==2){
       ## calculate first differences
       evs <- evs[,2] - evs[,1]
@@ -193,13 +246,13 @@ sim <- function(models, iv, robust=F, ci=c(0.025,0.975), nsim = 1000){
       out <- rbind(out, res)
       skip <- T
     }
-    
+
     ## warning for Inf/-Inf in single iterations
     if(Inf %in% evs|-Inf %in% evs){
       warning(paste0("Inf/-Inf in ",length(evs[evs==Inf])+length(evs[evs==-Inf])," evs iteration(s)"))
       evs[evs==Inf|evs==-Inf] <- NA
     }
-    
+
     if(!skip){
       ## generate output table
       if(class(models[[i]])[1] != "vglm"){
@@ -220,7 +273,7 @@ sim <- function(models, iv, robust=F, ci=c(0.025,0.975), nsim = 1000){
       out <- rbind(out, res)
     }
   }
-  
+
   ## return output table
   rownames(out) <- NULL
   return(out)
@@ -241,11 +294,11 @@ latexTable <- function(x, caption=NULL, label=NULL, align=NULL, digits=3
   ## mlabs: labels for each model
   ## ...: further arguments passed to print.xtable (e.g. file etc.)
   ############################################################################################
-  
+
   ## save model in list
   if(class(x)!="list") x <- list(x)
   tbl <- data.frame(vars = names(coef(x[[1]])))
-  
+
   for(m in 1:length(x)){
     ## extract varnames, coefs and se
     vars <- names(coef(x[[m]]))
@@ -257,11 +310,11 @@ latexTable <- function(x, caption=NULL, label=NULL, align=NULL, digits=3
     }
     tmp <- data.frame(vars,coefs,se)
     colnames(tmp) <- c("vars",paste0(c("coefs","se"),m))
-    
+
     ## merge model results
     tbl <- merge(tbl,tmp,by="vars",all=T)
   }
-  
+
   ## arrange variables
   if(!is.null(varlabs)){
     if(nrow(tbl)!=length(varlabs)) stop("Variable lables do not have correct length")
@@ -269,15 +322,15 @@ latexTable <- function(x, caption=NULL, label=NULL, align=NULL, digits=3
     tbl <- tbl[names(varlabs),]
     tbl$vars <- unlist(varlabs)
   }
-  
+
   ## prepare full variable names for output
   out <- data.frame(vars = as.vector(t(cbind(as.character(tbl$vars),""))))
-  
+
   ## coefs and se in single column for each model
   for(m in 1:length(x)){
     out <- cbind(out, as.vector(t(tbl[,grep(m,colnames(tbl))])))
   }
-  
+
   ## model names
   if(!is.null(mlabs)){
     if(length(mlabs)!=(ncol(out)-1)) stop("Model labels do not have correct length")
@@ -285,29 +338,29 @@ latexTable <- function(x, caption=NULL, label=NULL, align=NULL, digits=3
   } else {
     colnames(out) <- c("Variable", paste0("(",1:length(x),")"))
   }
-  
+
   ## convert table to character
   out <- apply(out, 2, as.character)
-  
+
   ## add number of observations
   if(class(x[[1]])=="vglm"){
     out <- rbind(out, c("N",sapply(x, function(x) length(residuals(x))/2)))
   } else {
     out <- rbind(out, c("N",sapply(x, function(x) length(residuals(x)))))
   }
-  
+
   ## add LogLik or R-Squared
   if(class(x[[1]])=="lm"){
-    out <- rbind(out, c("R-squared (adj.)",sapply(x, function(x) 
+    out <- rbind(out, c("R-squared (adj.)",sapply(x, function(x)
       round(summary(x)$adj.r.squared, digits))))
   } else {
-    out <- rbind(out, c("Log-Likelihood",sapply(x, function(x) 
+    out <- rbind(out, c("Log-Likelihood",sapply(x, function(x)
       round(logLik(x), 0))))
   }
-  
+
   ## adjust align for excluded rownames
   if(!is.null(align)) align <- paste0("l",align)
-  
+
   ## export table
   print(xtable(out, caption=caption, label=label, align=align), include.rownames=F
         , hline.after=c(-1,0,nrow(out)-2,nrow(out)), ...)

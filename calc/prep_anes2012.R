@@ -13,10 +13,12 @@
 rm(list = ls())
 gc()
 
+library(tidyverse)
 library(car)
 library(dplyr)
 library(SnowballC)
 library(quanteda)
+library(quanteda.dictionaries)
 library(stm)
 library(readstata13)
 library(ineq)
@@ -24,9 +26,10 @@ library(rstan)
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
-setwd("/data/Dropbox/Uni/Projects/2016/knowledge/")
+setwd("/data/Dropbox/Uni/projects/2016/knowledge/")
 datasrc <- "/data/Dropbox/Uni/Data/anes2012/"
 raw2012 <- read.dta13(paste0(datasrc,"anes_timeseries_2012.dta"), convert.factors = F)
+load("~/Dropbox/Uni/Data/LIWC/liwc2015.Rdata")
 
 source("calc/func.R")
 
@@ -258,22 +261,22 @@ pid <- Recode(anes2012$pid_cont, "NA=0")
 ## 2) Issue positions
 
 # expert positions
-expert <- anes2012 %>% 
+expert <- anes2012 %>%
   filter(polknow_factual > median(polknow_factual, na.rm = T)) %>%
   summarize_at(vars(spsrvpr_dpc:envjob_rpc), mean, na.rm = T)
 
 # ego positions
 issue_rep <- Recode(anes2012$spsrvpr_ego, "NA=0") * expert$spsrvpr_rpc +
   Recode(anes2012$defsppr_ego, "NA=0") * expert$defsppr_rpc +
-  Recode(anes2012$inspre_ego, "NA=0") * expert$inspre_rpc + 
-  Recode(anes2012$guarpr_ego, "NA=0") * expert$guarpr_rpc + 
+  Recode(anes2012$inspre_ego, "NA=0") * expert$inspre_rpc +
+  Recode(anes2012$guarpr_ego, "NA=0") * expert$guarpr_rpc +
   Recode(anes2012$aidblack_ego, "NA=0") * expert$aidblack_rpc +
   Recode(anes2012$envjob_ego, "NA=0") * expert$envjob_rpc
 
 issue_dem <- Recode(anes2012$spsrvpr_ego, "NA=0") * expert$spsrvpr_dpc +
   Recode(anes2012$defsppr_ego, "NA=0") * expert$defsppr_dpc +
-  Recode(anes2012$inspre_ego, "NA=0") * expert$inspre_dpc + 
-  Recode(anes2012$guarpr_ego, "NA=0") * expert$guarpr_dpc + 
+  Recode(anes2012$inspre_ego, "NA=0") * expert$inspre_dpc +
+  Recode(anes2012$guarpr_ego, "NA=0") * expert$guarpr_dpc +
   Recode(anes2012$aidblack_ego, "NA=0") * expert$aidblack_dpc +
   Recode(anes2012$envjob_ego, "NA=0") * expert$envjob_dpc
 
@@ -378,72 +381,76 @@ for(i in 1:nrow(spell)){
 anes2012spell <- data.frame(caseid = anes2012opend$caseid, anes2012spell,stringsAsFactors = F)
 
 
-### add meta information about responses
 
-## function to compute shannon entropy (rescaled to 0-1??)
-shannon <- function(x, reversed = F){
-  out <- (- sum(log(x^x)/log(length(x))))
-  if(reversed) out <- 1 - out
-  out
+# Text-based political sophistication measure -----------------------------
+
+
+## Consistency: Shannon entropy of response lengths ----------------------
+
+### compute shannon entropy
+shannon <- function(x){
+  -sum(log(x^x)/log(length(x)))
 }
 
-## overall response length
+### overall response length
 anes2012$wc <- apply(anes2012spell[,-1], 1, function(x){
-  length(unlist(strsplit(x,"\\s+")))
+  sum(str_count(x, "\\w+"))
 })
 anes2012$lwc <- log(anes2012$wc)/max(log(anes2012$wc))
 
-## number of items answered
-anes2012$nitem <- apply(anes2012spell[,-1] != "", 1, sum, na.rm = T)
-
-## diversity in item response
-anes2012$ditem <- apply(anes2012spell[,-1], 1, function(x){
-  iwc <- unlist(lapply(strsplit(x,"\\s+"), length))
+### consistency in item response
+anes2012$consistency <- apply(anes2012spell[,-1], 1, function(x){
+  iwc <- str_count(x, "\\w+")
   shannon(iwc/sum(iwc))
 })
 
 
-### fit structural topic model
+## Considerations: Number of topics mentioned -----------------------------
 
-### prepare data
-
-## combine regular survey and open-ended data, remove spanish and empty responses
+### combine regular survey and open-ended data, remove spanish and empty responses
 meta2012 <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
 data2012 <- anes2012 %>% mutate(resp = apply(anes2012spell[,-1],1,paste,collapse=' ')) %>%
   filter(spanish == 0 & wc != 0)
 
-## remove additional whitespaces
+### remove additional whitespaces
 data2012$resp <- gsub("\\s+"," ", data2012$resp)
 data2012$resp <- gsub("(^\\s+|\\s+$)","", data2012$resp)
 
-## remove missings on metadata
+### remove missings on metadata
 data2012 <- data2012[apply(!is.na(data2012[,meta2012]),1,prod)==1,]
 
-## process for stm
-processed2012 <- textProcessor(data2012$resp, metadata = data2012[,meta2012]
-                               , customstopwords = c("dont", "hes", "shes", "that", "etc"))
-out2012 <- prepDocuments(processed2012$documents, processed2012$vocab, processed2012$meta
-                         , lower.thresh = 10)
+### process for stm
+processed2012 <- textProcessor(data2012$resp, metadata = data2012[,meta2012],
+                               customstopwords = c("dont", "hes", "shes", "that", "etc"))
+out2012 <- prepDocuments(processed2012$documents, processed2012$vocab, processed2012$meta,
+                         lower.thresh = 10)
 
-## remove discarded observations from data
+### remove discarded observations from data
 data2012 <- data2012[-processed2012$docs.removed,]
 data2012 <- data2012[-out2012$docs.removed,]
 
-## stm fit with 49 topics
-stm_fit2012 <- stm(out2012$documents, out2012$vocab, prevalence = as.matrix(out2012$meta)
-                   , K=49, seed=12345)
+### stm fit with 49 topics
+stm_fit2012 <- stm(out2012$documents, out2012$vocab, prevalence = as.matrix(out2012$meta),
+                   K=49, seed=12345)
+
+### compute number of considerations
+data2012$considerations <- ntopics(stm_fit2012, out2012)
 
 
-#######################
-### Discursive sophistication measure
-#######################
+# Word choice: LIWC component ---------------------------------------------
 
-## combine sophistication components with remaining data
-data2012 <- cbind(data2012, sophistication(stm_fit2012, out2012))
+anes2012_liwc <- liwcalike(data2012$resp, liwc)
+
+## combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
+data2012$wordchoice <- (anes2012_liwc$conj + anes2012_liwc$negate) * anes2012_liwc$WC
+data2012$wordchoice <- data2012$wordchoice / max(data2012$wordchoice)
+
+
+# Merge with full data and save -------------------------------------------
 
 ## compute combined measures
-data2012$polknow_text <- data2012$ntopics * data2012$distinct * data2012$ditem
-data2012$polknow_text_mean <- (data2012$ntopics + data2012$distinct + data2012$ditem)/3
+data2012$polknow_text <- with(data2012, considerations * consistency * wordchoice)
+data2012$polknow_text_mean <- with(data2012, considerations + consistency + wordchoice)/3
 
 
 #################
@@ -465,7 +472,7 @@ polknow_hetreg <- function(policy, target, measure
   y <- tmp[,paste(c(policy,target),collapse="_")]
   X <- tmp[,c(paste(c(policy,"ego"),collapse="_"), controls)]
   Z <- as.matrix(tmp[,measure])
-  
+
   dl <- list(N = nrow(X), B = ncol(X), G = ncol(Z)
              , y = y, X = X, Z = Z
              , Zpred = rbind(cbind(sdrange(Z[,1]), mean(Z[,2]), mean(Z[,3]))
@@ -510,5 +517,5 @@ for(p in policies){
 ### save output
 
 save(anes2012, anes2012opend, anes2012spell, data2012, meta2012, processed2012, out2012
-     , stm_fit2012, hetreg_summary2012
+     , stm_fit2012#, hetreg_summary2012
      , file="calc/out/anes2012.Rdata")
