@@ -396,7 +396,7 @@ shannon <- function(x){
 anes2012$wc <- apply(anes2012spell[,-1], 1, function(x){
   sum(str_count(x, "\\w+"))
 })
-anes2012$lwc <- log(anes2012$wc)/max(log(anes2012$wc))
+anes2012$lwc <- log(anes2012$wc)/max(log(anes2012$wc), na.rm = T)
 
 ### consistency in item response
 anes2012$consistency <- apply(anes2012spell[,-1], 1, function(x){
@@ -516,6 +516,6 @@ for(p in policies){
 
 ### save output
 
-save(anes2012, anes2012opend, anes2012spell, data2012, meta2012, processed2012, out2012
-     , stm_fit2012#, hetreg_summary2012
-     , file="calc/out/anes2012.Rdata")
+save(anes2012, anes2012opend, anes2012spell, data2012, meta2012, processed2012, out2012,
+     stm_fit2012, #hetreg_summary2012,
+     file="calc/out/anes2012.Rdata")

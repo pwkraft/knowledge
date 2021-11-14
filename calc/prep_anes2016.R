@@ -26,7 +26,7 @@ library(rstan)
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
-setwd("/data/Dropbox/Uni/Projects/2016/knowledge/")
+setwd("/data/Dropbox/Uni/projects/2016/knowledge/")
 datasrc <- "/data/Dropbox/Uni/Data/anes2016/"
 raw2016 <- read.dta13(paste0(datasrc,"anes_timeseries_2016.dta"), convert.factors = F)
 load("~/Dropbox/Uni/Data/LIWC/liwc2015.Rdata")
@@ -367,7 +367,7 @@ shannon <- function(x){
 anes2016$wc <- apply(anes2016spell[,-1], 1, function(x){
   sum(str_count(x, "\\w+"))
 })
-anes2016$lwc <- log(anes2016$wc)/max(log(anes2016$wc))
+anes2016$lwc <- log(anes2016$wc)/max(log(anes2016$wc), na.rm = T)
 
 ### consistency in item response
 anes2016$consistency <- apply(anes2016spell[,-1], 1, function(x){
@@ -479,6 +479,6 @@ for(p in policies){
 
 ### save output
 
-save(anes2016, anes2016opend, anes2016spell, data2016, meta2016, processed2016, out2016
-     , stm_fit2016#, hetreg_summary2016
-     , file="calc/out/anes2016.Rdata")
+save(anes2016, anes2016opend, anes2016spell, data2016, meta2016, processed2016, out2016,
+     stm_fit2016, #hetreg_summary2016,
+     file="calc/out/anes2016.Rdata")
