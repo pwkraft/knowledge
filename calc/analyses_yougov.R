@@ -6,6 +6,7 @@
 
 
 rm(list = ls())
+library(tidyverse)
 library(car)
 library(quanteda)
 library(stm)

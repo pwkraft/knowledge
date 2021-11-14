@@ -9,6 +9,7 @@ rm(list = ls())
 gc()
 
 library(MASS)
+library(tidyverse)
 library(car)
 library(quanteda)
 library(stm)
