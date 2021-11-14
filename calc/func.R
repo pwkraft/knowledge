@@ -11,6 +11,10 @@ sdrange <- function(x){
   mean(x, na.rm = T) + c(-1,1) * sd(x, na.rm = T)
 }
 
+### compute shannon entropy
+shannon <- function(x){
+  -sum(log(x^x)/log(length(x)))
+}
 
 ### Compute number of topics based on stm results
 #' built: 2018-01-11, Patrick Kraft

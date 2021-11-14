@@ -26,7 +26,6 @@ library(rstan)
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
-setwd("/data/Dropbox/Uni/projects/2016/knowledge/")
 datasrc <- "/data/Dropbox/Uni/Data/anes2012/"
 raw2012 <- read.dta13(paste0(datasrc,"anes_timeseries_2012.dta"), convert.factors = F)
 load("~/Dropbox/Uni/Data/LIWC/liwc2015.Rdata")
@@ -387,11 +386,6 @@ anes2012spell <- data.frame(caseid = anes2012opend$caseid, anes2012spell,strings
 
 ## Consistency: Shannon entropy of response lengths ----------------------
 
-### compute shannon entropy
-shannon <- function(x){
-  -sum(log(x^x)/log(length(x)))
-}
-
 ### overall response length
 anes2012$wc <- apply(anes2012spell[,-1], 1, function(x){
   sum(str_count(x, "\\w+"))
@@ -437,85 +431,24 @@ stm_fit2012 <- stm(out2012$documents, out2012$vocab, prevalence = as.matrix(out2
 data2012$considerations <- ntopics(stm_fit2012, out2012)
 
 
-# Word choice: LIWC component ---------------------------------------------
+## Word choice: LIWC component ---------------------------------------------
 
 anes2012_liwc <- liwcalike(data2012$resp, liwc)
 
-## combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
+### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
 data2012$wordchoice <- (anes2012_liwc$conj + anes2012_liwc$negate) * anes2012_liwc$WC
 data2012$wordchoice <- data2012$wordchoice / max(data2012$wordchoice)
 
 
-# Merge with full data and save -------------------------------------------
+## Merge with full data and save -------------------------------------------
 
-## compute combined measures
+### compute combined measures
 data2012$polknow_text <- with(data2012, considerations * consistency * wordchoice)
 data2012$polknow_text_mean <- with(data2012, considerations + consistency + wordchoice)/3
 
 
-#################
-### Estimate hetreg models (in prep because it takes a long time)
-#################
 
+# save output -------------------------------------------------------------
 
-policies <- c("ideol","spsrvpr","defsppr","inspre","guarpr","aidblack","envjob")
-targets <- c("rpc","dpc")
-m <- c("polknow_text_mean","polknow_factual","wordsum")
-
-polknow_hetreg <- function(policy, target, measure
-                           , controls = c("female", "educ", "faminc", "lage"
-                                          , "black", "relig", "mode")
-                           , df = data2012, control = NULL){
-  tmp <- na.omit(df[,c(paste(c(policy,target),collapse="_")
-                       , paste(c(policy,"ego"),collapse="_")
-                       , measure, controls)])
-  y <- tmp[,paste(c(policy,target),collapse="_")]
-  X <- tmp[,c(paste(c(policy,"ego"),collapse="_"), controls)]
-  Z <- as.matrix(tmp[,measure])
-
-  dl <- list(N = nrow(X), B = ncol(X), G = ncol(Z)
-             , y = y, X = X, Z = Z
-             , Zpred = rbind(cbind(sdrange(Z[,1]), mean(Z[,2]), mean(Z[,3]))
-                             , cbind(mean(Z[,1]), sdrange(Z[,2]), mean(Z[,3]))))
-  res <- stan(file = "calc/hetreg.stan", data=dl, control=control)
-  return(res)
-}
-
-hetreg_summary2012 <- data.frame(NULL)
-for(p in policies){
-  for(t in targets){
-    iterlab <- paste(c(p,t),collapse="_")
-    cat("\n\n===================================================================================")
-    cat("\nIteration: ",iterlab)
-    cat("\n___________________________________________________________________________________\n")
-    tmp <- polknow_hetreg(p, t, m)
-    tmp_sigmadif1 <- extract(tmp, par="sigmadif1")[[1]]
-    tmp_sigmadif2 <- extract(tmp, par="sigmadif2")[[1]]
-    tmp_df <- data.frame(policy = p, target = t, measure = m[1:2]
-                         , mean = c(mean(tmp_sigmadif1), mean(tmp_sigmadif2))
-                         , cilo = c(quantile(tmp_sigmadif1, .025), quantile(tmp_sigmadif2, .025))
-                         , cihi = c(quantile(tmp_sigmadif1, .975), quantile(tmp_sigmadif2, .975))
-                         , gamma = summary(tmp)$summary[c("gamma[1]","gamma[2]"),"mean"]
-                         , sd = summary(tmp)$summary[c("gamma[1]","gamma[2]"),"sd"]
-                         , gamma_cilo = summary(tmp)$summary[c("gamma[1]","gamma[2]"),"2.5%"]
-                         , gamma_cihi = summary(tmp)$summary[c("gamma[1]","gamma[2]"),"97.5%"]
-                         , Rhat = summary(tmp)$summary[c("gamma[1]","gamma[2]"),"Rhat"])
-    hetreg_summary2012 <- rbind(hetreg_summary2012, tmp_df)
-  }
-}
-
-## estimation issue with liberal/conservative assessment!
-# tmp <- polknow_hetreg("ideol", "dpc", "polknow_factual", control = list(adapt_delta=.99))
-# tmp_sigmadif <- extract(tmp, par="sigmadif")[[1]]
-# tmp_df <- data.frame(policy = "ideol", target = "dpc", measure = "dpc"
-#                      , mean = mean(tmp_sigmadif)
-#                      , cilo = quantile(tmp_sigmadif, .025)
-#                      , cihi = quantile(tmp_sigmadif, .975))
-
-
-
-### save output
-
-save(anes2012, anes2012opend, anes2012spell, data2012, meta2012, processed2012, out2012,
-     stm_fit2012, #hetreg_summary2012,
+save(anes2012, anes2012opend, anes2012spell, data2012, meta2012, processed2012, out2012, stm_fit2012,
      file="calc/out/anes2012.Rdata")

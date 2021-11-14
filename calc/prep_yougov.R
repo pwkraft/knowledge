@@ -13,15 +13,17 @@
 rm(list = ls())
 gc()
 
+library(tidyverse)
 library(car)
 library(dplyr)
 library(quanteda)
+library(quanteda.dictionaries)
 library(stm)
 library(ineq)
 library(ggplot2)
-setwd("/data/Dropbox/Uni/Projects/2016/knowledge/")
 datasrc <- "/data/Dropbox/Uni/Data/YouGov2015/"
 raw <- read.csv(paste0(datasrc,"STBR0007_OUTPUT.csv"))
+load("~/Dropbox/Uni/Data/LIWC/liwc2015.Rdata")
 
 source("calc/func.R")
 
@@ -102,7 +104,7 @@ yougov$relig <- (6 - car::recode(raw$pew_churatd, "7:hi=NA"))/5
 yougov$age <- 2015 - raw$birthyr
 
 ## sex
-yougov$female <- raw$gender - 1  
+yougov$female <- raw$gender - 1
 
 ## race
 yougov$black <- as.numeric(raw$race == 2)
@@ -140,74 +142,74 @@ for(i in 1:nrow(spell)){
 opend <- data.frame(caseid = raw$caseid, opend, stringsAsFactors = F)
 
 
-### add meta information about responses
 
-## function to compute shannon entropy (rescaled to 0-1??)
-shannon <- function(x, reversed = F){
-  out <- (- sum(log(x^x)/log(length(x))))
-  if(reversed) out <- 1 - out
-  out
-}
+# Text-based political sophistication measure -----------------------------
 
-## overall response length
+
+## Consistency: Shannon entropy of response lengths ----------------------
+
+### overall response length
 yougov$wc <- apply(opend[,-1], 1, function(x){
-  length(unlist(strsplit(x,"\\s+")))
+  sum(str_count(x, "\\w+"))
 })
-yougov$lwc <- log(yougov$wc)/max(log(yougov$wc))
+yougov$lwc <- log(yougov$wc)/max(log(yougov$wc), na.rm = T)
 
-## number of items answered
-yougov$nitem <- apply(opend[,-1] != "", 1, sum, na.rm = T)
-
-## diversity in item response
-yougov$ditem <- apply(opend[,-1], 1, function(x){
-  iwc <- unlist(lapply(strsplit(x,"\\s+"), length))
+### consistency in item response
+yougov$consistency <- apply(opend[,-1], 1, function(x){
+  iwc <- str_count(x, "\\w+")
   shannon(iwc/sum(iwc))
 })
 
 
-### fit structural topic model
+## Considerations: Number of topics mentioned -----------------------------
 
-### prepare data
-
-## combine regular survey and open-ended data, remove spanish and empty responses
+### combine regular survey and open-ended data, remove empty responses
 meta <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
 data_yg <- yougov %>% mutate(resp = apply(opend[,-1],1,paste,collapse=' '))
 
-## remove additional whitespaces
+### remove additional whitespaces
 data_yg$resp <- gsub("\\s+"," ", data_yg$resp)
 data_yg$resp <- gsub("(^\\s+|\\s+$)","", data_yg$resp)
 
-## remove missings on metadata
+### remove missings on metadata
 data_yg <- data_yg[apply(!is.na(data_yg[,meta]),1,prod)==1,]
 
-## process for stm
+### process for stm
 processed_yougov <- textProcessor(data_yg$resp, metadata = data_yg[,meta]
                                   , customstopwords = c("dont", "hes", "shes", "that", "etc"))
 out_yougov <- prepDocuments(processed_yougov$documents, processed_yougov$vocab, processed_yougov$meta
-                     , lower.thresh = 10)
+                            , lower.thresh = 10)
 
-## remove discarded observations from data
+### remove discarded observations from data
 data_yg <- data_yg[-processed_yougov$docs.removed,]
 data_yg <- data_yg[-out_yougov$docs.removed,]
 
-## quick fit
+### stm fit with 49 topics
 stm_fit <- stm(out_yougov$documents, out_yougov$vocab, prevalence = as.matrix(out_yougov$meta)
                , K=47, seed=12345)
 
-
-#######################
-### Discursive sophistication measure
-#######################
-
-## combine sophistication components with remaining data
-data_yg <- cbind(data_yg, sophistication(stm_fit, out_yougov))
-
-## compute combined measures
-data_yg$polknow_text <- data_yg$ntopics * data_yg$distinct * data_yg$ditem
-data_yg$polknow_text_mean <- (data_yg$ntopics + data_yg$distinct + data_yg$ditem)/3
+### compute number of considerations
+data_yg$considerations <- ntopics(stm_fit, out_yougov)
 
 
-### save output
+## Word choice: LIWC component ---------------------------------------------
+
+yougov_liwc <- liwcalike(data_yg$resp, liwc)
+
+## combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
+data_yg$wordchoice <- (yougov_liwc$conj + yougov_liwc$negate) * yougov_liwc$WC
+data_yg$wordchoice <- data_yg$wordchoice / max(data_yg$wordchoice)
+
+
+## Merge with full data and save -------------------------------------------
+
+### compute combined measures
+data_yg$polknow_text <- with(data_yg, considerations * consistency * wordchoice)
+data_yg$polknow_text_mean <- with(data_yg, considerations + consistency + wordchoice)/3
+
+
+
+# Save Output -------------------------------------------------------------
 
 save(yougov, opend, spell, data_yg, meta, processed_yougov, out_yougov, stm_fit
      , file="calc/out/yougov.Rdata")
