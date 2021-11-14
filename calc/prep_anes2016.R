@@ -13,10 +13,12 @@
 rm(list = ls())
 gc()
 
+library(tidyverse)
 library(car)
 library(dplyr)
 library(SnowballC)
 library(quanteda)
+library(quanteda.dictionaries)
 library(stm)
 library(readstata13)
 library(ineq)
@@ -27,6 +29,7 @@ options(mc.cores = parallel::detectCores())
 setwd("/data/Dropbox/Uni/Projects/2016/knowledge/")
 datasrc <- "/data/Dropbox/Uni/Data/anes2016/"
 raw2016 <- read.dta13(paste0(datasrc,"anes_timeseries_2016.dta"), convert.factors = F)
+load("~/Dropbox/Uni/Data/LIWC/liwc2015.Rdata")
 
 source("calc/func.R")
 
@@ -228,7 +231,7 @@ anes2016$redist <- (anes2016$spsrvpr_ego - anes2016$guarpr_ego + 6)/12
 ## Support tax increases (new scale: 0-1)
 ## favor tax on millionaires
 ## raising personal inc tax for over 250K inc to reduce deficit
-anes2016$tax <- Recode(raw2016$V162140, "lo:-1=NA; 2=0; 3=0.5") 
+anes2016$tax <- Recode(raw2016$V162140, "lo:-1=NA; 2=0; 3=0.5")
 
 ### NOTE:
 # MAYBE ALSO CHECK THE FEDERAL SPENDING ITEMS (V161205) etc. for consistency
@@ -251,22 +254,22 @@ pid <- Recode(anes2016$pid_cont, "NA=0")
 ## 2) Issue positions
 
 # expert positions
-expert <- anes2016 %>% 
+expert <- anes2016 %>%
   filter(polknow_factual > median(polknow_factual, na.rm = T)) %>%
   summarize_at(vars(spsrvpr_dpc:envjob_rpc), mean, na.rm = T)
 
 # ego positions
 issue_rep <- Recode(anes2016$spsrvpr_ego, "NA=0") * expert$spsrvpr_rpc +
   Recode(anes2016$defsppr_ego, "NA=0") * expert$defsppr_rpc +
-  Recode(anes2016$inspre_ego, "NA=0") * expert$inspre_rpc + 
-  Recode(anes2016$guarpr_ego, "NA=0") * expert$guarpr_rpc + 
+  Recode(anes2016$inspre_ego, "NA=0") * expert$inspre_rpc +
+  Recode(anes2016$guarpr_ego, "NA=0") * expert$guarpr_rpc +
   Recode(anes2016$aidblack_ego, "NA=0") * expert$aidblack_rpc +
   Recode(anes2016$envjob_ego, "NA=0") * expert$envjob_rpc
 
 issue_dem <- Recode(anes2016$spsrvpr_ego, "NA=0") * expert$spsrvpr_dpc +
   Recode(anes2016$defsppr_ego, "NA=0") * expert$defsppr_dpc +
-  Recode(anes2016$inspre_ego, "NA=0") * expert$inspre_dpc + 
-  Recode(anes2016$guarpr_ego, "NA=0") * expert$guarpr_dpc + 
+  Recode(anes2016$inspre_ego, "NA=0") * expert$inspre_dpc +
+  Recode(anes2016$guarpr_ego, "NA=0") * expert$guarpr_dpc +
   Recode(anes2016$aidblack_ego, "NA=0") * expert$aidblack_dpc +
   Recode(anes2016$envjob_ego, "NA=0") * expert$envjob_dpc
 
@@ -349,72 +352,76 @@ for(i in 1:nrow(spell)){
 anes2016spell <- data.frame(caseid = anes2016opend$V160001, anes2016spell,stringsAsFactors = F)
 
 
-### add meta information about responses
 
-## function to compute shannon entropy (rescaled to 0-1??)
-shannon <- function(x, reversed = F){
-  out <- (- sum(log(x^x)/log(length(x))))
-  if(reversed) out <- 1 - out
-  out
+# Text-based political sophistication measure -----------------------------
+
+
+## Consistency: Shannon entropy of response lengths ----------------------
+
+### compute shannon entropy
+shannon <- function(x){
+  -sum(log(x^x)/log(length(x)))
 }
 
-## overall response length
+### overall response length
 anes2016$wc <- apply(anes2016spell[,-1], 1, function(x){
-  length(unlist(strsplit(x,"\\s+")))
+  sum(str_count(x, "\\w+"))
 })
 anes2016$lwc <- log(anes2016$wc)/max(log(anes2016$wc))
 
-## number of items answered
-anes2016$nitem <- apply(anes2016spell[,-1] != "", 1, sum, na.rm = T)
-
-## diversity in item response
-anes2016$ditem <- apply(anes2016spell[,-1], 1, function(x){
-  iwc <- unlist(lapply(strsplit(x,"\\s+"), length))
+### consistency in item response
+anes2016$consistency <- apply(anes2016spell[,-1], 1, function(x){
+  iwc <- str_count(x, "\\w+")
   shannon(iwc/sum(iwc))
 })
 
 
-### fit structural topic model
+## Considerations: Number of topics mentioned -----------------------------
 
-### prepare data
-
-## combine regular survey and open-ended data, remove spanish and empty responses
+### combine regular survey and open-ended data, remove spanish and empty responses
 meta2016 <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
 data2016 <- anes2016 %>% mutate(resp = apply(anes2016spell[,-1],1,paste,collapse=' ')) %>%
   filter(spanish == 0 & wc != 0)
 
-## remove additional whitespaces
+### remove additional whitespaces
 data2016$resp <- gsub("\\s+"," ", data2016$resp)
 data2016$resp <- gsub("(^\\s+|\\s+$)","", data2016$resp)
 
-## remove missings on metadata
+### remove missings on metadata
 data2016 <- data2016[apply(!is.na(data2016[,meta2016]),1,prod)==1,]
 
-## process for stm
-processed2016 <- textProcessor(data2016$resp, metadata = data2016[,meta2016]
-                               , customstopwords = c("dont", "hes", "shes", "that", "etc"))
-out2016 <- prepDocuments(processed2016$documents, processed2016$vocab, processed2016$meta
-                         , lower.thresh = 10)
+### process for stm
+processed2016 <- textProcessor(data2016$resp, metadata = data2016[,meta2016],
+                               customstopwords = c("dont", "hes", "shes", "that", "etc"))
+out2016 <- prepDocuments(processed2016$documents, processed2016$vocab, processed2016$meta,
+                         lower.thresh = 10)
 
-## remove discarded observations from data
+### remove discarded observations from data
 data2016 <- data2016[-processed2016$docs.removed,]
 data2016 <- data2016[-out2016$docs.removed,]
 
-## stm fit with 20 topics
-stm_fit2016 <- stm(out2016$documents, out2016$vocab, prevalence = as.matrix(out2016$meta)
-                , K=47, init.type = "Spectral", seed=12345)
+### stm fit with 49 topics
+stm_fit2016 <- stm(out2016$documents, out2016$vocab, prevalence = as.matrix(out2016$meta),
+                   K=49, seed=12345)
+
+### compute number of considerations
+data2016$considerations <- ntopics(stm_fit2016, out2016)
 
 
-#######################
-### Discursive sophistication measure
-#######################
+# Word choice: LIWC component ---------------------------------------------
 
-## combine sophistication components with remaining data
-data2016 <- cbind(data2016, sophistication(stm_fit2016, out2016))
+anes2016_liwc <- liwcalike(data2016$resp, liwc)
+
+## combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
+data2016$wordchoice <- (anes2016_liwc$conj + anes2016_liwc$negate) * anes2016_liwc$WC
+data2016$wordchoice <- data2016$wordchoice / max(data2016$wordchoice)
+
+
+# Merge with full data and save -------------------------------------------
 
 ## compute combined measures
-data2016$polknow_text <- data2016$ntopics * data2016$distinct * data2016$ditem
-data2016$polknow_text_mean <- (data2016$ntopics + data2016$distinct + data2016$ditem)/3
+data2016$polknow_text <- with(data2016, considerations * consistency * wordchoice)
+data2016$polknow_text_mean <- with(data2016, considerations + consistency + wordchoice)/3
 
 
 #################
@@ -436,7 +443,7 @@ polknow_hetreg <- function(policy, target, measure
   y <- tmp[,paste(c(policy,target),collapse="_")]
   X <- tmp[,c(paste(c(policy,"ego"),collapse="_"), controls)]
   Z <- as.matrix(tmp[,measure])
-  
+
   dl <- list(N = nrow(X), B = ncol(X), G = ncol(Z)
              , y = y, X = X, Z = Z
              , Zpred = rbind(cbind(sdrange(Z[,1]), mean(Z[,2]), mean(Z[,3]))
@@ -473,5 +480,5 @@ for(p in policies){
 ### save output
 
 save(anes2016, anes2016opend, anes2016spell, data2016, meta2016, processed2016, out2016
-     , stm_fit2016, hetreg_summary2016
+     , stm_fit2016#, hetreg_summary2016
      , file="calc/out/anes2016.Rdata")
