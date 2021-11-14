@@ -13,9 +13,11 @@
 rm(list = ls())
 gc()
 
+library(tidyverse)
 library(car)
 library(dplyr)
 library(quanteda)
+library(quanteda.dictionaries)
 library(stm)
 library(haven)
 library(ineq)
@@ -65,7 +67,7 @@ swiss$constring2[swiss$constring2 %in% c(99999997,99999998)] <- ""
 ## combine pro and con
 swiss$string1 <- paste(swiss$prostring1, swiss$constring1)
 swiss$string2 <- paste(swiss$prostring2, swiss$constring2)
-  
+
 ## minor pre-processing
 opend <- apply(swiss[,c("string1","string2")], 2, function(x){
   x <- char_tolower(x)

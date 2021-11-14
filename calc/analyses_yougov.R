@@ -41,7 +41,7 @@ plot_empty <- theme_classic(base_size=9) + theme(panel.border = element_rect(fil
 ### compare measures
 summary(lm(know_dis ~ polknow_text_mean + know_pol, data=data_yg))
 summary(lm(know_dis ~ polknow_text_mean + know_pol + female + log(age) + black + relig + educ + faminc, data=data_yg))
-## argument: Discursive sophistication is a better measure of competence in the sense that the respondents pick up 
+## argument: Discursive sophistication is a better measure of competence in the sense that the respondents pick up
 ## information about the disease
 
 ## closing gender gap is replicated!
@@ -60,7 +60,7 @@ colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 pdf("../fig/yg_corplot.pdf",width=2.5, height=2.5)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.1, size=.2)), axisLabels="none"
-        , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge","Disease\nInformation")) + 
+        , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge","Disease\nInformation")) +
   plot_default
 dev.off()
 
@@ -71,11 +71,11 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), 
 dev.off()
 
 
-datcor <- data_yg[,c("ditem","ntopics","distinct")]
+datcor <- data_yg[,c("considerations","consistency","wordchoice")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Opinionation","Considerations","Word Choice")) + plot_default
+        , columnLabels = c("Considerations","Consistency","Word Choice")) + plot_default
 ggsave("../fig/yg_corplot_components.pdf",width=2.6, height=2.6)
 
 
@@ -98,12 +98,12 @@ res <- rbind(data.frame(sim(m2full, iv=data.frame(polknow_text_mean=seq(min(data
              , data.frame(sim(m2full, iv=data.frame(know_pol=seq(0,1,length=10)))
                           ,value=seq(0,1,length=10),Variable="Factual Knowledge"))
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_default +
-  geom_ribbon(alpha=0.4, lwd=.1) + geom_line() + 
+  geom_ribbon(alpha=0.4, lwd=.1) + geom_line() +
   ylab("Information Retrieval") + xlab("Value of Independent Variable")
 ggsave("../fig/yg_disease.pdf",width=4,height=2)
 
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_empty +
-  geom_ribbon(alpha=0.4, lwd=.1) + geom_line() + 
+  geom_ribbon(alpha=0.4, lwd=.1) + geom_line() +
   ylab("Information Retrieval") + xlab("Value of Independent Variable")
 ggsave("../fig/yg_disease0.pdf",width=4,height=2)
 
@@ -129,7 +129,7 @@ dev.off()
 summary(m2full)
 
 ## create table
-stargazer(m2full, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+stargazer(m2full, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE,
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
           title="Effects of sophistication on information retrieval in the 2015 YouGov study.
           Standard errors in parentheses. Estimates are used for Figure 3 in the main text.",

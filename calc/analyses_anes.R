@@ -75,19 +75,19 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), 
 datcor <- data2012[,c("considerations","consistency","wordchoice")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Opinionation","Considerations","Word Choice")) + plot_default
+        , columnLabels = c("Considerations","Consistency","Word Choice")) + plot_default
 ggsave("../fig/anes2012_corplot_components.pdf",width=2.6, height=2.6)
 
 ## empty plot
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Opinionation","Considerations","Word Choice")) + plot_empty
+        , columnLabels = c("Considerations","Consistency","Word Choice")) + plot_empty
 ggsave("../fig/anes2012_corplot_components0.pdf",width=2.6, height=2.6)
 
 ## ANES 2016 components
 datcor <- data2016[,c("considerations","consistency","wordchoice")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Opinionation","Considerations","Word Choice")) + plot_default
+        , columnLabels = c("Considerations","Consistency","Word Choice")) + plot_default
 ggsave("../fig/anes2016_corplot_components.pdf",width=2.6, height=2.6)
 
 
