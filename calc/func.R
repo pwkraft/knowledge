@@ -16,6 +16,12 @@ shannon <- function(x){
   -sum(log(x^x)/log(length(x)))
 }
 
+## quickly declare missing values
+na_in <- function(x, y) {
+  x[x %in% y] <- NA
+  x
+}
+
 ### Compute number of topics based on stm results
 #' built: 2018-01-11, Patrick Kraft
 #' updated: 2021-06-18, Patrick Kraft

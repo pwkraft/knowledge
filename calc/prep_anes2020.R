@@ -29,11 +29,6 @@ source("calc/func.R")
 
 # Recode main survey data -------------------------------------------------
 
-na_in <- function(x, y) {
-  x[x %in% y] <- NA
-  x
-}
-
 anes2020 <- raw2020 %>% transmute(
 
   ## respondent id
@@ -50,52 +45,39 @@ anes2020 <- raw2020 %>% transmute(
                       (na_in(V202142y1, -7:-1) == 1))/5,
 
   ## political knowledge (factual knowledge questions, pre-election
-  polknow_factual = ((na_in(V201644, -5) == 6) +
-                       (na_in(V201645, -5) == 1) +
-                       (na_in(V201646, -5) == 1) +
-                       (na_in(V201647, -5) == 2))/4,
-
-  ## political knowledge (majorities in congress, post-election)
-  polknow_majority = ((Recode(knowl_housemaj, "c(-6,-7)=NA")==2)
-                                              + (Recode(knowl_senmaj, "c(-6,-7)=NA")==1))/2)
-
-  ## political knowledge (interviewer evaluation, only in F2F part!)
-  polknow_evalpre = (5 - Recode(iwrobspre_levinfo, "lo:-1=NA"))/4
-  polknow_evalpost = (5 - Recode(iwrobspost_levinfo, "lo:-1=NA"))/4
-  polknow_eval = (polknow_evalpre + polknow_evalpost)/2
-
-  ## intelligence (interviewer evaluation, only in F2F part!)
-  intpre = (5 - Recode(iwrobspre_intell, "lo:-1=NA"))/4
-  intpost = (5 - Recode(iwrobspost_intell, "lo:-1=NA"))/4
-  int = (intpre + intpost)/2
+  polknow_factual = ((na_if(V201644, -5) == 6) +
+                       (na_if(V201645, -5) == 1) +
+                       (na_if(V201646, -5) == 1) +
+                       (na_if(V201647, -5) == 2))/4,
 
   ## education (bachelor degree)
-  educ = as.numeric(dem_edugroup_x >= 4)
-  educ[dem_edugroup_x < 0] = NA
+  educ = as.numeric(na_in(V201511x, -9:-2) >= 4),
 
   ## education (continuous)
-  educ_cont = (Recode(dem_edugroup_x, "lo:0=NA") - 1)/4
+  educ_cont = as.numeric(na_in(V201511x, -9:-2)),
 
   ## political media exposure
-  polmedia = Recode(prmedia_wkinews, "lo:-4=NA; -1=0")
-                            + Recode(prmedia_wktvnws, "lo:-4=NA; -1=0")
-                            + Recode(prmedia_wkpaprnws, "lo:-4=NA; -1=0")
-                            + Recode(prmedia_wkrdnws, "lo:-4=NA; -1=0")) / 28
+  polmedia = (na_in(V201629a, -9:-1) + na_in(V201629b, -9:-1) +
+                na_in(V201629c, -9:-1) + na_in(V201629d, -9:-1)) / 4,
+  polmedia = if_else(V201629e == 1, 0, polmedia),
 
   ## political discussion
-  poldisc = Recode(discuss_discpstwk, "lo:-1 = NA")/7
-  poldisc[discuss_disc==2] = 0
+  poldisc = na_in(V202023, -9:-1)/7,
+  poldisc = if_else(V202022 == 2, 0, poldisc),
 
   ## political interest (pay attention to politics)
-  polint_att = (5 - Recode(interest_attention, "lo:-1 = NA"))/4
+  polint_att = (5 - na_if(V201005, -9))/4,
 
   ## political interest (following campaign)
-  polint_cam = (3 - Recode(interest_following, "lo:-1 = NA"))/2
+  polint_cam = (3 - na_if(V201006, -9))/2,
 
   ## overall political interest
-  polint = with(anes2012, (polint_att + polint_cam)/2)
+  polint = (polint_att + polint_cam)/2,
 
   ## internal efficacy
+  V202212
+  V202213
+
   effic_int = Recode(effic_complicstd, "lo:-8=NA; -1=1") - 1
                              + Recode(effic_complicrev, "lo:-8=NA; -1=1") - 1
                              - Recode(effic_undstd, "lo:-8=NA; -1=5") + 5
