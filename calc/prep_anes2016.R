@@ -396,7 +396,7 @@ data2016 <- data2016[-out2016$docs.removed,]
 
 ### stm fit with 49 topics
 stm_fit2016 <- stm(out2016$documents, out2016$vocab, prevalence = as.matrix(out2016$meta),
-                   K=49, seed=12345)
+                   K=25, seed=12345)
 
 ### compute number of considerations
 data2016$considerations <- ntopics(stm_fit2016, out2016)

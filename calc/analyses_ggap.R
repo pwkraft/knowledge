@@ -16,30 +16,30 @@ library(dplyr)
 library(stm)
 library(stargazer)
 
-setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
+#setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
 ## load data and stm results
-load("out/anes2012.Rdata")
-load("out/anes2016.Rdata")
-load("out/swiss.Rdata")
-load("out/yougov.Rdata")
+load("calc/out/anes2012.Rdata")
+load("calc/out/anes2016.Rdata")
+load("calc/out/swiss.Rdata")
+load("calc/out/yougov.Rdata")
 
 ## QUESTION: remove wc=0 and spanish=1?
 
-source("func.R")
+source("calc/func.R")
 
 ## plot defaults
 plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
 plot_empty <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill="white"))
 
 ## compare response behavior by gender
-ggplot(anes2012, aes(factor(female), y=as.numeric(wc!=0))) + 
+ggplot(anes2012, aes(factor(female), y=as.numeric(wc!=0))) +
   stat_summary_bin(fun.y = "mean", geom="bar")
 
-ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + geom_point(alpha=.1, size=.1) + 
+ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + geom_point(alpha=.1, size=.1) +
   stat_summary(fun.data = "mean_cl_boot", col="red")
 
-ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) + 
+ggplot(filter(anes2012, wc>0), aes(factor(female), y=wc)) +
   stat_summary(fun.data = "mean_cl_boot", col="red")
 
 table(anes2012$spanish==0)
@@ -63,19 +63,19 @@ plot_df <- data.frame(rbind(cbind(data2012$polknow_text_mean, data2012$female, 1
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
 plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"))
-plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
+plot_means <- plot_df %>% group_by(Variable, Gender) %>%
   summarize_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
   mutate(cilo = mean - 1.96*sd/sqrt(n)
          , cihi = mean + 1.96*sd/sqrt(n))
 
-p1 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
-  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
+p1 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default +
+  geom_bar(stat="identity") + geom_errorbar(width=.25) +
   facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
   ggtitle("2012 ANES")
 
-p1_empty <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_empty + 
-  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
+p1_empty <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_empty +
+  geom_bar(stat="identity") + geom_errorbar(width=.25) +
   facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
   ggtitle("2012 ANES")
@@ -96,19 +96,19 @@ plot_df <- data.frame(rbind(cbind(data2016$polknow_text_mean, data2016$female, 1
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
 plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"))
-plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
+plot_means <- plot_df %>% group_by(Variable, Gender) %>%
   summarize_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
   mutate(cilo = mean - 1.96*sd/sqrt(n)
          , cihi = mean + 1.96*sd/sqrt(n))
 
-p2 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
-  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
+p2 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default +
+  geom_bar(stat="identity") + geom_errorbar(width=.25) +
   facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
   ggtitle("2016 ANES")
 
-p2_empty <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_empty + 
-  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
+p2_empty <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_empty +
+  geom_bar(stat="identity") + geom_errorbar(width=.25) +
   facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
   ggtitle("2016 ANES")
@@ -121,19 +121,19 @@ plot_df <- data.frame(rbind(cbind(data_yg$polknow_text_mean, data_yg$female, 1)
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
 plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"))
-plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
+plot_means <- plot_df %>% group_by(Variable, Gender) %>%
   summarize_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
   mutate(cilo = mean - 1.96*sd/sqrt(n)
          , cihi = mean + 1.96*sd/sqrt(n))
 
-p3 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
-  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
+p3 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default +
+  geom_bar(stat="identity") + geom_errorbar(width=.25) +
   facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
   ggtitle("2015 YouGov Survey")
 
-p3_empty <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_empty + 
-  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
+p3_empty <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_empty +
+  geom_bar(stat="identity") + geom_errorbar(width=.25) +
   facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
   ggtitle("2015 YouGov Survey")
@@ -146,14 +146,14 @@ plot_df <- data.frame(rbind(cbind(opend_german$polknow_text_mean, opend_german$f
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
 plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Level of\nJustification"))
-plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
+plot_means <- plot_df %>% group_by(Variable, Gender) %>%
   summarize_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
   mutate(cilo = mean - 1.96*sd/sqrt(n)
          , cihi = mean + 1.96*sd/sqrt(n))
 
-p4 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
-  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
-  facet_wrap(~Variable, scale="free_y") + 
+p4 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default +
+  geom_bar(stat="identity") + geom_errorbar(width=.25) +
+  facet_wrap(~Variable, scale="free_y") +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
   labs(title="Swiss Survey", subtitle="German Respondents", y="Average Values", x=NULL)
 
@@ -165,14 +165,14 @@ plot_df <- data.frame(rbind(cbind(opend_french$polknow_text_mean, opend_french$f
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
 plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Level of\nJustification"))
-plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
+plot_means <- plot_df %>% group_by(Variable, Gender) %>%
   summarize_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
   mutate(cilo = mean - 1.96*sd/sqrt(n)
          , cihi = mean + 1.96*sd/sqrt(n))
 
-p5 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
-  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
-  facet_wrap(~Variable, scale="free_y") + 
+p5 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default +
+  geom_bar(stat="identity") + geom_errorbar(width=.25) +
+  facet_wrap(~Variable, scale="free_y") +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
   labs(title=" ", subtitle="French Respondents", y="Average Values", x=NULL)
 
@@ -184,26 +184,26 @@ plot_df <- data.frame(rbind(cbind(opend_italian$polknow_text_mean, opend_italian
 colnames(plot_df) <- c("Knowledge","Gender","Variable")
 plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
 plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Level of\nJustification"))
-plot_means <- plot_df %>% group_by(Variable, Gender) %>% 
+plot_means <- plot_df %>% group_by(Variable, Gender) %>%
   summarize_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
   mutate(cilo = mean - 1.96*sd/sqrt(n)
          , cihi = mean + 1.96*sd/sqrt(n))
 
-p6 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default + 
-  geom_bar(stat="identity") + geom_errorbar(width=.25) + 
-  facet_wrap(~Variable, scale="free_y") + 
+p6 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default +
+  geom_bar(stat="identity") + geom_errorbar(width=.25) +
+  facet_wrap(~Variable, scale="free_y") +
   geom_point(aes(y=max), col="white") + guides(fill=FALSE) + scale_fill_brewer(palette="Paired") +
   labs(title=" ", subtitle="Italian Respondents", y="Average Values", x=NULL)
 
 
 (p0 <- grid.arrange(p1, p2, p3, p4, p5, p6, ncol=3))
-ggsave("../fig/meandiff.pdf", p0 ,width=6.5, height=4)
+ggsave("fig/meandiff.pdf", p0 ,width=6.5, height=4)
 
 (p0 <- grid.arrange(p1, p2, p3, ncol=3))
-ggsave("../fig/meandiff_pres.pdf", p0 ,width=6.5, height=3)
+ggsave("fig/meandiff_pres.pdf", p0 ,width=6.5, height=3)
 
 (p0 <- grid.arrange(p1_empty, p2_empty, p3_empty, ncol=3))
-ggsave("../fig/meandiff_pres_empty.pdf", p0 ,width=6.5, height=3)
+ggsave("fig/meandiff_pres_empty.pdf", p0 ,width=6.5, height=3)
 
 
 ########
@@ -283,25 +283,25 @@ dfplot <- rbind(dfplot1, dfplot2)
 dfplot$source <- factor(dfplot$source, levels=c("2012 ANES", "2016 ANES", "2015 YouGov Survey"))
 
 ggplot(dfplot, aes(y=ivnames, x=Estimate
-                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
+                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) +
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point() + geom_errorbarh(height = 0) + facet_grid(source~dv, scale="free") +
   plot_default + theme(axis.text.x = element_text(angle = 45, hjust = 1))
-ggsave("../fig/determinants.pdf",width=5,height=4)
+ggsave("fig/determinants.pdf",width=5,height=4)
 
 ggplot(dfplot, aes(y=ivnames, x=Estimate
-                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
+                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) +
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point() + geom_errorbarh(height = 0) + facet_grid(source~dv, scale="free") +
   plot_empty + theme(axis.text.x = element_text(angle = 45, hjust = 1))
-ggsave("../fig/determinants_empty.pdf",width=5,height=4)
+ggsave("fig/determinants_empty.pdf",width=5,height=4)
 
 ggplot(dfplot, aes(y=ivnames, x=Estimate
-                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) + 
+                   , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) +
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point(size=.5) + geom_errorbarh(height = 0) + facet_grid(source~dv, scale="free") +
   plot_default + theme(axis.text.x = element_text(angle = 45, hjust = 1))
-ggsave("../fig/determinants_poster.pdf",width=4,height=4)
+ggsave("fig/determinants_poster.pdf",width=4,height=4)
 
 
 ########
@@ -325,7 +325,7 @@ tmp2016 <- tibble(estimate = sapply(summary(prep2016)[[3]], function(x) x["femal
                   , topics = prep2016$topics) %>% arrange(estimate)
 topics2016 <- c(head(tmp2016$topics), tail(tmp2016$topics))
 
-pdf("../fig/stm_gender.pdf", height=5, width=12)
+pdf("fig/stm_gender.pdf", height=5, width=12)
 par(mfrow=c(1,2), mar=c(2.2,0.5,2.2,0.5))
 plot.estimateEffect(prep2012, covariate = "female", topics = topics2012, model = stm_fit2012
                     , xlim = c(-.05,.015), method = "difference", cov.value1 = 1, cov.value2 = 0
@@ -337,7 +337,7 @@ plot.estimateEffect(prep2016, covariate = "female", topics = topics2016, model =
                     , main = "Gender Differences in Topic Proportions (2016 ANES)")
 dev.off()
 
-pdf("../fig/stm_gender_poster.pdf", height=8, width=6.5)
+pdf("fig/stm_gender_poster.pdf", height=8, width=6.5)
 par(mfrow=c(2,1), mar=c(2.2,0.5,2.2,0.5))
 plot.estimateEffect(prep2012, covariate = "female", topics = topics2012, model = stm_fit2012
                     , xlim = c(-.05,.015), method = "difference", cov.value1 = 1, cov.value2 = 0
@@ -349,13 +349,13 @@ plot.estimateEffect(prep2016, covariate = "female", topics = topics2016, model =
                     , main = "Gender Differences in Topic Proportions (2016 ANES)")
 dev.off()
 
-pdf("../fig/stm_gender_pres0.pdf", height=5, width=7.5)
+pdf("fig/stm_gender_pres0.pdf", height=5, width=7.5)
 par(mfrow=c(1,1), mar=c(2.2,0.5,2.2,0.5))
 plot(x=0, y =0, type = "n", xlim = c(-.05,.015), ylab = NA, yaxt='n', main = "Gender Differences in Topic Proportions (2012 ANES)")
 abline(v=0, lty=2)
 dev.off()
 
-pdf("../fig/stm_gender_pres1.pdf", height=5, width=7.5)
+pdf("fig/stm_gender_pres1.pdf", height=5, width=7.5)
 par(mfrow=c(1,1), mar=c(2.2,0.5,2.2,0.5))
 plot.estimateEffect(prep2012, covariate = "female", topics = topics2012, model = stm_fit2012
                     , xlim = c(-.05,.015), method = "difference", cov.value1 = 1, cov.value2 = 0
@@ -372,10 +372,10 @@ dev.off()
 stargazer(m1, type = "text")
 
 ## create table
-stargazer(m1, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+stargazer(m1, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE,
           model.names=FALSE, dep.var.labels.include = TRUE, star.cutoffs = NA, omit.table.layout = "n",
-          title="Effects of gender on discursive sophistication and factual knowledge in the 
-          2012 ANES and 2016 ANES. Standard errors in parentheses. Estimates are used for 
+          title="Effects of gender on discursive sophistication and factual knowledge in the
+          2012 ANES and 2016 ANES. Standard errors in parentheses. Estimates are used for
           Figure 7 in the main text.",
           column.labels = c("2012 ANES","2016 ANES","2012 ANES","2016 ANES"),
           dep.var.labels = c("Discursive Sophistication","Factual Knowledge"),
@@ -384,21 +384,21 @@ stargazer(m1, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 
                                "African American","Church Attendance",
                                "Mode: Online","Constant"),
           keep.stat = c("n", "rsq"),
-          out = "../tab/determinants_anes.tex", label = "tab:determinants_anes", type="text")
+          out = "tab/determinants_anes.tex", label = "tab:determinants_anes", type="text")
 
 
 ## print summary
 stargazer(m2, type = "text")
 
 ## create table
-stargazer(m2, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE, 
+stargazer(m2, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digits= 3, model.numbers = FALSE,
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = NA, omit.table.layout = "n",
-          title="Effects of gender on discursive sophistication and factual knowledge in the 
-          2015 YouGov Study. Standard errors in parentheses. Estimates are used for 
+          title="Effects of gender on discursive sophistication and factual knowledge in the
+          2015 YouGov Study. Standard errors in parentheses. Estimates are used for
           Figure 7 in the main text.",
           column.labels = c("Discursive Sophistication","Factual Knowledge"),
           #dep.var.labels = c("Discursive Sophistication","Factual Knowledge"),
           covariate.labels = c("Female","College Degree","Family Income","Age (log)",
                                "African American","Church Attendance","Constant"),
           keep.stat = c("n", "rsq"),
-          out = "../tab/determinants_yg.tex", label = "tab:determinants_yg", type="text")
+          out = "tab/determinants_yg.tex", label = "tab:determinants_yg", type="text")

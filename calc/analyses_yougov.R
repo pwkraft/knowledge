@@ -19,16 +19,16 @@ library(dplyr)
 library(pmisc)
 library(stargazer)
 
-setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
+#setwd("/data/Dropbox/Uni/Projects/2016/knowledge/calc")
 
 ## load data and stm results
-load("out/yougov.Rdata")
+load("calc/out/yougov.Rdata")
 
 
 ## QUESTION: remove wc=0 and spanish=1?
 mean(yougov$wc[yougov$wc>0])
 
-source("func.R")
+source("calc/func.R")
 
 ## plot defaults
 plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
@@ -59,13 +59,13 @@ summary(lm(know_dis ~ female + educ + log(age) + black + relig + educ + faminc, 
 datcor <- data_yg[,c("polknow_text_mean","know_pol", "know_dis")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 
-pdf("../fig/yg_corplot.pdf",width=2.5, height=2.5)
+pdf("fig/yg_corplot.pdf",width=2.5, height=2.5)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.1, size=.2)), axisLabels="none"
         , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge","Disease\nInformation")) +
   plot_default
 dev.off()
 
-pdf("../fig/yg_corplot_empty.pdf",width=2.5, height=2.5)
+pdf("fig/yg_corplot_empty.pdf",width=2.5, height=2.5)
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.01, size=.2)), axisLabels="none"
         , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge","Disease\nInformatilon")) +
   theme_classic(base_size=8) + theme(panel.border = element_rect(fill="white"))
@@ -77,7 +77,7 @@ colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
         , columnLabels = c("Considerations","Consistency","Word Choice")) + plot_default
-ggsave("../fig/yg_corplot_components.pdf",width=2.6, height=2.6)
+ggsave("fig/yg_corplot_components.pdf",width=2.6, height=2.6)
 
 
 ########
@@ -101,12 +101,12 @@ res <- rbind(data.frame(sim(m2full, iv=data.frame(polknow_text_mean=seq(min(data
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_default +
   geom_ribbon(alpha=0.4, lwd=.1) + geom_line() +
   ylab("Information Retrieval") + xlab("Value of Independent Variable")
-ggsave("../fig/yg_disease.pdf",width=4,height=2)
+ggsave("fig/yg_disease.pdf",width=4,height=2)
 
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_empty +
   geom_ribbon(alpha=0.4, lwd=.1) + geom_line() +
   ylab("Information Retrieval") + xlab("Value of Independent Variable")
-ggsave("../fig/yg_disease0.pdf",width=4,height=2)
+ggsave("fig/yg_disease0.pdf",width=4,height=2)
 
 
 
@@ -114,7 +114,7 @@ ggsave("../fig/yg_disease0.pdf",width=4,height=2)
 ### Additional information: STM summaries
 ###################
 
-pdf("../fig/yg_stm_prop.pdf", width=6, height=9)
+pdf("fig/yg_stm_prop.pdf", width=6, height=9)
 par(mar=c(4.2,0.5,2.5,0.5))
 plot(stm_fit
      , main=paste0("YouGov Survey (k = ",stm_fit$settings$dim$K,")",collapse = "")
@@ -139,4 +139,4 @@ stargazer(m2full, align = FALSE, column.sep.width = "0pt", no.space = TRUE, digi
                                "College Degree","Family Income","Age (log)",
                                "African American","Church Attendance","Constant"),
           keep.stat = c("n", "rsq"),
-          out = "../tab/yg_disease.tex", label = "tab:yg_disease", type="text")
+          out = "tab/yg_disease.tex", label = "tab:yg_disease", type="text")

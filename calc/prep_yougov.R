@@ -118,7 +118,7 @@ yougov$faminc <- (car::recode(raw$faminc, "31=12; 97:hi=NA") -1)/15
 ### MORE WORK ON PRE-PROCESSING NEEDED, check all steps, spell checking, stopword removal etc.
 
 ## minor pre-processing
-opend <- apply(select(raw, Q2, Q3, Q5, Q6), 2, function(x){
+opend <- apply(dplyr::select(raw, Q2, Q3, Q5, Q6), 2, function(x){
     x <- gsub("(^\\s+|\\s+$)","", x)
     x[x %in% c("N/A","n/a","na","Na","__NA__","no","not sure","none","nothing","good"
                ,"don't know","don't no","","I have no clue","I do not know")] <- ""
@@ -186,7 +186,7 @@ data_yg <- data_yg[-out_yougov$docs.removed,]
 
 ### stm fit with 49 topics
 stm_fit <- stm(out_yougov$documents, out_yougov$vocab, prevalence = as.matrix(out_yougov$meta)
-               , K=47, seed=12345)
+               , K=25, seed=12345)
 
 ### compute number of considerations
 data_yg$considerations <- ntopics(stm_fit, out_yougov)
@@ -197,7 +197,10 @@ data_yg$considerations <- ntopics(stm_fit, out_yougov)
 yougov_liwc <- liwcalike(data_yg$resp, liwc)
 
 ## combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
-data_yg$wordchoice <- (yougov_liwc$conj + yougov_liwc$negate) * yougov_liwc$WC
+data_yg$wordchoice <- with(yougov_liwc,
+                           Sixltr + discrep + tentat + cause + insight - certain - negate - differ)
+# MISSING: Inclusiveness (incl), Inhibition (Inhib) -> replaced by Differentiation (differ)
+data_yg$wordchoice <- data_yg$wordchoice - min(data_yg$wordchoice)
 data_yg$wordchoice <- data_yg$wordchoice / max(data_yg$wordchoice)
 
 
