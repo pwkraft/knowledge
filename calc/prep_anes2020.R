@@ -75,162 +75,198 @@ anes2020 <- raw2020 %>% transmute(
   polint = (polint_att + polint_cam)/2,
 
   ## internal efficacy
-  V202212
-  V202213
-
-  effic_int = Recode(effic_complicstd, "lo:-8=NA; -1=1") - 1
-                             + Recode(effic_complicrev, "lo:-8=NA; -1=1") - 1
-                             - Recode(effic_undstd, "lo:-8=NA; -1=5") + 5
-                             - Recode(effic_undrev, "lo:-8=NA; -1=5") + 5
-  ) / 8
+  effic_int = (na_in(V202214, -9:-1) - 1
+               - na_in(V202213, -9:-1) + 5)/8,
 
   ## external efficacy
-  effic_ext = Recode(effic_carestd, "lo:-8=NA; -1=1") - 1
-                             - Recode(effic_carerev, "lo:-8=NA; -1=5") + 5
-                             + Recode(effic_saystd, "lo:-8=NA; -1=1") - 1
-                             - Recode(effic_sayrev, "lo:-8=NA; -1=5") + 5
-  ) / 8
+  effic_ext = (na_in(V202212, -9:-1) - 1
+               + na_in(V202213, -9:-1) - 1)/8,
 
   ## overall efficacy
-  effic = with(anes2012, (effic_int + effic_ext)/2)
+  effic = (effic_int + effic_ext)/2,
 
   ## voted in previous election
-  pastvote = Recode(interest_voted2008, "c(2,5)=0; lo:-1=NA")
+  pastvote = as.numeric(na_in(V201101, -9:-1) == 1 |
+                          na_in(V201102, -9:-1) == 1),
 
   ## voted in current election
-  vote = Recode(rvote2012_x, "2=0; lo:-1=NA")
+  vote = na_if(V202109x, -2),
 
   ## participated in protest march / rally
-  protest = Recode(dhsinvolv_march, "c(2,5)=0; lo:-1=NA")
-
-  ## letter to congressman/senator
-  letter = Recode(dhsinvolv_contact1, "2=0; lo:-1=NA")
+  protest = as.numeric(na_in(V202025, -9:-1) == 1),
 
   ## signed a petition
-  petition = as.numeric((Recode(dhsinvolv_netpetition, "c(2,5)=0; lo:-1=NA") +
-                                     Recode(dhsinvolv_petition, "c(2,5)=0; lo:-1=NA")) > 0)
+  petition = as.numeric(na_in(V202026, -9:-1) == 1),
 
   ## wear a campaign button
-  button = Recode(mobilpo_sign, "c(2,5)=0; lo:-1=NA")
+  button = as.numeric(na_in(V202015, -9:-1) == 1),
+
+  ## letter to congressman/senator
+  letter = as.numeric(na_in(V202030, -9:-1) == 1),
 
   ## additive index non-conventional participation
-  part = with(anes2012, protest + petition + button + letter)
-
-  ## vote choice (pre-election) (1=dpc, 2=rpc)
-  vc_pre = Recode(prevote_intpreswho,"lo:-1=NA; 1=1; 2=2; else=3")
-
-  ## vote choice (post-election)
-  vc_post = Recode(postvote_presvtwho,"lo:-1=NA; 1=1; 2=2; else=3")
-  vote_rep = Recode(vc_post, "3=NA") - 1
-
-  ## vote change (pre-post)
-  vc_change = vc_pre == vc_post
-  #vc_change[prevote_presvt == 1] = 1
-  vc_change[is.na(vc_pre) & !is.na(vc_post)] = 0
-  vc_change[!is.na(vc_pre) & is.na(vc_post)] = 0
-
-  ## party/candidate placements
-  ideol_ego = (Recode(libcpre_self, "lo:0=NA") - 4)/3
-  spsrvpr_ego = (Recode(spsrvpr_ssself, "lo:0=NA") - 4)/3
-  defsppr_ego = (Recode(defsppr_self, "lo:0=NA") - 4)/3
-  inspre_ego = (Recode(inspre_self, "lo:0=NA") - 4)/3
-  guarpr_ego = (Recode(guarpr_self, "lo:0=NA") - 4)/3
-  aidblack_ego = (Recode(aidblack_self, "lo:0=NA") - 4)/3
-  envjob_ego = (Recode(envjob_self, "lo:0=NA") - 4)/3
-
-  ideol_dpc = (Recode(libcpre_dpc, "lo:0=NA") - 4)/3
-  ideol_rpc = (Recode(libcpre_rpc, "lo:0=NA") - 4)/3
-  spsrvpr_dpc = (Recode(spsrvpr_ssdpc, "lo:0=NA") - 4)/3
-  spsrvpr_rpc = (Recode(spsrvpr_ssrpc, "lo:0=NA") - 4)/3
-  defsppr_dpc = (Recode(defsppr_dpc, "lo:0=NA") - 4)/3
-  defsppr_rpc = (Recode(defsppr_rpc, "lo:0=NA") - 4)/3
-  inspre_dpc = (Recode(inspre_dpc, "lo:0=NA") - 4)/3
-  inspre_rpc = (Recode(inspre_rpc, "lo:0=NA") - 4)/3
-  guarpr_dpc = (Recode(guarpr_dpc, "lo:0=NA") - 4)/3
-  guarpr_rpc = (Recode(guarpr_rpc, "lo:0=NA") - 4)/3
-  aidblack_dpc = (Recode(aidblack_dpc, "lo:0=NA") - 4)/3
-  aidblack_rpc = (Recode(aidblack_rpc, "lo:0=NA") - 4)/3
-  envjob_dpc = (Recode(envjob_dpc, "lo:0=NA") - 4)/3
-  envjob_rpc = (Recode(envjob_rpc, "lo:0=NA") - 4)/3
-
-  ## ideology (factor/dummies)
-  ideol = factor(Recode(libcpre_self, "1:3=1; 4=2; 5:7=3; else=NA")
-                           , labels = c("Liberal","Moderate","Conservative"))
-  ideol_lib = as.numeric(ideol=="Liberal")
-  ideol_con = as.numeric(ideol=="Conservative")
-
-  ## ideology (continuous, -1 to 1)
-  ideol_ct = (Recode(libcpre_self, "lo:0=NA") - 4)/3
-
-  ## strength of ideology
-  ideol_str = abs(ideol_ct)
+  part = protest + petition + button + letter,
 
   ## party identification (factor/dummies)
-  pid = factor(Recode(pid_x
-                                , "1:2=1; c(3,4,5)=2; 6:7=3; else=NA")
-                         , labels = c("Democrat","Independent","Republican"))
-  pid_dem = as.numeric(pid=="Democrat")
-  pid_rep = as.numeric(pid=="Republican")
+  pid = recode_factor(as.numeric(V201231x),
+                      `1` = "Democrat",
+                      `2` = "Democrat",
+                      `3` = "Independent",
+                      `4` = "Independent",
+                      `5` = "Independent",
+                      `6` = "Republican",
+                      `7` = "Republican",
+                      .default = NA_character_),
+  pid_dem = as.numeric(pid=="Democrat"),
+  pid_rep = as.numeric(pid=="Republican"),
 
   ## pid continuous
-  pid_cont = (Recode(pid_x, "lo:0=NA") - 4)/3
+  pid_cont = (na_in(V201231x, -9:-1) - 4)/3,
 
   ## strength of partisanship
-  pid_str = abs(pid_cont)
+  pid_str = abs(pid_cont),
 
   ## interaction: pid * education
-  educ_pid = educ_cont * pid_cont
+  educ_pid = educ_cont * pid_cont,
 
   ## religiosity (church attendance)
-  relig = (5 - Recode(relig_churchoft, "lo:0 = NA"))/5
-  relig[relig_church != 1] = 0
-  relig[relig_churchwk == 2] = 1
+  relig = (5 - na_in(V201453, -9:-1))/5,
+  relig = ifelse(V201452 == 2, 0, relig),
+  relig = ifelse(V201454 == 2, 1, relig),
 
   ## age
-  age = Recode(dem_age_r_x, "c(-2,-9,-8) = NA")
+  age = na_if(V201507x, -9),
 
   ## log(age)
-  lage = log(age)
+  lage = log(age),
 
   ## sex
-  female = gender_respondent_x - 1
+  female = na_if(V201600, -9) - 1,
 
   ## race
-  black = as.numeric(Recode(dem_raceeth_x, "lo:0 = NA") == 2)
+  black = as.numeric(na_in(V201549x, -9:-1) == 2),
 
   ## income
-  faminc = (Recode(incgroup_prepost_x, "lo:0 = NA") -1)/27
-
-  ## gender of inerviewer
-  iwrmale = Recode(iwrdesc_pre_gender, "lo:0=NA; 2=0")
+  faminc = na_in(V201617x, -9:-1)/21,
 
   ## spanish speaking respondent
-  spanish = as.numeric(profile_spanishsurv == 1 |
-                                   admin_pre_lang_start == 2 |
-                                   admin_post_lang_start == 2)
-
-  ## wordsum literacy test
-  wordsum = (wordsum_setb == 5) + (wordsum_setd == 3)
-                           + (wordsum_sete == 1) + (wordsum_setf == 3)
-                           + (wordsum_setg == 5) + (wordsum_seth == 4)
-                           + (wordsum_setj == 1) + (wordsum_setk == 1)
-                           + (wordsum_setl == 4) + (wordsum_seto == 2))/10
-
-  ## gender of interviewe
-  iwr_female = Recode(iwrdesc_pre_gender,"lo:-1=NA")-1
-
-  ## Pro-redistribution attitude: (new scale: 0-1)
-  ## Services and spending tradeoff placement (1-7, max = increase spending)
-  ## Standard of living (1-7, max = gov't should let each person get ahead on their own)
-  redist = (Recode(spsrvpr_ssself, "lo:0 = NA") - Recode(guarpr_self, "lo:0 = NA") + 6)/12
-
-  ## Support tax increases (new scale: 0-1)
-  ## favor tax on millionaires
-  ## raising personal inc tax for over 250K inc to reduce deficit
-  tax = ((-Recode(milln_milltax_x, "lo:0 = NA") + 7)/3 + Recode(budget_rdef250k, "lo:0 = NA; 1=2; 2=0; 3=1"))/4
-
-  ## Personality characteristics: Extraversion
-  extraversion = Recode(tipi_extra, "lo:0 = NA")
-  reserved = Recode(tipi_resv, "lo:0 = NA")
+  spanish = as.numeric(V201001 == 2 | V202001 == 2)
 )
 
+
+
+# Prepare open-ended responses --------------------------------------------
+
+### NOTE: MORE WORK ON PRE-PROCESSING NEEDED, check all steps, spell checking, stopword removal etc.
+
+## read original open-ended responses (downloaded from anes website)
+anes2020opend <- read_csv("~/Dropbox/Uni/Data/anes2020/anes_timeseries_2020_redacted_openends.csv")
+
+## identify spanish respondents
+anes2020$spanish2 <- as.numeric(cld2::detect_language(apply(anes2020opend[,-1],1,paste,collapse=' ')) != "en")
+
+## minor pre-processing
+anes2020spell <- apply(anes2020opend[,-1], 2, function(x){
+  x <- char_tolower(x)
+  x <- gsub("//"," ", x , fixed = T)
+  x <- gsub("\\s+"," ", x)
+  x <- gsub("(^\\s+|\\s+$)","", x)
+  return(x)
+})
+
+
+## num-lock issue
+# maybe look into this later
+
+## fix words without whitespace
+# maybe look into this later
+
+## spell-checking
+write.table(anes2020spell, file = "calc/out/anes2020oe.csv",
+            sep = ",", col.names = F, row.names = F)
+spell <- aspell("calc/out/anes2020oe.csv") %>%
+  filter(Suggestions!="NULL")
+
+## replace incorrect words
+for(i in 1:nrow(spell)){
+  anes2020spell[spell$Line[i],] <- gsub(spell$Original[i], unlist(spell$Suggestions[i])[1],
+                                        anes2020spell[spell$Line[i],])
+}
+anes2020spell <- data.frame(caseid = anes2020opend$V200001, anes2020spell,stringsAsFactors = F)
+
+
+
+# Text-based political sophistication measure -----------------------------
+
+
+## Consistency: Shannon entropy of response lengths ----------------------
+
+### overall response length
+anes2020$wc <- apply(anes2020spell[,-1], 1, function(x){
+  sum(str_count(x, "\\w+"))
+})
+anes2020$lwc <- log(anes2020$wc)/max(log(anes2020$wc), na.rm = T)
+
+### consistency in item response
+anes2020$consistency <- apply(anes2020spell[,-1], 1, function(x){
+  iwc <- str_count(x, "\\w+")
+  shannon(iwc/sum(iwc))
+})
+
+
+## Considerations: Number of topics mentioned -----------------------------
+
+### combine regular survey and open-ended data, remove spanish and empty responses
+meta2020 <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
+data2020 <- anes2020 %>% mutate(resp = apply(anes2020spell[,-1],1,paste,collapse=' ')) %>%
+  filter(spanish == 0 & wc != 0)
+
+### remove additional whitespaces
+data2020$resp <- gsub("\\s+"," ", data2020$resp)
+data2020$resp <- gsub("(^\\s+|\\s+$)","", data2020$resp)
+
+### remove missings on metadata
+data2020 <- data2020[apply(!is.na(data2020[,meta2020]),1,prod)==1,]
+
+### process for stm
+processed2020 <- textProcessor(data2020$resp, metadata = data2020[,meta2020],
+                               customstopwords = c("dont", "hes", "shes", "that", "etc"))
+out2020 <- prepDocuments(processed2020$documents, processed2020$vocab, processed2020$meta,
+                         lower.thresh = 10)
+
+### remove discarded observations from data
+data2020 <- data2020[-processed2020$docs.removed,]
+data2020 <- data2020[-out2020$docs.removed,]
+
+### stm fit with 49 topics
+stm_fit2020 <- stm(out2020$documents, out2020$vocab, prevalence = as.matrix(out2020$meta),
+                   K=49, seed=12345)
+
+### compute number of considerations
+data2020$considerations <- ntopics(stm_fit2020, out2020)
+
+
+## Word choice: LIWC component ---------------------------------------------
+
+anes2020_liwc <- liwcalike(data2020$resp, liwc)
+
+### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
+data2020$wordchoice <- with(anes2020_liwc,
+                            Sixltr + discrep + tentat + cause + insight - certain - negate - differ)
+# MISSING: Inclusiveness (incl), Inhibition (Inhib) -> replaced by Differentiation (differ)
+data2020$wordchoice <- data2020$wordchoice - min(data2020$wordchoice)
+data2020$wordchoice <- data2020$wordchoice / max(data2020$wordchoice)
+
+
+## Merge with full data and save -------------------------------------------
+
+### compute combined measures
+data2020$polknow_text <- with(data2020, considerations * consistency * wordchoice)
+data2020$polknow_text_mean <- with(data2020, considerations + consistency + wordchoice)/3
+
+
+
+# save output -------------------------------------------------------------
+
+save(anes2020, anes2020opend, anes2020spell, data2020, meta2020, processed2020, out2020, stm_fit2020,
+     file="calc/out/anes2020.Rdata")

@@ -407,7 +407,10 @@ data2016$considerations <- ntopics(stm_fit2016, out2016)
 anes2016_liwc <- liwcalike(data2016$resp, liwc)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
-data2016$wordchoice <- (anes2016_liwc$conj + anes2016_liwc$negate) * anes2016_liwc$WC
+data2016$wordchoice <- with(anes2016_liwc,
+                            Sixltr + discrep + tentat + cause + insight - certain - negate - differ)
+# MISSING: Inclusiveness (incl), Inhibition (Inhib) -> replaced by Differentiation (differ)
+data2016$wordchoice <- data2016$wordchoice - min(data2016$wordchoice)
 data2016$wordchoice <- data2016$wordchoice / max(data2016$wordchoice)
 
 

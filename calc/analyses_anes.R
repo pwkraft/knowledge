@@ -279,7 +279,7 @@ res$Year <- rep(c("2012 ANES","2016 ANES"), each=20)
 ggplot(res, aes(x=value, y=mean, ymin=cilo,ymax=cihi, fill=Variable, lty=Variable)) + plot_default +
   geom_ribbon(alpha=0.4, lwd=.1) + geom_line() +
   facet_grid(~Year, scales="free_x") +
-  ylab("Expected Probability\nof Correct Vote") + xlab("Value of Independent Variable")
+  ylab("Expected Probability\nof Correct Vote") + xlab("Value of Independent Variable") + ylim(.75,1)
 ggsave("../fig/correctvote.pdf",width=5,height=2)
 
 
