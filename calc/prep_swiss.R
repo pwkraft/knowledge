@@ -154,8 +154,10 @@ opend_german_liwc <- liwcalike(opend_german$resp, liwc_de)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
 opend_german$wordchoice <- with(opend_german_liwc,
-                                discrep + tentat + incl + cause + insight + inhib
-                                - certain - negate - excl)
+                                incl + excl
+                                #discrep + tentat + incl + cause + insight + inhib
+                                #- certain - negate - excl
+                                )
 # NOTE: based on 2007 dict
 opend_german$wordchoice <- opend_german$wordchoice - min(opend_german$wordchoice)
 opend_german$wordchoice <- opend_german$wordchoice / max(opend_german$wordchoice)
@@ -230,8 +232,10 @@ opend_french_liwc <- liwcalike(opend_french$resp, liwc_fr)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
 opend_french$wordchoice <- with(opend_french_liwc,
-                                divergence + tentative + inclusion + cause + perspicacité + inhibition
-                                - certitude - négation - exclusion)
+                                conjonction + exclusion
+                                #divergence + tentative + inclusion + cause + perspicacité + inhibition
+                                #- certitude - négation - exclusion
+                                )
 # NOTE: based on 2007 dict
 opend_french$wordchoice <- opend_french$wordchoice - min(opend_french$wordchoice)
 opend_french$wordchoice <- opend_french$wordchoice / max(opend_french$wordchoice)
@@ -307,8 +311,10 @@ opend_italian_liwc <- liwcalike(opend_italian$resp, liwc_it)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
 opend_italian$wordchoice <- with(opend_italian_liwc,
-                                 discrep + possib + inclusi + causa + intros + inibiz
-                                 - certez - negazio - esclusi)
+                                 inclusi + esclusi
+                                 #discrep + possib + inclusi + causa + intros + inibiz
+                                 #- certez - negazio - esclusi
+                                 )
 # NOTE: based on 2007 dict
 opend_italian$wordchoice <- opend_italian$wordchoice - min(opend_italian$wordchoice)
 opend_italian$wordchoice <- opend_italian$wordchoice / max(opend_italian$wordchoice)

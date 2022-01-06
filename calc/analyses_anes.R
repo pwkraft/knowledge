@@ -66,19 +66,18 @@ ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), 
                                  ,"Interviewer\nEvaluation")) + plot_default
 ggsave("fig/anes2016_corplot.pdf",width=3.2, height=3.2)
 
+## 2016 ANES poster version
+ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
+        , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge"
+                           ,"Interviewer\nEvaluation")) + plot_default
+#ggsave("fig/anes2016_corplot.pdf",width=4, height=4)
+
 ## 2020 ANES
 datcor <- data2020[,c("polknow_text_mean","polknow_factual")]
 colnames(datcor) <- paste0("v",1:ncol(datcor))
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
         , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge")) + plot_default
 ggsave("fig/anes2020_corplot.pdf",width=3.2, height=3.2)
-
-
-## 2016 ANES poster version
-ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
-        , columnLabels = c("Discursive\nSophistication","Factual\nKnowledge"
-                           ,"Interviewer\nEvaluation")) + plot_default
-#ggsave("fig/anes2016_corplot.pdf",width=4, height=4)
 
 
 ## ANES 2012 components
@@ -123,10 +122,10 @@ m4b[[1]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + fam
 m4b[[2]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
 m4b[[3]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
 m4b[[4]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2016)
-m4c[[1]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig, data = data2020, family=binomial("logit"))
-m4c[[2]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig, data = data2020)
+m4c[[1]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2020, family=binomial("logit"))
+m4c[[2]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2020)
 m4c[[3]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig, data = data2020)
-m4c[[4]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig, data = data2020)
+m4c[[4]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2020)
 
 res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean))),
              sim(m4a, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual))),

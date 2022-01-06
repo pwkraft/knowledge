@@ -21,6 +21,7 @@ library(stargazer)
 ## load data and stm results
 load("calc/out/anes2012.Rdata")
 load("calc/out/anes2016.Rdata")
+load("calc/out/anes2020.Rdata")
 load("calc/out/swiss.Rdata")
 load("calc/out/yougov.Rdata")
 
@@ -114,6 +115,31 @@ p2_empty <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gen
   ggtitle("2016 ANES")
 
 
+### 2020 ANES
+
+plot_df <- data.frame(rbind(cbind(data2020$polknow_text_mean, data2020$female, 1),
+                            cbind(data2020$polknow_factual, data2020$female, 2))) %>% na.omit()
+colnames(plot_df) <- c("Knowledge","Gender","Variable")
+plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
+plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"))
+plot_means <- plot_df %>% group_by(Variable, Gender) %>%
+  summarize_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
+  mutate(cilo = mean - 1.96*sd/sqrt(n)
+         , cihi = mean + 1.96*sd/sqrt(n))
+
+p2b <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default +
+  geom_bar(stat="identity") + geom_errorbar(width=.25) +
+  facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+  geom_point(aes(y=max), col="white") + guides(fill="none") + scale_fill_brewer(palette="Paired") +
+  ggtitle("2020 ANES")
+
+p2b_empty <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_empty +
+  geom_bar(stat="identity") + geom_errorbar(width=.25) +
+  facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+  geom_point(aes(y=max), col="white") + guides(fill="none") + scale_fill_brewer(palette="Paired") +
+  ggtitle("2020 ANES")
+
+
 ### Yougov Data
 
 plot_df <- data.frame(rbind(cbind(data_yg$polknow_text_mean, data_yg$female, 1)
@@ -196,13 +222,13 @@ p6 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) 
   labs(title=" ", subtitle="Italian Respondents", y="Average Values", x=NULL)
 
 
-(p0 <- grid.arrange(p1, p2, p3, p4, p5, p6, ncol=3))
-ggsave("fig/meandiff.pdf", p0 ,width=6.5, height=4)
+(p0 <- grid.arrange(p1, p2, p2b, p3, p4, p5, p6, ncol=4))
+ggsave("fig/meandiff.pdf", p0 ,width=6.5, height=3)
 
-(p0 <- grid.arrange(p1, p2, p3, ncol=3))
+(p0 <- grid.arrange(p1, p2, p2b, p3, ncol=4))
 ggsave("fig/meandiff_pres.pdf", p0 ,width=6.5, height=3)
 
-(p0 <- grid.arrange(p1_empty, p2_empty, p3_empty, ncol=3))
+(p0 <- grid.arrange(p1_empty, p2_empty, p2b_empty, p3_empty, ncol=4))
 ggsave("fig/meandiff_pres_empty.pdf", p0 ,width=6.5, height=3)
 
 
@@ -215,7 +241,7 @@ ggsave("fig/meandiff_pres_empty.pdf", p0 ,width=6.5, height=3)
 
 ### ANES data
 
-dvnames <- rep(c("Discursive Sophistication","Factual Knowledge"), each=2)
+dvnames <- rep(c("Discursive Sophistication","Factual Knowledge"), each=3)
 ivnames <- c("Intercept", "Female", "Media", "Discussions", "College"
              , "Income", "log(Age)", "Black", "Church", "Online")
 
@@ -223,8 +249,10 @@ ivnames <- c("Intercept", "Female", "Media", "Discussions", "College"
 m1 <- NULL
 m1[[1]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data2012)
 m1[[2]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data2016)
-m1[[3]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data2012)
-m1[[4]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data2016)
+m1[[3]] <- lm(polknow_text_mean ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data2020)
+m1[[4]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data2012)
+m1[[5]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data2016)
+m1[[6]] <- lm(polknow_factual ~ female + polmedia + poldisc + educ + faminc + log(age) + black + relig + mode, data = data2020)
 lapply(m1, summary)
 
 # prepare dataframe for plotting (sloppy code)
@@ -238,11 +266,11 @@ for(i in 1:length(m1)){
   dfplot1 <- rbind(dfplot1, tmp)
   rm(tmp)
 }
-dfplot1$source <- rep(c("2012 ANES", "2016 ANES"), each=nrow(dfplot1)/4)
+dfplot1$source <- rep(c("2012 ANES", "2016 ANES", "2020 ANES"), each=nrow(dfplot1)/6)
 
 # create factor variables, remove intercept for plotting
 dfplot1$ivnames <- factor(dfplot1$ivnames, levels = rev(ivnames))
-dfplot1$dv <- factor(dfplot1$dv, levels = dvnames[c(1,3)])
+dfplot1$dv <- factor(dfplot1$dv, levels = unique(dvnames))
 dfplot1 <- dfplot1[dfplot1$ivnames!="Intercept",]
 
 ### Add YouGov data
@@ -280,28 +308,28 @@ dfplot2 <- dfplot2[dfplot2$ivnames!="Intercept",]
 ### combine ANES and YouGov
 
 dfplot <- rbind(dfplot1, dfplot2)
-dfplot$source <- factor(dfplot$source, levels=c("2012 ANES", "2016 ANES", "2015 YouGov Survey"))
+dfplot$source <- factor(dfplot$source, levels=c("2012 ANES", "2016 ANES", "2020 ANES", "2015 YouGov Survey"))
 
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) +
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point() + geom_errorbarh(height = 0) + facet_grid(source~dv, scale="free") +
   plot_default + theme(axis.text.x = element_text(angle = 45, hjust = 1))
-ggsave("fig/determinants.pdf",width=5,height=4)
+ggsave("fig/determinants.pdf",width=5,height=5)
 
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) +
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point() + geom_errorbarh(height = 0) + facet_grid(source~dv, scale="free") +
   plot_empty + theme(axis.text.x = element_text(angle = 45, hjust = 1))
-ggsave("fig/determinants_empty.pdf",width=5,height=4)
+ggsave("fig/determinants_empty.pdf",width=5,height=5)
 
 ggplot(dfplot, aes(y=ivnames, x=Estimate
                    , xmin = Estimate-1.96*Std..Error, xmax = Estimate+1.96*Std..Error)) +
   geom_vline(xintercept = 0, color="grey") + xlab("Estimate") + ylab("Independent Variable") +
   geom_point(size=.5) + geom_errorbarh(height = 0) + facet_grid(source~dv, scale="free") +
   plot_default + theme(axis.text.x = element_text(angle = 45, hjust = 1))
-ggsave("fig/determinants_poster.pdf",width=4,height=4)
+ggsave("fig/determinants_poster.pdf",width=4,height=5)
 
 
 ########

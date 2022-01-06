@@ -198,7 +198,9 @@ yougov_liwc <- liwcalike(data_yg$resp, liwc)
 
 ## combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
 data_yg$wordchoice <- with(yougov_liwc,
-                           Sixltr + discrep + tentat + cause + insight - certain - negate - differ)
+                           conj + differ,
+                           #Sixltr + discrep + tentat + cause + insight - certain - negate - differ
+                           )
 # MISSING: Inclusiveness (incl), Inhibition (Inhib) -> replaced by Differentiation (differ)
 data_yg$wordchoice <- data_yg$wordchoice - min(data_yg$wordchoice)
 data_yg$wordchoice <- data_yg$wordchoice / max(data_yg$wordchoice)

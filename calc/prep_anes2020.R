@@ -35,7 +35,7 @@ anes2020 <- raw2020 %>% transmute(
   caseid = V200001,
 
   ## interview mode (1=Video, 2=Phone, 3=Web)
-  mode = as_factor(V200002),
+  mode = as.numeric(V200002 == 3),
 
   ## political knowledge (office recognition, post-election)
   polknow_office = ((na_in(V202138y, -7:-1) == 1) +
@@ -252,7 +252,9 @@ anes2020_liwc <- liwcalike(data2020$resp, liwc)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
 data2020$wordchoice <- with(anes2020_liwc,
-                            Sixltr + discrep + tentat + cause + insight - certain - negate - differ)
+                            conj + differ,
+                            # Sixltr + discrep + tentat + cause + insight - certain - negate - differ
+                            )
 # MISSING: Inclusiveness (incl), Inhibition (Inhib) -> replaced by Differentiation (differ)
 data2020$wordchoice <- data2020$wordchoice - min(data2020$wordchoice)
 data2020$wordchoice <- data2020$wordchoice / max(data2020$wordchoice)
