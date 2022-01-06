@@ -437,7 +437,7 @@ anes2012_liwc <- liwcalike(data2012$resp, liwc)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
 data2012$wordchoice <- with(anes2012_liwc,
-                            conj + differ,
+                            (conj + differ) * WC,
                             #Sixltr + discrep + tentat + cause + insight - certain - negate - differ
                             )
 # MISSING: Inclusiveness (incl), Inhibition (Inhib) -> replaced by Differentiation (differ)

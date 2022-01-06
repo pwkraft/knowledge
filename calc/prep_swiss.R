@@ -154,7 +154,7 @@ opend_german_liwc <- liwcalike(opend_german$resp, liwc_de)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
 opend_german$wordchoice <- with(opend_german_liwc,
-                                incl + excl
+                                (incl + excl) * WC
                                 #discrep + tentat + incl + cause + insight + inhib
                                 #- certain - negate - excl
                                 )
