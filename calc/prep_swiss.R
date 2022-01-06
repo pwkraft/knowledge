@@ -142,7 +142,7 @@ opend_german <- opend_german[-out_german$docs.removed,]
 
 ### quick fit (30 topics)
 stm_fit_german <- stm(out_german$documents, out_german$vocab, prevalence = as.matrix(out_german$meta),
-                      K=49, seed=12345)
+                      K=25, seed=12345)
 
 ### compute number of considerations
 opend_german$considerations <- ntopics(stm_fit_german, out_german)
@@ -153,8 +153,11 @@ opend_german$considerations <- ntopics(stm_fit_german, out_german)
 opend_german_liwc <- liwcalike(opend_german$resp, liwc_de)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
-### NOTE Conjunctions not included, so I'm using cognative mechanisms
-opend_german$wordchoice <- (opend_german_liwc$cogmech + opend_german_liwc$negate) * opend_german_liwc$WC
+opend_german$wordchoice <- with(opend_german_liwc,
+                                discrep + tentat + incl + cause + insight + inhib
+                                - certain - negate - excl)
+# NOTE: based on 2007 dict
+opend_german$wordchoice <- opend_german$wordchoice - min(opend_german$wordchoice)
 opend_german$wordchoice <- opend_german$wordchoice / max(opend_german$wordchoice)
 
 
@@ -215,7 +218,7 @@ opend_french <- opend_french[-out_french$docs.removed,]
 
 ## quick fit (60 topics)
 stm_fit_french <- stm(out_french$documents, out_french$vocab, prevalence = as.matrix(out_french$meta),
-                      K=44, seed=12345)
+                      K=25, seed=12345)
 
 ### compute number of considerations
 opend_french$considerations <- ntopics(stm_fit_french, out_french)
@@ -223,11 +226,14 @@ opend_french$considerations <- ntopics(stm_fit_french, out_french)
 
 ## Word choice: LIWC component ---------------------------------------------
 
-opend_french_liwc <- liwcalike(opend_french$resp, liwc_de)
+opend_french_liwc <- liwcalike(opend_french$resp, liwc_fr)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
-### NOTE Conjunctions not included, so I'm using cognative mechanisms
-opend_french$wordchoice <- (opend_french_liwc$cogmech + opend_french_liwc$negate) * opend_french_liwc$WC
+opend_french$wordchoice <- with(opend_french_liwc,
+                                divergence + tentative + inclusion + cause + perspicacité + inhibition
+                                - certitude - négation - exclusion)
+# NOTE: based on 2007 dict
+opend_french$wordchoice <- opend_french$wordchoice - min(opend_french$wordchoice)
 opend_french$wordchoice <- opend_french$wordchoice / max(opend_french$wordchoice)
 
 
@@ -287,8 +293,9 @@ opend_italian <- opend_italian[-processed$docs.removed,]
 opend_italian <- opend_italian[-out_italian$docs.removed,]
 
 ## quick fit (60 topics)
-stm_fit_italian <- stm(out_italian$documents, out_italian$vocab, prevalence = as.matrix(out_italian$meta),
-                      K=36, seed=12345)
+stm_fit_italian <- stm(out_italian$documents, out_italian$vocab,
+                       prevalence = as.matrix(out_italian$meta),
+                       K=25, seed=12345)
 
 ### compute number of considerations
 opend_italian$considerations <- ntopics(stm_fit_italian, out_italian)
@@ -296,11 +303,14 @@ opend_italian$considerations <- ntopics(stm_fit_italian, out_italian)
 
 ## Word choice: LIWC component ---------------------------------------------
 
-opend_italian_liwc <- liwcalike(opend_italian$resp, liwc_de)
+opend_italian_liwc <- liwcalike(opend_italian$resp, liwc_it)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
-### NOTE Conjunctions not included, so I'm using cognative mechanisms
-opend_italian$wordchoice <- (opend_italian_liwc$cogmech + opend_italian_liwc$negate) * opend_italian_liwc$WC
+opend_italian$wordchoice <- with(opend_italian_liwc,
+                                 discrep + possib + inclusi + causa + intros + inibiz
+                                 - certez - negazio - esclusi)
+# NOTE: based on 2007 dict
+opend_italian$wordchoice <- opend_italian$wordchoice - min(opend_italian$wordchoice)
 opend_italian$wordchoice <- opend_italian$wordchoice / max(opend_italian$wordchoice)
 
 

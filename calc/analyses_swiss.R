@@ -20,14 +20,14 @@ library(pmisc)
 library(stargazer)
 library(ggridges)
 
-setwd("/data/Dropbox/Uni/projects/2016/knowledge/calc")
+#setwd("/data/Dropbox/Uni/projects/2016/knowledge/calc")
 
 ## load data and stm results
-load("out/swiss.Rdata")
+load("calc/out/swiss.Rdata")
 
 ## QUESTION: remove wc=0 and spanish=1?
 
-source("func.R")
+source("calc/func.R")
 
 ## plot defaults
 plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(fill=NA))
@@ -37,7 +37,7 @@ plot_default <- theme_classic(base_size=9) + theme(panel.border = element_rect(f
 # Plot estimated topics
 ########
 
-pdf("../fig/swiss_stm_prop.pdf", width=12, height=7)
+pdf("fig/swiss_stm_prop.pdf", width=12, height=7)
 par(mfrow=c(1,3), mar=c(4.2,0.5,2.5,0.5))
 plot(stm_fit_german
      , main=paste0("German Respondents (k = ",stm_fit_german$settings$dim$K,")",collapse = "")
@@ -63,7 +63,7 @@ colnames(datcor) <- paste0("v",1:ncol(datcor))
 
 ggpairs(datcor, lower = list(continuous = wrap("smooth", alpha =.05, size=.2)), axisLabels="none"
         , columnLabels = c("Considerations","Consistency","Word Choice")) + plot_default
-ggsave("../fig/swiss_corplot_components.pdf",width=2.6, height=2.6)
+ggsave("fig/swiss_corplot_components.pdf",width=2.6, height=2.6)
 
 
 
@@ -119,19 +119,19 @@ p_italian_empty <- ggplot(opend_italian, aes(x=polknow_text_mean, y=as.factor(lo
   annotate("text", x=0.1, y=8, size=2, label = paste0("r = ",round(cor(opend_italian$polknow_text_mean, opend_italian$loj), 2))) +
   ggtitle("Italian respondents") + ylab("") + xlab("Discursive sophistication") + theme(panel.border = element_rect(fill="white"))
 
-pdf("../fig/swiss_ggridges_0.pdf", width=2.5, height=3)
+pdf("fig/swiss_ggridges_0.pdf", width=2.5, height=3)
 grid.arrange(p_german_empty, p_french_empty, p_italian_empty, ncol=1)
 dev.off()
 
-pdf("../fig/swiss_ggridges_1.pdf", width=2.5, height=3)
+pdf("fig/swiss_ggridges_1.pdf", width=2.5, height=3)
 grid.arrange(p_german, p_french_empty, p_italian_empty, ncol=1)
 dev.off()
 
-pdf("../fig/swiss_ggridges_2.pdf", width=2.5, height=3)
+pdf("fig/swiss_ggridges_2.pdf", width=2.5, height=3)
 grid.arrange(p_german, p_french, p_italian_empty, ncol=1)
 dev.off()
 
-pdf("../fig/swiss_ggridges_3.pdf", width=2.5, height=3)
+pdf("fig/swiss_ggridges_3.pdf", width=2.5, height=3)
 grid.arrange(p_german, p_french, p_italian, ncol=1)
 dev.off()
 
@@ -157,7 +157,7 @@ ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
   scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=3) +
   geom_text(data=opend_cor, aes(label=cor),size=2,vjust=-9) +
   ylab("Level of Justification") + xlab("Discursive sophistication")
-ggsave("../fig/swiss_ggridges.pdf",width=6,height=2)
+ggsave("fig/swiss_ggridges.pdf",width=6,height=2)
 
 ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
@@ -165,7 +165,7 @@ ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
   scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=1) +
   geom_text(data=opend_cor, aes(label=cor),size=2) + theme(panel.border = element_rect(fill="white")) +
   ylab("Level of Justification") + xlab("Discursive sophistication")
-ggsave("../fig/swiss_ggridges_empty.pdf",width=2.5,height=5)
+ggsave("fig/swiss_ggridges_empty.pdf",width=2.5,height=5)
 
 ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
@@ -173,7 +173,7 @@ ggplot(opend_combined, aes(x=polknow_text_mean, y=as.factor(loj))) +
   scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=1) +
   geom_text(data=opend_cor, aes(label=cor),size=2,vjust=-9) +
   ylab("Level of Justification") + xlab("Discursive sophistication")
-ggsave("../fig/swiss_ggridges_poster.pdf",width=4,height=4)
+ggsave("fig/swiss_ggridges_poster.pdf",width=4,height=4)
 
 
 ######################
