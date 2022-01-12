@@ -98,7 +98,7 @@ swiss <- swiss %>%
 opend_german <- swiss %>% filter(lang == 1)
 
 
-## Consistency: Shannon entropy of response lengths ----------------------
+## Range: Shannon entropy of response lengths ----------------------
 
 ## overall response length
 opend_german$wc <- apply(dplyr::select(opend_german, string1:string2), 1, function(x){
@@ -107,13 +107,13 @@ opend_german$wc <- apply(dplyr::select(opend_german, string1:string2), 1, functi
 opend_german$lwc <- log(opend_german$wc)/max(log(opend_german$wc), na.rm = T)
 
 ### consistency in item response  (respondents either answered pro OR con, I should take that into account!!!)
-opend_german$consistency <- apply(dplyr::select(opend_german, string1:string2), 1, function(x){
+opend_german$range <- apply(dplyr::select(opend_german, string1:string2), 1, function(x){
   iwc <- str_count(x, "\\w+")
   shannon(iwc/sum(iwc))
 })
 
 
-## Considerations: Number of topics mentioned -----------------------------
+## Size: Number of topics mentioned -----------------------------
 
 ## combine regular survey and open-ended data
 ## ADD: type of referendum as a meta-covariate
@@ -145,29 +145,29 @@ stm_fit_german <- stm(out_german$documents, out_german$vocab, prevalence = as.ma
                       K=25, seed=12345)
 
 ### compute number of considerations
-opend_german$considerations <- ntopics(stm_fit_german, out_german)
+opend_german$size <- ntopics(stm_fit_german, out_german)
 
 
-## Word choice: LIWC component ---------------------------------------------
+## Constraint: LIWC component ---------------------------------------------
 
 opend_german_liwc <- liwcalike(opend_german$resp, liwc_de)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
-opend_german$wordchoice <- with(opend_german_liwc,
+opend_german$constraint <- with(opend_german_liwc,
                                 (incl + excl) * WC
                                 #discrep + tentat + incl + cause + insight + inhib
                                 #- certain - negate - excl
                                 )
 # NOTE: based on 2007 dict
-opend_german$wordchoice <- opend_german$wordchoice - min(opend_german$wordchoice)
-opend_german$wordchoice <- opend_german$wordchoice / max(opend_german$wordchoice)
+opend_german$constraint <- opend_german$constraint - min(opend_german$constraint)
+opend_german$constraint <- opend_german$constraint / max(opend_german$constraint)
 
 
 ## Merge with full data and save -------------------------------------------
 
 ### compute combined measures
-opend_german$polknow_text <- with(opend_german, considerations * consistency * wordchoice)
-opend_german$polknow_text_mean <- with(opend_german, considerations + consistency + wordchoice)/3
+opend_german$polknow_text <- with(opend_german, size * range * constraint)
+opend_german$polknow_text_mean <- with(opend_german, size + range + constraint)/3
 
 
 
@@ -176,7 +176,7 @@ opend_german$polknow_text_mean <- with(opend_german, considerations + consistenc
 opend_french <- swiss %>% filter(lang == 2)
 
 
-## Consistency: Shannon entropy of response lengths ----------------------
+## Range: Shannon entropy of response lengths ----------------------
 
 ## overall response length
 opend_french$wc <- apply(dplyr::select(opend_french, string1:string2), 1, function(x){
@@ -185,13 +185,13 @@ opend_french$wc <- apply(dplyr::select(opend_french, string1:string2), 1, functi
 opend_french$lwc <- log(opend_french$wc)/max(log(opend_french$wc), na.rm = T)
 
 ### consistency in item response  (respondents either answered pro OR con, I should take that into account!!!)
-opend_french$consistency <- apply(dplyr::select(opend_french, string1:string2), 1, function(x){
+opend_french$range <- apply(dplyr::select(opend_french, string1:string2), 1, function(x){
   iwc <- str_count(x, "\\w+")
   shannon(iwc/sum(iwc))
 })
 
 
-## Considerations: Number of topics mentioned -----------------------------
+## Size: Number of topics mentioned -----------------------------
 
 ## combine regular survey and open-ended data
 ## ADD: type of referendum as a meta-covariate
@@ -223,29 +223,29 @@ stm_fit_french <- stm(out_french$documents, out_french$vocab, prevalence = as.ma
                       K=25, seed=12345)
 
 ### compute number of considerations
-opend_french$considerations <- ntopics(stm_fit_french, out_french)
+opend_french$size <- ntopics(stm_fit_french, out_french)
 
 
-## Word choice: LIWC component ---------------------------------------------
+## Constraint: LIWC component ---------------------------------------------
 
 opend_french_liwc <- liwcalike(opend_french$resp, liwc_fr)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
-opend_french$wordchoice <- with(opend_french_liwc,
+opend_french$constraint <- with(opend_french_liwc,
                                 conjonction + exclusion
                                 #divergence + tentative + inclusion + cause + perspicacité + inhibition
                                 #- certitude - négation - exclusion
                                 )
 # NOTE: based on 2007 dict
-opend_french$wordchoice <- opend_french$wordchoice - min(opend_french$wordchoice)
-opend_french$wordchoice <- opend_french$wordchoice / max(opend_french$wordchoice)
+opend_french$constraint <- opend_french$constraint - min(opend_french$constraint)
+opend_french$constraint <- opend_french$constraint / max(opend_french$constraint)
 
 
 ## Merge with full data and save -------------------------------------------
 
 ### compute combined measures
-opend_french$polknow_text <- with(opend_french, considerations * consistency * wordchoice)
-opend_french$polknow_text_mean <- with(opend_french, considerations + consistency + wordchoice)/3
+opend_french$polknow_text <- with(opend_french, size * range * constraint)
+opend_french$polknow_text_mean <- with(opend_french, size + range + constraint)/3
 
 
 
@@ -254,7 +254,7 @@ opend_french$polknow_text_mean <- with(opend_french, considerations + consistenc
 opend_italian <- swiss %>% filter(lang == 3)
 
 
-## Consistency: Shannon entropy of response lengths ----------------------
+## Range: Shannon entropy of response lengths ----------------------
 
 ## overall response length
 opend_italian$wc <- apply(dplyr::select(opend_italian, string1:string2), 1, function(x){
@@ -263,13 +263,13 @@ opend_italian$wc <- apply(dplyr::select(opend_italian, string1:string2), 1, func
 opend_italian$lwc <- log(opend_italian$wc)/max(log(opend_italian$wc), na.rm = T)
 
 ### consistency in item response  (respondents either answered pro OR con, I should take that into account!!!)
-opend_italian$consistency <- apply(dplyr::select(opend_italian, string1:string2), 1, function(x){
+opend_italian$range <- apply(dplyr::select(opend_italian, string1:string2), 1, function(x){
   iwc <- str_count(x, "\\w+")
   shannon(iwc/sum(iwc))
 })
 
 
-## Considerations: Number of topics mentioned -----------------------------
+## Size: Number of topics mentioned -----------------------------
 
 ## combine regular survey and open-ended data
 ## ADD: type of referendum as a meta-covariate
@@ -302,29 +302,29 @@ stm_fit_italian <- stm(out_italian$documents, out_italian$vocab,
                        K=25, seed=12345)
 
 ### compute number of considerations
-opend_italian$considerations <- ntopics(stm_fit_italian, out_italian)
+opend_italian$size <- ntopics(stm_fit_italian, out_italian)
 
 
-## Word choice: LIWC component ---------------------------------------------
+## Constraint: LIWC component ---------------------------------------------
 
 opend_italian_liwc <- liwcalike(opend_italian$resp, liwc_it)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
-opend_italian$wordchoice <- with(opend_italian_liwc,
+opend_italian$constraint <- with(opend_italian_liwc,
                                  inclusi + esclusi
                                  #discrep + possib + inclusi + causa + intros + inibiz
                                  #- certez - negazio - esclusi
                                  )
 # NOTE: based on 2007 dict
-opend_italian$wordchoice <- opend_italian$wordchoice - min(opend_italian$wordchoice)
-opend_italian$wordchoice <- opend_italian$wordchoice / max(opend_italian$wordchoice)
+opend_italian$constraint <- opend_italian$constraint - min(opend_italian$constraint)
+opend_italian$constraint <- opend_italian$constraint / max(opend_italian$constraint)
 
 
 ## Merge with full data and save -------------------------------------------
 
 ### compute combined measures
-opend_italian$polknow_text <- with(opend_italian, considerations * consistency * wordchoice)
-opend_italian$polknow_text_mean <- with(opend_italian, considerations + consistency + wordchoice)/3
+opend_italian$polknow_text <- with(opend_italian, size * range * constraint)
+opend_italian$polknow_text_mean <- with(opend_italian, size + range + constraint)/3
 
 
 

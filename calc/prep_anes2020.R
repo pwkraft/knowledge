@@ -135,7 +135,7 @@ anes2020 <- raw2020 %>% transmute(
   relig = ifelse(V201454 == 2, 1, relig),
 
   ## age
-  age = na_if(V201507x, -9),
+  age = as.numeric(na_if(V201507x, -9)),
 
   ## log(age)
   lage = log(age),
@@ -171,6 +171,27 @@ anes2020spell <- apply(anes2020opend[,-1], 2, function(x){
   x <- gsub("//"," ", x , fixed = T)
   x <- gsub("\\s+"," ", x)
   x <- gsub("(^\\s+|\\s+$)","", x)
+  x[x %in% c("-1 inapplicable","-7 refused","n/a","no","none","#(43042)","i am","nome"
+             ,"i refuse", "i rwfuse to disclose", "refuse to disclose"
+             ,"dk","skip","no5","don't know","same","not really", "ditto"
+             ,"no idea", "can't say","no comment","no views","nope","not at all"
+             ,"no i can't","no i cant", "i don't know","iguess not","i dont know"
+             , "dont know", "dint care","no no comment","no not really", "again no"
+             , "1", "1 dk","dk5","no answer","hi","i","not","no commont"
+             , "can't answer","no can not","dosen't know","he is not sure"
+             , "its confidential","no answwer","not reaslly","lkjlkj","skjzhdkjhsd"
+             , "you can", "even", "can","dont know dont talk about politics"
+             , "dont knoiw","nono","not sure","do not know it","quit"
+             , "doesnt know","she doesnt know","no not thinking","cant say"
+             , "i don't know much", "would rather not explain","past"
+             , "skipped question", "skip the question", "hjkdhfkjhdskjh"
+             , "theuyidhfjdhkjdhfiaesjrhdjhflike shit", "dfdsjfksdjfkdsjf","dfsadfsf"
+             , "god knows no i can't","no comments","dont want to comment"
+             , "doesn't know","wants to skip","no not sure","no i caint", "not really no"
+             , "i really cant say let me think","nope i don't know what liberal is"
+             , "dont know what a conservative is dont care","she cannot"
+             , "doesn't klnow", "no i cain't", "decline", "really can't"
+             , "i choose not to","no i don't want to","no skip", "-1", "-9")] <- ""
   return(x)
 })
 
@@ -199,7 +220,7 @@ anes2020spell <- data.frame(caseid = anes2020opend$V200001, anes2020spell,string
 # Text-based political sophistication measure -----------------------------
 
 
-## Consistency: Shannon entropy of response lengths ----------------------
+## Range: Shannon entropy of response lengths ----------------------
 
 ### overall response length
 anes2020$wc <- apply(anes2020spell[,-1], 1, function(x){
@@ -208,13 +229,13 @@ anes2020$wc <- apply(anes2020spell[,-1], 1, function(x){
 anes2020$lwc <- log(anes2020$wc)/max(log(anes2020$wc), na.rm = T)
 
 ### consistency in item response
-anes2020$consistency <- apply(anes2020spell[,-1], 1, function(x){
+anes2020$range <- apply(anes2020spell[,-1], 1, function(x){
   iwc <- str_count(x, "\\w+")
   shannon(iwc/sum(iwc))
 })
 
 
-## Considerations: Number of topics mentioned -----------------------------
+## Size: Number of topics mentioned -----------------------------
 
 ### combine regular survey and open-ended data, remove spanish and empty responses
 meta2020 <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
@@ -243,28 +264,28 @@ stm_fit2020 <- stm(out2020$documents, out2020$vocab, prevalence = as.matrix(out2
                    K=25, seed=12345)
 
 ### compute number of considerations
-data2020$considerations <- ntopics(stm_fit2020, out2020)
+data2020$size <- ntopics(stm_fit2020, out2020)
 
 
-## Word choice: LIWC component ---------------------------------------------
+## Constraint: LIWC component ---------------------------------------------
 
 anes2020_liwc <- liwcalike(data2020$resp, liwc)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
-data2020$wordchoice <- with(anes2020_liwc,
+data2020$constraint <- with(anes2020_liwc,
                             (conj + differ) * WC,
                             # Sixltr + discrep + tentat + cause + insight - certain - negate - differ
                             )
 # MISSING: Inclusiveness (incl), Inhibition (Inhib) -> replaced by Differentiation (differ)
-data2020$wordchoice <- data2020$wordchoice - min(data2020$wordchoice)
-data2020$wordchoice <- data2020$wordchoice / max(data2020$wordchoice)
+data2020$constraint <- data2020$constraint - min(data2020$constraint)
+data2020$constraint <- data2020$constraint / max(data2020$constraint)
 
 
 ## Merge with full data and save -------------------------------------------
 
 ### compute combined measures
-data2020$polknow_text <- with(data2020, considerations * consistency * wordchoice)
-data2020$polknow_text_mean <- with(data2020, considerations + consistency + wordchoice)/3
+data2020$polknow_text <- with(data2020, size * range * constraint)
+data2020$polknow_text_mean <- with(data2020, size + range + constraint)/3
 
 
 

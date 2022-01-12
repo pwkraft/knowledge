@@ -327,6 +327,27 @@ anes2016spell <- apply(anes2016opend[,-1], 2, function(x){
   x <- gsub("//"," ", x , fixed = T)
   x <- gsub("\\s+"," ", x)
   x <- gsub("(^\\s+|\\s+$)","", x)
+  x[x %in% c("-1 inapplicable","-7 refused","n/a","no","none","#(43042)","i am","nome"
+             ,"i refuse", "i rwfuse to disclose", "refuse to disclose"
+             ,"dk","skip","no5","don't know","same","not really", "ditto"
+             ,"no idea", "can't say","no comment","no views","nope","not at all"
+             ,"no i can't","no i cant", "i don't know","iguess not","i dont know"
+             , "dont know", "dint care","no no comment","no not really", "again no"
+             , "1", "1 dk","dk5","no answer","hi","i","not","no commont"
+             , "can't answer","no can not","dosen't know","he is not sure"
+             , "its confidential","no answwer","not reaslly","lkjlkj","skjzhdkjhsd"
+             , "you can", "even", "can","dont know dont talk about politics"
+             , "dont knoiw","nono","not sure","do not know it","quit"
+             , "doesnt know","she doesnt know","no not thinking","cant say"
+             , "i don't know much", "would rather not explain","past"
+             , "skipped question", "skip the question", "hjkdhfkjhdskjh"
+             , "theuyidhfjdhkjdhfiaesjrhdjhflike shit", "dfdsjfksdjfkdsjf","dfsadfsf"
+             , "god knows no i can't","no comments","dont want to comment"
+             , "doesn't know","wants to skip","no not sure","no i caint", "not really no"
+             , "i really cant say let me think","nope i don't know what liberal is"
+             , "dont know what a conservative is dont care","she cannot"
+             , "doesn't klnow", "no i cain't", "decline", "really can't"
+             , "i choose not to","no i don't want to","no skip", "-1", "-9")] <- ""
   return(x)
 })
 
@@ -355,7 +376,7 @@ anes2016spell <- data.frame(caseid = anes2016opend$V160001, anes2016spell,string
 # Text-based political sophistication measure -----------------------------
 
 
-## Consistency: Shannon entropy of response lengths ----------------------
+## Range: Shannon entropy of response lengths ----------------------
 
 ### overall response length
 anes2016$wc <- apply(anes2016spell[,-1], 1, function(x){
@@ -364,13 +385,13 @@ anes2016$wc <- apply(anes2016spell[,-1], 1, function(x){
 anes2016$lwc <- log(anes2016$wc)/max(log(anes2016$wc), na.rm = T)
 
 ### consistency in item response
-anes2016$consistency <- apply(anes2016spell[,-1], 1, function(x){
+anes2016$range <- apply(anes2016spell[,-1], 1, function(x){
   iwc <- str_count(x, "\\w+")
   shannon(iwc/sum(iwc))
 })
 
 
-## Considerations: Number of topics mentioned -----------------------------
+## Size: Number of topics mentioned -----------------------------
 
 ### combine regular survey and open-ended data, remove spanish and empty responses
 meta2016 <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
@@ -399,28 +420,28 @@ stm_fit2016 <- stm(out2016$documents, out2016$vocab, prevalence = as.matrix(out2
                    K=25, seed=12345)
 
 ### compute number of considerations
-data2016$considerations <- ntopics(stm_fit2016, out2016)
+data2016$size <- ntopics(stm_fit2016, out2016)
 
 
-## Word choice: LIWC component ---------------------------------------------
+## Constraint: LIWC component ---------------------------------------------
 
 anes2016_liwc <- liwcalike(data2016$resp, liwc)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
-data2016$wordchoice <- with(anes2016_liwc,
+data2016$constraint <- with(anes2016_liwc,
                             (conj + differ) * WC,
                             #Sixltr + discrep + tentat + cause + insight - certain - negate - differ
                             )
 # MISSING: Inclusiveness (incl), Inhibition (Inhib) -> replaced by Differentiation (differ)
-data2016$wordchoice <- data2016$wordchoice - min(data2016$wordchoice)
-data2016$wordchoice <- data2016$wordchoice / max(data2016$wordchoice)
+data2016$constraint <- data2016$constraint - min(data2016$constraint)
+data2016$constraint <- data2016$constraint / max(data2016$constraint)
 
 
 ## Merge with full data and save -------------------------------------------
 
 ### compute combined measures
-data2016$polknow_text <- with(data2016, considerations * consistency * wordchoice)
-data2016$polknow_text_mean <- with(data2016, considerations + consistency + wordchoice)/3
+data2016$polknow_text <- with(data2016, size * range * constraint)
+data2016$polknow_text_mean <- with(data2016, size + range + constraint)/3
 
 
 

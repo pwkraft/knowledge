@@ -29,27 +29,6 @@ cihi <- function(x, na.rm = T){
 ## load raw CCES data
 raw <- haven::read_sav("/data/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav")
 
-## word count in OE responses
-wc <- raw |>
-  dplyr::select(UWM309, UWM310, UWM312, UWM313, UWM315,
-                UWM316, UWM318, UWM319, UWM321, UWM322) |>
-  apply(1, paste, collapse = " ") |>
-  stringr::str_count('\\w+')
-
-wc_sep <- raw |>
-  dplyr::select(UWM309, UWM310, UWM312, UWM313, UWM315,
-                UWM316, UWM318, UWM319, UWM321, UWM322) |>
-  dplyr::transmute_all(~str_count(.,'\\w+')) |>
-  dplyr::transmute(gun = UWM309 + UWM310,
-                   abortion = UWM312 + UWM313,
-                   daca = UWM315 + UWM316,
-                   health = UWM318 + UWM319,
-                   trade = UWM321 + UWM322,
-                   female = factor(raw$gender - 1, labels = c("Male","Female"))) |>
-  tidyr::gather(oe_item, wc, -female) |>
-  dplyr::group_by(oe_item, female) |>
-  dplyr::summarize(mean = mean(wc, na.rm = T), cilo = cilo(wc), cihi = cihi(wc))
-
 ## recode cces data
 cces <- raw |>
   dplyr::transmute(
@@ -106,8 +85,8 @@ cces <- raw |>
     pk_ideol = ifelse(is.na(ideo_dem) | is.na(ideo_rep),
                       0, as.numeric(ideo_dem < ideo_rep)),
     pk_ideol_dk = as.numeric(ideo_dem < ideo_rep),
-    pk_combined = (pk_house + pk_senate + pk_ideol)/3,
-    polknow_factual = (pk_house + pk_senate)/2,
+    pk_combined = (pk_house + pk_senate)/2,
+    polknow_factual = (pk_house + pk_senate + pk_ideol)/3,
     # NOTE - knowledge about state senates etc. (CC18_309c...) missing
 
     ## UWM knowledge about women representation
@@ -132,15 +111,15 @@ cces <- raw |>
                       (UWM311==5) + (UWM314==5) + (UWM317==5) + (UWM320==5) + (UWM323==4), NA),
 
     ## political interest etc.
-    polatt = (5 - UWM329)/4,
-    campint = (3 - UWM330)/2,
-    polint = (polatt + campint)/2,
+    polint_att = (5 - UWM329)/4,
+    polint_cam = (3 - UWM330)/2,
+    polint = (polint_att + polint_cam)/2,
     effic_int = (UWM331 - UWM332 + 4)/8,
     effic_ext = (UWM333 + UWM334 - 2)/8,
 
     ## political participation
-    vote_intent = dplyr::recode(as.numeric(CC18_350), `1` = 1, `3` = 1, .default = 0),
-    vote = dplyr::recode(as.numeric(raw$CC18_401), `5` = 1, .default = 0),
+    vote = dplyr::recode(as.numeric(CC18_350), `1` = 1, `3` = 1, .default = 0),
+    vote_post = dplyr::recode(as.numeric(raw$CC18_401), `5` = 1, .default = 0),
 
     ## attitudes toward women representation
     want_more_women = (3 - UWM335)/2,
@@ -148,11 +127,7 @@ cces <- raw |>
     govern_better = dplyr::recode(as.numeric(UWM337), `1` = 1, `2` = 0, `3` = .5),
     # NOTE - check other attitudinal items on women representation in post-election wave
 
-    ## open-ended responses
-    wc = wc,
-    lwc = log(wc)/max(log(wc), na.rm = T)
   )
-
 
 
 
@@ -168,7 +143,67 @@ opend <- raw |>
   apply(2, function(x){
   x <- gsub("(^\\s+|\\s+$)","", x)
   x[x %in% c("N/A","n/a","na","Na","__NA__","no","not sure","none","nothing","good"
-             ,"don't know","don't no","","I have no clue","I do not know")] <- ""
+             ,"don't know","don't no","","I have no clue","I do not know", "Don't know",
+             "Not sure", "No idea", "Idk", "None", "no comments", "?", "no", "yes",
+             "I dont know", "Dk", "???", "Don't know.", "Do not know", "NO idea",
+             "Unsure", "unsure", "Can't think of any", "Dont know", "None.", "bad", "for",
+             "Rt7", "Btgj", "Ftujvfjnu", "Btvni", "Ctbhhhh UK bbg", "Fvvgffvg", "Rthgfh",
+             "Egg digging f ghjvg", "Vytbn", "By my b", "ok", "yueah", "UNK",
+             "Against", "Favor", "on", "None!", "Bullshit", "No reason", "never",
+             "always", "Disagree", "No", "Yes", "Kind of", "i don't know", "do not know",
+             "nonsense", "unknown", "Know comment", "No comment", "NONE", "Nobe", "not",
+             "Nothing", "I don't care", "N/a", "im not sure", "do not know", "like it",
+             "i don't know", "I don’t nnow", "No opinion", "000", "I don’t really know",
+             "No response", "NA", "Not against", "NoZ.", "Dj.", "Who cares", "Not against",
+             "yes agree", "dont agree", "_____?", "-----????", "i dont know", "not against it.",
+             "no reason", "common sense", "no reasons", "Not", "notsure", "No thoughts", "NO",
+             "YES", "dont know", "I don't know.", "whatever", "get reak", "I don't know", "idk",
+             "dont know", "Wrong", "Right", "I dont kno", "H", ".", "Not against",
+             "I'm not against it", "Yep", "dont know", "I don't know.", "Not.","No option",
+             "Don’t know", "Im not sure", "I don't know", "Not", "NOT SURE", "NO OPINION",
+             "no idea", "I I'm not sure.", "I'm not sure.", "g jk;l g", "gre m;jkl e",
+             "jkl; grjkl g", "gs hjldsf", "tr.knjnjkger", "Zest Ajax's ;Oreg;Orr Gehrig arague rag",
+             "rehi ECG's Iguassu", "eragnk jg", "g JFK;l g", "Gere m;JFKl e", "JFKl; grJFKl g",
+             "gs holds", "tr.knjnjger", "no info", "I'm not.", "Have nothing", "Fuck if I know",
+             "not at this time", "Not applicable.", "NOTHING", "not against ...",
+             "I am not against it.", "I do not have the expertise in this area",
+             "i do not have expertise in this area", "I am against them", "Can’t think of one",
+             "know of no good reason..", "Hhh", "Agree", "Agree with this issue", "Ggg",
+             'See my answer in "for" appeal.', "Im for them", "None come to mind",
+             "None come to mind.", "needed", "not against", "na/", "None, this is crazy",
+             "Uncheck", "Check", "Mot sure", "Vheck", "Non check", "not sure what this is",
+             "nothing about his one", "Democrats", "Republicans", "I am against.",
+             "It should not happen.", "yes i am", "no im not", "the democrats", "democrats",
+             "republicans", "mpt sire", "bit syre", "Not against it.",
+             "i honestly have no response to this", "i do not have a response to this",
+             "no response sorry", "i dont know enough", "i dont enough about this",
+             "i dont know what a tariffs is", "no comment", "I have no argument",
+             "I don't have an opinion.", "I don't have an opinion", "I don’t knew", "I don’t know",
+             "I don’t make", "I’m not sure.", "Not completely sure.", "IDK", "conservatives",
+             "liberals", "Republican", "Honestly, I have no idea.", "i have no clue", "idk mah dude",
+             "Non", "for it", "no opinion", "not for it", "not for a repeal", "Same",
+             "Absolutely nothing.", "Nothing.", "ITS OK", "No clue", "I do not know of any",
+             "We need", "Not good", "I'm not at all", "I’m not against this", "No against",
+             "YEs I am", "No I am not", "Hell no I am not", "Yes, I am for this", "I am for this",
+             "I am not for this", "not against", "i'M NOT AGAINST THEM", "Jerbs",
+             "bad things", "good things", "goos things", "good news", "No reason not to.",
+             "tricky", "No at all", "Not for it.", "IM NOT AGAINST", "NOTHING AGAINST",
+             "in favor", "against", "not right", "right", "no comment", "Never.", "For it",
+             "none i know of", "none should be.", "Conservatives", "Liberals", "Not for it",
+             "no comment", "?? - not sure I can think of any", "nothing on this matter",
+             "All", "Rep", "Dem", "In not against", "No answer", "No knowledge", "No ideas on this",
+             "See other box.", "I have no idea", "I also have no idea", "Don'tknow", 'no good',
+             "a very crazy", "no good idea", "is a cool", "is a cool", "crazy", "is crazy",
+             "crazy total", "nothing to say", "also nothing", "positive", "negative",
+             "I am for", "I don't see any", "Don't know on this one", "do not know much about it",
+             "Can’t think of any.", "Don’t know enough on this topic", "confused", "High",
+             "Keep this policy", "I don't really know.", "I I'm not sure.", "I'm not sure.",
+             "I'm not sure", "I don't know what a tariffs is", "Don’t know.", "in certain cases",
+             "In favor", "ID.", "No idea.", "no opinion", "I'm for it", "Not sure.", "I do not know.",
+             "I don't know much about these.", "no good reasons", "I DINT KNOW MUCH ABOUT THIS TOPIC",
+             "I dint know much", "I'm not sure", "No need", "<-", "..?", "Please!!", "DINT KNOW",
+             "NOT AGAINST"
+             )] <- ""
   x <- gsub("//"," ", x , fixed = T)
   x <- gsub("\\s+"," ", x)
   x <- gsub("(^\\s+|\\s+$)","", x)
@@ -183,26 +218,32 @@ spell <- aspell("calc/out/spell.csv") %>%
 
 ## replace incorrect words
 for(i in 1:nrow(spell)){
-  opend[spell$Line[i],] <- gsub(spell$Original[i], unlist(spell$Suggestions[i])[1]
-                                , opend[spell$Line[i],])
+  opend[spell$Line[i],] <- gsub(spell$Original[i], unlist(spell$Suggestions[i])[1],
+                                opend[spell$Line[i],])
 }
 opend <- data.frame(caseid = raw$caseid, opend, stringsAsFactors = F)
 
+## word count in OE responses
+cces$wc <- opend[,-1] |>
+  apply(1, paste, collapse = " ") |>
+  stringr::str_count('\\w+')
+cces$lwc = log(cces$wc)/max(log(cces$wc), na.rm = T)
 
-## Consistency: Shannon entropy of response lengths ----------------------
 
-### consistency in item response
-cces$consistency <- apply(opend, 1, function(x){
+## Range: Shannon entropy of response lengths ----------------------
+
+### range in item response
+cces$range <- apply(opend[,-1], 1, function(x){
   iwc <- str_count(x, "\\w+")
   shannon(iwc/sum(iwc))
 })
 
 
-## Considerations: Number of topics mentioned -----------------------------
+## Size: Number of topics mentioned -----------------------------
 
 ### combine regular survey and open-ended data, remove empty responses
 meta <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
-data_cces <- cces %>% mutate(resp = apply(opend, 1, paste, collapse = " "))
+data_cces <- cces %>% mutate(resp = apply(opend[,-1], 1, paste, collapse = " "))
 
 ### remove additional whitespaces
 data_cces$resp <- gsub("\\s+"," ", data_cces$resp)
@@ -226,32 +267,32 @@ stm_fit <- stm(out_cces$documents, out_cces$vocab, prevalence = as.matrix(out_cc
                , K=25, seed=12345)
 
 ### compute number of considerations
-data_cces$considerations <- ntopics(stm_fit, out_cces)
+data_cces$size <- ntopics(stm_fit, out_cces)
 
 
-## Word choice: LIWC component ---------------------------------------------
+## Constraint: LIWC component ---------------------------------------------
 
 cces_liwc <- liwcalike(data_cces$resp, liwc)
 
 ## combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
-data_cces$wordchoice <- with(cces_liwc,
+data_cces$constraint <- with(cces_liwc,
                            (conj + differ) * WC,
                            #Sixltr + discrep + tentat + cause + insight - certain - negate - differ
 )
 # MISSING: Inclusiveness (incl), Inhibition (Inhib) -> replaced by Differentiation (differ)
-data_cces$wordchoice <- data_cces$wordchoice - min(data_cces$wordchoice)
-data_cces$wordchoice <- data_cces$wordchoice / max(data_cces$wordchoice)
+data_cces$constraint <- data_cces$constraint - min(data_cces$constraint)
+data_cces$constraint <- data_cces$constraint / max(data_cces$constraint)
 
 
 ## Merge with full data and save -------------------------------------------
 
 ### compute combined measures
-data_cces$polknow_text <- with(data_cces, considerations * consistency * wordchoice)
-data_cces$polknow_text_mean <- with(data_cces, considerations + consistency + wordchoice)/3
+data_cces$polknow_text <- with(data_cces, size * range * constraint)
+data_cces$polknow_text_mean <- with(data_cces, size + range + constraint)/3
 
 
 
 # Save Output -------------------------------------------------------------
 
-save(cces, opend, spell, data_cces, meta, processed_cces, out_cces, stm_fit
-     , file="calc/out/cces.Rdata")
+save(cces, opend, spell, data_cces, meta, processed_cces, out_cces, stm_fit,
+     file="calc/out/cces.Rdata")

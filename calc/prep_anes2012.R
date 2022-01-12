@@ -384,7 +384,7 @@ anes2012spell <- data.frame(caseid = anes2012opend$caseid, anes2012spell,strings
 # Text-based political sophistication measure -----------------------------
 
 
-## Consistency: Shannon entropy of response lengths ----------------------
+## Range: Shannon entropy of response lengths ----------------------
 
 ### overall response length
 anes2012$wc <- apply(anes2012spell[,-1], 1, function(x){
@@ -393,13 +393,13 @@ anes2012$wc <- apply(anes2012spell[,-1], 1, function(x){
 anes2012$lwc <- log(anes2012$wc)/max(log(anes2012$wc), na.rm = T)
 
 ### consistency in item response
-anes2012$consistency <- apply(anes2012spell[,-1], 1, function(x){
+anes2012$range <- apply(anes2012spell[,-1], 1, function(x){
   iwc <- str_count(x, "\\w+")
   shannon(iwc/sum(iwc))
 })
 
 
-## Considerations: Number of topics mentioned -----------------------------
+## Size: Number of topics mentioned -----------------------------
 
 ### combine regular survey and open-ended data, remove spanish and empty responses
 meta2012 <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
@@ -428,28 +428,28 @@ stm_fit2012 <- stm(out2012$documents, out2012$vocab, prevalence = as.matrix(out2
                    K=25, seed=12345)
 
 ### compute number of considerations
-data2012$considerations <- ntopics(stm_fit2012, out2012)
+data2012$size <- ntopics(stm_fit2012, out2012)
 
 
-## Word choice: LIWC component ---------------------------------------------
+## Constraint: LIWC component ---------------------------------------------
 
 anes2012_liwc <- liwcalike(data2012$resp, liwc)
 
 ### combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
-data2012$wordchoice <- with(anes2012_liwc,
+data2012$constraint <- with(anes2012_liwc,
                             (conj + differ) * WC,
                             #Sixltr + discrep + tentat + cause + insight - certain - negate - differ
                             )
 # MISSING: Inclusiveness (incl), Inhibition (Inhib) -> replaced by Differentiation (differ)
-data2012$wordchoice <- data2012$wordchoice - min(data2012$wordchoice)
-data2012$wordchoice <- data2012$wordchoice / max(data2012$wordchoice)
+data2012$constraint <- data2012$constraint - min(data2012$constraint)
+data2012$constraint <- data2012$constraint / max(data2012$constraint)
 
 
 ## Merge with full data and save -------------------------------------------
 
 ### compute combined measures
-data2012$polknow_text <- with(data2012, considerations * consistency * wordchoice)
-data2012$polknow_text_mean <- with(data2012, considerations + consistency + wordchoice)/3
+data2012$polknow_text <- with(data2012, size * range * constraint)
+data2012$polknow_text_mean <- with(data2012, size + range + constraint)/3
 
 
 

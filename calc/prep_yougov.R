@@ -61,8 +61,8 @@ raw$Q30[is.na(raw$Q30)] <- 8
 raw$Q31[is.na(raw$Q31)] <- 8
 
 ## political knowledge (study 3) CHECK ANSWERS!
-yougov$know_pol <- with(raw, (Q24==3) + (Q25==1) + (Q26==1) + (Q27==2)
-                        + (Q28==2) + (Q29==1) + (Q30==2) + (Q31==1))/8
+yougov$polknow_factual <- with(raw, (Q24==3) + (Q25==1) + (Q26==1) + (Q27==2)
+                               + (Q28==2) + (Q29==1) + (Q30==2) + (Q31==1))/8
 
 ## education (bachelor degree)
 yougov$educ <- as.numeric(raw$educ>=5)
@@ -146,7 +146,7 @@ opend <- data.frame(caseid = raw$caseid, opend, stringsAsFactors = F)
 # Text-based political sophistication measure -----------------------------
 
 
-## Consistency: Shannon entropy of response lengths ----------------------
+## Range: Shannon entropy of response lengths ----------------------
 
 ### overall response length
 yougov$wc <- apply(opend[,-1], 1, function(x){
@@ -155,13 +155,13 @@ yougov$wc <- apply(opend[,-1], 1, function(x){
 yougov$lwc <- log(yougov$wc)/max(log(yougov$wc), na.rm = T)
 
 ### consistency in item response
-yougov$consistency <- apply(opend[,-1], 1, function(x){
+yougov$range <- apply(opend[,-1], 1, function(x){
   iwc <- str_count(x, "\\w+")
   shannon(iwc/sum(iwc))
 })
 
 
-## Considerations: Number of topics mentioned -----------------------------
+## Size: Number of topics mentioned -----------------------------
 
 ### combine regular survey and open-ended data, remove empty responses
 meta <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
@@ -189,28 +189,28 @@ stm_fit <- stm(out_yougov$documents, out_yougov$vocab, prevalence = as.matrix(ou
                , K=25, seed=12345)
 
 ### compute number of considerations
-data_yg$considerations <- ntopics(stm_fit, out_yougov)
+data_yg$size <- ntopics(stm_fit, out_yougov)
 
 
-## Word choice: LIWC component ---------------------------------------------
+## Constraint: LIWC component ---------------------------------------------
 
 yougov_liwc <- liwcalike(data_yg$resp, liwc)
 
 ## combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
-data_yg$wordchoice <- with(yougov_liwc,
+data_yg$constraint <- with(yougov_liwc,
                            (conj + differ) * WC,
                            #Sixltr + discrep + tentat + cause + insight - certain - negate - differ
                            )
 # MISSING: Inclusiveness (incl), Inhibition (Inhib) -> replaced by Differentiation (differ)
-data_yg$wordchoice <- data_yg$wordchoice - min(data_yg$wordchoice)
-data_yg$wordchoice <- data_yg$wordchoice / max(data_yg$wordchoice)
+data_yg$constraint <- data_yg$constraint - min(data_yg$constraint)
+data_yg$constraint <- data_yg$constraint / max(data_yg$constraint)
 
 
 ## Merge with full data and save -------------------------------------------
 
 ### compute combined measures
-data_yg$polknow_text <- with(data_yg, considerations * consistency * wordchoice)
-data_yg$polknow_text_mean <- with(data_yg, considerations + consistency + wordchoice)/3
+data_yg$polknow_text <- with(data_yg, size * range * constraint)
+data_yg$polknow_text_mean <- with(data_yg, size + range + constraint)/3
 
 
 
