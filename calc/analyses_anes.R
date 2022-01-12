@@ -32,6 +32,7 @@ options(mc.cores = parallel::detectCores())
 load("calc/out/anes2012.Rdata")
 load("calc/out/anes2016.Rdata")
 load("calc/out/anes2020.Rdata")
+load("calc/out/cces.Rdata")
 
 ## QUESTION: remove wc=0 and spanish=1?
 
@@ -113,7 +114,7 @@ ivnames <- c("Intercept", "Gender\n(Female)", "Media\nExposure", "Political\nDis
 
 ### Joint model controlling for both measures + wordsum index
 
-m4a <- m4b <- m4c <- NULL
+m4a <- m4b <- m4c <- m4d <- NULL
 m4a[[1]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012, family=binomial("logit"))
 m4a[[2]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012)
 m4a[[3]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode + wordsum, data = data2012)
@@ -126,18 +127,24 @@ m4c[[1]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + fam
 m4c[[2]] <- lm(part ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2020)
 m4c[[3]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig, data = data2020)
 m4c[[4]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig + mode, data = data2020)
+m4d[[1]] <- glm(vote ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig, data = data_cces, family=binomial("logit"))
+m4d[[2]] <- lm(polint ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig, data = data_cces)
+m4d[[3]] <- lm(effic_int ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig, data = data_cces)
+m4d[[4]] <- lm(effic_ext ~ polknow_text_mean + polknow_factual + female + educ + faminc + log(age) + black + relig, data = data_cces)
 
 res <- rbind(sim(m4a, iv=data.frame(polknow_text_mean=sdrange(data2012$polknow_text_mean))),
              sim(m4a, iv=data.frame(polknow_factual=sdrange(data2012$polknow_factual))),
              sim(m4b, iv=data.frame(polknow_text_mean=sdrange(data2016$polknow_text_mean))),
              sim(m4b, iv=data.frame(polknow_factual=sdrange(data2016$polknow_factual))),
              sim(m4c, iv=data.frame(polknow_text_mean=sdrange(data2020$polknow_text_mean))),
-             sim(m4c, iv=data.frame(polknow_factual=sdrange(data2020$polknow_factual))))
+             sim(m4c, iv=data.frame(polknow_factual=sdrange(data2020$polknow_factual))),
+             sim(m4d, iv=data.frame(polknow_text_mean=sdrange(data_cces$polknow_text_mean))),
+             sim(m4d, iv=data.frame(polknow_factual=range(data_cces$polknow_factual, na.rm = T))))
 res$dvlab <- factor(res$dv, level = c("vote","part","effic_int","effic_ext")
                     , labels = c("Turnout","Non-conv. Participation"
                                  , "Internal Efficacy","External Efficacy"))
 res$ivlab <- factor(res$iv, labels = dvnames)
-res$Year <- rep(c("2012 ANES","2016 ANES", "2020 ANES"), each=8)
+res$Year <- rep(c("2012 ANES","2016 ANES", "2020 ANES", "2018 CCES"), each=8)
 
 ggplot(res, aes(y=ivlab, x=mean, xmin=cilo, xmax=cihi)) +
   geom_vline(xintercept = 0, color="grey") +

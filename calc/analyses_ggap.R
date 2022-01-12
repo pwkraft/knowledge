@@ -24,6 +24,7 @@ load("calc/out/anes2016.Rdata")
 load("calc/out/anes2020.Rdata")
 load("calc/out/swiss.Rdata")
 load("calc/out/yougov.Rdata")
+load("calc/out/cces.Rdata")
 
 ## QUESTION: remove wc=0 and spanish=1?
 
@@ -140,6 +141,30 @@ p2b_empty <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Ge
   ggtitle("2020 ANES")
 
 
+### 2018 CCES
+
+plot_df <- data.frame(rbind(cbind(data_cces$polknow_text_mean, data_cces$female, 1),
+                            cbind(data_cces$polknow_factual, data_cces$female, 2))) %>% na.omit()
+colnames(plot_df) <- c("Knowledge","Gender","Variable")
+plot_df$Gender <- factor(plot_df$Gender, labels = c("Male","Female"))
+plot_df$Variable <- factor(plot_df$Variable, labels = c("Discursive\nSophistication", "Factual\nKnowledge"))
+plot_means <- plot_df %>% group_by(Variable, Gender) %>%
+  summarize_all(funs(mean="mean",n=length(.),sd="sd",quant=quantile(.,.95),max="max")) %>%
+  mutate(cilo = mean - 1.96*sd/sqrt(n)
+         , cihi = mean + 1.96*sd/sqrt(n))
+
+p2c <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_default +
+  geom_bar(stat="identity") + geom_errorbar(width=.25) +
+  facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+  geom_point(aes(y=max), col="white") + guides(fill="none") + scale_fill_brewer(palette="Paired") +
+  ggtitle("2018 CCES")
+
+p2c_empty <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) + plot_empty +
+  geom_bar(stat="identity") + geom_errorbar(width=.25) +
+  facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+  geom_point(aes(y=max), col="white") + guides(fill="none") + scale_fill_brewer(palette="Paired") +
+  ggtitle("2018 CCES")
+
 ### Yougov Data
 
 plot_df <- data.frame(rbind(cbind(data_yg$polknow_text_mean, data_yg$female, 1)
@@ -222,7 +247,7 @@ p6 <- ggplot(plot_means, aes(y=mean,x=Gender,ymin=cilo,ymax=cihi, fill=Gender)) 
   labs(title=" ", subtitle="Italian Respondents", y="Average Values", x=NULL)
 
 
-(p0 <- grid.arrange(p1, p2, p2b, p3, p4, p5, p6, ncol=4))
+(p0 <- grid.arrange(p1, p2, p2b, p2c, p3, p4, p5, p6, ncol=4))
 ggsave("fig/meandiff.pdf", p0 ,width=6.5, height=3)
 
 (p0 <- grid.arrange(p1, p2, p2b, p3, ncol=4))
@@ -283,6 +308,8 @@ ivnames_yg <- c("Intercept", "Female", "College", "Income", "log(Age)", "Black",
 m2 <- NULL
 m2[[1]] <- lm(polknow_text_mean ~ female + educ + faminc + log(age) + black + relig, data = data_yg)
 m2[[2]] <- lm(know_pol ~ female + educ + faminc + log(age) + black + relig, data = data_yg)
+m2[[3]] <- lm(polknow_text_mean ~ female + educ + faminc + log(age) + black + relig, data = data_cces)
+m2[[4]] <- lm(polknow_factual ~ female + educ + faminc + log(age) + black + relig, data = data_cces)
 #m2[[3]] <- lm(know_dis ~ female + educ + faminc + log(age) + relig  + black, data = data_yg)
 lapply(m2, summary)
 
