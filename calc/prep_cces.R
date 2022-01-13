@@ -32,6 +32,7 @@ raw <- haven::read_sav("/data/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav
 ## recode cces data
 cces <- raw |>
   dplyr::transmute(
+    caseid = caseid,
     weight = teamweight,
 
     ## sociodemographics
@@ -202,8 +203,8 @@ opend <- raw |>
              "In favor", "ID.", "No idea.", "no opinion", "I'm for it", "Not sure.", "I do not know.",
              "I don't know much about these.", "no good reasons", "I DINT KNOW MUCH ABOUT THIS TOPIC",
              "I dint know much", "I'm not sure", "No need", "<-", "..?", "Please!!", "DINT KNOW",
-             "NOT AGAINST"
-             )] <- ""
+             "NOT AGAINST", "I really don't know", "not for it.","Can't think of a thing.",
+             "None I can think of")] <- ""
   x <- gsub("//"," ", x , fixed = T)
   x <- gsub("\\s+"," ", x)
   x <- gsub("(^\\s+|\\s+$)","", x)
