@@ -1,25 +1,29 @@
 \babel@toc {USenglish}{}
 \contentsline {section}{Appendices}{1}{section*.24}%
 \ttl@starttoc {sections@1}
-\contentsline {section}{\numberline {A}Information on Discursive Sophistication Components}{3}{appendix.a.A}%
-\contentsline {subsection}{\numberline {I}Distribution of Word Counts in Open-Ended Responses}{3}{subsection.a.A.1}%
-\contentsline {subsection}{\numberline {II}Overview of Topic Proportions}{5}{subsection.a.A.2}%
-\contentsline {subsection}{\numberline {III}Discursive Sophistication Components}{8}{subsection.a.A.3}%
-\contentsline {section}{\numberline {B}Pre-Processing and Topic Model Specification}{9}{appendix.a.B}%
-\contentsline {subsection}{\numberline {I}PreText Analysis}{9}{subsection.a.B.1}%
-\contentsline {subsection}{\numberline {II}Robustness Checks for Varying Model Specifications}{10}{subsection.a.B.2}%
-\contentsline {section}{\numberline {C}Additional Information on Remaining Variables}{13}{appendix.a.C}%
-\contentsline {subsection}{\numberline {I}Item Selection and Recoding}{13}{subsection.a.C.1}%
-\contentsline {paragraph}{Conventional measures of political knowledge:}{13}{section*.36}%
-\contentsline {paragraph}{Dependent variables:}{13}{section*.37}%
-\contentsline {paragraph}{Control variables:}{14}{section*.38}%
-\contentsline {subsection}{\numberline {II}Variable Distributions -- 2012 ANES}{15}{subsection.a.C.2}%
-\contentsline {subsection}{\numberline {III}Variable Distributions -- 2016 ANES}{17}{subsection.a.C.3}%
-\contentsline {subsection}{\numberline {IV}Variable Distributions -- 2015 YouGov}{19}{subsection.a.C.4}%
-\contentsline {section}{\numberline {D}Robustness Checks}{20}{appendix.a.D}%
-\contentsline {subsection}{\numberline {I}Controlling for Personality Characteristics}{20}{subsection.a.D.1}%
-\contentsline {subsection}{\numberline {II}Controlling for Individual Response Length}{21}{subsection.a.D.2}%
-\contentsline {section}{\numberline {E}Tables of Model Estimates}{22}{appendix.a.E}%
-\contentsline {subsection}{\numberline {I}Main Analyses}{22}{subsection.a.E.1}%
-\contentsline {subsection}{\numberline {II}Robustness Checks}{27}{subsection.a.E.2}%
+\contentsline {section}{\numberline {A}Overview of Data Sources and Open Ended Items}{2}{appendix.a.A}%
+\contentsline {subsection}{\numberline {I}2012 \& 2016 American National Election Study}{2}{subsection.a.A.1}%
+\contentsline {subsection}{\numberline {II}2015 YouGov Survey}{2}{subsection.a.A.2}%
+\contentsline {subsection}{\numberline {III}Swiss Referendum Survey}{3}{subsection.a.A.3}%
+\contentsline {section}{\numberline {B}Information on Discursive Sophistication Components}{3}{appendix.a.B}%
+\contentsline {subsection}{\numberline {I}Distribution of Word Counts in Open-Ended Responses}{3}{subsection.a.B.1}%
+\contentsline {subsection}{\numberline {II}Overview of Topic Proportions}{5}{subsection.a.B.2}%
+\contentsline {subsection}{\numberline {III}Discursive Sophistication Components}{8}{subsection.a.B.3}%
+\contentsline {section}{\numberline {C}Pre-Processing and Topic Model Specification}{9}{appendix.a.C}%
+\contentsline {subsection}{\numberline {I}PreText Analysis}{9}{subsection.a.C.1}%
+\contentsline {subsection}{\numberline {II}Robustness Checks for Varying Model Specifications}{10}{subsection.a.C.2}%
+\contentsline {section}{\numberline {D}Additional Information on Remaining Variables}{13}{appendix.a.D}%
+\contentsline {subsection}{\numberline {I}Item Selection and Recoding}{13}{subsection.a.D.1}%
+\contentsline {paragraph}{Conventional measures of political knowledge:}{13}{section*.32}%
+\contentsline {paragraph}{Dependent variables:}{13}{section*.33}%
+\contentsline {paragraph}{Control variables:}{14}{section*.34}%
+\contentsline {subsection}{\numberline {II}Variable Distributions -- 2012 ANES}{15}{subsection.a.D.2}%
+\contentsline {subsection}{\numberline {III}Variable Distributions -- 2016 ANES}{17}{subsection.a.D.3}%
+\contentsline {subsection}{\numberline {IV}Variable Distributions -- 2015 YouGov}{19}{subsection.a.D.4}%
+\contentsline {section}{\numberline {E}Robustness Checks}{20}{appendix.a.E}%
+\contentsline {subsection}{\numberline {I}Controlling for Personality Characteristics}{20}{subsection.a.E.1}%
+\contentsline {subsection}{\numberline {II}Controlling for Individual Response Length}{21}{subsection.a.E.2}%
+\contentsline {section}{\numberline {F}Tables of Model Estimates}{22}{appendix.a.F}%
+\contentsline {subsection}{\numberline {I}Main Analyses}{22}{subsection.a.F.1}%
+\contentsline {subsection}{\numberline {II}Robustness Checks}{27}{subsection.a.F.2}%
 \contentsfinish 
