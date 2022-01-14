@@ -48,6 +48,22 @@ nrow(data_cces) + nrow(data_yg) +
 
 
 
+# Yearly citation count ---------------------------------------------------
+
+read_csv("calc/in/PoPCites_summary.csv") %>%
+  ggplot(aes(x = Year, y = Citations)) +
+  geom_line() +
+  ylab("Citations per Year") +
+  xlab("") +
+  theme_classic(base_size=9) +
+  theme(panel.border = element_rect(fill=NA)) +
+  scale_x_continuous(breaks=seq(1995,2020,5)) +
+  ylim(0,75)
+ggsave("fig/cites.pdf", width=3.5, height=2.2)
+ggsave("fig/cites.png", width=3.5, height=2.2)
+
+
+
 # Factor analysis of sophistication components ----------------------------
 
 tibble(Variable = c("Size","Range", "Constraint"),
