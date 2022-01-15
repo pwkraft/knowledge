@@ -13,7 +13,7 @@
 *.blg
 *.tar.gz
 *.fdb_latexmk
-*.synctex.gz
+*.synctex.gz 
 *.nav
 *.snm
 *.toc
@@ -28,7 +28,7 @@
 .Rapp.history
 
 # Session Data files
-.RData
+.RData 
 
 # Example code in package build process
 *-Ex.R
