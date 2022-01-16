@@ -204,7 +204,7 @@ opend <- raw |>
              "I don't know much about these.", "no good reasons", "I DINT KNOW MUCH ABOUT THIS TOPIC",
              "I dint know much", "I'm not sure", "No need", "<-", "..?", "Please!!", "DINT KNOW",
              "NOT AGAINST", "I really don't know", "not for it.","Can't think of a thing.",
-             "None I can think of")] <- ""
+             "None I can think of", "dint have a good answer for this")] <- ""
   x <- gsub("//"," ", x , fixed = T)
   x <- gsub("\\s+"," ", x)
   x <- gsub("(^\\s+|\\s+$)","", x)
