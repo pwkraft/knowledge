@@ -144,7 +144,10 @@ data_cces %>%
            (polknow_text_mean > quantile(polknow_text_mean,.75) & female == 1)) %>%
   arrange(polknow_text_mean) %>%
   select(caseid, female, polknow_factual, polknow_text_mean) %>%
-  left_join(opend) %>%
+  #left_join(opend) %>%
+  left_join(haven::read_sav("/data/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
+              dplyr::select(caseid, UWM309, UWM310, UWM312, UWM313, UWM315,
+                            UWM316, UWM318, UWM319, UWM321, UWM322)) %>%
   write_csv(file="calc/tmp/select_cces.csv")
 
 
