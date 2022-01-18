@@ -272,7 +272,7 @@ grid.arrange(
               n = n(),
               cilo = avg - 1.96*sd/sqrt(n),
               cihi = avg + 1.96*sd/sqrt(n)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Gender)) + plot_default +
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
     geom_bar(stat="identity") + geom_errorbar(width=.25) +
     facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
     geom_point(aes(y=1), col="white") +
@@ -294,7 +294,7 @@ grid.arrange(
               n = n(),
               cilo = avg - 1.96*sd/sqrt(n),
               cihi = avg + 1.96*sd/sqrt(n)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Gender)) + plot_default +
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
     geom_bar(stat="identity") + geom_errorbar(width=.25) +
     facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
     geom_point(aes(y=1), col="white") +
@@ -316,7 +316,7 @@ grid.arrange(
               n = n(),
               cilo = avg - 1.96*sd/sqrt(n),
               cihi = avg + 1.96*sd/sqrt(n)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Gender)) + plot_default +
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
     geom_bar(stat="identity") + geom_errorbar(width=.25) +
     facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
     geom_point(aes(y=1), col="white") +
@@ -339,7 +339,7 @@ grid.arrange(
               cilo = avg - 1.96*sd/sqrt(n),
               cihi = avg + 1.96*sd/sqrt(n),
               max = max(value)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Gender)) + plot_default +
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill="Variable")) + plot_default +
     geom_bar(stat="identity") + geom_errorbar(width=.25) +
     facet_wrap(~Variable, scale="free_y") +
     geom_point(aes(y=max), col="white") +
@@ -363,7 +363,7 @@ grid.arrange(
               n = n(),
               cilo = avg - 1.96*sd/sqrt(n),
               cihi = avg + 1.96*sd/sqrt(n)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Gender)) + plot_default +
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
     geom_bar(stat="identity") + geom_errorbar(width=.25) +
     facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
     geom_point(aes(y=1), col="white") +
@@ -386,7 +386,7 @@ grid.arrange(
               cilo = avg - 1.96*sd/sqrt(n),
               cihi = avg + 1.96*sd/sqrt(n),
               max = max(value)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Gender)) + plot_default +
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill="Variable")) + plot_default +
     geom_bar(stat="identity") + geom_errorbar(width=.25) +
     facet_wrap(~Variable, scale="free_y") +
     geom_point(aes(y=max), col="white") +
@@ -410,7 +410,7 @@ grid.arrange(
               n = n(),
               cilo = avg - 1.96*sd/sqrt(n),
               cihi = avg + 1.96*sd/sqrt(n)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Gender)) + plot_default +
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
     geom_bar(stat="identity") + geom_errorbar(width=.25) +
     facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
     geom_point(aes(y=1), col="white") +
@@ -433,7 +433,7 @@ grid.arrange(
               cilo = avg - 1.96*sd/sqrt(n),
               cihi = avg + 1.96*sd/sqrt(n),
               max = max(value)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Gender)) + plot_default +
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill="Variable")) + plot_default +
     geom_bar(stat="identity") + geom_errorbar(width=.25) +
     facet_wrap(~Variable, scale="free_y") +
     geom_point(aes(y=max), col="white") +
