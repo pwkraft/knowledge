@@ -13,16 +13,15 @@
 \contentsline {paragraph}{Control variables:}{4}{section*.33}%
 \contentsline {section}{\numberline {B}Information on Discursive Sophistication Components}{6}{appendix.a.B}%
 \contentsline {subsection}{\numberline {I}Distribution of Word Counts in Open-Ended Responses}{6}{subsection.a.B.1}%
-\contentsline {subsection}{\numberline {II}Overview of Topic Proportions}{7}{subsection.a.B.2}%
-\contentsline {subsection}{\numberline {III}Discursive Sophistication Components}{10}{subsection.a.B.3}%
-\contentsline {section}{\numberline {C}Pre-Processing and Topic Model Specification}{11}{appendix.a.C}%
+\contentsline {subsection}{\numberline {II}Pre-Processing and Topic Model Specification}{6}{subsection.a.B.2}%
+\contentsline {subsection}{\numberline {III}Overview of Topic Proportions}{7}{subsection.a.B.3}%
+\contentsline {subsection}{\numberline {IV}Discursive Sophistication Components}{10}{subsection.a.B.4}%
+\contentsline {section}{\numberline {C}Robustness Checks}{11}{appendix.a.C}%
 \contentsline {subsection}{\numberline {I}PreText Analysis}{11}{subsection.a.C.1}%
-\contentsline {subsection}{\numberline {II}Robustness Checks for Varying Model Specifications}{12}{subsection.a.C.2}%
-\contentsline {section}{\numberline {D}Robustness Checks}{15}{appendix.a.D}%
-\contentsline {subsection}{\numberline {I}Controlling for Personality Characteristics}{15}{subsection.a.D.1}%
-\contentsline {subsection}{\numberline {II}Controlling for Individual Response Length}{16}{subsection.a.D.2}%
-\contentsline {section}{\numberline {E}Tables of Model Estimates}{17}{appendix.a.E}%
-\contentsline {subsection}{\numberline {I}Figure~\ref {fig:knoweff}: Effects of sophistication on turnout, political interest, internal efficacy, and external efficacy}{17}{subsection.a.E.1}%
-\contentsline {subsection}{\numberline {II}Figure~\ref {fig:yg_disease}: Expected information retrieval in the 2015 YouGov Study as a function of political sophistication}{21}{subsection.a.E.2}%
-\contentsline {subsection}{\numberline {III}Figure~\ref {fig:determinants}: The gender gap in political sophistication after controlling for common determinants.}{22}{subsection.a.E.3}%
+\contentsline {subsection}{\numberline {II}Discursive Sophistication for Varying Model Specifications}{12}{subsection.a.C.2}%
+\contentsline {subsection}{\numberline {III}Controlling for Extraversion and Verbal Skills}{13}{subsection.a.C.3}%
+\contentsline {section}{\numberline {D}Tables of Model Estimates}{16}{appendix.a.D}%
+\contentsline {subsection}{\numberline {I}Figure~\ref {fig:knoweff}: Effects of sophistication on turnout, political interest, internal efficacy, and external efficacy}{16}{subsection.a.D.1}%
+\contentsline {subsection}{\numberline {II}Figure~\ref {fig:yg_disease}: Expected information retrieval in the 2015 YouGov Study as a function of political sophistication}{20}{subsection.a.D.2}%
+\contentsline {subsection}{\numberline {III}Figure~\ref {fig:determinants}: The gender gap in political sophistication after controlling for common determinants.}{21}{subsection.a.D.3}%
 \contentsfinish 

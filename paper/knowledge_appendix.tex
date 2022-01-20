@@ -69,7 +69,7 @@ Lastly, I examine survey data on Swiss citizens justifying their vote choices on
 	\item \textit{Church attendance} (2012 \& 2016 ANES, 2015 YouGov Survey): Six-category indicator of the frequency of church attendance. 
 	\item \textit{Wordsum vocabulary scores}  (2012 \& 2016 ANES): Modified version of the GSS wordsum vocabulary test consisting of 10 terms.
 	\item \textit{Survey Mode} (2012 \& 2016 ANES): Dichotomous indicator for face-to-face vs. online samples of the ANES surveys.
-	\item \textit{Personality characteristics} (2012 \& 2016 ANES): Measures of extraversion and being reserved, part of the Ten Item Personality Inventory (TIPI) measuring the ``Big Five'' personality traits.
+	\item \textit{Extraversion} (2012 \& 2016 ANES): Part of the Ten Item Personality Inventory (TIPI) measuring the ``Big Five'' personality traits.
 	\item \textit{Response length} (2012 \& 2016 ANES): Logged number of words in the collection of open-ended responses by each individual.
 \end{itemize}
 
@@ -107,6 +107,7 @@ Lastly, I examine survey data on Swiss citizens justifying their vote choices on
 
 % TODO: ADD percentage of non-response by gender!
 
+\subsection{Pre-Processing and Topic Model Specification}
 
 \clearpage
 \subsection{Overview of Topic Proportions}
@@ -157,10 +158,13 @@ Lastly, I examine survey data on Swiss citizens justifying their vote choices on
 \end{figure*}
 
 
-\clearpage
-\section{Pre-Processing and Topic Model Specification}\label{app:topicmodel}
 
-\subsection{PreText Analysis}
+\clearpage
+\section{Robustness Checks}\label{app:robustness}
+
+
+
+\subsection{PreText Analysis}\label{app:topicmodel}
 Two components of discursive sophistication (\textit{considerations} and \textit{word choice}) rely on quantities extracted from structural topic models \citep{roberts2014structural}. As with any other text-as-data approach, a necessary first step before estimating the topic model is to pre-process the raw text and convert it into a document term matrix \citep[DTM, see for example][]{manning2008introduction}. Common pre-processing procedures include stemming and lowercasing, as well as the removal of numbers, punctuation, stopwords, and infrequent terms. However, topic models and other unsupervised learning techniques can be sensitive to these pre-processing choices \citep[c.f.,][]{denny2018text}. To address this issue, \citet{denny2018text} recommend that researchers compare DTMs under all possible pre-processing regimes. The authors propose \textit{preText scores} as a measure to quantify the extent to which varying pre-processing regimes may yield unusual results compared to a baseline without any pre-processing.
 
 \begin{figure}[h]
@@ -169,7 +173,7 @@ Two components of discursive sophistication (\textit{considerations} and \textit
 \end{figure}
 
 \clearpage
-\subsection{Robustness Checks for Varying Model Specifications}
+\subsection{Discursive Sophistication for Varying Model Specifications}
 
 Following the procedure outlined in \citet{denny2018text}, Figure~\ref{fig:pretext} displays the results of a linear model regressing preText scores resulting from all possible pre-processing regimes on each individual step for a random subset of 500 open-ended responses in each of the studies included in the analyses. Significant coefficients indicate that the topic model results may be sensitive to the respective pre-processing step. As such, removing stopwords and punctuation, as well as removing infrequent terms (at least in the 2016 ANES) might be problematic. \citet{denny2018text}, however, emphasize that the most important consideration in choosing pre-processing steps are theoretical. Given that the purpose of the topic model is to extract considerations related to political preferences, there are strong theoretical reasons to remove stopwords and punctuation from open-ended responses as they do not contain any relevant content. Furthermore, I apply lowercasing and stemming of terms to reduce resulting document term matrix to a computationally more manageable size and since these pre-processing steps should not be influential according to the preText analysis.
 
@@ -185,18 +189,14 @@ Figure~\ref{fig:pretext_robustness} examines whether the proposed measure of dis
 In summary, open-ended responses in the analyses reported in the main text are pre-processed by stemming and lowercasing, as well as the removing numbers, punctuation, stopwords, and infrequent terms (i.e., terms that appear in fewer than 10 responses).\footnote{Prior to applying these pre-processing steps, open-ended responses in the 2012 \& 2016 ANES as well as the 2015 YouGov survey are cleaned by correcting spelling errors using an implementation of the Aspell spell-checking algorithm (\url{www.aspell.net}).} While the results discussed in the manuscript are based on this preferred specification, the substantive results are robust for alternative pre-processing regimes or varying numbers of topics.
 
 
-\clearpage
-\section{Robustness Checks}\label{app:personality}
 
-\subsection{Controlling for Personality Characteristics}
+\subsection{Controlling for Extraversion and Verbal Skills}\label{app:personality}
 \begin{figure}[h]\centering
 \includegraphics{/data/Dropbox/Uni/projects/2016/knowledge/fig/knoweff_personality.pdf}
 \caption[Effects of sophistication on political engagement controlling for personality characteristics in the 2012 and 2016 ANES]{Effects of sophistication on internal efficacy, external efficacy, non-conventional participation, and turnout in the 2012 and 2016 ANES. For each dependent variable, the figure displays the change in expected values after increasing each sophistication measure from -1 to +1 standard deviation from its mean (including 95\% confidence intervals). Model estimates are based on logistic regression (turnout) or OLS (internal efficacy, external efficacy, non-conventional participation). Both sophistication measure are included simultaneously while controlling for gender, education, income, age, race, church attendance, survey mode, Wordsum vocabulary scores, as well as personality characteristics (extraversion and being reserved).% Full model results are presented in the appendix, Tables \ref{tab:knoweff2012_personality} and \ref{tab:knoweff2016_personality}.
 }\label{fig:knoweff_personality}
 \end{figure}
 
-\clearpage
-\subsection{Controlling for Individual Response Length}
 \begin{figure}[h]\centering
 \includegraphics{/data/Dropbox/Uni/projects/2016/knowledge/fig/knoweff_lwc.pdf}
 \caption[Effects of sophistication on political engagement controlling for response length in the 2012 and 2016 ANES]{Effects of sophistication on internal efficacy, external efficacy, non-conventional participation, and turnout in the 2012 and 2016 ANES. For each dependent variable, the figure displays the change in expected values after increasing each sophistication measure from -1 to +1 standard deviation from its mean (including 95\% confidence intervals). Model estimates are based on logistic regression (turnout) or OLS (internal efficacy, external efficacy, non-conventional participation). Both sophistication measure are included simultaneously while controlling for gender, education, income, age, race, church attendance, survey mode, Wordsum vocabulary scores, as well as the logged word count across open-ended responses.% Full model results are presented in the appendix, Tables \ref{tab:knoweff2012_lwc} and \ref{tab:knoweff2016_lwc}.
