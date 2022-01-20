@@ -13,6 +13,7 @@
 
 library(tidyverse)
 library(quanteda)
+library(nFactors)
 library(gridExtra)
 library(ggridges)
 library(GGally)
@@ -20,6 +21,7 @@ library(xtable)
 library(stm)
 library(broom)
 library(marginaleffects)
+library(stargazer)
 
 
 ## Load data ----
@@ -80,6 +82,19 @@ tibble(Variable = c("Size","Range", "Constraint"),
   print(file = "tab/factload.tex",
         caption.placement = "bottom",
         include.rownames = FALSE)
+
+### Determine the number of factors
+nfactors <- function(x) {
+  ev <- eigen(cor(x, use = "complete.obs")) # get eigenvalues
+  ap <- parallel(subject=nrow(x),var=ncol(x),
+                 rep=100,cent=.05)
+  nS <- nScree(x=ev$values, aparallel=ap$eigen$qevpea)
+  plotnScree(nS)
+}
+nfactors(dplyr::select(data_cces, size, range, constraint))
+nfactors(dplyr::select(data2020, size, range, constraint))
+nfactors(dplyr::select(data2016, size, range, constraint))
+nfactors(dplyr::select(data2012, size, range, constraint))
 
 
 
@@ -190,8 +205,8 @@ c(m1text, m1factual) %>%
   as_tibble() %>%
   filter(term %in% c("polknow_text_mean", "polknow_factual")) %>%
   mutate(
-    study = factor(rep(c("2018 CES", "2020 ANES", "2015 ANES", "2012 ANES"), 8),
-                   levels = c("2018 CES", "2020 ANES", "2015 ANES", "2012 ANES")),
+    study = factor(rep(c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES"), 8),
+                   levels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES")),
     dv = recode_factor(rep(rep(dvs, each = 4), 2),
                        `vote` = "Turnout",
                        `polint_att` = "Political Interest",
@@ -205,6 +220,74 @@ c(m1text, m1factual) %>%
   geom_point() + geom_errorbarh(height=0) + facet_grid(study~dv) +
   xlab("Average Marginal Effect") + ylab("Independent Variable") + plot_default
 ggsave("fig/knoweff.pdf", width=6.5, height=4)
+
+c(m1text[1], m1factual[1],
+  m1text[5], m1factual[5],
+  m1text[9], m1factual[9],
+  m1text[13], m1factual[13]) %>%
+  stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
+            model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+            title=c("Effects of sophistication on turnout, political interest, internal efficacy,
+          and external efficacy in the 2018 CES. Standard errors in parentheses. Estimates are used for
+          Figure \\ref{fig:knoweff} in the main text."),
+            column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
+            column.separate = c(2,2,2,2),
+            covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
+                                 "College Degree","Household Income","Age",
+                                 "Black","Church Attendance","Constant"),
+            keep.stat = c("n", "rsq", "ll"), font.size = "footnotesize",
+            out = "tab/knoweff2018cces.tex", label = "tab:knoweff2018cces")
+
+c(m1text[2], m1factual[2],
+  m1text[6], m1factual[6],
+  m1text[10], m1factual[10],
+  m1text[14], m1factual[14]) %>%
+  stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
+            model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+            title=c("Effects of sophistication on turnout, political interest, internal efficacy,
+          and external efficacy in the 2020 ANES. Standard errors in parentheses. Estimates are used for
+          Figure \\ref{fig:knoweff} in the main text."),
+            column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
+            column.separate = c(2,2,2,2),
+            covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
+                                 "College Degree","Household Income","Age",
+                                 "Black","Church Attendance","Constant"),
+            keep.stat = c("n", "rsq", "ll"), font.size = "footnotesize",
+            out = "tab/knoweff2020anes.tex", label = "tab:knoweff2020anes")
+
+c(m1text[3], m1factual[3],
+  m1text[7], m1factual[7],
+  m1text[11], m1factual[11],
+  m1text[15], m1factual[15]) %>%
+  stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
+            model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+            title=c("Effects of sophistication on turnout, political interest, internal efficacy,
+          and external efficacy in the 2016 ANES. Standard errors in parentheses. Estimates are used for
+          Figure \\ref{fig:knoweff} in the main text."),
+            column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
+            column.separate = c(2,2,2,2),
+            covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
+                                 "College Degree","Household Income","Age",
+                                 "Black","Church Attendance","Constant"),
+            keep.stat = c("n", "rsq", "ll"), font.size = "footnotesize",
+            out = "tab/knoweff2016anes.tex", label = "tab:knoweff2016anes")
+
+c(m1text[4], m1factual[4],
+  m1text[8], m1factual[8],
+  m1text[12], m1factual[12],
+  m1text[16], m1factual[16]) %>%
+  stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
+            model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+            title=c("Effects of sophistication on turnout, political interest, internal efficacy,
+          and external efficacy in the 2012 ANES. Standard errors in parentheses. Estimates are used for
+          Figure \\ref{fig:knoweff} in the main text."),
+            column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
+            column.separate = c(2,2,2,2),
+            covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
+                                 "College Degree","Household Income","Age",
+                                 "Black","Church Attendance","Constant"),
+            keep.stat = c("n", "rsq", "ll"), font.size = "footnotesize",
+            out = "tab/knoweff2012anes.tex", label = "tab:knoweff2012anes")
 
 
 
@@ -226,6 +309,19 @@ rbind(sim(m2[[1]], iv=data.frame(polknow_text_mean=seq(min(data_yg$polknow_text_
   geom_ribbon(alpha=0.4, lwd=.1) + geom_line() +
   ylab("Information Retrieval") + xlab("Value of Independent Variable")
 ggsave("fig/yg_disease.pdf", width=4, height=2)
+
+stargazer(m2, type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          title="Effects of sophistication on information retrieval in the 2015 YouGov study.
+          Standard errors in parentheses. Estimates are used for Figure \\ref{fig:yg_disease}
+          in the main text.",
+          column.labels = "Information Retrieval",
+          column.separate = 2,
+          covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
+                               "College Degree","Household Income","Age",
+                               "Black","Church Attendance","Constant"),
+          keep.stat = c("n", "rsq"), font.size = "footnotesize",
+          out = "tab/yg_disease.tex", label = "tab:yg_disease")
 
 
 
@@ -450,18 +546,19 @@ grid.arrange(
 
 ivs <- c("female", "educ", "faminc", "age", "black", "relig")
 
-c(map(list(data_cces, data2020, data2016, data2012, data_yg),
-      ~lm(reformulate(ivs, response = "polknow_text_mean"),
-          data = ., subset = !is.na(polknow_factual))),
-  map(list(data_cces, data2020, data2016, data2012, data_yg),
-      ~lm(reformulate(ivs, response = "polknow_factual"),
+m3text <- list(data_cces, data2020, data2016, data2012, data_yg) %>%
+  map(~lm(reformulate(ivs, response = "polknow_text_mean"),
+          data = ., subset = !is.na(polknow_factual)))
+m3factual <- list(data_cces, data2020, data2016, data2012, data_yg) %>%
+  map(~lm(reformulate(ivs, response = "polknow_factual"),
           data = ., subset = !is.na(polknow_text_mean)))
-) %>%
+
+c(m3text, m3factual) %>%
   map_dfr(~tidy(., conf.int = T), .id = "model") %>%
   filter(term == "female") %>%
   mutate(
-    study = factor(rep(c("2018 CES", "2020 ANES", "2015 ANES", "2012 ANES", "2015 YouGov"), 2),
-                   levels = c("2015 YouGov", "2020 ANES", "2018 CES", "2012 ANES", "2015 ANES")),
+    study = factor(rep(c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov"), 2),
+                   levels = c("2015 YouGov", "2020 ANES", "2018 CES", "2012 ANES", "2016 ANES")),
     dv = recode_factor(rep(c("polknow_text_mean","polknow_factual"), each = 5),
                        `polknow_text_mean` = "Discursive Sophistication",
                        `polknow_factual` = "Factual Knowledge")) %>%
@@ -471,6 +568,27 @@ c(map(list(data_cces, data2020, data2016, data2012, data_yg),
   xlab("Estimated Gender Gap") + ylab("Dataset") + plot_default
 ggsave("fig/determinants.pdf",width=5,height=2)
 
+stargazer(m3text, type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
+          model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
+          dep.var.labels = "Discursive Sophistication",
+          title="Effects of gender on discursive sophistication in the CES, ANES, and YouGov study.
+          Estimates are used for Figure \\ref{fig:determinants} in the main text.",
+          column.labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov"),
+          covariate.labels = c("Female", "College Degree", "Household Income",
+                               "Age", "Black", "Church Attendance", "Constant"),
+          keep.stat = c("n", "rsq"), font.size = "footnotesize",
+          out = "tab/determinants_text.tex", label = "tab:determinants_text")
+
+stargazer(m3factual, type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
+          model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
+          dep.var.labels = "Factual Knowledge",
+          title="Effects of gender on factual knowledge in the CES, ANES, and YouGov study.
+          Estimates are used for Figure \\ref{fig:determinants} in the main text.",
+          column.labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov"),
+          covariate.labels = c("Female", "College Degree", "Household Income",
+                               "Age", "Black", "Church Attendance", "Constant"),
+          keep.stat = c("n", "rsq"), font.size = "footnotesize",
+          out = "tab/determinants_factual.tex", label = "tab:determinants_factual")
 
 
 # Explaining the gender gap -----------------------------------------------

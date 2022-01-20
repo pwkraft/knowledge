@@ -1,30 +1,28 @@
 \babel@toc {USenglish}{}
 \contentsline {section}{Appendices}{1}{section*.26}%
 \ttl@starttoc {sections@1}
-\contentsline {section}{\numberline {A}Overview of Data Sources and Open Ended Items}{2}{appendix.a.A}%
-\contentsline {subsection}{\numberline {I}2018 CES}{2}{subsection.a.A.1}%
-\contentsline {subsection}{\numberline {II}2012 \& 2016 American National Election Study}{2}{subsection.a.A.2}%
-\contentsline {subsection}{\numberline {III}2015 YouGov Survey}{3}{subsection.a.A.3}%
-\contentsline {subsection}{\numberline {IV}Swiss Referendum Survey}{3}{subsection.a.A.4}%
-\contentsline {section}{\numberline {B}Information on Discursive Sophistication Components}{4}{appendix.a.B}%
-\contentsline {subsection}{\numberline {I}Distribution of Word Counts in Open-Ended Responses}{4}{subsection.a.B.1}%
-\contentsline {subsection}{\numberline {II}Overview of Topic Proportions}{5}{subsection.a.B.2}%
-\contentsline {subsection}{\numberline {III}Discursive Sophistication Components}{8}{subsection.a.B.3}%
-\contentsline {section}{\numberline {C}Pre-Processing and Topic Model Specification}{9}{appendix.a.C}%
-\contentsline {subsection}{\numberline {I}PreText Analysis}{9}{subsection.a.C.1}%
-\contentsline {subsection}{\numberline {II}Robustness Checks for Varying Model Specifications}{10}{subsection.a.C.2}%
-\contentsline {section}{\numberline {D}Additional Information on Remaining Variables}{13}{appendix.a.D}%
-\contentsline {subsection}{\numberline {I}Item Selection and Recoding}{13}{subsection.a.D.1}%
-\contentsline {paragraph}{Conventional measures of political knowledge:}{13}{section*.34}%
-\contentsline {paragraph}{Dependent variables:}{13}{section*.35}%
-\contentsline {paragraph}{Control variables:}{14}{section*.36}%
-\contentsline {subsection}{\numberline {II}Variable Distributions -- 2012 ANES}{15}{subsection.a.D.2}%
-\contentsline {subsection}{\numberline {III}Variable Distributions -- 2016 ANES}{17}{subsection.a.D.3}%
-\contentsline {subsection}{\numberline {IV}Variable Distributions -- 2015 YouGov}{19}{subsection.a.D.4}%
-\contentsline {section}{\numberline {E}Robustness Checks}{20}{appendix.a.E}%
-\contentsline {subsection}{\numberline {I}Controlling for Personality Characteristics}{20}{subsection.a.E.1}%
-\contentsline {subsection}{\numberline {II}Controlling for Individual Response Length}{21}{subsection.a.E.2}%
-\contentsline {section}{\numberline {F}Tables of Model Estimates}{22}{appendix.a.F}%
-\contentsline {subsection}{\numberline {I}Main Analyses}{22}{subsection.a.F.1}%
-\contentsline {subsection}{\numberline {II}Robustness Checks}{27}{subsection.a.F.2}%
+\contentsline {section}{\numberline {A}Overview of Data Sources and Variables}{2}{appendix.a.A}%
+\contentsline {subsection}{\numberline {I}Summary of Surveys and Open-Ended Items}{2}{subsection.a.A.1}%
+\contentsline {paragraph}{2018 CES}{2}{section*.27}%
+\contentsline {paragraph}{2012 \& 2016 American National Election Study}{2}{section*.28}%
+\contentsline {paragraph}{2015 YouGov Survey}{3}{section*.29}%
+\contentsline {paragraph}{Swiss Referendum Survey}{3}{section*.30}%
+\contentsline {subsection}{\numberline {II}Remaining Variables and Recoding}{4}{subsection.a.A.2}%
+\contentsline {paragraph}{Conventional measures of political knowledge:}{4}{section*.31}%
+\contentsline {paragraph}{Dependent variables:}{4}{section*.32}%
+\contentsline {paragraph}{Control variables:}{4}{section*.33}%
+\contentsline {section}{\numberline {B}Information on Discursive Sophistication Components}{6}{appendix.a.B}%
+\contentsline {subsection}{\numberline {I}Distribution of Word Counts in Open-Ended Responses}{6}{subsection.a.B.1}%
+\contentsline {subsection}{\numberline {II}Overview of Topic Proportions}{7}{subsection.a.B.2}%
+\contentsline {subsection}{\numberline {III}Discursive Sophistication Components}{10}{subsection.a.B.3}%
+\contentsline {section}{\numberline {C}Pre-Processing and Topic Model Specification}{11}{appendix.a.C}%
+\contentsline {subsection}{\numberline {I}PreText Analysis}{11}{subsection.a.C.1}%
+\contentsline {subsection}{\numberline {II}Robustness Checks for Varying Model Specifications}{12}{subsection.a.C.2}%
+\contentsline {section}{\numberline {D}Robustness Checks}{15}{appendix.a.D}%
+\contentsline {subsection}{\numberline {I}Controlling for Personality Characteristics}{15}{subsection.a.D.1}%
+\contentsline {subsection}{\numberline {II}Controlling for Individual Response Length}{16}{subsection.a.D.2}%
+\contentsline {section}{\numberline {E}Tables of Model Estimates}{17}{appendix.a.E}%
+\contentsline {subsection}{\numberline {I}Figure~\ref {fig:knoweff}: Effects of sophistication on turnout, political interest, internal efficacy, and external efficacy}{17}{subsection.a.E.1}%
+\contentsline {subsection}{\numberline {II}Figure~\ref {fig:yg_disease}: Expected information retrieval in the 2015 YouGov Study as a function of political sophistication}{21}{subsection.a.E.2}%
+\contentsline {subsection}{\numberline {III}Figure~\ref {fig:determinants}: The gender gap in political sophistication after controlling for common determinants.}{22}{subsection.a.E.3}%
 \contentsfinish 
