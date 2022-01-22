@@ -131,4 +131,99 @@ dev.off()
 
 
 
+# Discursive sophistication components ------------------------------------
+
+## 2018 CES
+data_cces %>% transmute(
+  v1 = size,
+  v2 = range,
+  v3 = constraint) %>%
+  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
+          axisLabels = "none",
+          columnLabels = c("Size", "Range", "Constraint")
+  ) + plot_default
+ggsave("fig/cces2018_components.png", width = 2.6, height = 2.6)
+
+## 2020 ANES
+data2020 %>% transmute(
+  v1 = size,
+  v2 = range,
+  v3 = constraint) %>%
+  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
+          axisLabels = "none",
+          columnLabels = c("Size", "Range", "Constraint")
+  ) + plot_default
+ggsave("fig/anes2020_components.png", width = 2.6, height = 2.6)
+
+## 2016 ANES
+data2016 %>% transmute(
+  v1 = size,
+  v2 = range,
+  v3 = constraint) %>%
+  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
+          axisLabels = "none",
+          columnLabels = c("Size", "Range", "Constraint")
+  ) + plot_default
+ggsave("fig/anes2016_components.png", width = 2.6, height = 2.6)
+
+## 2012 ANES
+data2012 %>% transmute(
+  v1 = size,
+  v2 = range,
+  v3 = constraint) %>%
+  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
+          axisLabels = "none",
+          columnLabels = c("Size", "Range", "Constraint")
+  ) + plot_default
+ggsave("fig/anes2012_components.png", width = 2.6, height = 2.6)
+
+## 2015 YouGov
+data_yg %>% transmute(
+  v1 = size,
+  v2 = range,
+  v3 = constraint) %>%
+  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
+          axisLabels = "none",
+          columnLabels = c("Size", "Range", "Constraint")
+  ) + plot_default
+ggsave("fig/yg_components.png", width = 2.6, height = 2.6)
+
+## Swiss - French
+opend_french %>% transmute(
+  v1 = size,
+  v2 = range,
+  v3 = constraint) %>%
+  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
+          axisLabels = "none",
+          columnLabels = c("Size", "Range", "Constraint")
+  ) + plot_default
+ggsave("fig/french_components.png", width = 2.6, height = 2.6)
+
+## Swiss - German
+opend_german %>% transmute(
+  v1 = size,
+  v2 = range,
+  v3 = constraint) %>%
+  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
+          axisLabels = "none",
+          columnLabels = c("Size", "Range", "Constraint")
+  ) + plot_default
+ggsave("fig/german_components.png", width = 2.6, height = 2.6)
+
+## Swiss - Italian
+opend_italian %>% transmute(
+  v1 = size,
+  v2 = range,
+  v3 = constraint) %>%
+  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
+          axisLabels = "none",
+          columnLabels = c("Size", "Range", "Constraint")
+  ) + plot_default
+ggsave("fig/italian_components.png", width = 2.6, height = 2.6)
+
+
+
+# PreText analysis --------------------------------------------------------
+
+
 
