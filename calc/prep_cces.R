@@ -138,7 +138,7 @@ cces <- raw |>
 ### MORE WORK ON PRE-PROCESSING NEEDED, check all steps, spell checking, stopword removal etc.
 
 ## minor pre-processing
-opend <- raw |>
+opend_cces <- raw |>
   dplyr::select(UWM309, UWM310, UWM312, UWM313, UWM315,
                 UWM316, UWM318, UWM319, UWM321, UWM322) |>
   apply(2, function(x){
@@ -212,20 +212,20 @@ opend <- raw |>
 })
 
 ## spell-checking
-write.table(opend, file = "calc/out/spell.csv"
+write.table(opend_cces, file = "calc/out/spell.csv"
             , sep = ",", col.names = F, row.names = F)
-spell <- aspell("calc/out/spell.csv") %>%
+spell_cces <- aspell("calc/out/spell.csv") %>%
   filter(Suggestions!="NULL")
 
 ## replace incorrect words
-for(i in 1:nrow(spell)){
-  opend[spell$Line[i],] <- gsub(spell$Original[i], unlist(spell$Suggestions[i])[1],
-                                opend[spell$Line[i],])
+for(i in 1:nrow(spell_cces)){
+  opend_cces[spell_cces$Line[i],] <- gsub(spell_cces$Original[i], unlist(spell_cces$Suggestions[i])[1],
+                                opend_cces[spell_cces$Line[i],])
 }
-opend <- data.frame(caseid = raw$caseid, opend, stringsAsFactors = F)
+opend_cces <- data.frame(caseid = raw$caseid, opend_cces, stringsAsFactors = F)
 
 ## word count in OE responses
-cces$wc <- opend[,-1] |>
+cces$wc <- opend_cces[,-1] |>
   apply(1, paste, collapse = " ") |>
   stringr::str_count('\\w+')
 cces$lwc = log(cces$wc)/max(log(cces$wc), na.rm = T)
@@ -234,7 +234,7 @@ cces$lwc = log(cces$wc)/max(log(cces$wc), na.rm = T)
 ## Range: Shannon entropy of response lengths ----------------------
 
 ### range in item response
-cces$range <- apply(opend[,-1], 1, function(x){
+cces$range <- apply(opend_cces[,-1], 1, function(x){
   iwc <- str_count(x, "\\w+")
   shannon(iwc/sum(iwc))
 })
@@ -244,7 +244,7 @@ cces$range <- apply(opend[,-1], 1, function(x){
 
 ### combine regular survey and open-ended data, remove empty responses
 meta <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
-data_cces <- cces %>% mutate(resp = apply(opend[,-1], 1, paste, collapse = " "))
+data_cces <- cces %>% mutate(resp = apply(opend_cces[,-1], 1, paste, collapse = " "))
 
 ### remove additional whitespaces
 data_cces$resp <- gsub("\\s+"," ", data_cces$resp)
@@ -295,5 +295,5 @@ data_cces$polknow_text_mean <- with(data_cces, size + range + constraint)/3
 
 # Save Output -------------------------------------------------------------
 
-save(cces, opend, spell, data_cces, meta, processed_cces, out_cces, stm_fit_cces,
+save(cces, opend_cces, spell_cces, data_cces, meta, processed_cces, out_cces, stm_fit_cces,
      file="calc/out/cces.Rdata")

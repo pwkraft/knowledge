@@ -118,7 +118,7 @@ yougov$faminc <- (car::recode(raw$faminc, "31=12; 97:hi=NA") -1)/15
 ### MORE WORK ON PRE-PROCESSING NEEDED, check all steps, spell checking, stopword removal etc.
 
 ## minor pre-processing
-opend <- apply(dplyr::select(raw, Q2, Q3, Q5, Q6), 2, function(x){
+opend_yg <- apply(dplyr::select(raw, Q2, Q3, Q5, Q6), 2, function(x){
     x <- gsub("(^\\s+|\\s+$)","", x)
     x[x %in% c("N/A","n/a","na","Na","__NA__","no","not sure","none","nothing","good"
                ,"don't know","don't no","","I have no clue","I do not know")] <- ""
@@ -129,17 +129,17 @@ opend <- apply(dplyr::select(raw, Q2, Q3, Q5, Q6), 2, function(x){
 })
 
 ## spell-checking
-write.table(opend, file = "calc/out/spell.csv"
+write.table(opend_yg, file = "calc/out/spell.csv"
             , sep = ",", col.names = F, row.names = F)
-spell <- aspell("calc/out/spell.csv") %>%
+spell_yg <- aspell("calc/out/spell.csv") %>%
   filter(Suggestions!="NULL")
 
 ## replace incorrect words
-for(i in 1:nrow(spell)){
-  opend[spell$Line[i],] <- gsub(spell$Original[i], unlist(spell$Suggestions[i])[1]
-                                        , opend[spell$Line[i],])
+for(i in 1:nrow(spell_yg)){
+  opend_yg[spell_yg$Line[i],] <- gsub(spell_yg$Original[i], unlist(spell_yg$Suggestions[i])[1]
+                                        , opend_yg[spell_yg$Line[i],])
 }
-opend <- data.frame(caseid = raw$caseid, opend, stringsAsFactors = F)
+opend_yg <- data.frame(caseid = raw$caseid, opend_yg, stringsAsFactors = F)
 
 
 
@@ -149,13 +149,13 @@ opend <- data.frame(caseid = raw$caseid, opend, stringsAsFactors = F)
 ## Range: Shannon entropy of response lengths ----------------------
 
 ### overall response length
-yougov$wc <- apply(opend[,-1], 1, function(x){
+yougov$wc <- apply(opend_yg[,-1], 1, function(x){
   sum(str_count(x, "\\w+"))
 })
 yougov$lwc <- log(yougov$wc)/max(log(yougov$wc), na.rm = T)
 
 ### consistency in item response
-yougov$range <- apply(opend[,-1], 1, function(x){
+yougov$range <- apply(opend_yg[,-1], 1, function(x){
   iwc <- str_count(x, "\\w+")
   shannon(iwc/sum(iwc))
 })
@@ -165,7 +165,7 @@ yougov$range <- apply(opend[,-1], 1, function(x){
 
 ### combine regular survey and open-ended data, remove empty responses
 meta <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
-data_yg <- yougov %>% mutate(resp = apply(opend[,-1],1,paste,collapse=' '))
+data_yg <- yougov %>% mutate(resp = apply(opend_yg[,-1],1,paste,collapse=' '))
 
 ### remove additional whitespaces
 data_yg$resp <- gsub("\\s+"," ", data_yg$resp)
@@ -216,5 +216,5 @@ data_yg$polknow_text_mean <- with(data_yg, size + range + constraint)/3
 
 # Save Output -------------------------------------------------------------
 
-save(yougov, opend, spell, data_yg, meta, processed_yougov, out_yougov, stm_fit_yg,
+save(yougov, opend_yg, spell_yg, data_yg, meta, processed_yougov, out_yougov, stm_fit_yg,
      file="calc/out/yougov.Rdata")
