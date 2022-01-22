@@ -2,10 +2,10 @@
 
 Throughout the paper, I apply the theoretical framework across multiple surveys fielded in two countries that employed different sets of open-ended questions. Each survey focuses on sophistication in the context of distinct political tasks, namely the evaluation of (1) candidates running for public office, (2) broad issue areas such as health care and gun legislation, and (3) specific legislative policy referenda. The data sets are briefly described below.
 
+
 \subsection{Summary of Surveys and Open-Ended Items}
 
 \paragraph{2018 CES}
-
 \begin{itemize}
 	\item On the issue of \textbf{gun legislation}, please outline the main arguments that come to mind \textit{in favor and against} background checks for all gun sales, including at gun shows and over the Internet.
 	\item On the issue of \textbf{abortion}, please outline the main arguments that come to mind \textit{in favor and against} banning abortions after the 20th week of pregnancy.
@@ -32,7 +32,6 @@ Second, the respondents reported on their attitudes towards the Affordable Care 
 \end{itemize}
 %Here, discursive sophistication is evaluated based on the verbatim responses to the four preceding questions using the same procedures described above. 
 Compared to the open-ended likes/dislikes items included in the 2012 and 2016 ANES, the questions directly address considerations related to specific policy issues that were prominent in the political discourse at the time of the survey. Respondents who did not provide an answer to all of the open-ended questions were removed from the analysis (48).
-
 
 \paragraph{Swiss Referendum Survey}
 Lastly, I examine survey data on Swiss citizens justifying their vote choices on multiple referenda used in a recent analysis by \citet{colombo2016justifications}. The author compiled a data set of cross-sectional surveys administered in Switzerland after national popular votes on multiple policy propositions. The original surveys were conducted as representative samples after each of thirty-four national policy votes that were held between 2008 and 2012 resulting in a total of about 27,000 observations. However, respondents were only asked to justify their decision for or against a given proposition in verbatim if they participated in the vote in the first place. As such, about 5,000 individuals in the data set did not provide an open-ended response. The remaining respondents were asked to describe the main reason as well as additional justifications for their decision in two separate items. As before, discursive sophistication is evaluated based on verbatim responses to both questions. Since the Swiss survey was conducted in three different languages (German, French, and Italian), I computed the measure of discursive sophistication separately for each group of respondents.
@@ -74,57 +73,30 @@ Lastly, I examine survey data on Swiss citizens justifying their vote choices on
 \end{itemize}
 
 
+
 \clearpage
 \section[Information on Discursive Sophistication Components]{Detailed Information on Open-Ended Responses and Discursive Sophistication Components}\label{app:oeinfo}
 
-\subsection{Distribution of Word Counts in Open-Ended Responses}
+\subsection{Distribution of Word Counts \& Proportion of Non-Response}
+\begin{figure}[ht]\centering
+	\includegraphics{../fig/wc.png}
+	\caption[Total word count across all open-ended responses]{Total word count across all open-ended responses for each survey participant. The dashed red lines indicate the average response lengths in each survey.}\label{fig:wc}
+\end{figure}
 
-\begin{figure*}[h]
-    \centering
-    \begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics{/data/Dropbox/Uni/projects/2016/knowledge/fig/anes2012_wc.pdf}
-        \caption{2012 ANES}
-    \end{subfigure}%
-	\begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics{/data/Dropbox/Uni/projects/2016/knowledge/fig/anes2016_wc.pdf}
-        \caption{2016 ANES}
-    \end{subfigure}%
-    
-    \begin{subfigure}[t]{0.49\textwidth}
-        \centering
-        \includegraphics{/data/Dropbox/Uni/projects/2016/knowledge/fig/yg_wc.pdf}
-        \caption{2015 YouGov}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.49\textwidth}
-         \centering
-         \includegraphics{/data/Dropbox/Uni/projects/2016/knowledge/fig/swiss_wc.pdf}
-         \caption{Swiss Survey}
-    \end{subfigure}
-    \caption[Histograms of total word count in open-ended responses]{Histograms of total word count in the collection of open-ended responses for each individual. The dashed red lines indicate the average response lengths in each survey.}\label{fig:wc}
-\end{figure*}
+\begin{figure}[ht]\centering
+	\includegraphics{../fig/noresponse.png}
+	\caption{Proportion of non-response comparing male and female survey participants (including 95\% confidence intervals). Gender differences are only significant ($p<.05$) for the Swiss survey. The Swiss survey, however, contains an additional selection mechanism since respondents were only asked the set of open-ended questions if they previously reported that they voted in the respective referendum.}
+\end{figure}
 
-% TODO: ADD percentage of non-response by gender!
-
-\subsection{Pre-Processing and Topic Model Specification}
 
 \clearpage
-\subsection{Overview of Topic Proportions}
+\subsection{Pre-Processing and Topic Model Specification}
+
+I rely on the structural topic model framework to extract and estimate differences in the topics mentioned by male and female respondents. I follow the guidelines in \citet{roberts2014structural} to preprocess our open-ended responses (lowercasing, removing stopwords, removing punctuation, stemming) and used age, gender, education, party identification, as well as an interaction between education and party identification as covariates for topic prevalence. With the exception of including gender, this variable selection is equivalent to the procedure described in \citet{roberts2014structural} for open-ended survey responses. In order to differentiate only broader considerations, we set the number of topics to be equal to 25, but we replicate equivalent results with larger numbers of topics below. Figure~\ref{fig:stm_prop} displays the resulting topic proportions along with their highest probability terms across all data sets included in the analyses.
 
 \begin{figure}[h]\centering
-\includegraphics[width=\textwidth]{/data/Dropbox/Uni/projects/2016/knowledge/fig/anes_stm_prop.pdf}
-\caption[Estimated topic proportions in the 2012 and 2016 ANES based on the structural topic model]{Estimated topic proportions in the 2012 and 2016 ANES based on the structural topic model. See Appendix~\ref{app:topicmodel} for details on the model specification.}\label{fig:anes_stm_prop}
-\end{figure}
-
-\begin{figure}[h]\centering
-\includegraphics[width=.5\textwidth]{/data/Dropbox/Uni/projects/2016/knowledge/fig/yg_stm_prop.pdf}
-\caption[Estimated topic proportions in the 2015 YouGov survey based on the structural topic model]{Estimated topic proportions in the 2015 YouGov survey based on the structural topic model. See Appendix~\ref{app:topicmodel} for details on the model specification.}\label{fig:yg_stm_prop}
-\end{figure}
-
-\begin{figure}[h]\centering
-\includegraphics[width=\textwidth]{/data/Dropbox/Uni/projects/2016/knowledge/fig/swiss_stm_prop.pdf}
-\caption[Estimated topic proportions in the Swiss survey based on the structural topic model]{Estimated topic proportions in the Swiss survey based on the structural topic model. See Appendix~\ref{app:topicmodel} for details on the model specification.}\label{fig:swiss_stm_prop}
+\includegraphics[width=\textwidth]{../fig/stm_prop.pdf}
+\caption[Estimated topic proportions based on the structural topic model]{Estimated topic proportions based on the structural topic model. See Appendix~\ref{app:topicmodel} for details on the model specification.}\label{fig:stm_prop}
 \end{figure}
 
 

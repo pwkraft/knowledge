@@ -264,11 +264,11 @@ data_cces <- data_cces[-processed_cces$docs.removed,]
 data_cces <- data_cces[-out_cces$docs.removed,]
 
 ### stm fit with 49 topics
-stm_fit <- stm(out_cces$documents, out_cces$vocab, prevalence = as.matrix(out_cces$meta)
+stm_fit_cces <- stm(out_cces$documents, out_cces$vocab, prevalence = as.matrix(out_cces$meta)
                , K=25, seed=12345)
 
 ### compute number of considerations
-data_cces$size <- ntopics(stm_fit, out_cces)
+data_cces$size <- ntopics(stm_fit_cces, out_cces)
 
 
 ## Constraint: LIWC component ---------------------------------------------
@@ -295,5 +295,5 @@ data_cces$polknow_text_mean <- with(data_cces, size + range + constraint)/3
 
 # Save Output -------------------------------------------------------------
 
-save(cces, opend, spell, data_cces, meta, processed_cces, out_cces, stm_fit,
+save(cces, opend, spell, data_cces, meta, processed_cces, out_cces, stm_fit_cces,
      file="calc/out/cces.Rdata")

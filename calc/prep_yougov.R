@@ -185,11 +185,11 @@ data_yg <- data_yg[-processed_yougov$docs.removed,]
 data_yg <- data_yg[-out_yougov$docs.removed,]
 
 ### stm fit with 49 topics
-stm_fit <- stm(out_yougov$documents, out_yougov$vocab, prevalence = as.matrix(out_yougov$meta)
+stm_fit_yg <- stm(out_yougov$documents, out_yougov$vocab, prevalence = as.matrix(out_yougov$meta)
                , K=25, seed=12345)
 
 ### compute number of considerations
-data_yg$size <- ntopics(stm_fit, out_yougov)
+data_yg$size <- ntopics(stm_fit_yg, out_yougov)
 
 
 ## Constraint: LIWC component ---------------------------------------------
@@ -216,5 +216,5 @@ data_yg$polknow_text_mean <- with(data_yg, size + range + constraint)/3
 
 # Save Output -------------------------------------------------------------
 
-save(yougov, opend, spell, data_yg, meta, processed_yougov, out_yougov, stm_fit
-     , file="calc/out/yougov.Rdata")
+save(yougov, opend, spell, data_yg, meta, processed_yougov, out_yougov, stm_fit_yg,
+     file="calc/out/yougov.Rdata")

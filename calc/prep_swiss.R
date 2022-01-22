@@ -91,6 +91,11 @@ swiss <- swiss %>%
     string2 = preprocess(paste(prostring2, constring2))
   )
 
+## overall response length
+swiss$wc <- apply(dplyr::select(swiss, string1:string2), 1, function(x){
+  sum(str_count(x, "\\w+"))
+})
+
 
 
 # GERMAN: Text-based political sophistication measure ----------------------------
@@ -100,10 +105,7 @@ opend_german <- swiss %>% filter(lang == 1)
 
 ## Range: Shannon entropy of response lengths ----------------------
 
-## overall response length
-opend_german$wc <- apply(dplyr::select(opend_german, string1:string2), 1, function(x){
-  sum(str_count(x, "\\w+"))
-})
+## logged response length
 opend_german$lwc <- log(opend_german$wc)/max(log(opend_german$wc), na.rm = T)
 
 ### consistency in item response  (respondents either answered pro OR con, I should take that into account!!!)
@@ -178,10 +180,7 @@ opend_french <- swiss %>% filter(lang == 2)
 
 ## Range: Shannon entropy of response lengths ----------------------
 
-## overall response length
-opend_french$wc <- apply(dplyr::select(opend_french, string1:string2), 1, function(x){
-  sum(str_count(x, "\\w+"))
-})
+## logged response length
 opend_french$lwc <- log(opend_french$wc)/max(log(opend_french$wc), na.rm = T)
 
 ### consistency in item response  (respondents either answered pro OR con, I should take that into account!!!)
@@ -256,10 +255,7 @@ opend_italian <- swiss %>% filter(lang == 3)
 
 ## Range: Shannon entropy of response lengths ----------------------
 
-## overall response length
-opend_italian$wc <- apply(dplyr::select(opend_italian, string1:string2), 1, function(x){
-  sum(str_count(x, "\\w+"))
-})
+## logged response length
 opend_italian$lwc <- log(opend_italian$wc)/max(log(opend_italian$wc), na.rm = T)
 
 ### consistency in item response  (respondents either answered pro OR con, I should take that into account!!!)
