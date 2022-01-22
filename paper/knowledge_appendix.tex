@@ -181,8 +181,17 @@ Figure~\ref{fig:pretext_robustness} examines whether the proposed measure of dis
 
 In summary, open-ended responses in the analyses reported in the main text are pre-processed by stemming and lowercasing, as well as the removing numbers, punctuation, stopwords, and infrequent terms (i.e., terms that appear in fewer than 10 responses).\footnote{Prior to applying these pre-processing steps, open-ended responses in the 2012 \& 2016 ANES as well as the 2015 YouGov survey are cleaned by correcting spelling errors using an implementation of the Aspell spell-checking algorithm (\url{www.aspell.net}).} While the results discussed in the manuscript are based on this preferred specification, the substantive results are robust for alternative pre-processing regimes or varying numbers of topics.
 
-
+\clearpage
 \subsection{Controlling for Extraversion and Verbal Skills}\label{app:personality}
+
+
+\begin{figure}[h]\centering
+	\includegraphics{../fig/knoweff_robust.pdf}
+	\caption{Effects of sophistication on internal efficacy, external efficacy, non-conventional participation, and turnout in the 2012 and 2016 ANES. For each dependent variable, the figure displays the change in expected values after increasing each sophistication measure from -1 to +1 standard deviation from its mean (including 95\% confidence intervals). Model estimates are based on logistic regression (turnout) or OLS (internal efficacy, external efficacy, non-conventional participation). Both sophistication measure are included simultaneously while controlling for gender, education, income, age, race, church attendance, survey mode, Wordsum vocabulary scores, as well as personality characteristics (extraversion and being reserved).% Full model results are presented in the appendix, Tables \ref{tab:knoweff2012_personality} and \ref{tab:knoweff2016_personality}.
+	}\label{fig:knoweff_robust}
+\end{figure}
+
+
 \begin{figure}[h]\centering
 \includegraphics{/data/Dropbox/Uni/projects/2016/knowledge/fig/knoweff_personality.pdf}
 \caption[Effects of sophistication on political engagement controlling for personality characteristics in the 2012 and 2016 ANES]{Effects of sophistication on internal efficacy, external efficacy, non-conventional participation, and turnout in the 2012 and 2016 ANES. For each dependent variable, the figure displays the change in expected values after increasing each sophistication measure from -1 to +1 standard deviation from its mean (including 95\% confidence intervals). Model estimates are based on logistic regression (turnout) or OLS (internal efficacy, external efficacy, non-conventional participation). Both sophistication measure are included simultaneously while controlling for gender, education, income, age, race, church attendance, survey mode, Wordsum vocabulary scores, as well as personality characteristics (extraversion and being reserved).% Full model results are presented in the appendix, Tables \ref{tab:knoweff2012_personality} and \ref{tab:knoweff2016_personality}.

@@ -279,3 +279,96 @@ ggplot(plot_df, aes(x = xmean, xmin = x, xmax = xend, y = ylab)) +
 ggsave("../fig/pretext.pdf",width = 6, height = 4)
 
 
+
+# Controlling for Extraversion and Verbal Skills --------------------------
+
+dvs <- c("vote", "polint_att", "effic_int", "effic_ext")
+ivs <- c("female", "educ", "faminc", "age", "black", "relig")
+ivs_rob <- c("extraversion", "mode", "wordsum", "wc")
+
+m1text <- c(
+  map(ivs_rob,
+      ~glm(reformulate(c("polknow_text_mean", ivs, .), response = "vote"),
+           data = data2016, subset = !is.na(polknow_factual), family=binomial("logit"))),
+  map(ivs_rob,
+      ~lm(reformulate(c("polknow_text_mean", ivs, .), response = "polint_att"),
+          data = data2016, subset = !is.na(polknow_factual))),
+  map(ivs_rob,
+      ~lm(reformulate(c("polknow_text_mean", ivs, .), response = "effic_int"),
+          data = data2016, subset = !is.na(polknow_factual))),
+  map(ivs_rob,
+      ~lm(reformulate(c("polknow_text_mean", ivs, .), response = "effic_ext"),
+          data = data2016, subset = !is.na(polknow_factual))),
+
+  map(ivs_rob,
+      ~glm(reformulate(c("polknow_text_mean", ivs, .), response = "vote"),
+           data = data2012, subset = !is.na(polknow_factual), family=binomial("logit"))),
+  map(ivs_rob,
+      ~lm(reformulate(c("polknow_text_mean", ivs, .), response = "polint_att"),
+          data = data2012, subset = !is.na(polknow_factual))),
+  map(ivs_rob,
+      ~lm(reformulate(c("polknow_text_mean", ivs, .), response = "effic_int"),
+          data = data2012, subset = !is.na(polknow_factual))),
+  map(ivs_rob,
+      ~lm(reformulate(c("polknow_text_mean", ivs, .), response = "effic_ext"),
+          data = data2012, subset = !is.na(polknow_factual)))
+  )
+
+m1factual <- c(
+  map(ivs_rob,
+      ~glm(reformulate(c("polknow_factual", ivs, .), response = "vote"),
+           data = data2016, subset = !is.na(polknow_factual), family=binomial("logit"))),
+  map(ivs_rob,
+      ~lm(reformulate(c("polknow_factual", ivs, .), response = "polint_att"),
+          data = data2016, subset = !is.na(polknow_factual))),
+  map(ivs_rob,
+      ~lm(reformulate(c("polknow_factual", ivs, .), response = "effic_int"),
+          data = data2016, subset = !is.na(polknow_factual))),
+  map(ivs_rob,
+      ~lm(reformulate(c("polknow_factual", ivs, .), response = "effic_ext"),
+          data = data2016, subset = !is.na(polknow_factual))),
+
+  map(ivs_rob,
+      ~glm(reformulate(c("polknow_factual", ivs, .), response = "vote"),
+           data = data2012, subset = !is.na(polknow_factual), family=binomial("logit"))),
+  map(ivs_rob,
+      ~lm(reformulate(c("polknow_factual", ivs, .), response = "polint_att"),
+          data = data2012, subset = !is.na(polknow_factual))),
+  map(ivs_rob,
+      ~lm(reformulate(c("polknow_factual", ivs, .), response = "effic_int"),
+          data = data2012, subset = !is.na(polknow_factual))),
+  map(ivs_rob,
+      ~lm(reformulate(c("polknow_factual", ivs, .), response = "effic_ext"),
+          data = data2012, subset = !is.na(polknow_factual)))
+)
+
+c(m1text, m1factual) %>%
+  map_dfr(~summary(marginaleffects(.)), .id = "model") %>%
+  as_tibble() %>%
+  filter(term %in% c("polknow_text_mean", "polknow_factual")) %>%
+  mutate(
+    study = factor(rep(rep(c("2016 ANES", "2012 ANES"), each = 16), 2),
+                   levels = c("2016 ANES", "2012 ANES")),
+    dv = recode_factor(rep(rep(dvs, each = 4), 4),
+                       `vote` = "Turnout",
+                       `polint_att` = "Political Interest",
+                       `effic_iznt` = "Internal Efficacy",
+                       `effic_ext` = "External Efficacy"),
+    Control = factor(rep(1:4, 16),
+                     labels = c("Extraversion",
+                                "Survey mode",
+                                "Wordsum score",
+                                "Response length")),
+    term = recode_factor(term,
+                         `polknow_factual` = "Factual\nKnowledge",
+                         `polknow_text_mean` = "Discursive\nSophistication")) %>%
+  ggplot(aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high,
+             col = Control, shape = Control)) +
+  geom_vline(xintercept = 0, color="grey") +
+  geom_point(position = position_dodge(width = -.5)) +
+  geom_errorbarh(height=0, position = position_dodge(width = -.5)) +
+  facet_grid(study~dv) +
+  labs(x = "Average Marginal Effect", y = "Independent Variable") +
+  plot_default + theme(legend.position = "bottom")
+ggsave("fig/knoweff_robust.pdf", width=6.5, height=3.5)
+
