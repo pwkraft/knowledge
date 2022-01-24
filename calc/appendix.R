@@ -226,6 +226,7 @@ ggsave("fig/italian_components.png", width = 2.6, height = 2.6)
 
 # PreText analysis --------------------------------------------------------
 
+## select raw documents
 res <- list(
   cces2018 = apply(opend_cces[opend_cces$caseid %in% data_cces$caseid[1:500], -1],
                    1, paste, collapse = " "),
@@ -244,13 +245,8 @@ res <- list(
   italian = apply(cbind(opend_italian$string1[1:500],opend_italian$string2[1:500]),
                   1, paste, collapse=' ')
 ) %>%
-  map(factorial_preprocessing, use_ngrams = FALSE, parallel = TRUE, cores = 7) %>%
-  map(preText, parallel = TRUE, cores = 7)
-
-### CONTINUE HERE
-
-## remove intermediate dfms
-file.remove(dir()[grep("intermediate_dfm_\\d+\\.Rdata", dir())])
+  map(factorial_preprocessing, use_ngrams = FALSE, parallel = TRUE, cores = 12) %>%
+  map(preText, parallel = TRUE, cores = 12)
 
 ## generate preText score plot
 res %>% map(preText_score_plot)
@@ -259,24 +255,22 @@ res %>% map(preText_score_plot)
 extractData <- function(x){
   out <- x[[2]]
   out$xmean <- x[[3]]$x
-  out$ylab <- factor(out$y, labels = c("Lowercase","Remove Infrequent Terms","Remove Numbers"
-                                       ,"Remove Punctuation","Remove Stopwords","Stemming"))
+  out$ylab <- factor(out$y, labels = c("Lowercase","Remove Infrequent Terms","Remove Numbers",
+                                       "Remove Punctuation","Remove Stopwords","Stemming"))
   out
 }
 
-plot_df <- res %>%
+res %>%
   map(regression_coefficient_plot, remove_intercept = TRUE) %>%
-  map("data") %>% map_dfr(extractData) %>%
-  mutate(data = rep(names(res), each=nrow(.)/length(res))) %>%
-  mutate(datalab = factor(data, levels = c("opend2012","opend2016","opend_yougov"
-                                           ,"opend_german","opend_french","opend_italian")
-                          , labels = c("2012 ANES","2016 ANES","2015 YouGov"
-                                       ,"Swiss (German)","Swiss (French)","Swiss (Italian)")))
-
-ggplot(plot_df, aes(x = xmean, xmin = x, xmax = xend, y = ylab)) +
+  map_dfr("data", .id = "study") %>% #map_dfr(extractData) %>%
+  mutate(study = factor(study, levels = c("cces2018", "anes2020", "anes2016", "anes2012",
+                                          "yougov", "french","german","italian"),
+                        labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES","2015 YouGov",
+                                   "Swiss (French)","Swiss (German)","Swiss (Italian)"))) %>%
+  ggplot(aes(x = Coefficient, xmin = Coefficient-2*SE, xmax = Coefficient+2*SE, y = Variable)) +
   geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
-  facet_wrap(~datalab, ncol=2) + labs(y=NULL, x = "Regression Coefficient") + plot_default
-ggsave("../fig/pretext.pdf",width = 6, height = 4)
+  facet_wrap(~study, ncol=2) + labs(y=NULL, x = "Regression Coefficient") + plot_default
+ggsave("fig/pretext.png",width = 6, height = 4.5)
 
 
 
