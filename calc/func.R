@@ -375,3 +375,60 @@ latexTable <- function(x, caption=NULL, label=NULL, align=NULL, digits=3
   print(xtable(out, caption=caption, label=label, align=align), include.rownames=F
         , hline.after=c(-1,0,nrow(out)-2,nrow(out)), ...)
 }
+
+
+robustSoph <- function(data, k, k_original, label, removestopwords = TRUE,
+                       stem = TRUE, thresh = 10, lang = "english",
+                       meta = c("age","educ_cont","pid_cont","educ_pid","female"),
+                       seed = 12345){
+  ### function to estimate stm and compute discursive sophistication w/ varying model specifications
+  # data: original dataset containing the following variables:
+  #       - polknow_text_mean: original discursive sophistication measure used in main analyses
+  #       - resp: merged open-ended responses (minor pre-processing applied)
+  #       - ditem: opinionation component of discursive sophistication
+  #       - all variables listed in [meta]
+  # k: number of topics used for stm estimation
+  # k_original: number of topics in original stm
+  # label: label for dataset
+  # removestopwords: (logical) whether stop words should be removed
+  # thresh: lower threshold in prepDocuments for minimum number of docs each term has to appear in
+  # stem: (logical) whether or not to stem words in textProcessor
+  # lang: language used in textProcessor
+  # meta: variable names (in data) that are used as prevalence covariates in stm estimation
+  # seed: seed used for stm estimation
+  ###
+
+  ### garbage collection
+  gc()
+
+  ## remove missings on metadata
+  data <- data[apply(!is.na(data[,meta]),1,prod)==1,]
+
+  ## process for stm
+  processed <- textProcessor(data$resp, metadata = data[,meta], stem = stem, language = lang,
+                             removestopwords = removestopwords,
+                             customstopwords = c("dont", "hes", "shes", "that", "etc")
+  )
+  out <- prepDocuments(processed$documents, processed$vocab, processed$meta, lower.thresh = thresh)
+
+  ## remove discarded observations from data
+  if(length(processed$docs.removed)>0) data <- data[-processed$docs.removed,]
+  if(length(out$docs.removed)>0) data <- data[-out$docs.removed,]
+
+  ## stm fit
+  stm_fit <- stm(out$documents, out$vocab, prevalence = as.matrix(out$meta)
+                 , K=k, init.type = "Spectral", seed=seed)
+
+  ## compute number of considerations
+  data$size <- ntopics(stm_fit, out)
+  data$polknow_text_rep <- with(data, size + range + constraint)/3
+
+  ## compute discursive_sophistication
+  out <- tibble(datalab = label,
+                k_original = k_original, k = k,
+                removestopwords = removestopwords,
+                stem = stem, thresh = thresh,
+                polknow_text_mean = data$polknow_text_mean,
+                polknow_text_rep = data$polknow_text_rep)
+  out
+}

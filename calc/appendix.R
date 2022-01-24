@@ -23,6 +23,7 @@ library(broom)
 library(marginaleffects)
 library(stargazer)
 library(preText)
+library(sampleSelection)
 
 
 ## Load data ----
@@ -262,7 +263,7 @@ extractData <- function(x){
 
 res %>%
   map(regression_coefficient_plot, remove_intercept = TRUE) %>%
-  map_dfr("data", .id = "study") %>% #map_dfr(extractData) %>%
+  map_dfr("data", .id = "study") %>%
   mutate(study = factor(study, levels = c("cces2018", "anes2020", "anes2016", "anes2012",
                                           "yougov", "french","german","italian"),
                         labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES","2015 YouGov",
@@ -271,6 +272,82 @@ res %>%
   geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
   facet_wrap(~study, ncol=2) + labs(y=NULL, x = "Regression Coefficient") + plot_default
 ggsave("fig/pretext.png",width = 6, height = 4.5)
+
+
+
+# Discursive sophistication for varying model specifications --------------
+
+## compute alternative measures (save intermediate steps)
+plot_df <- bind_rows(
+  robustSoph(data_cces, 35, stm_fit_cces$settings$dim$K, "2018 CES"),
+  robustSoph(data2020, 35, stm_fit2020$settings$dim$K, "2020 ANES"),
+  robustSoph(data2016, 35, stm_fit2016$settings$dim$K, "2016 ANES"),
+  robustSoph(data2012, 35, stm_fit2012$settings$dim$K, "2012 ANES"),
+  robustSoph(data_yg, 35, stm_fit_yg$settings$dim$K, "2015 YouGov"),
+  robustSoph(opend_french, 35, stm_fit_french$settings$dim$K, "Swiss (French)",
+             lang = "french", meta = c("age", "edu", "ideol", "edu_ideol", "female")),
+  robustSoph(opend_german, 35, stm_fit_german$settings$dim$K, "Swiss (German)",
+             lang = "german", meta = c("age", "edu", "ideol", "edu_ideol", "female")),
+  robustSoph(opend_italian, 35, stm_fit_italian$settings$dim$K, "Swiss (Italian)",
+             lang = "italian", meta = c("age", "edu", "ideol", "edu_ideol", "female"))
+)
+save(plot_df, file = "calc/tmp/tmp01.Rdata")
+
+plot_df <- plot_df %>% bind_rows(
+  robustSoph(data_cces, 25, stm_fit_cces$settings$dim$K, "2018 CES", stem = FALSE),
+  robustSoph(data2020, 25, stm_fit2020$settings$dim$K, "2020 ANES", stem = FALSE),
+  robustSoph(data2016, 25, stm_fit2016$settings$dim$K, "2016 ANES", stem = FALSE),
+  robustSoph(data2012, 25, stm_fit2012$settings$dim$K, "2012 ANES", stem = FALSE),
+  robustSoph(data_yg, 25, stm_fit_yg$settings$dim$K, "2015 YouGov", stem = FALSE),
+  robustSoph(opend_french, 25, stm_fit_french$settings$dim$K, "Swiss (French)", stem = FALSE,
+             lang = "french", meta = c("age", "edu", "ideol", "edu_ideol", "female")),
+  robustSoph(opend_german, 25, stm_fit_german$settings$dim$K, "Swiss (German)", stem = FALSE,
+             lang = "german", meta = c("age", "edu", "ideol", "edu_ideol", "female")),
+  robustSoph(opend_italian, 25, stm_fit_italian$settings$dim$K, "Swiss (Italian)", stem = FALSE,
+             lang = "italian", meta = c("age", "edu", "ideol", "edu_ideol", "female"))
+  )
+save(plot_df, file = "calc/tmp/tmp02.Rdata")
+
+plot_df <- plot_df %>% bind_rows(
+  robustSoph(data_cces, 25, stm_fit_cces$settings$dim$K, "2018 CES", removestopwords = FALSE),
+  robustSoph(data2020, 25, stm_fit2020$settings$dim$K, "2020 ANES", removestopwords = FALSE),
+  robustSoph(data2016, 25, stm_fit2016$settings$dim$K, "2016 ANES", removestopwords = FALSE),
+  robustSoph(data2012, 25, stm_fit2012$settings$dim$K, "2012 ANES", removestopwords = FALSE),
+  robustSoph(data_yg, 25, stm_fit_yg$settings$dim$K, "2015 YouGov", removestopwords = FALSE),
+  robustSoph(opend_french, 25, stm_fit_french$settings$dim$K, "Swiss (French)", removestopwords = FALSE,
+             lang = "french", meta = c("age", "edu", "ideol", "edu_ideol", "female")),
+  robustSoph(opend_german, 25, stm_fit_german$settings$dim$K, "Swiss (German)", removestopwords = FALSE,
+             lang = "german", meta = c("age", "edu", "ideol", "edu_ideol", "female")),
+  robustSoph(opend_italian, 25, stm_fit_italian$settings$dim$K, "Swiss (Italian)", removestopwords = FALSE,
+             lang = "italian", meta = c("age", "edu", "ideol", "edu_ideol", "female"))
+)
+save(plot_df, file = "calc/tmp/tmp03.Rdata")
+
+## prepare data for plotting
+plot_df <- plot_df %>%
+  mutate(
+    datalab = factor(datalab,
+                     levels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov",
+                                "Swiss (French)", "Swiss (German)", "Swiss (Italian)")),
+    condition = factor(100*k + 10*stem + 1*removestopwords, levels = c("3511","2501","2510"),
+                       labels = c("More topics (k = 35)", "No stemming", "Keep stopwords"))
+  )
+
+## compute correlations for subgroups
+plot_cor <- plot_df %>%
+  group_by(datalab, condition) %>%
+  summarize(cor = paste0("r = ",round(cor(polknow_text_mean, polknow_text_rep), 3))) %>%
+  mutate(polknow_text_mean = .9, polknow_text_rep = .1)
+
+## generate plot
+ggplot(plot_df, aes(y=polknow_text_mean, x=polknow_text_rep)) +
+  geom_point(alpha=.05) + geom_smooth(method="lm") +
+  facet_grid(datalab~condition) +
+  geom_text(data=plot_cor, aes(label=cor), size=2) + xlim(0,1) + ylim(0,1) +
+  labs(y = "Discursive Sophistication (Preferred Specification)",
+       x = "Discursive Sophistication (Alternative Specifications)") +
+  plot_default
+ggsave("fig/pretext_robustness.png", width=5, height=8.5)
 
 
 
@@ -366,3 +443,79 @@ c(m1text, m1factual) %>%
   plot_default + theme(legend.position = "bottom")
 ggsave("fig/knoweff_robust.pdf", width=6.5, height=3.5)
 
+
+
+# Check selection models for CCES 2018 ------------------------------------
+
+## check determinants of oe response >0
+glm(as.numeric(wc>0) ~ female + educ + faminc + age + black + relig,
+    data = cces, family=binomial("logit")) %>%
+  summary()
+
+## gender differences in willingness to respond & length of response
+mean(cces$wc>0)
+t.test(as.numeric(wc>0)~female, data = cces)
+prop.test(table(cces$female, cces$wc==0))
+mean(data_cces$wc)
+t.test(wc~female, data = data_cces)
+
+## prep data for heckit model
+heck_tmp <- data_cces %>%
+  select(caseid, polknow_text_mean) %>%
+  right_join(cces) %>%
+  mutate(select = as.numeric(!is.na(polknow_text_mean)))
+
+table(heck_tmp$select)
+table(is.na(heck_tmp$polknow_text_mean), heck_tmp$wc>0)
+
+## estimate heckit model (does this specification make sense theoretically?)
+heckit(select ~ female + educ + faminc + age + black + relig,
+       polknow_text_mean ~ female + educ + faminc + age + black + relig,
+       data = heck_tmp) %>%
+  summary()
+
+heckit(select ~ female + educ + faminc + age + black + relig,
+       polknow_factual ~ female + educ + faminc + age + black + relig,
+       data = heck_tmp) %>%
+  summary()
+
+## heckit model for other outcomes
+heckit(select ~ female + educ + faminc + age + black + relig,
+       vote ~ polknow_text_mean + female + educ + faminc + age + black + relig,
+       data = heck_tmp) %>%
+  summary()
+
+heckit(select ~ female + educ + faminc + age + black + relig,
+       vote ~ polknow_factual + female + educ + faminc + age + black + relig,
+       data = heck_tmp) %>%
+  summary()
+
+heckit(select ~ female + educ + faminc + age + black + relig,
+       polint_att ~ polknow_text_mean + female + educ + faminc + age + black + relig,
+       data = heck_tmp) %>%
+  summary()
+
+heckit(select ~ female + educ + faminc + age + black + relig,
+       polint_att ~ polknow_factual + female + educ + faminc + age + black + relig,
+       data = heck_tmp) %>%
+  summary()
+
+heckit(select ~ female + educ + faminc + age + black + relig,
+       effic_int ~ polknow_text_mean + female + educ + faminc + age + black + relig,
+       data = heck_tmp) %>%
+  summary()
+
+heckit(select ~ female + educ + faminc + age + black + relig,
+       effic_int ~ polknow_factual + female + educ + faminc + age + black + relig,
+       data = heck_tmp) %>%
+  summary()
+
+heckit(select ~ female + educ + faminc + age + black + relig,
+       effic_ext ~ polknow_text_mean + female + educ + faminc + age + black + relig,
+       data = heck_tmp) %>%
+  summary()
+
+heckit(select ~ female + educ + faminc + age + black + relig,
+       effic_ext ~ polknow_factual + female + educ + faminc + age + black + relig,
+       data = heck_tmp) %>%
+  summary()

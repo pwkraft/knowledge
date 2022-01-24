@@ -22,9 +22,6 @@ library(quanteda.dictionaries)
 library(stm)
 library(readstata13)
 library(ineq)
-library(rstan)
-rstan_options(auto_write = TRUE)
-options(mc.cores = parallel::detectCores())
 
 datasrc <- "/data/Dropbox/Uni/Data/anes2012/"
 raw2012 <- read.dta13(paste0(datasrc,"anes_timeseries_2012.dta"), convert.factors = F)

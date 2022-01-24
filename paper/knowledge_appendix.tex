@@ -44,15 +44,17 @@ Lastly, I examine survey data on Swiss citizens justifying their vote choices on
 
 \paragraph{Conventional measures of political knowledge:}
 \begin{itemize}
+	\item \textit{2018 CES}:
+	\item \textit{2020 ANES}:
+	\item \textit{2016 ANES}: Additive index of correct responses to 4 knowledge items included in the pre-election wave (length of Senate term, federal government spending, majority in House, majority in Senate). `Don't know' responses are considered incorrect. Interviewer evaluations are based on the assessment of the respondent's general level of information about politics recorded at the end of the pre-election wave.	
 	\item \textit{2012 ANES}: Additive index of correct responses to 5 knowledge items included in the pre-election wave (number of Presidential terms, size of budget deficit, length of Senate term, meaning of Medicare, federal government spending). `Don't know' responses are considered incorrect. Interviewer evaluations are based on the assessment of the respondent's general level of information about politics recorded at the end of the pre-election wave.
-	\item \textit{2016 ANES}: Additive index of correct responses to 4 knowledge items included in the pre-election wave (length of Senate term, federal government spending, majority in House, majority in Senate). `Don't know' responses are considered incorrect. Interviewer evaluations are based on the assessment of the respondent's general level of information about politics recorded at the end of the pre-election wave.
 	\item \textit{2015 YouGov Survey}: Additive index of correct responses to 8 knowledge items (Speaker of the House, meaning of TPP, Chair of Federal Reserve Board, current unemployment rate, Presidential veto override, meaning of Common Core, leading source of electricity in US, majority in Senate). `Don't know' responses are considered incorrect.
 \end{itemize}
 
 \paragraph{Dependent variables:}
 \begin{itemize}
 	\item \textit{Turnout} (2012 \& 2016 ANES): Dichotomous indicator, based on post-election wave.
-	\item \textit{Non-conventional participation} (2012 \& 2016 ANES): Additive index of different forms of political engagement (participated in protest, signed petition, wore campaign button, wrote letter to public official).
+	\item \textit{Political Interest} (2012 \& 2016 ANES): Additive index of different forms of political engagement (participated in protest, signed petition, wore campaign button, wrote letter to public official).
 	\item \textit{Internal efficacy} (2012 \& 2016 ANES): Sum of two agree/disagree items (politics too complicated, good understanding of political issues [reversed]).
 	\item \textit{External efficacy} (2012 \& 2016 ANES): Sum of two agree/disagree items (public officials don't care, people have no say about what the government does).
 	\item \textit{Information retrieval (2015 YouGov Survey)}: Additive index of correct answers to 9 questions about the fictional disease described in the news article (symptoms: fatigue, headaches, diarrhea, joint pain, boils, warts, fever; virus spread; cure for the virus)
@@ -63,13 +65,9 @@ Lastly, I examine survey data on Swiss citizens justifying their vote choices on
 	\item \textit{Gender} (2012 \& 2016 ANES, 2015 YouGov Survey): Dichotomous indicator for female respondents.
 	\item \textit{College education} (2012 \& 2016 ANES, 2015 YouGov Survey): Dichotomous indicator for Bachelor's degree or higher.
 	\item \textit{Family/Household income} (2012 \& 2016 ANES, 2015 YouGov Survey): Self-reported household income categories.
-	\item \textit{Age} (2012 \& 2016 ANES, 2015 YouGov Survey): Logged age in years.
+	\item \textit{Age} (2012 \& 2016 ANES, 2015 YouGov Survey): Age in years.
 	\item \textit{Race} (2012 \& 2016 ANES, 2015 YouGov Survey): Dichotomous indicator for black non-Hispanic vs. others.
 	\item \textit{Church attendance} (2012 \& 2016 ANES, 2015 YouGov Survey): Six-category indicator of the frequency of church attendance. 
-	\item \textit{Wordsum vocabulary scores}  (2012 \& 2016 ANES): Modified version of the GSS wordsum vocabulary test consisting of 10 terms.
-	\item \textit{Survey Mode} (2012 \& 2016 ANES): Dichotomous indicator for face-to-face vs. online samples of the ANES surveys.
-	\item \textit{Extraversion} (2012 \& 2016 ANES): Part of the Ten Item Personality Inventory (TIPI) measuring the ``Big Five'' personality traits.
-	\item \textit{Response length} (2012 \& 2016 ANES): Logged number of words in the collection of open-ended responses by each individual.
 \end{itemize}
 
 
@@ -173,7 +171,7 @@ Following the procedure outlined in \citet{denny2018text}, Figure~\ref{fig:prete
 It is less obvious from a theoretical perspective whether to remove infrequent terms from open-ended responses, although it is preferred in order to make the estimation of the discursive sophistication components computationally efficient. Since the preText analysis for the 2016 ANES suggests that this pre-processing step might be influential, I compare discursive sophistication for both alternative regimes below \citep[c.f.,][]{denny2018text}. Before turning to this sensitivity check, however, I consider another crucial modeling choice when working with topic models: determining the total number of topics $k$ to be estimated. For all analyses reported below, the number of topics was selected using the algorithm proposed by \citet{lee2014low} and implemented in the \texttt{stm} package in \textbf{R} \citep{roberts2014stm}.
 
 \begin{figure}[h]\centering
-\includegraphics{/data/Dropbox/Uni/projects/2016/knowledge/fig/pretext_robustness.pdf}
+\includegraphics{/data/Dropbox/Uni/projects/2016/knowledge/fig/pretext_robustness.png}
 \caption[Robustness of discursive sophistication measure for different pre-processing choices and topic model specifications]{Robustness of discursive sophistication measure for different pre-processing choices and topic model specifications.}\label{fig:pretext_robustness}
 \end{figure}
 
@@ -183,6 +181,13 @@ In summary, open-ended responses in the analyses reported in the main text are p
 
 \clearpage
 \subsection{Controlling for Extraversion and Verbal Skills}\label{app:personality}
+
+\begin{itemize}
+	\item \textit{Wordsum vocabulary scores}  (2012 \& 2016 ANES): Modified version of the GSS wordsum vocabulary test consisting of 10 terms.
+	\item \textit{Survey Mode} (2012 \& 2016 ANES): Dichotomous indicator for face-to-face vs. online samples of the ANES surveys.
+	\item \textit{Extraversion} (2012 \& 2016 ANES): Part of the Ten Item Personality Inventory (TIPI) measuring the ``Big Five'' personality traits.
+	\item \textit{Response length} (2012 \& 2016 ANES): Logged number of words in the collection of open-ended responses by each individual.
+\end{itemize}
 
 
 \begin{figure}[h]\centering
