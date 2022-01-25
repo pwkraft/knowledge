@@ -398,8 +398,8 @@ grid.arrange(
     geom_point(aes(y=1), col="white") +
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     ggtitle("2015 YouGov"),
-  get_legend(tibble(`Knowledge Measure` = factor(1:2, labels = c("Open-ended", "Conventional"))) %>%
-               ggplot(aes(x = `Knowledge Measure`, fill = `Knowledge Measure`)) +
+  get_legend(tibble(`Measurement Type` = factor(1:2, labels = c("Open-ended", "Conventional"))) %>%
+               ggplot(aes(x = `Measurement Type`, fill = `Measurement Type`)) +
                geom_bar() +
                scale_fill_brewer(palette="Paired")),
 
