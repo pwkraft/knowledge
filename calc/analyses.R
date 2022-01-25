@@ -628,15 +628,15 @@ png("fig/stm_gender.png", height=5.5, width=6.5, units = "in", res = 400)
 par(mfrow=c(3,1), mar=c(2.2,0.5,2.2,0.5))
 plot.estimateEffect(prep2012, covariate = "female", topics = topics2012, model = stm_fit2012,
                     xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
-                    labeltype = "prob", n=5, verbose.labels = F, width=50,
+                    labeltype = "frex", n=5, verbose.labels = F, width=50,
                     main = "2012 ANES")
 plot.estimateEffect(prep2016, covariate = "female", topics = topics2016, model = stm_fit2016,
                     xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
-                    labeltype = "prob", n=5, verbose.labels = F, width=50,
+                    labeltype = "frex", n=5, verbose.labels = F, width=50,
                     main = "2016 ANES")
 plot.estimateEffect(prep2020, covariate = "female", topics = topics2020, model = stm_fit2020,
                     xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
-                    labeltype = "prob", n=5, verbose.labels = F, width=50,
+                    labeltype = "frex", n=5, verbose.labels = F, width=50,
                     main = "2020 ANES")
 dev.off()
 
