@@ -155,7 +155,7 @@ ggsave("fig/anes2012_corplot.png",width=3.2, height=3.2)
 # Sample responses --------------------------------------------------------
 
 data_cces %>%
-  filter(wc > (median(wc) - 25) & wc < (median(wc) + 25),
+  filter(wc > (median(wc) - 100) & wc < (median(wc) + 100),
          polknow_factual == 1) %>%
   filter((polknow_text_mean < quantile(polknow_text_mean,.25) & female == 0) |
            (polknow_text_mean > quantile(polknow_text_mean,.75) & female == 1)) %>%
