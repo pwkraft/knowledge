@@ -146,6 +146,16 @@ data_cces %>% transmute(
   ) + plot_default
 ggsave("fig/cces2018_components.png", width = 2.6, height = 2.6)
 
+data_cces %>% transmute(
+  v1 = size,
+  v2 = range,
+  v3 = constraint) %>%
+  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
+          axisLabels = "none",
+          columnLabels = c("Size", "Range", "Constraint")
+  ) + plot_empty
+ggsave("fig/cces2018_components0.png", width = 2.6, height = 2.6)
+
 ## 2020 ANES
 data2020 %>% transmute(
   v1 = size,

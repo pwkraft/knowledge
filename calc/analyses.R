@@ -223,6 +223,54 @@ c(m1text, m1factual) %>%
   xlab("Average Marginal Effect") + ylab("Independent Variable") + plot_default
 ggsave("fig/knoweff.pdf", width=6.5, height=4)
 
+c(m1text[1:2], m1factual[1:2],
+  m1text[5:6], m1factual[5:6],
+  m1text[9:10], m1factual[9:10],
+  m1text[13:14], m1factual[13:14]) %>%
+  map_dfr(~summary(marginaleffects(.)), .id = "model") %>%
+  as_tibble() %>%
+  filter(term %in% c("polknow_text_mean", "polknow_factual")) %>%
+  mutate(
+    study = factor(rep(c("2018 CES", "2020 ANES"), 8),
+                   levels = c("2018 CES", "2020 ANES")),
+    dv = recode_factor(rep(dvs, each = 4),
+                       `vote` = "Turnout",
+                       `polint_att` = "Political Interest",
+                       `effic_int` = "Internal Efficacy",
+                       `effic_ext` = "External Efficacy"),
+    term = recode_factor(term,
+                         `polknow_factual` = "Factual\nKnowledge",
+                         `polknow_text_mean` = "Discursive\nSophistication")) %>%
+  ggplot(aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high)) +
+  geom_vline(xintercept = 0, color="grey") +
+  geom_point() + geom_errorbarh(height=0) + facet_grid(study~dv) +
+  xlab("Average Marginal Effect") + ylab("Independent Variable") + plot_empty
+ggsave("fig/knoweff0.pdf", width=5.5, height=2.5)
+
+c(m1text[1:2], m1factual[1:2],
+  m1text[5:6], m1factual[5:6],
+  m1text[9:10], m1factual[9:10],
+  m1text[13:14], m1factual[13:14]) %>%
+  map_dfr(~summary(marginaleffects(.)), .id = "model") %>%
+  as_tibble() %>%
+  filter(term %in% c("polknow_text_mean", "polknow_factual")) %>%
+  mutate(
+    study = factor(rep(c("2018 CES", "2020 ANES"), 8),
+                   levels = c("2018 CES", "2020 ANES")),
+    dv = recode_factor(rep(dvs, each = 4),
+                       `vote` = "Turnout",
+                       `polint_att` = "Political Interest",
+                       `effic_int` = "Internal Efficacy",
+                       `effic_ext` = "External Efficacy"),
+    term = recode_factor(term,
+                         `polknow_factual` = "Factual\nKnowledge",
+                         `polknow_text_mean` = "Discursive\nSophistication")) %>%
+  ggplot(aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high)) +
+  geom_vline(xintercept = 0, color="grey") +
+  geom_point() + geom_errorbarh(height=0) + facet_grid(study~dv) +
+  xlab("Average Marginal Effect") + ylab("Independent Variable") + plot_default
+ggsave("fig/knoweff1.pdf", width=5.5, height=2.5)
+
 c(m1text[1], m1factual[1],
   m1text[5], m1factual[5],
   m1text[9], m1factual[9],
@@ -343,7 +391,7 @@ rbind(data.frame(opend_german, language = "German"),
       data.frame(opend_italian, language = "Italian")) %>%
   ggplot(aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
-  scale_y_discrete(expand = c(0.01, 0)) + xlim(-.1,.85) +
+  scale_y_discrete(expand = c(0.01, 0)) +
   scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=3) +
   geom_text(data=opend_cor, aes(label=cor),size=2,vjust=-9) +
   ylab("Level of Justification") + xlab("Discursive sophistication")
@@ -386,6 +434,17 @@ rbind(data.frame(opend_german, language = "German"),
             aes(label=cor),size=2,vjust=-9) +
   ylab("Level of Justification") + xlab("Discursive sophistication")
 ggsave("fig/swiss_ggridges2.pdf",width=6,height=2)
+
+rbind(data.frame(opend_german, language = "German"),
+      data.frame(opend_french, language = "French"),
+      data.frame(opend_italian, language = "Italian")) %>%
+  ggplot(aes(x=polknow_text_mean, y=as.factor(loj))) +
+  geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
+  scale_y_discrete(expand = c(0.01, 0)) + xlim(-.1,.85) +
+  scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=3) +
+  geom_text(data=opend_cor, aes(label=cor),size=2,vjust=-9) +
+  ylab("Level of Justification") + xlab("Discursive sophistication")
+ggsave("fig/swiss_ggridges3.pdf",width=6,height=2)
 
 
 
@@ -586,6 +645,386 @@ grid.arrange(
   ncol=3) %>%
   ggsave("fig/meandiff.pdf", plot = ., width=6.5, height=5)
 
+grid.arrange(
+  data_cces %>%
+    select(polknow_text_mean,
+           polknow_factual,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+    geom_point(aes(y=1), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    ggtitle("2018 CES"),
+  data2020 %>%
+    select(polknow_text_mean,
+           polknow_factual,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+    geom_point(aes(y=1), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    ggtitle("2020 ANES"),
+  data2016 %>%
+    select(polknow_text_mean,
+           polknow_factual,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+    geom_point(aes(y=1), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    ggtitle("2016 ANES"),
+  data2012 %>%
+    select(polknow_text_mean,
+           polknow_factual,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+    geom_point(aes(y=1), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    ggtitle("2012 ANES"),
+
+  data_yg %>%
+    select(polknow_text_mean,
+           polknow_factual,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+    geom_point(aes(y=1), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    ggtitle("2015 YouGov"),
+  opend_french %>%
+    select(polknow_text_mean,
+           loj,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `loj` = "Level of\nJustification")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n),
+              max = max(value)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill="Variable")) + plot_default +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable, scale="free_y") +
+    geom_point(aes(y=max), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    labs(title="Swiss Survey",
+         subtitle="French Respondents",
+         y="Average Values", x=NULL),
+  opend_german %>%
+    select(polknow_text_mean,
+           loj,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `loj` = "Level of\nJustification")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n),
+              max = max(value)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill="Variable")) + plot_default +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable, scale="free_y") +
+    geom_point(aes(y=max), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    labs(title=" ",
+         subtitle="German Respondents",
+         y="Average Values", x=NULL),
+  opend_italian %>%
+    select(polknow_text_mean,
+           loj,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `loj` = "Level of\nJustification")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n),
+              max = max(value)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill="Variable")) + plot_default +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable, scale="free_y") +
+    geom_point(aes(y=max), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    labs(title="",
+         subtitle="Italian Respondents",
+         y="Average Values", x=NULL),
+  ncol=4) %>%
+  ggsave("fig/meandiff1.pdf", plot = ., width=8, height=4)
+
+grid.arrange(
+  data_cces %>%
+    select(polknow_text_mean,
+           polknow_factual,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_empty +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+    geom_point(aes(y=1), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    ggtitle("2018 CES"),
+  data2020 %>%
+    select(polknow_text_mean,
+           polknow_factual,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_empty +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+    geom_point(aes(y=1), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    ggtitle("2020 ANES"),
+  data2016 %>%
+    select(polknow_text_mean,
+           polknow_factual,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_empty +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+    geom_point(aes(y=1), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    ggtitle("2016 ANES"),
+  data2012 %>%
+    select(polknow_text_mean,
+           polknow_factual,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_empty +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+    geom_point(aes(y=1), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    ggtitle("2012 ANES"),
+
+  data_yg %>%
+    select(polknow_text_mean,
+           polknow_factual,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_empty +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
+    geom_point(aes(y=1), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    ggtitle("2015 YouGov"),
+  opend_french %>%
+    select(polknow_text_mean,
+           loj,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `loj` = "Level of\nJustification")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n),
+              max = max(value)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill="Variable")) + plot_empty +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable, scale="free_y") +
+    geom_point(aes(y=max), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    labs(title="Swiss Survey",
+         subtitle="French Respondents",
+         y="Average Values", x=NULL),
+  opend_german %>%
+    select(polknow_text_mean,
+           loj,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `loj` = "Level of\nJustification")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n),
+              max = max(value)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill="Variable")) + plot_empty +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable, scale="free_y") +
+    geom_point(aes(y=max), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    labs(title=" ",
+         subtitle="German Respondents",
+         y="Average Values", x=NULL),
+  opend_italian %>%
+    select(polknow_text_mean,
+           loj,
+           female) %>%
+    pivot_longer(-female) %>%
+    mutate(Gender = factor(female, labels = c("Male","Female")),
+           Variable = recode_factor(name,
+                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `loj` = "Level of\nJustification")) %>%
+    na.omit() %>%
+    group_by(Variable, Gender) %>%
+    summarize(avg = mean(value),
+              sd = sd(value),
+              n = n(),
+              cilo = avg - 1.96*sd/sqrt(n),
+              cihi = avg + 1.96*sd/sqrt(n),
+              max = max(value)) %>%
+    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill="Variable")) + plot_empty +
+    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    facet_wrap(~Variable, scale="free_y") +
+    geom_point(aes(y=max), col="white") +
+    guides(fill="none") + scale_fill_brewer(palette="Paired") +
+    labs(title="",
+         subtitle="Italian Respondents",
+         y="Average Values", x=NULL),
+  ncol=4) %>%
+  ggsave("fig/meandiff0.pdf", plot = ., width=8, height=4)
+
 
 
 # Gender gap: differences w/ controls -------------------------------------
@@ -613,6 +1052,21 @@ c(m3text, m3factual) %>%
   geom_point() + geom_errorbarh(height=0) + facet_wrap(.~dv) +
   xlab("Estimated Gender Gap") + ylab("Dataset") + plot_default
 ggsave("fig/determinants.pdf",width=5,height=2)
+
+c(m3text, m3factual) %>%
+  map_dfr(~tidy(., conf.int = T), .id = "model") %>%
+  filter(term == "female") %>%
+  mutate(
+    study = factor(rep(c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov"), 2),
+                   levels = c("2015 YouGov", "2020 ANES", "2018 CES", "2012 ANES", "2016 ANES")),
+    dv = recode_factor(rep(c("polknow_text_mean","polknow_factual"), each = 5),
+                       `polknow_text_mean` = "Discursive Sophistication",
+                       `polknow_factual` = "Factual Knowledge")) %>%
+  ggplot(aes(y=study, x=estimate, xmin=conf.low, xmax=conf.high)) +
+  geom_vline(xintercept = 0, color="grey") +
+  geom_point() + geom_errorbarh(height=0) + facet_wrap(.~dv) +
+  xlab("Estimated Gender Gap") + ylab("Dataset") + plot_empty
+ggsave("fig/determinants0.pdf",width=5,height=2)
 
 stargazer(m3text, type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
@@ -678,4 +1132,18 @@ plot.estimateEffect(prep2020, covariate = "female", topics = topics2020, model =
                     main = "2020 ANES")
 dev.off()
 
+png("fig/stm_gender1.png", height=3.5, width=7.5, units = "in", res = 400)
+par(mfrow=c(1,1), mar=c(2.2,0.5,2.2,0.5))
+plot.estimateEffect(prep2020, covariate = "female", topics = topics2020, model = stm_fit2020,
+                    xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
+                    labeltype = "frex", n=5, verbose.labels = F, width=50,
+                    main = "2020 ANES")
+
+png("fig/stm_gender0.png", height=3.5, width=7.5, units = "in", res = 400)
+par(mfrow=c(1,1), mar=c(2.2,0.5,2.2,0.5))
+plot.estimateEffect(prep2020, covariate = "female", topics = topics2020, model = stm_fit2020,
+                    xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
+                    labeltype = "frex", n=5, verbose.labels = F, width=50,
+                    main = "2020 ANES", type = "n")
+dev.off()
 
