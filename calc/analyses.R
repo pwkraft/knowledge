@@ -1138,12 +1138,15 @@ plot.estimateEffect(prep2020, covariate = "female", topics = topics2020, model =
                     xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
                     labeltype = "frex", n=5, verbose.labels = F, width=50,
                     main = "2020 ANES")
+dev.off()
 
 png("fig/stm_gender0.png", height=3.5, width=7.5, units = "in", res = 400)
 par(mfrow=c(1,1), mar=c(2.2,0.5,2.2,0.5))
-plot.estimateEffect(prep2020, covariate = "female", topics = topics2020, model = stm_fit2020,
-                    xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
-                    labeltype = "frex", n=5, verbose.labels = F, width=50,
-                    main = "2020 ANES", type = "n")
+plot(x=c(-.05,.02), y = 1:2,
+     type = "n", xlim = c(-.05,.02), main = "2020 ANES",
+     yaxt='n', xlab = "", ylab = "")
+abline(v = 0, lty = "dashed")
 dev.off()
+
+
 
