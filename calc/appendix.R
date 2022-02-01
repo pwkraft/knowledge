@@ -404,7 +404,7 @@ ggplot(plot_df, aes(y=polknow_text_mean, x=polknow_text_rep)) +
   labs(y = "Discursive Sophistication (Preferred Specification)",
        x = "Discursive Sophistication (Alternative Specifications)") +
   plot_default
-ggsave("fig/pretext_robustness_pres.png", width=8, height=4)
+ggsave("fig/pretext_robustness_pres.png", width=5, height=3)
 
 
 
