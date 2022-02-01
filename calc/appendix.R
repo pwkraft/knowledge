@@ -131,6 +131,14 @@ plot(stm_fit_italian, n = 5, labeltype = "frex", text.cex = 1,
      main = paste0("Swiss Survey - Italian (k = ", stm_fit_italian$settings$dim$K,")", collapse = ""))
 dev.off()
 
+pdf("fig/stm_prop_pres.pdf", width=16, height=8)
+par(mfrow = c(1,2), mar=c(4.2,0.5,2.5,0.5))
+plot(stm_fit_cces, n = 5, labeltype = "frex", text.cex = 1,
+     main = paste0("2018 CES (k = ", stm_fit_cces$settings$dim$K,")", collapse = ""))
+plot(stm_fit2020, n = 5, labeltype = "frex", text.cex = 1,
+     main = paste0("2020 ANES (k = ", stm_fit2020$settings$dim$K,")", collapse = ""))
+dev.off()
+
 
 
 # Discursive sophistication components ------------------------------------
@@ -358,6 +366,45 @@ ggplot(plot_df, aes(y=polknow_text_mean, x=polknow_text_rep)) +
        x = "Discursive Sophistication (Alternative Specifications)") +
   plot_default
 ggsave("fig/pretext_robustness.png", width=5, height=8.5)
+
+
+
+# PreText Robustness for presentation -------------------------------------
+
+## compute alternative measures (save intermediate steps)
+plot_df <- bind_rows(
+  robustSoph(data_cces, 35, stm_fit_cces$settings$dim$K, "2018 CES"),
+  robustSoph(data2020, 35, stm_fit2020$settings$dim$K, "2020 ANES"),
+  robustSoph(data_cces, 25, stm_fit_cces$settings$dim$K, "2018 CES", stem = FALSE),
+  robustSoph(data2020, 25, stm_fit2020$settings$dim$K, "2020 ANES", stem = FALSE),
+  robustSoph(data_cces, 25, stm_fit_cces$settings$dim$K, "2018 CES", removestopwords = FALSE),
+  robustSoph(data2020, 25, stm_fit2020$settings$dim$K, "2020 ANES", removestopwords = FALSE),
+  )
+
+## prepare data for plotting
+plot_df <- plot_df %>%
+  mutate(
+    datalab = factor(datalab,
+                     levels = c("2018 CES", "2020 ANES")),
+    condition = factor(100*k + 10*stem + 1*removestopwords, levels = c("3511","2501","2510"),
+                       labels = c("More topics (k = 35)", "No stemming", "Keep stopwords"))
+  )
+
+## compute correlations for subgroups
+plot_cor <- plot_df %>%
+  group_by(datalab, condition) %>%
+  summarize(cor = paste0("r = ",round(cor(polknow_text_mean, polknow_text_rep), 3))) %>%
+  mutate(polknow_text_mean = .9, polknow_text_rep = .1)
+
+## generate plot
+ggplot(plot_df, aes(y=polknow_text_mean, x=polknow_text_rep)) +
+  geom_point(alpha=.05) + geom_smooth(method="lm") +
+  facet_grid(datalab~condition) +
+  geom_text(data=plot_cor, aes(label=cor), size=2) + xlim(0,1) + ylim(0,1) +
+  labs(y = "Discursive Sophistication (Preferred Specification)",
+       x = "Discursive Sophistication (Alternative Specifications)") +
+  plot_default
+ggsave("fig/pretext_robustness_pres.png", width=8, height=4)
 
 
 
