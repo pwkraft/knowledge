@@ -402,8 +402,9 @@ rbind(data.frame(opend_german, language = "German"),
       data.frame(opend_italian, language = "Italian")) %>%
   ggplot(aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_empty +
-  scale_y_discrete(expand = c(0.01, 0)) + xlim(-.1,.85) +
-  scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=3) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_x_continuous(expand = c(0, 0), limits = c(-.1,.9)) +
+  facet_wrap(~language,ncol=3) +
   geom_text(data=opend_cor, aes(label=cor),size=2,vjust=-9) +
   ylab("Level of Justification") + xlab("Discursive sophistication")
 ggsave("fig/swiss_ggridges0.pdf",width=6,height=2)
@@ -415,8 +416,9 @@ rbind(data.frame(opend_german, language = "German"),
          polknow_text_mean = ifelse(language == "Italian", NA, polknow_text_mean)) %>%
   ggplot(aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
-  scale_y_discrete(expand = c(0.01, 0)) + xlim(-.1,.85) +
-  scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=3) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_x_continuous(expand = c(0, 0), limits = c(-.1,.9)) +
+  facet_wrap(~language,ncol=3) +
   geom_text(data = filter(opend_cor, language == "French"),
             aes(label=cor),size=2,vjust=-9) +
   ylab("Level of Justification") + xlab("Discursive sophistication")
@@ -428,8 +430,9 @@ rbind(data.frame(opend_german, language = "German"),
   mutate(polknow_text_mean = ifelse(language == "Italian", NA, polknow_text_mean)) %>%
   ggplot(aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
-  scale_y_discrete(expand = c(0.01, 0)) + xlim(-.1,.85) +
-  scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=3) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_x_continuous(expand = c(0, 0), limits = c(-.1,.9)) +
+  facet_wrap(~language,ncol=3) +
   geom_text(data = filter(opend_cor, language != "Italian"),
             aes(label=cor),size=2,vjust=-9) +
   ylab("Level of Justification") + xlab("Discursive sophistication")
@@ -440,8 +443,9 @@ rbind(data.frame(opend_german, language = "German"),
       data.frame(opend_italian, language = "Italian")) %>%
   ggplot(aes(x=polknow_text_mean, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
-  scale_y_discrete(expand = c(0.01, 0)) + xlim(-.1,.85) +
-  scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=3) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_x_continuous(expand = c(0, 0), limits = c(-.1,.9)) +
+  facet_wrap(~language,ncol=3) +
   geom_text(data=opend_cor, aes(label=cor),size=2,vjust=-9) +
   ylab("Level of Justification") + xlab("Discursive sophistication")
 ggsave("fig/swiss_ggridges3.pdf",width=6,height=2)
