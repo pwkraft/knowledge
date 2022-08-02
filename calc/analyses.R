@@ -454,6 +454,13 @@ ggsave("fig/swiss_ggridges3.pdf",width=6,height=2)
 
 # Gender gap: levels w/o controls -----------------------------------------
 
+data_summary <- function(x) {
+  m <- mean(x)
+  ymin <- m-1.96*sd(x)/sqrt(length(x))
+  ymax <- m+1.96*sd(x)/sqrt(length(x))
+  return(c(y=m,ymin=ymin,ymax=ymax))
+}
+
 grid.arrange(
   data_cces %>%
     select(polknow_text_mean,
@@ -465,16 +472,10 @@ grid.arrange(
                                     `polknow_text_mean` = "Discursive\nSophistication",
                                     `polknow_factual` = "Factual\nKnowledge")) %>%
     na.omit() %>%
-    group_by(Variable, Gender) %>%
-    summarize(avg = mean(value),
-              sd = sd(value),
-              n = n(),
-              cilo = avg - 1.96*sd/sqrt(n),
-              cihi = avg + 1.96*sd/sqrt(n)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
-    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    ggplot(aes(y=value, x=Gender, fill=Variable)) + plot_default +
+    geom_violin(trim=TRUE) +
+    stat_summary(fun.data=data_summary, geom="pointrange", shape=23, fill="white", size = .4) +
     facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
-    geom_point(aes(y=1), col="white") +
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     ggtitle("2018 CES"),
   data_yg %>%
@@ -487,16 +488,10 @@ grid.arrange(
                                     `polknow_text_mean` = "Discursive\nSophistication",
                                     `polknow_factual` = "Factual\nKnowledge")) %>%
     na.omit() %>%
-    group_by(Variable, Gender) %>%
-    summarize(avg = mean(value),
-              sd = sd(value),
-              n = n(),
-              cilo = avg - 1.96*sd/sqrt(n),
-              cihi = avg + 1.96*sd/sqrt(n)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
-    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    ggplot(aes(y=value, x=Gender, fill=Variable)) + plot_default +
+    geom_violin(trim=TRUE) +
+    stat_summary(fun.data=data_summary, geom="pointrange", shape=23, fill="white", size = .4) +
     facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
-    geom_point(aes(y=1), col="white") +
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     ggtitle("2015 YouGov"),
   get_legend(tibble(`Measurement Type` = factor(1:2, labels = c("Open-ended", "Conventional"))) %>%
@@ -514,16 +509,10 @@ grid.arrange(
                                     `polknow_text_mean` = "Discursive\nSophistication",
                                     `polknow_factual` = "Factual\nKnowledge")) %>%
     na.omit() %>%
-    group_by(Variable, Gender) %>%
-    summarize(avg = mean(value),
-              sd = sd(value),
-              n = n(),
-              cilo = avg - 1.96*sd/sqrt(n),
-              cihi = avg + 1.96*sd/sqrt(n)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
-    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    ggplot(aes(y=value, x=Gender, fill=Variable)) + plot_default +
+    geom_violin(trim=TRUE) +
+    stat_summary(fun.data=data_summary, geom="pointrange", shape=23, fill="white", size = .4) +
     facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
-    geom_point(aes(y=1), col="white") +
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     ggtitle("2020 ANES"),
   data2016 %>%
@@ -536,16 +525,10 @@ grid.arrange(
                                     `polknow_text_mean` = "Discursive\nSophistication",
                                     `polknow_factual` = "Factual\nKnowledge")) %>%
     na.omit() %>%
-    group_by(Variable, Gender) %>%
-    summarize(avg = mean(value),
-              sd = sd(value),
-              n = n(),
-              cilo = avg - 1.96*sd/sqrt(n),
-              cihi = avg + 1.96*sd/sqrt(n)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
-    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    ggplot(aes(y=value, x=Gender, fill=Variable)) + plot_default +
+    geom_violin(trim=TRUE) +
+    stat_summary(fun.data=data_summary, geom="pointrange", shape=23, fill="white", size = .4) +
     facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
-    geom_point(aes(y=1), col="white") +
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     ggtitle("2016 ANES"),
   data2012 %>%
@@ -558,16 +541,10 @@ grid.arrange(
                                     `polknow_text_mean` = "Discursive\nSophistication",
                                     `polknow_factual` = "Factual\nKnowledge")) %>%
     na.omit() %>%
-    group_by(Variable, Gender) %>%
-    summarize(avg = mean(value),
-              sd = sd(value),
-              n = n(),
-              cilo = avg - 1.96*sd/sqrt(n),
-              cihi = avg + 1.96*sd/sqrt(n)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill=Variable)) + plot_default +
-    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    ggplot(aes(y=value, x=Gender, fill=Variable)) + plot_default +
+    geom_violin(trim=TRUE) +
+    stat_summary(fun.data=data_summary, geom="pointrange", shape=23, fill="white", size = .4) +
     facet_wrap(~Variable) + ylab("Average Values") + xlab(NULL) +
-    geom_point(aes(y=1), col="white") +
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     ggtitle("2012 ANES"),
 
@@ -581,17 +558,10 @@ grid.arrange(
                                     `polknow_text_mean` = "Discursive\nSophistication",
                                     `loj` = "Level of\nJustification")) %>%
     na.omit() %>%
-    group_by(Variable, Gender) %>%
-    summarize(avg = mean(value),
-              sd = sd(value),
-              n = n(),
-              cilo = avg - 1.96*sd/sqrt(n),
-              cihi = avg + 1.96*sd/sqrt(n),
-              max = max(value)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill="Variable")) + plot_default +
-    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    ggplot(aes(y=value, x=Gender, fill="Variable")) + plot_default +
+    geom_violin(trim=TRUE) +
+    stat_summary(fun.data=data_summary, geom="pointrange", shape=23, fill="white", size = .4) +
     facet_wrap(~Variable, scale="free_y") +
-    geom_point(aes(y=max), col="white") +
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     labs(title="Swiss Survey",
          subtitle="French Respondents",
@@ -606,17 +576,10 @@ grid.arrange(
                                     `polknow_text_mean` = "Discursive\nSophistication",
                                     `loj` = "Level of\nJustification")) %>%
     na.omit() %>%
-    group_by(Variable, Gender) %>%
-    summarize(avg = mean(value),
-              sd = sd(value),
-              n = n(),
-              cilo = avg - 1.96*sd/sqrt(n),
-              cihi = avg + 1.96*sd/sqrt(n),
-              max = max(value)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill="Variable")) + plot_default +
-    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    ggplot(aes(y=value, x=Gender, fill="Variable")) + plot_default +
+    geom_violin(trim=TRUE) +
+    stat_summary(fun.data=data_summary, geom="pointrange", shape=23, fill="white", size = .4) +
     facet_wrap(~Variable, scale="free_y") +
-    geom_point(aes(y=max), col="white") +
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     labs(title=" ",
          subtitle="German Respondents",
@@ -631,17 +594,10 @@ grid.arrange(
                                     `polknow_text_mean` = "Discursive\nSophistication",
                                     `loj` = "Level of\nJustification")) %>%
     na.omit() %>%
-    group_by(Variable, Gender) %>%
-    summarize(avg = mean(value),
-              sd = sd(value),
-              n = n(),
-              cilo = avg - 1.96*sd/sqrt(n),
-              cihi = avg + 1.96*sd/sqrt(n),
-              max = max(value)) %>%
-    ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi, fill="Variable")) + plot_default +
-    geom_bar(stat="identity") + geom_errorbar(width=.25) +
+    ggplot(aes(y=value, x=Gender, fill="Variable")) + plot_default +
+    geom_violin(trim=TRUE) +
+    stat_summary(fun.data=data_summary, geom="pointrange", shape=23, fill="white", size = .4) +
     facet_wrap(~Variable, scale="free_y") +
-    geom_point(aes(y=max), col="white") +
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     labs(title="",
          subtitle="Italian Respondents",
