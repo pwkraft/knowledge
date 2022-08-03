@@ -47,6 +47,7 @@ anes2012$polknow_office <- with(raw2012, (Recode(ofcrec_speaker_correct, "lo:-1=
 anes2012$polknow_factual <- with(raw2012, ((preknow_prestimes==2) + (preknow_sizedef==1)
                                  + (preknow_senterm==6) + (preknow_medicare==1)
                                  + (preknow_leastsp==1))/5)
+anes2012$polknow_factual_scale <- as.numeric(scale(anes2012$polknow_factual))
 
 ## political knowledge (majorities in congress, post-election)
 anes2012$polknow_majority <- with(raw2012, ((Recode(knowl_housemaj, "c(-6,-7)=NA")==2)
@@ -447,6 +448,7 @@ data2012$constraint <- data2012$constraint / max(data2012$constraint)
 ### compute combined measures
 data2012$polknow_text <- with(data2012, size * range * constraint)
 data2012$polknow_text_mean <- with(data2012, size + range + constraint)/3
+data2012$polknow_text_scale <- as.numeric(scale(data2012$polknow_text))
 
 
 

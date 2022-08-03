@@ -63,6 +63,7 @@ raw$Q31[is.na(raw$Q31)] <- 8
 ## political knowledge (study 3) CHECK ANSWERS!
 yougov$polknow_factual <- with(raw, (Q24==3) + (Q25==1) + (Q26==1) + (Q27==2)
                                + (Q28==2) + (Q29==1) + (Q30==2) + (Q31==1))/8
+yougov$polknow_factual_scale <- as.numeric(scale(yougov$polknow_factual))
 
 ## education (bachelor degree)
 yougov$educ <- as.numeric(raw$educ>=5)
@@ -211,7 +212,7 @@ data_yg$constraint <- data_yg$constraint / max(data_yg$constraint)
 ### compute combined measures
 data_yg$polknow_text <- with(data_yg, size * range * constraint)
 data_yg$polknow_text_mean <- with(data_yg, size + range + constraint)/3
-
+data_yg$polknow_text_scale <- as.numeric(scale(data_yg$polknow_text))
 
 
 # Save Output -------------------------------------------------------------

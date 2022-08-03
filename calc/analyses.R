@@ -104,8 +104,8 @@ nfactors(dplyr::select(data2012, size, range, constraint))
 
 ## 2018 CES
 data_cces %>% transmute(
-  v1 = polknow_text_mean,
-  v2 = polknow_factual) %>%
+  v1 = polknow_text_scale,
+  v2 = polknow_factual_scale) %>%
   ggpairs(lower = list(continuous = wrap("smooth", alpha =.05, size=.2)),
           axisLabels="none",
           columnLabels = c("Discursive\nSophistication",
@@ -115,8 +115,8 @@ ggsave("fig/cces2018_corplot.png",width=3.2, height=3.2)
 
 ## 2020 ANES
 data2020 %>% transmute(
-  v1 = polknow_text_mean,
-  v2 = polknow_factual) %>%
+  v1 = polknow_text_scale,
+  v2 = polknow_factual_scale) %>%
   ggpairs(lower = list(continuous = wrap("smooth", alpha =.05, size=.2)),
           axisLabels="none",
           columnLabels = c("Discursive\nSophistication",
@@ -126,8 +126,8 @@ ggsave("fig/anes2020_corplot.png",width=3.2, height=3.2)
 
 ## 2016 ANES
 data2016 %>% transmute(
-  v1 = polknow_text_mean,
-  v2 = polknow_factual,
+  v1 = polknow_text_scale,
+  v2 = polknow_factual_scale,
   v3 = polknow_evalpre) %>%
   ggpairs(lower = list(continuous = wrap("smooth", alpha =.05, size=.2)),
           axisLabels="none",
@@ -139,8 +139,8 @@ ggsave("fig/anes2016_corplot.png",width=3.2, height=3.2)
 
 ## 2012 ANES
 data2012 %>% transmute(
-  v1 = polknow_text_mean,
-  v2 = polknow_factual,
+  v1 = polknow_text_scale,
+  v2 = polknow_factual_scale,
   v3 = polknow_evalpre) %>%
   ggpairs(lower = list(continuous = wrap("smooth", alpha =.05, size=.2)),
           axisLabels="none",
@@ -157,10 +157,10 @@ ggsave("fig/anes2012_corplot.png",width=3.2, height=3.2)
 data_cces %>%
   filter(wc > (median(wc) - 100) & wc < (median(wc) + 100),
          polknow_factual == 1) %>%
-  filter((polknow_text_mean < quantile(polknow_text_mean,.25) & female == 0) |
-           (polknow_text_mean > quantile(polknow_text_mean,.75) & female == 1)) %>%
-  arrange(polknow_text_mean) %>%
-  select(caseid, female, polknow_factual, polknow_text_mean) %>%
+  filter((polknow_text_scale < quantile(polknow_text_scale,.25) & female == 0) |
+           (polknow_text_scale > quantile(polknow_text_scale,.75) & female == 1)) %>%
+  arrange(polknow_text_scale) %>%
+  select(caseid, female, polknow_factual, polknow_text_scale) %>%
   #left_join(opend) %>%
   left_join(haven::read_sav("/data/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
               dplyr::select(caseid, UWM309, UWM310, UWM312, UWM313, UWM315,
@@ -176,36 +176,36 @@ ivs <- c("female", "educ", "faminc", "age", "black", "relig")
 
 m1text <- c(
   map(list(data_cces, data2020, data2016, data2012),
-      ~glm(reformulate(c("polknow_text_mean", ivs), response = "vote"),
-           data = ., subset = !is.na(polknow_factual), family=binomial("logit"))),
+      ~glm(reformulate(c("polknow_text_scale", ivs), response = "vote"),
+           data = ., subset = !is.na(polknow_factual_scale), family=binomial("logit"))),
   map(list(data_cces, data2020, data2016, data2012),
-      ~lm(reformulate(c("polknow_text_mean", ivs), response = "polint_att"),
-          data = ., subset = !is.na(polknow_factual))),
+      ~lm(reformulate(c("polknow_text_scale", ivs), response = "polint_att"),
+          data = ., subset = !is.na(polknow_factual_scale))),
   map(list(data_cces, data2020, data2016, data2012),
-      ~lm(reformulate(c("polknow_text_mean", ivs), response = "effic_int"),
-          data = ., subset = !is.na(polknow_factual))),
+      ~lm(reformulate(c("polknow_text_scale", ivs), response = "effic_int"),
+          data = ., subset = !is.na(polknow_factual_scale))),
   map(list(data_cces, data2020, data2016, data2012),
-      ~lm(reformulate(c("polknow_text_mean", ivs), response = "effic_ext"),
-          data = ., subset = !is.na(polknow_factual))))
+      ~lm(reformulate(c("polknow_text_scale", ivs), response = "effic_ext"),
+          data = ., subset = !is.na(polknow_factual_scale))))
 
 m1factual <- c(
   map(list(data_cces, data2020, data2016, data2012),
-      ~glm(reformulate(c("polknow_factual", ivs), response = "vote"),
-           data = ., subset = !is.na(polknow_text_mean), family=binomial("logit"))),
+      ~glm(reformulate(c("polknow_factual_scale", ivs), response = "vote"),
+           data = ., subset = !is.na(polknow_text_scale), family=binomial("logit"))),
   map(list(data_cces, data2020, data2016, data2012),
-      ~lm(reformulate(c("polknow_factual", ivs), response = "polint_att"),
-          data = ., subset = !is.na(polknow_text_mean))),
+      ~lm(reformulate(c("polknow_factual_scale", ivs), response = "polint_att"),
+          data = ., subset = !is.na(polknow_text_scale))),
   map(list(data_cces, data2020, data2016, data2012),
-      ~lm(reformulate(c("polknow_factual", ivs), response = "effic_int"),
-          data = ., subset = !is.na(polknow_text_mean))),
+      ~lm(reformulate(c("polknow_factual_scale", ivs), response = "effic_int"),
+          data = ., subset = !is.na(polknow_text_scale))),
   map(list(data_cces, data2020, data2016, data2012),
-      ~lm(reformulate(c("polknow_factual", ivs), response = "effic_ext"),
-          data = ., subset = !is.na(polknow_text_mean))))
+      ~lm(reformulate(c("polknow_factual_scale", ivs), response = "effic_ext"),
+          data = ., subset = !is.na(polknow_text_scale))))
 
 c(m1text, m1factual) %>%
   map_dfr(~summary(marginaleffects(.)), .id = "model") %>%
   as_tibble() %>%
-  filter(term %in% c("polknow_text_mean", "polknow_factual")) %>%
+  filter(term %in% c("polknow_text_scale", "polknow_factual_scale")) %>%
   mutate(
     study = factor(rep(c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES"), 8),
                    levels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES")),
@@ -215,8 +215,8 @@ c(m1text, m1factual) %>%
                        `effic_int` = "Internal Efficacy",
                        `effic_ext` = "External Efficacy"),
     term = recode_factor(term,
-                         `polknow_factual` = "Factual\nKnowledge",
-                         `polknow_text_mean` = "Discursive\nSophistication")) %>%
+                         `polknow_factual_scale` = "Factual\nKnowledge",
+                         `polknow_text_scale` = "Discursive\nSophistication")) %>%
   ggplot(aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high)) +
   geom_vline(xintercept = 0, color="grey") +
   geom_point() + geom_errorbarh(height=0) + facet_grid(study~dv) +
@@ -229,7 +229,7 @@ c(m1text[1:2], m1factual[1:2],
   m1text[13:14], m1factual[13:14]) %>%
   map_dfr(~summary(marginaleffects(.)), .id = "model") %>%
   as_tibble() %>%
-  filter(term %in% c("polknow_text_mean", "polknow_factual")) %>%
+  filter(term %in% c("polknow_text_scale", "polknow_factual_scale")) %>%
   mutate(
     study = factor(rep(c("2018 CES", "2020 ANES"), 8),
                    levels = c("2018 CES", "2020 ANES")),
@@ -239,8 +239,8 @@ c(m1text[1:2], m1factual[1:2],
                        `effic_int` = "Internal Efficacy",
                        `effic_ext` = "External Efficacy"),
     term = recode_factor(term,
-                         `polknow_factual` = "Factual\nKnowledge",
-                         `polknow_text_mean` = "Discursive\nSophistication")) %>%
+                         `polknow_factual_scale` = "Factual\nKnowledge",
+                         `polknow_text_scale` = "Discursive\nSophistication")) %>%
   ggplot(aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high)) +
   geom_vline(xintercept = 0, color="grey") +
   geom_point() + geom_errorbarh(height=0) + facet_grid(study~dv) +
@@ -253,7 +253,7 @@ c(m1text[1:2], m1factual[1:2],
   m1text[13:14], m1factual[13:14]) %>%
   map_dfr(~summary(marginaleffects(.)), .id = "model") %>%
   as_tibble() %>%
-  filter(term %in% c("polknow_text_mean", "polknow_factual")) %>%
+  filter(term %in% c("polknow_text_scale", "polknow_factual_scale")) %>%
   mutate(
     study = factor(rep(c("2018 CES", "2020 ANES"), 8),
                    levels = c("2018 CES", "2020 ANES")),
@@ -263,8 +263,8 @@ c(m1text[1:2], m1factual[1:2],
                        `effic_int` = "Internal Efficacy",
                        `effic_ext` = "External Efficacy"),
     term = recode_factor(term,
-                         `polknow_factual` = "Factual\nKnowledge",
-                         `polknow_text_mean` = "Discursive\nSophistication")) %>%
+                         `polknow_factual_scale` = "Factual\nKnowledge",
+                         `polknow_text_scale` = "Discursive\nSophistication")) %>%
   ggplot(aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high)) +
   geom_vline(xintercept = 0, color="grey") +
   geom_point() + geom_errorbarh(height=0) + facet_grid(study~dv) +
@@ -344,17 +344,19 @@ c(m1text[4], m1factual[4],
 # Validation: information retrieval ---------------------------------------
 
 m2 <- list(
-  lm(know_dis ~ polknow_text_mean + female + educ + faminc + age + black + relig, data = data_yg),
-  lm(know_dis ~ polknow_factual + female + educ + faminc + age + black + relig, data = data_yg))
+  lm(know_dis ~ polknow_text_scale + female + educ + faminc + age + black + relig, data = data_yg),
+  lm(know_dis ~ polknow_factual_scale + female + educ + faminc + age + black + relig, data = data_yg))
 
-rbind(sim(m2[[1]], iv=data.frame(polknow_text_mean=seq(min(data_yg$polknow_text_mean),
-                                                       max(data_yg$polknow_text_mean),
+rbind(sim(m2[[1]], iv=data.frame(polknow_text_scale=seq(min(data_yg$polknow_text_scale),
+                                                       max(data_yg$polknow_text_scale),
                                                        length=10))),
-      sim(m2[[2]], iv=data.frame(polknow_factual=seq(0,1,length=10)))) %>%
+      sim(m2[[2]], iv=data.frame(polknow_factual_scale=seq(min(data_yg$polknow_factual_scale),
+                                                           max(data_yg$polknow_factual_scale),
+                                                           length=10)))) %>%
   as_tibble() %>%
   mutate(Variable = recode_factor(iv,
-                                  `polknow_text_mean` = "Discursive Sophistication",
-                                  `polknow_factual` = "Factual Knowledge")) %>%
+                                  `polknow_text_scale` = "Discursive Sophistication",
+                                  `polknow_factual_scale` = "Factual Knowledge")) %>%
   ggplot(aes(x=ivval, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_default +
   geom_ribbon(alpha=0.4, lwd=.1) + geom_line() +
   ylab("Information Retrieval") + xlab("Value of Independent Variable")
@@ -378,18 +380,18 @@ stargazer(m2, type="text", align = TRUE, column.sep.width = "-25pt", no.space = 
 # Validation: manual coding -----------------------------------------------
 
 opend_cor <- tibble(
-  cor = c(cor(opend_german$polknow_text_mean, opend_german$loj),
-          cor(opend_french$polknow_text_mean, opend_french$loj),
-          cor(opend_italian$polknow_text_mean, opend_italian$loj)),
+  cor = c(cor(opend_german$polknow_text_scale, opend_german$loj),
+          cor(opend_french$polknow_text_scale, opend_french$loj),
+          cor(opend_italian$polknow_text_scale, opend_italian$loj)),
   language = c("German", "French", "Italian"),
-  polknow_text_mean = 0.05,
+  polknow_text_scale = 0.05,
   loj = 4) %>%
   mutate(cor = paste0("r = ",round(cor, 2)))
 
 rbind(data.frame(opend_german, language = "German"),
       data.frame(opend_french, language = "French"),
       data.frame(opend_italian, language = "Italian")) %>%
-  ggplot(aes(x=polknow_text_mean, y=as.factor(loj))) +
+  ggplot(aes(x=polknow_text_scale, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
   scale_y_discrete(expand = c(0.01, 0)) +
   scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=3) +
@@ -400,7 +402,7 @@ ggsave("fig/swiss_ggridges.pdf",width=6,height=2)
 rbind(data.frame(opend_german, language = "German"),
       data.frame(opend_french, language = "French"),
       data.frame(opend_italian, language = "Italian")) %>%
-  ggplot(aes(x=polknow_text_mean, y=as.factor(loj))) +
+  ggplot(aes(x=polknow_text_scale, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_empty +
   scale_y_discrete(expand = c(0.01, 0)) +
   scale_x_continuous(expand = c(0, 0), limits = c(-.1,.9)) +
@@ -412,9 +414,9 @@ ggsave("fig/swiss_ggridges0.pdf",width=6,height=2)
 rbind(data.frame(opend_german, language = "German"),
       data.frame(opend_french, language = "French"),
       data.frame(opend_italian, language = "Italian")) %>%
-  mutate(polknow_text_mean = ifelse(language == "German", NA, polknow_text_mean),
-         polknow_text_mean = ifelse(language == "Italian", NA, polknow_text_mean)) %>%
-  ggplot(aes(x=polknow_text_mean, y=as.factor(loj))) +
+  mutate(polknow_text_scale = ifelse(language == "German", NA, polknow_text_scale),
+         polknow_text_scale = ifelse(language == "Italian", NA, polknow_text_scale)) %>%
+  ggplot(aes(x=polknow_text_scale, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
   scale_y_discrete(expand = c(0.01, 0)) +
   scale_x_continuous(expand = c(0, 0), limits = c(-.1,.9)) +
@@ -427,8 +429,8 @@ ggsave("fig/swiss_ggridges1.pdf",width=6,height=2)
 rbind(data.frame(opend_german, language = "German"),
       data.frame(opend_french, language = "French"),
       data.frame(opend_italian, language = "Italian")) %>%
-  mutate(polknow_text_mean = ifelse(language == "Italian", NA, polknow_text_mean)) %>%
-  ggplot(aes(x=polknow_text_mean, y=as.factor(loj))) +
+  mutate(polknow_text_scale = ifelse(language == "Italian", NA, polknow_text_scale)) %>%
+  ggplot(aes(x=polknow_text_scale, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
   scale_y_discrete(expand = c(0.01, 0)) +
   scale_x_continuous(expand = c(0, 0), limits = c(-.1,.9)) +
@@ -441,7 +443,7 @@ ggsave("fig/swiss_ggridges2.pdf",width=6,height=2)
 rbind(data.frame(opend_german, language = "German"),
       data.frame(opend_french, language = "French"),
       data.frame(opend_italian, language = "Italian")) %>%
-  ggplot(aes(x=polknow_text_mean, y=as.factor(loj))) +
+  ggplot(aes(x=polknow_text_scale, y=as.factor(loj))) +
   geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
   scale_y_discrete(expand = c(0.01, 0)) +
   scale_x_continuous(expand = c(0, 0), limits = c(-.1,.9)) +
@@ -463,14 +465,14 @@ data_summary <- function(x) {
 
 grid.arrange(
   data_cces %>%
-    select(polknow_text_mean,
-           polknow_factual,
+    select(polknow_text_scale,
+           polknow_factual_scale,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
-                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+                                    `polknow_text_scale` = "Discursive\nSophistication",
+                                    `polknow_factual_scale` = "Factual\nKnowledge")) %>%
     na.omit() %>%
     ggplot(aes(y=value, x=Gender, fill=Variable)) + plot_default +
     geom_violin(trim=TRUE) +
@@ -479,14 +481,14 @@ grid.arrange(
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     ggtitle("2018 CES"),
   data_yg %>%
-    select(polknow_text_mean,
-           polknow_factual,
+    select(polknow_text_scale,
+           polknow_factual_scale,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
-                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+                                    `polknow_text_scale` = "Discursive\nSophistication",
+                                    `polknow_factual_scale` = "Factual\nKnowledge")) %>%
     na.omit() %>%
     ggplot(aes(y=value, x=Gender, fill=Variable)) + plot_default +
     geom_violin(trim=TRUE) +
@@ -500,14 +502,14 @@ grid.arrange(
                scale_fill_brewer(palette="Paired")),
 
   data2020 %>%
-    select(polknow_text_mean,
-           polknow_factual,
+    select(polknow_text_scale,
+           polknow_factual_scale,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
-                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+                                    `polknow_text_scale` = "Discursive\nSophistication",
+                                    `polknow_factual_scale` = "Factual\nKnowledge")) %>%
     na.omit() %>%
     ggplot(aes(y=value, x=Gender, fill=Variable)) + plot_default +
     geom_violin(trim=TRUE) +
@@ -516,14 +518,14 @@ grid.arrange(
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     ggtitle("2020 ANES"),
   data2016 %>%
-    select(polknow_text_mean,
-           polknow_factual,
+    select(polknow_text_scale,
+           polknow_factual_scale,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
-                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+                                    `polknow_text_scale` = "Discursive\nSophistication",
+                                    `polknow_factual_scale` = "Factual\nKnowledge")) %>%
     na.omit() %>%
     ggplot(aes(y=value, x=Gender, fill=Variable)) + plot_default +
     geom_violin(trim=TRUE) +
@@ -532,14 +534,14 @@ grid.arrange(
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     ggtitle("2016 ANES"),
   data2012 %>%
-    select(polknow_text_mean,
-           polknow_factual,
+    select(polknow_text_scale,
+           polknow_factual_scale,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
-                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+                                    `polknow_text_scale` = "Discursive\nSophistication",
+                                    `polknow_factual_scale` = "Factual\nKnowledge")) %>%
     na.omit() %>%
     ggplot(aes(y=value, x=Gender, fill=Variable)) + plot_default +
     geom_violin(trim=TRUE) +
@@ -549,13 +551,13 @@ grid.arrange(
     ggtitle("2012 ANES"),
 
   opend_french %>%
-    select(polknow_text_mean,
+    select(polknow_text_scale,
            loj,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_text_scale` = "Discursive\nSophistication",
                                     `loj` = "Level of\nJustification")) %>%
     na.omit() %>%
     ggplot(aes(y=value, x=Gender, fill="Variable")) + plot_default +
@@ -567,13 +569,13 @@ grid.arrange(
          subtitle="French Respondents",
          y="Average Values", x=NULL),
   opend_german %>%
-    select(polknow_text_mean,
+    select(polknow_text_scale,
            loj,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_text_scale` = "Discursive\nSophistication",
                                     `loj` = "Level of\nJustification")) %>%
     na.omit() %>%
     ggplot(aes(y=value, x=Gender, fill="Variable")) + plot_default +
@@ -585,13 +587,13 @@ grid.arrange(
          subtitle="German Respondents",
          y="Average Values", x=NULL),
   opend_italian %>%
-    select(polknow_text_mean,
+    select(polknow_text_scale,
            loj,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_text_scale` = "Discursive\nSophistication",
                                     `loj` = "Level of\nJustification")) %>%
     na.omit() %>%
     ggplot(aes(y=value, x=Gender, fill="Variable")) + plot_default +
@@ -607,14 +609,14 @@ grid.arrange(
 
 grid.arrange(
   data_cces %>%
-    select(polknow_text_mean,
-           polknow_factual,
+    select(polknow_text_scale,
+           polknow_factual_scale,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
-                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+                                    `polknow_text_scale` = "Discursive\nSophistication",
+                                    `polknow_factual_scale` = "Factual\nKnowledge")) %>%
     na.omit() %>%
     group_by(Variable, Gender) %>%
     summarize(avg = mean(value),
@@ -629,14 +631,14 @@ grid.arrange(
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     ggtitle("2018 CES"),
   data2020 %>%
-    select(polknow_text_mean,
-           polknow_factual,
+    select(polknow_text_scale,
+           polknow_factual_scale,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
-                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+                                    `polknow_text_scale` = "Discursive\nSophistication",
+                                    `polknow_factual_scale` = "Factual\nKnowledge")) %>%
     na.omit() %>%
     group_by(Variable, Gender) %>%
     summarize(avg = mean(value),
@@ -651,14 +653,14 @@ grid.arrange(
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     ggtitle("2020 ANES"),
   data2016 %>%
-    select(polknow_text_mean,
-           polknow_factual,
+    select(polknow_text_scale,
+           polknow_factual_scale,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
-                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+                                    `polknow_text_scale` = "Discursive\nSophistication",
+                                    `polknow_factual_scale` = "Factual\nKnowledge")) %>%
     na.omit() %>%
     group_by(Variable, Gender) %>%
     summarize(avg = mean(value),
@@ -673,14 +675,14 @@ grid.arrange(
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     ggtitle("2016 ANES"),
   data2012 %>%
-    select(polknow_text_mean,
-           polknow_factual,
+    select(polknow_text_scale,
+           polknow_factual_scale,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
-                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+                                    `polknow_text_scale` = "Discursive\nSophistication",
+                                    `polknow_factual_scale` = "Factual\nKnowledge")) %>%
     na.omit() %>%
     group_by(Variable, Gender) %>%
     summarize(avg = mean(value),
@@ -696,14 +698,14 @@ grid.arrange(
     ggtitle("2012 ANES"),
 
   data_yg %>%
-    select(polknow_text_mean,
-           polknow_factual,
+    select(polknow_text_scale,
+           polknow_factual_scale,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
-                                    `polknow_factual` = "Factual\nKnowledge")) %>%
+                                    `polknow_text_scale` = "Discursive\nSophistication",
+                                    `polknow_factual_scale` = "Factual\nKnowledge")) %>%
     na.omit() %>%
     group_by(Variable, Gender) %>%
     summarize(avg = mean(value),
@@ -718,13 +720,13 @@ grid.arrange(
     guides(fill="none") + scale_fill_brewer(palette="Paired") +
     ggtitle("2015 YouGov"),
   opend_french %>%
-    select(polknow_text_mean,
+    select(polknow_text_scale,
            loj,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_text_scale` = "Discursive\nSophistication",
                                     `loj` = "Level of\nJustification")) %>%
     na.omit() %>%
     group_by(Variable, Gender) %>%
@@ -743,13 +745,13 @@ grid.arrange(
          subtitle="French Respondents",
          y="Average Values", x=NULL),
   opend_german %>%
-    select(polknow_text_mean,
+    select(polknow_text_scale,
            loj,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_text_scale` = "Discursive\nSophistication",
                                     `loj` = "Level of\nJustification")) %>%
     na.omit() %>%
     group_by(Variable, Gender) %>%
@@ -768,13 +770,13 @@ grid.arrange(
          subtitle="German Respondents",
          y="Average Values", x=NULL),
   opend_italian %>%
-    select(polknow_text_mean,
+    select(polknow_text_scale,
            loj,
            female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
-                                    `polknow_text_mean` = "Discursive\nSophistication",
+                                    `polknow_text_scale` = "Discursive\nSophistication",
                                     `loj` = "Level of\nJustification")) %>%
     na.omit() %>%
     group_by(Variable, Gender) %>%
@@ -802,11 +804,11 @@ grid.arrange(
 ivs <- c("female", "educ", "faminc", "age", "black", "relig")
 
 m3text <- list(data_cces, data2020, data2016, data2012, data_yg) %>%
-  map(~lm(reformulate(ivs, response = "polknow_text_mean"),
-          data = ., subset = !is.na(polknow_factual)))
+  map(~lm(reformulate(ivs, response = "polknow_text_scale"),
+          data = ., subset = !is.na(polknow_factual_scale)))
 m3factual <- list(data_cces, data2020, data2016, data2012, data_yg) %>%
-  map(~lm(reformulate(ivs, response = "polknow_factual"),
-          data = ., subset = !is.na(polknow_text_mean)))
+  map(~lm(reformulate(ivs, response = "polknow_factual_scale"),
+          data = ., subset = !is.na(polknow_text_scale)))
 
 c(m3text, m3factual) %>%
   map_dfr(~tidy(., conf.int = T), .id = "model") %>%
@@ -814,9 +816,9 @@ c(m3text, m3factual) %>%
   mutate(
     study = factor(rep(c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov"), 2),
                    levels = c("2015 YouGov", "2020 ANES", "2018 CES", "2012 ANES", "2016 ANES")),
-    dv = recode_factor(rep(c("polknow_text_mean","polknow_factual"), each = 5),
-                       `polknow_text_mean` = "Discursive Sophistication",
-                       `polknow_factual` = "Factual Knowledge")) %>%
+    dv = recode_factor(rep(c("polknow_text_scale","polknow_factual_scale"), each = 5),
+                       `polknow_text_scale` = "Discursive Sophistication",
+                       `polknow_factual_scale` = "Factual Knowledge")) %>%
   ggplot(aes(y=study, x=estimate, xmin=conf.low, xmax=conf.high)) +
   geom_vline(xintercept = 0, color="grey") +
   geom_point() + geom_errorbarh(height=0) + facet_wrap(.~dv) +
@@ -829,9 +831,9 @@ c(m3text, m3factual) %>%
   mutate(
     study = factor(rep(c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov"), 2),
                    levels = c("2015 YouGov", "2020 ANES", "2018 CES", "2012 ANES", "2016 ANES")),
-    dv = recode_factor(rep(c("polknow_text_mean","polknow_factual"), each = 5),
-                       `polknow_text_mean` = "Discursive Sophistication",
-                       `polknow_factual` = "Factual Knowledge")) %>%
+    dv = recode_factor(rep(c("polknow_text_scale","polknow_factual_scale"), each = 5),
+                       `polknow_text_scale` = "Discursive Sophistication",
+                       `polknow_factual_scale` = "Factual Knowledge")) %>%
   ggplot(aes(y=study, x=estimate, xmin=conf.low, xmax=conf.high)) +
   geom_vline(xintercept = 0, color="grey") +
   geom_point() + geom_errorbarh(height=0) + facet_wrap(.~dv) +

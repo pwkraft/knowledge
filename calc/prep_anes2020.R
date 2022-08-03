@@ -49,6 +49,7 @@ anes2020 <- raw2020 %>% transmute(
                        (na_if(V201645, -5) == 1) +
                        (na_if(V201646, -5) == 1) +
                        (na_if(V201647, -5) == 2))/4,
+  polknow_factual_scale = as.numeric(scale(polknow_factual)),
 
   ## education (bachelor degree)
   educ = as.numeric(na_in(V201511x, -9:-2) >= 4),
@@ -286,6 +287,7 @@ data2020$constraint <- data2020$constraint / max(data2020$constraint)
 ### compute combined measures
 data2020$polknow_text <- with(data2020, size * range * constraint)
 data2020$polknow_text_mean <- with(data2020, size + range + constraint)/3
+data2020$polknow_text_scale <- as.numeric(scale(data2020$polknow_text))
 
 
 

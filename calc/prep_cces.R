@@ -88,6 +88,7 @@ cces <- raw |>
     pk_ideol_dk = as.numeric(ideo_dem < ideo_rep),
     pk_combined = (pk_house + pk_senate)/2,
     polknow_factual = (pk_house + pk_senate + pk_ideol)/3,
+    polknow_factual_scale = as.numeric(scale(polknow_factual)),
     # NOTE - knowledge about state senates etc. (CC18_309c...) missing
 
     ## UWM knowledge about women representation
@@ -290,6 +291,7 @@ data_cces$constraint <- data_cces$constraint / max(data_cces$constraint)
 ### compute combined measures
 data_cces$polknow_text <- with(data_cces, size * range * constraint)
 data_cces$polknow_text_mean <- with(data_cces, size + range + constraint)/3
+data_cces$polknow_text_scale <- as.numeric(scale(data_cces$polknow_text))
 
 
 
