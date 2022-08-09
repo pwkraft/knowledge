@@ -340,7 +340,6 @@ c(m1text[4], m1factual[4],
             out = "tab/knoweff2012anes.tex", label = "tab:knoweff2012anes")
 
 
-
 # Validation: information retrieval ---------------------------------------
 
 m2 <- list(

@@ -287,7 +287,7 @@ data2020$constraint <- data2020$constraint / max(data2020$constraint)
 ### compute combined measures
 data2020$polknow_text <- with(data2020, size * range * constraint)
 data2020$polknow_text_mean <- with(data2020, size + range + constraint)/3
-data2020$polknow_text_scale <- as.numeric(scale(data2020$polknow_text))
+data2020$polknow_text_scale <- as.numeric(scale(data2020$polknow_text_mean))
 
 
 

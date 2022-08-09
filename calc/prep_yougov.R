@@ -212,7 +212,7 @@ data_yg$constraint <- data_yg$constraint / max(data_yg$constraint)
 ### compute combined measures
 data_yg$polknow_text <- with(data_yg, size * range * constraint)
 data_yg$polknow_text_mean <- with(data_yg, size + range + constraint)/3
-data_yg$polknow_text_scale <- as.numeric(scale(data_yg$polknow_text))
+data_yg$polknow_text_scale <- as.numeric(scale(data_yg$polknow_text_mean))
 
 
 # Save Output -------------------------------------------------------------

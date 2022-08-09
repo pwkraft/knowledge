@@ -27,13 +27,14 @@ cihi <- function(x, na.rm = T){
 }
 
 ## load raw CCES data
-raw <- haven::read_sav("/data/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav")
+raw <- haven::read_sav("~/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav")
 
 ## recode cces data
 cces <- raw |>
   dplyr::transmute(
     caseid = caseid,
     weight = teamweight,
+    inputstate = inputstate,
 
     ## sociodemographics
     age = 2018 - birthyr,
@@ -89,7 +90,27 @@ cces <- raw |>
     pk_combined = (pk_house + pk_senate)/2,
     polknow_factual = (pk_house + pk_senate + pk_ideol)/3,
     polknow_factual_scale = as.numeric(scale(polknow_factual)),
-    # NOTE - knowledge about state senates etc. (CC18_309c...) missing
+    CC18_309c = as.numeric(CC18_309c),
+    CC18_309d = as.numeric(CC18_309d),
+
+    ## CCES common core name recognition
+    pk_govparty = as.numeric(dplyr::recode(as.character(raw$CC18_310a),
+                                           `2` = "Republican",
+                                           `3` = "Democratic",
+                                           `4` = "Independent") == raw$CurrentGovParty),
+    pk_sen1party = as.numeric(dplyr::recode(as.character(raw$CC18_310b),
+                                           `2` = "Republican",
+                                           `3` = "Democratic",
+                                           `4` = "Independent") == raw$CurrentSen1Party),
+    pk_sen2party = as.numeric(dplyr::recode(as.character(raw$CC18_310c),
+                                            `2` = "Republican",
+                                            `3` = "Democratic",
+                                            `4` = "Independent") == raw$CurrentSen2Party),
+    pk_houseparty = as.numeric(dplyr::recode(as.character(raw$CC18_310d),
+                                             `2` = "Republican",
+                                             `3` = "Democratic",
+                                             `4` = "Independent") == raw$CurrentHouseParty),
+
 
     ## UWM knowledge about women representation
     repknow_cong = as.numeric(UWM302 >= 10 & UWM302 <= 30),
@@ -129,6 +150,14 @@ cces <- raw |>
     govern_better = dplyr::recode(as.numeric(UWM337), `1` = 1, `2` = 0, `3` = .5),
     # NOTE - check other attitudinal items on women representation in post-election wave
 
+  ) |>
+  left_join(read_csv("~/Dropbox/Uni/Data/cces2018/CCES18_StateMajorities.csv")) |>
+  mutate(
+    pk_statesenate = as.numeric(CC18_309c == majority_statesenate),
+    pk_lowerchamber = as.numeric(CC18_309d == majority_lowerchamber),
+    polknow_factual2 = (pk_house + pk_senate + pk_ideol + pk_statesenate + pk_lowerchamber +
+                         pk_govparty + pk_sen1party + pk_sen2party + pk_houseparty)/9,
+    polknow_factual2_scale = as.numeric(scale(polknow_factual2)),
   )
 
 
@@ -291,7 +320,7 @@ data_cces$constraint <- data_cces$constraint / max(data_cces$constraint)
 ### compute combined measures
 data_cces$polknow_text <- with(data_cces, size * range * constraint)
 data_cces$polknow_text_mean <- with(data_cces, size + range + constraint)/3
-data_cces$polknow_text_scale <- as.numeric(scale(data_cces$polknow_text))
+data_cces$polknow_text_scale <- as.numeric(scale(data_cces$polknow_text_mean))
 
 
 

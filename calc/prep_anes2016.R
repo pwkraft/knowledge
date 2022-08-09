@@ -443,7 +443,7 @@ data2016$constraint <- data2016$constraint / max(data2016$constraint)
 ### compute combined measures
 data2016$polknow_text <- with(data2016, size * range * constraint)
 data2016$polknow_text_mean <- with(data2016, size + range + constraint)/3
-data2016$polknow_text_scale <- as.numeric(scale(data2016$polknow_text))
+data2016$polknow_text_scale <- as.numeric(scale(data2016$polknow_text_mean))
 
 
 

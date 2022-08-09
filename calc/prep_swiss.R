@@ -170,7 +170,7 @@ opend_german$constraint <- opend_german$constraint / max(opend_german$constraint
 ### compute combined measures
 opend_german$polknow_text <- with(opend_german, size * range * constraint)
 opend_german$polknow_text_mean <- with(opend_german, size + range + constraint)/3
-opend_german$polknow_text_scale <- as.numeric(scale(opend_german$polknow_text))
+opend_german$polknow_text_scale <- as.numeric(scale(opend_german$polknow_text_mean))
 
 
 
@@ -246,7 +246,7 @@ opend_french$constraint <- opend_french$constraint / max(opend_french$constraint
 ### compute combined measures
 opend_french$polknow_text <- with(opend_french, size * range * constraint)
 opend_french$polknow_text_mean <- with(opend_french, size + range + constraint)/3
-opend_french$polknow_text_scale <- as.numeric(scale(opend_french$polknow_text))
+opend_french$polknow_text_scale <- as.numeric(scale(opend_french$polknow_text_mean))
 
 
 
@@ -323,7 +323,7 @@ opend_italian$constraint <- opend_italian$constraint / max(opend_italian$constra
 ### compute combined measures
 opend_italian$polknow_text <- with(opend_italian, size * range * constraint)
 opend_italian$polknow_text_mean <- with(opend_italian, size + range + constraint)/3
-opend_italian$polknow_text_scale <- as.numeric(scale(opend_italian$polknow_text))
+opend_italian$polknow_text_scale <- as.numeric(scale(opend_italian$polknow_text_mean))
 
 
 
