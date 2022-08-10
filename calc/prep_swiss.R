@@ -40,6 +40,7 @@ swiss$lang <- raw$sprache
 
 ## level of justification, manual coding
 swiss$loj <- raw$lojr
+swiss$loj_scale <- as.numeric(scale(swiss$loj))
 
 ## age
 swiss$age <- raw$age
@@ -77,7 +78,49 @@ preprocess <- function(x){
              ,"nessun motivo","non so","weis nicht mehr","weiss nicht mehr","kein kommentar"
              ,"keine 2 grund","rien dautre","weis es nicht mehr","weiss es nicht mehr"
              ,"keins","k angaben","kein weitere grund","keine anderen gründen","wn","keine"
-             ,"keiner","nichts mehr")] <- ""
+             ,"keiner","nichts mehr" # added below to address German responses (went through all loj = 0 codes)
+             , "war mir nicht klar", "-", "---", "keine", "nein", "kam nicht draus um was es ging"
+             , "nichts", "kam nicht draus", "97", "nicht^s", "wusste nicht um was es geht."
+             , "keine antwort", "nein.", "wusste nicht genau um was es geht", "keinen"
+             , "1, nicht so befasst damit2. kein zweiter grund", "gar kein intresse"
+             , "will grund nicht angeben", "ooooooooooooooo", "die gleichen gründe"
+             , "nicht gedacht dabei", "war ratlos also nein", "ok", "weeeee", "wieso nicht"
+             , "sie weiss es nicht mehr genau", "- weiss nicht", "gleiche antwort", "wie vorhin"
+             , "weil das muss nicht jeder wissen", "weiss nicht mehr", "nichts mehr", "."
+             , "k.a.", "nix", "keinen wirklichen grund", "weiss es nicht mehr so genau."
+             , "wn", "nichts.", "n", "oooooooooo", "keine genauen gründe", "rigrnbrdtimmung"
+             , "grund war ihm nicht so klar.", "s", "habe es nicht verstanden", "weis nicht"
+             , "lesefehler gemacht darum falsch gewaehlt", "wenig informiert", "ooooooooooo"
+             , "weiss nichts", "nicht genau verstanden um was es geht", "kene", "gleich wie vorher"
+             , "habe es nicht ganz begriffen", "weiss nichts mehr.", "-----", "----"
+             , "keine gründe", "grundlos", "hat sie nicht interessiert", "keinen", "vergessen"
+             , "kann es nicht mehr sagen", "nicht mehr", "weiss nicht genau", "keines"
+             , "weiss nicht genau,", "ssfds", "interessiert mich nicht", "weis nich habe"
+             , "weis nich habe", "nichts mehr", "llll", "lll", "keine 2. grund", "..."
+             , "war zuwenig informiert", "das gleiche", "kein weiterer grund", "..........."
+             , "kein grund mehr", "kann nicht begründet", "kein 2. grund", "keine 2.grund"
+             , "kann ich nicht sagen", "nichts.", "xx", "weis es nicht mehr", "weiss es nicht mehr"
+             , "weiss nicht genau", "kein anderes grund", "bin nicht drausgekommen", "="
+             , "wusste nicht genau", "hat sich nicht damit befasst", "nein.", "das war alles"
+             , "eigentliche nicht genau überlegt", "alles", "zu enig informiert", "hg"
+             , "dito", "keine angabe", "hat sich icht damit b efasst, deshalb das nein"
+             , "habe das zu wenig verstanden darum abgelehnt", "man hat sie nicht ganz verstanden"
+             , "zuviel auf einmal", "macht sinn", "---------", "ich weissnicht"
+             , "zu wenig befasst weiss nicht", "nichts mehr anderse", "weil bin nicht nachnahmen"
+             , "habe mich nicht wirklich damit auseinander gesetzt", "schlecht erklärt"
+             , "ist schon lange her", "weiss ich schlicht nicht mehr", "weiss nicht wieso"
+             , "weiss es nicht mehr", "niochts", "der glich berüdig  lang so wie es ist"
+             , "frage falsch verstanden", "kennt die gründe nicht.", "ist ihr zu fremt"
+             , "das braucht es nicht", "nicht formulierbar", "bin nicht ganz genau nachgekommen"
+             , "oooooooooooo", "hat mich nicht interessiert", "(verwechselt es mit osterweiterung)"
+             , "weiss nicht mehr genau", "nichst mehr", "nein w.n.", "keines", "...."
+             , ".....kennt sich zuwenig aus...", "neinn", "pers.", "-------------", "keiner"
+             , "ein anderer grund", "nichts mehr", "hatte keinen durchblick.", "nicht genau"
+             , "gleich", "überflog es nur kurz", "keine angaben", "kannte mich zuwenig aus"
+             , "weiss grund nicht mehr", "nicht mehr", "kein", "ws", "ooooooooooo", "??"
+             , "das interessiert uns garnicht", "der kugelschreiber hat nein geschrieben."
+             , "persönlich", "auch das gleiche", "kann ich nicht sagen bin sehr emotional"
+             )] <- ""
   x <- gsub("//"," ", x , fixed = T)
   x <- gsub("\\s+"," ", x)
   x <- gsub("(^\\s+|\\s+$)","", x)
