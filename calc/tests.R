@@ -84,6 +84,7 @@ comparisons(m1text[[1]], variables = list(polknow_text_scale = "sd")) %>% tidy()
 comparisons(m1text[[1]], variables = list(polknow_text_scale = "2sd")) %>% tidy()
 comparisons(m1text[[1]], variables = list(polknow_text_scale = c(-1,0))) %>% tidy()
 comparisons(m1text[[1]], variables = list(polknow_text_scale = c(0,1))) %>% tidy()
+comparisons(m1text[[1]], variables = list(polknow_text_scale = c(-1,1))) %>% tidy()
 
 marginaleffects(m1factual[[1]], variables = "polknow_factual_scale") %>% summary()
 comparisons(m1factual[[1]], variables = "polknow_factual_scale") %>% tidy()
@@ -91,6 +92,8 @@ comparisons(m1factual[[1]], variables = list(polknow_factual_scale = "sd")) %>% 
 comparisons(m1factual[[1]], variables = list(polknow_factual_scale = "2sd")) %>% tidy()
 comparisons(m1factual[[1]], variables = list(polknow_factual_scale = c(-1,0))) %>% tidy()
 comparisons(m1factual[[1]], variables = list(polknow_factual_scale = c(0,1))) %>% tidy()
+comparisons(m1factual[[1]], variables = list(polknow_factual_scale = c(-1,1))) %>% tidy()
+
 
 c(m1text, m1factual) %>%
   map_dfr(~summary(marginaleffects(.)), .id = "model") %>%

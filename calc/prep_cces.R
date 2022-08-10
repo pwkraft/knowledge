@@ -88,8 +88,8 @@ cces <- raw |>
                       0, as.numeric(ideo_dem < ideo_rep)),
     pk_ideol_dk = as.numeric(ideo_dem < ideo_rep),
     pk_combined = (pk_house + pk_senate)/2,
-    polknow_factual = (pk_house + pk_senate + pk_ideol)/3,
-    polknow_factual_scale = as.numeric(scale(polknow_factual)),
+    polknow_old = (pk_house + pk_senate + pk_ideol)/3,
+    polknow_old_scale = as.numeric(scale(polknow_old)),
     CC18_309c = as.numeric(CC18_309c),
     CC18_309d = as.numeric(CC18_309d),
 
@@ -132,6 +132,9 @@ cces <- raw |>
     know_male = (know_guns + know_trade + know_daca)/3,
     dk_count = ifelse(treat_dk == "DK included",
                       (UWM311==5) + (UWM314==5) + (UWM317==5) + (UWM320==5) + (UWM323==4), NA),
+    polknow_factual = (know_trade + know_daca + know_health +
+                         know_guns + know_abortion)/5,
+    polknow_factual_scale = as.numeric(scale(polknow_factual)),
 
     ## political interest etc.
     polint_att = (5 - UWM329)/4,
@@ -155,9 +158,9 @@ cces <- raw |>
   mutate(
     pk_statesenate = as.numeric(CC18_309c == majority_statesenate),
     pk_lowerchamber = as.numeric(CC18_309d == majority_lowerchamber),
-    polknow_factual2 = (pk_house + pk_senate + pk_ideol + pk_statesenate + pk_lowerchamber +
+    polknow_old2 = (pk_house + pk_senate + pk_ideol + pk_statesenate + pk_lowerchamber +
                          pk_govparty + pk_sen1party + pk_sen2party + pk_houseparty)/9,
-    polknow_factual2_scale = as.numeric(scale(polknow_factual2)),
+    polknow_old2_scale = as.numeric(scale(polknow_old2)),
   )
 
 

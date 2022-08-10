@@ -156,11 +156,11 @@ ggsave("fig/anes2012_corplot.png",width=3.2, height=3.2)
 
 data_cces %>%
   filter(wc > (median(wc) - 100) & wc < (median(wc) + 100),
-         polknow_factual == 1) %>%
+         polknow_old == 1) %>%
   filter((polknow_text_scale < quantile(polknow_text_scale,.25) & female == 0) |
            (polknow_text_scale > quantile(polknow_text_scale,.75) & female == 1)) %>%
   arrange(polknow_text_scale) %>%
-  select(caseid, female, polknow_factual, polknow_text_scale) %>%
+  select(caseid, female, polknow_old, polknow_text_scale) %>%
   #left_join(opend) %>%
   left_join(haven::read_sav("/data/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
               dplyr::select(caseid, UWM309, UWM310, UWM312, UWM313, UWM315,
@@ -172,44 +172,30 @@ data_cces %>%
 # Validation: competence and engagement -----------------------------------
 
 dvs <- c("vote", "polint_att", "effic_int", "effic_ext")
-ivs <- c("female", "educ", "faminc", "age", "black", "relig")
+ivs <- c("polknow_text_scale", "polknow_factual_scale",
+         "female", "educ", "faminc", "age", "black", "relig")
 
-m1text <- c(
+m1 <- c(
   map(list(data_cces, data2020, data2016, data2012),
-      ~glm(reformulate(c("polknow_text_scale", ivs), response = "vote"),
-           data = ., subset = !is.na(polknow_factual_scale), family=binomial("logit"))),
+      ~glm(reformulate(ivs, response = "vote"), data = ., family=binomial("logit"))),
   map(list(data_cces, data2020, data2016, data2012),
-      ~lm(reformulate(c("polknow_text_scale", ivs), response = "polint_att"),
-          data = ., subset = !is.na(polknow_factual_scale))),
+      ~lm(reformulate(ivs, response = "polint_att"), data = .)),
   map(list(data_cces, data2020, data2016, data2012),
-      ~lm(reformulate(c("polknow_text_scale", ivs), response = "effic_int"),
-          data = ., subset = !is.na(polknow_factual_scale))),
+      ~lm(reformulate(ivs, response = "effic_int"), data = .)),
   map(list(data_cces, data2020, data2016, data2012),
-      ~lm(reformulate(c("polknow_text_scale", ivs), response = "effic_ext"),
-          data = ., subset = !is.na(polknow_factual_scale))))
+      ~lm(reformulate(ivs, response = "effic_ext"), data = .))
+)
 
-m1factual <- c(
-  map(list(data_cces, data2020, data2016, data2012),
-      ~glm(reformulate(c("polknow_factual_scale", ivs), response = "vote"),
-           data = ., subset = !is.na(polknow_text_scale), family=binomial("logit"))),
-  map(list(data_cces, data2020, data2016, data2012),
-      ~lm(reformulate(c("polknow_factual_scale", ivs), response = "polint_att"),
-          data = ., subset = !is.na(polknow_text_scale))),
-  map(list(data_cces, data2020, data2016, data2012),
-      ~lm(reformulate(c("polknow_factual_scale", ivs), response = "effic_int"),
-          data = ., subset = !is.na(polknow_text_scale))),
-  map(list(data_cces, data2020, data2016, data2012),
-      ~lm(reformulate(c("polknow_factual_scale", ivs), response = "effic_ext"),
-          data = ., subset = !is.na(polknow_text_scale))))
-
-c(m1text, m1factual) %>%
-  map_dfr(~summary(marginaleffects(.)), .id = "model") %>%
+m1 %>%
+  map_dfr(~tidy(comparisons(
+    ., variables = list(polknow_text_scale = c(-1,1),
+                        polknow_factual_scale = c(-1,1)))),
+    .id = "model") %>%
   as_tibble() %>%
-  filter(term %in% c("polknow_text_scale", "polknow_factual_scale")) %>%
   mutate(
-    study = factor(rep(c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES"), 8),
+    study = factor(rep(rep(c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES"), each = 2), 4),
                    levels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES")),
-    dv = recode_factor(rep(rep(dvs, each = 4), 2),
+    dv = recode_factor(rep(dvs, each = 8),
                        `vote` = "Turnout",
                        `polint_att` = "Political Interest",
                        `effic_int` = "Internal Efficacy",
@@ -220,61 +206,32 @@ c(m1text, m1factual) %>%
   ggplot(aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high)) +
   geom_vline(xintercept = 0, color="grey") +
   geom_point() + geom_errorbarh(height=0) + facet_grid(study~dv) +
-  xlab("Average Marginal Effect") + ylab("Independent Variable") + plot_default
+  xlab("Estimated Effect of Discursive Sophistication and Factual Knowledge\n(for an increase from 1 SD below mean to 1 SD above mean)") +
+  ylab("Independent Variable") + plot_default
 ggsave("fig/knoweff.pdf", width=6.5, height=4)
 
-c(m1text[1:2], m1factual[1:2],
-  m1text[5:6], m1factual[5:6],
-  m1text[9:10], m1factual[9:10],
-  m1text[13:14], m1factual[13:14]) %>%
-  map_dfr(~summary(marginaleffects(.)), .id = "model") %>%
-  as_tibble() %>%
-  filter(term %in% c("polknow_text_scale", "polknow_factual_scale")) %>%
-  mutate(
-    study = factor(rep(c("2018 CES", "2020 ANES"), 8),
-                   levels = c("2018 CES", "2020 ANES")),
-    dv = recode_factor(rep(dvs, each = 4),
-                       `vote` = "Turnout",
-                       `polint_att` = "Political Interest",
-                       `effic_int` = "Internal Efficacy",
-                       `effic_ext` = "External Efficacy"),
-    term = recode_factor(term,
-                         `polknow_factual_scale` = "Factual\nKnowledge",
-                         `polknow_text_scale` = "Discursive\nSophistication")) %>%
-  ggplot(aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high)) +
-  geom_vline(xintercept = 0, color="grey") +
-  geom_point() + geom_errorbarh(height=0) + facet_grid(study~dv) +
-  xlab("Average Marginal Effect") + ylab("Independent Variable") + plot_empty
-ggsave("fig/knoweff0.pdf", width=5.5, height=2.5)
 
-c(m1text[1:2], m1factual[1:2],
-  m1text[5:6], m1factual[5:6],
-  m1text[9:10], m1factual[9:10],
-  m1text[13:14], m1factual[13:14]) %>%
-  map_dfr(~summary(marginaleffects(.)), .id = "model") %>%
-  as_tibble() %>%
-  filter(term %in% c("polknow_text_scale", "polknow_factual_scale")) %>%
-  mutate(
-    study = factor(rep(c("2018 CES", "2020 ANES"), 8),
-                   levels = c("2018 CES", "2020 ANES")),
-    dv = recode_factor(rep(dvs, each = 4),
-                       `vote` = "Turnout",
-                       `polint_att` = "Political Interest",
-                       `effic_int` = "Internal Efficacy",
-                       `effic_ext` = "External Efficacy"),
-    term = recode_factor(term,
-                         `polknow_factual_scale` = "Factual\nKnowledge",
-                         `polknow_text_scale` = "Discursive\nSophistication")) %>%
-  ggplot(aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high)) +
-  geom_vline(xintercept = 0, color="grey") +
-  geom_point() + geom_errorbarh(height=0) + facet_grid(study~dv) +
-  xlab("Average Marginal Effect") + ylab("Independent Variable") + plot_default
-ggsave("fig/knoweff1.pdf", width=5.5, height=2.5)
+# Validation: interaction b/w measures ------------------------------------
 
-c(m1text[1], m1factual[1],
-  m1text[5], m1factual[5],
-  m1text[9], m1factual[9],
-  m1text[13], m1factual[13]) %>%
+ivs <- c("polknow_text_scale * polknow_factual_scale",
+         "female", "educ", "faminc", "age", "black", "relig")
+
+m1int <- c(
+  map(list(data_cces, data2020, data2016, data2012),
+      ~glm(reformulate(ivs, response = "vote"), data = ., family=binomial("logit"))),
+  map(list(data_cces, data2020, data2016, data2012),
+      ~lm(reformulate(ivs, response = "polint_att"), data = .)),
+  map(list(data_cces, data2020, data2016, data2012),
+      ~lm(reformulate(ivs, response = "effic_int"), data = .)),
+  map(list(data_cces, data2020, data2016, data2012),
+      ~lm(reformulate(ivs, response = "effic_ext"), data = .))
+)
+m1int %>% map(summary)
+
+c(m1[1], m1int[1],
+  m1[5], m1int[5],
+  m1[9], m1int[9],
+  m1[13], m1int[13]) %>%
   stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout, political interest, internal efficacy,
@@ -282,16 +239,17 @@ c(m1text[1], m1factual[1],
           Figure \\ref{fig:knoweff} in the main text."),
             column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
             column.separate = c(2,2,2,2),
-            covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
-                                 "College Degree","Household Income","Age",
+            order = c(1,2,9,3:8,10),
+            covariate.labels = c("Discursive Soph.","Factual Knowledge", "Disc. X Factual",
+                                 "Female", "College Degree","Household Income","Age",
                                  "Black","Church Attendance","Constant"),
             keep.stat = c("n", "rsq", "ll"), font.size = "footnotesize",
             out = "tab/knoweff2018cces.tex", label = "tab:knoweff2018cces")
 
-c(m1text[2], m1factual[2],
-  m1text[6], m1factual[6],
-  m1text[10], m1factual[10],
-  m1text[14], m1factual[14]) %>%
+c(m1[2], m1int[2],
+  m1[6], m1int[6],
+  m1[10], m1int[10],
+  m1[14], m1int[14]) %>%
   stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout, political interest, internal efficacy,
@@ -299,16 +257,17 @@ c(m1text[2], m1factual[2],
           Figure \\ref{fig:knoweff} in the main text."),
             column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
             column.separate = c(2,2,2,2),
-            covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
-                                 "College Degree","Household Income","Age",
+            order = c(1,2,9,3:8,10),
+            covariate.labels = c("Discursive Soph.","Factual Knowledge", "Disc. X Factual",
+                                 "Female", "College Degree","Household Income","Age",
                                  "Black","Church Attendance","Constant"),
             keep.stat = c("n", "rsq", "ll"), font.size = "footnotesize",
             out = "tab/knoweff2020anes.tex", label = "tab:knoweff2020anes")
 
-c(m1text[3], m1factual[3],
-  m1text[7], m1factual[7],
-  m1text[11], m1factual[11],
-  m1text[15], m1factual[15]) %>%
+c(m1[3], m1int[3],
+  m1[7], m1int[7],
+  m1[11], m1int[11],
+  m1[15], m1int[15]) %>%
   stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout, political interest, internal efficacy,
@@ -316,16 +275,17 @@ c(m1text[3], m1factual[3],
           Figure \\ref{fig:knoweff} in the main text."),
             column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
             column.separate = c(2,2,2,2),
-            covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
-                                 "College Degree","Household Income","Age",
+            order = c(1,2,9,3:8,10),
+            covariate.labels = c("Discursive Soph.","Factual Knowledge", "Disc. X Factual",
+                                 "Female", "College Degree","Household Income","Age",
                                  "Black","Church Attendance","Constant"),
             keep.stat = c("n", "rsq", "ll"), font.size = "footnotesize",
             out = "tab/knoweff2016anes.tex", label = "tab:knoweff2016anes")
 
-c(m1text[4], m1factual[4],
-  m1text[8], m1factual[8],
-  m1text[12], m1factual[12],
-  m1text[16], m1factual[16]) %>%
+c(m1[4], m1int[4],
+  m1[8], m1int[8],
+  m1[12], m1int[12],
+  m1[16], m1int[16]) %>%
   stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout, political interest, internal efficacy,
@@ -333,14 +293,19 @@ c(m1text[4], m1factual[4],
           Figure \\ref{fig:knoweff} in the main text."),
             column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
             column.separate = c(2,2,2,2),
-            covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
-                                 "College Degree","Household Income","Age",
+            order = c(1,2,9,3:8,10),
+            covariate.labels = c("Discursive Soph.","Factual Knowledge", "Disc. X Factual",
+                                 "Female", "College Degree","Household Income","Age",
                                  "Black","Church Attendance","Constant"),
             keep.stat = c("n", "rsq", "ll"), font.size = "footnotesize",
             out = "tab/knoweff2012anes.tex", label = "tab:knoweff2012anes")
 
 
 # Validation: information retrieval ---------------------------------------
+
+# TODO: CONTINUE HERE, REPLACE SIM FUNCTION?
+
+summary(lm(know_dis ~ polknow_text_scale + polknow_factual_scale + female + educ + faminc + age + black + relig, data = data_yg))
 
 m2 <- list(
   lm(know_dis ~ polknow_text_scale + female + educ + faminc + age + black + relig, data = data_yg),
