@@ -722,10 +722,10 @@ stargazer(c(m3text, m3swiss), type="text", align = TRUE, column.sep.width = "0pt
           title="Effects of gender on discursive sophistication in the CES, ANES, and YouGov study.
           Estimates are used for Figure \\ref{fig:determinants} in the main text.",
           column.labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov",
-                            "Swiss (French)", "Swiss (German)", "Swiss (Italian)"),
+                            "French", "German", "Italian"),
           covariate.labels = c("Female", "Age", "Black", "College Degree",
                                "Household Income", "Church Attendance", "Constant"),
-          keep.stat = c("n", "rsq"), font.size = "scriptsize",
+          keep.stat = c("n", "rsq"), font.size = "tiny",
           out = "tab/determinants_text.tex", label = "tab:determinants_text")
 
 stargazer(m3factual, type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
