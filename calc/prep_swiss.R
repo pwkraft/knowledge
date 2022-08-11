@@ -57,6 +57,15 @@ swiss$edu_ideol <- swiss$edu * swiss$ideol
 ## gender
 swiss$female <- 1 - raw$male
 
+## college degree
+swiss$educ <- as.numeric(raw$edu == 4)
+
+## political interest
+swiss$polint <- raw$polint
+
+## media usage
+swiss$media <- raw$media
+
 
 ### open-ended responses
 ### MORE WORK ON PRE-PROCESSING NEEDED, check all steps, spell checking, stopword removal etc.
