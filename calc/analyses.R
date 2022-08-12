@@ -380,8 +380,8 @@ stargazer(m2, type="text", align = TRUE, column.sep.width = "-25pt", no.space = 
           column.labels = "Information Retrieval",
           column.separate = 3,
           order = c(1,2,9,3:8,10),
-          covariate.labels = c("Discursive Soph.","Factual Knowledge","Female",
-                               "Age", "Black", "College Degree",
+          covariate.labels = c("Discursive Soph.","Factual Knowledge", "Disc. X Factual",
+                               "Female", "Age", "Black", "College Degree",
                                "Household Income","Church Attendance","Constant"),
           keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
           out = "tab/yg_disease.tex", label = "tab:yg_disease")
@@ -708,8 +708,7 @@ bind_rows(
   ) %>%
   ggplot(aes(y=study, x=estimate, xmin=conf.low, xmax=conf.high)) +
   geom_vline(xintercept = 0, color="grey") +
-  geom_vline(xintercept = -0.2, color="grey", lty="dashed") +
-  geom_vline(xintercept = 0.2, color="grey", lty="dashed") +
+  geom_vline(xintercept = c(-0.2,0.2), color="grey", lty="dashed") +
   geom_point() + geom_errorbarh(height=0) +
   geom_errorbarh(aes(xmin=conf.low90, xmax=conf.high90), height=.2) +
   facet_wrap(.~dv) + xlim(-.75, .25) +
