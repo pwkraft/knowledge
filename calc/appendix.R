@@ -56,40 +56,40 @@ wc_mean <- tibble(
 )
 
 bind_rows(
-  transmute(data_cces, wc = wc, study = 1),
-  transmute(data2020, wc = wc, study = 2),
-  transmute(data2016, wc = wc, study = 3),
-  transmute(data2012, wc = wc, study = 4),
+  transmute(data2020, wc = wc, study = 1),
+  transmute(data2016, wc = wc, study = 2),
+  transmute(data2012, wc = wc, study = 3),
+  transmute(data_cces, wc = wc, study = 4),
   transmute(data_yg, wc = wc, study = 5),
   transmute(opend_french, wc = wc, study = 6),
   transmute(opend_german, wc = wc, study = 6),
   transmute(opend_italian, wc = wc, study = 6)
 ) %>% mutate(
   study = factor(study,
-                 labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES",
-                            "2015 YouGov", "Swiss Survey"))) %>%
+                 labels = c("2020 ANES", "2016 ANES", "2012 ANES",
+                            "2018 CES", "2015 YouGov", "Swiss Survey"))) %>%
   ggplot(aes(wc)) + geom_histogram(fill = "grey") + theme_classic(base_size = 8) +
   theme(panel.border = element_rect(fill=NA)) +
-  facet_wrap(.~study, ncol = 2, scales = "free") +
+  facet_wrap(.~study, ncol = 3, scales = "free") +
   geom_vline(aes(xintercept = wc), colour="red", linetype = "longdash",data = wc_mean) +
   ylab("Number of Respondents") + xlab("Word Count")
-ggsave("fig/wc.png", width = 6, height = 5)
+ggsave("fig/wc.png", width = 6, height = 2.5)
 
 
 
 # Plot non-response by gender ---------------------------------------------
 
 bind_rows(
-  transmute(cces, noresp = wc == 0, female = female, study = 1),
-  transmute(anes2020, noresp = wc == 0, female = female, study = 2),
-  transmute(anes2016, noresp = wc == 0, female = female, study = 3),
-  transmute(anes2012, noresp = wc == 0, female = female, study = 4),
+  transmute(anes2020, noresp = wc == 0, female = female, study = 1),
+  transmute(anes2016, noresp = wc == 0, female = female, study = 2),
+  transmute(anes2012, noresp = wc == 0, female = female, study = 3),
+  transmute(cces, noresp = wc == 0, female = female, study = 4),
   transmute(yougov, noresp = wc == 0, female = female, study = 5),
   transmute(swiss, noresp = wc == 0, female = female, study = 6)
 ) %>% mutate(
   study = factor(study,
-                 labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES",
-                            "2015 YouGov", "Swiss Survey")),
+                 labels = c("2020 ANES", "2016 ANES", "2012 ANES",
+                            "2018 CES", "2015 YouGov", "Swiss Survey")),
   Gender = factor(female, labels = c("Male","Female"))) %>%
   na.omit() %>%
   group_by(study, Gender) %>%
@@ -100,9 +100,9 @@ bind_rows(
             cihi = avg + 1.96*sd/sqrt(n)) %>%
   ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi)) + plot_default +
   geom_bar(stat="identity", fill="grey") + geom_errorbar(width=.1) +
-  facet_wrap(~study, ncol = 2) + ylab("Average Values") + xlab(NULL) +
+  facet_wrap(~study, ncol = 3) + ylab("Average Values") + xlab(NULL) +
   guides(fill="none") + scale_fill_brewer(palette="Paired")
-ggsave("fig/noresponse.png", width = 6, height = 5)
+ggsave("fig/noresponse.png", width = 6, height = 2.5)
 
 transmute(cces, noresp = wc == 0, female = female) %>%
   t.test(noresp ~ female, data = .)
@@ -408,6 +408,11 @@ ggsave("fig/pretext_robustness_pres.png", width=5, height=3)
 
 
 
+# Discursive sophistication as a DV (reviewer request) --------------------
+
+# TODO: CONTINUE HERE
+
+
 # Controlling for Extraversion and Verbal Skills --------------------------
 
 dvs <- c("vote", "polint_att", "effic_int", "effic_ext")
@@ -480,7 +485,7 @@ c(m1text, m1factual) %>%
     dv = recode_factor(rep(rep(dvs, each = 4), 4),
                        `vote` = "Turnout",
                        `polint_att` = "Political Interest",
-                       `effic_iznt` = "Internal Efficacy",
+                       `effic_int` = "Internal Efficacy",
                        `effic_ext` = "External Efficacy"),
     Control = factor(rep(1:4, 16),
                      labels = c("Extraversion",
