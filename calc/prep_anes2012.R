@@ -70,6 +70,11 @@ anes2012$educ[raw2012$raw2012$dem_edugroup_x < 0] <- NA
 ## education (continuous)
 anes2012$educ_cont <- (Recode(raw2012$dem_edugroup_x, "lo:0=NA") - 1)/4
 
+## education (factor)
+anes2012$educ_fact <- factor(anes2012$educ_cont,
+                             labels = c("Less than high school", "High school", "Some college",
+                                        "Bachelor's degree", "Graduate degree"))
+
 ## political media exposure
 anes2012$polmedia <- with(raw2012, Recode(prmedia_wkinews, "lo:-4=NA; -1=0")
                           + Recode(prmedia_wktvnws, "lo:-4=NA; -1=0")
@@ -242,8 +247,9 @@ anes2012$redist <- (Recode(raw2012$spsrvpr_ssself, "lo:0 = NA") - Recode(raw2012
 anes2012$tax <- ((-Recode(raw2012$milln_milltax_x, "lo:0 = NA") + 7)/3 + Recode(raw2012$budget_rdef250k, "lo:0 = NA; 1=2; 2=0; 3=1"))/4
 
 ## Personality characteristics: Extraversion
-anes2012$extraversion <- Recode(raw2012$tipi_extra, "lo:0 = NA")
-anes2012$reserved <- Recode(raw2012$tipi_resv, "lo:0 = NA")
+anes2012$extraversion <- (Recode(raw2012$tipi_extra, "lo:0 = NA") -1)/6
+anes2012$newexperience <- (Recode(raw2012$tipi_open, "lo:0 = NA") - 1)/6
+anes2012$reserved <- (Recode(raw2012$tipi_resv, "lo:0 = NA") - 1)/6
 
 
 #########################

@@ -408,109 +408,76 @@ ggsave("fig/pretext_robustness_pres.png", width=5, height=3)
 
 
 
-# Discursive sophistication as a DV (reviewer request) --------------------
-
-# TODO: CONTINUE HERE
-
-
-# Controlling for Extraversion and Verbal Skills --------------------------
+# Controlling for Personality and Verbal Skills --------------------------
 
 dvs <- c("vote", "polint_att", "effic_int", "effic_ext")
-ivs <- c("female", "educ", "faminc", "age", "black", "relig")
-ivs_rob <- c("extraversion", "mode", "wordsum", "wc")
+ivs <- c("polknow_text_scale", "polknow_factual_scale",
+         "female", "age", "black", "educ", "faminc", "relig")
+ivs_rob <- c("extraversion + newexperience + reserved", "wordsum", "wc", "mode")
 
-m1text <- c(
+m1cont <- c(
   map(ivs_rob,
-      ~glm(reformulate(c("polknow_text_mean", ivs, .), response = "vote"),
-           data = data2016, subset = !is.na(polknow_factual), family=binomial("logit"))),
+      ~glm(reformulate(c(ivs, .), response = "vote"), data = data2016, family=binomial("logit"))),
   map(ivs_rob,
-      ~lm(reformulate(c("polknow_text_mean", ivs, .), response = "polint_att"),
-          data = data2016, subset = !is.na(polknow_factual))),
+      ~lm(reformulate(c(ivs, .), response = "polint_att"), data = data2016)),
   map(ivs_rob,
-      ~lm(reformulate(c("polknow_text_mean", ivs, .), response = "effic_int"),
-          data = data2016, subset = !is.na(polknow_factual))),
+      ~lm(reformulate(c(ivs, .), response = "effic_int"), data = data2016)),
   map(ivs_rob,
-      ~lm(reformulate(c("polknow_text_mean", ivs, .), response = "effic_ext"),
-          data = data2016, subset = !is.na(polknow_factual))),
+      ~lm(reformulate(c(ivs, .), response = "effic_ext"), data = data2016)),
 
   map(ivs_rob,
-      ~glm(reformulate(c("polknow_text_mean", ivs, .), response = "vote"),
-           data = data2012, subset = !is.na(polknow_factual), family=binomial("logit"))),
+      ~glm(reformulate(c(ivs, .), response = "vote"), data = data2012, family=binomial("logit"))),
   map(ivs_rob,
-      ~lm(reformulate(c("polknow_text_mean", ivs, .), response = "polint_att"),
-          data = data2012, subset = !is.na(polknow_factual))),
+      ~lm(reformulate(c(ivs, .), response = "polint_att"), data = data2012)),
   map(ivs_rob,
-      ~lm(reformulate(c("polknow_text_mean", ivs, .), response = "effic_int"),
-          data = data2012, subset = !is.na(polknow_factual))),
+      ~lm(reformulate(c(ivs, .), response = "effic_int"), data = data2012)),
   map(ivs_rob,
-      ~lm(reformulate(c("polknow_text_mean", ivs, .), response = "effic_ext"),
-          data = data2012, subset = !is.na(polknow_factual)))
-  )
-
-m1factual <- c(
-  map(ivs_rob,
-      ~glm(reformulate(c("polknow_factual", ivs, .), response = "vote"),
-           data = data2016, subset = !is.na(polknow_factual), family=binomial("logit"))),
-  map(ivs_rob,
-      ~lm(reformulate(c("polknow_factual", ivs, .), response = "polint_att"),
-          data = data2016, subset = !is.na(polknow_factual))),
-  map(ivs_rob,
-      ~lm(reformulate(c("polknow_factual", ivs, .), response = "effic_int"),
-          data = data2016, subset = !is.na(polknow_factual))),
-  map(ivs_rob,
-      ~lm(reformulate(c("polknow_factual", ivs, .), response = "effic_ext"),
-          data = data2016, subset = !is.na(polknow_factual))),
-
-  map(ivs_rob,
-      ~glm(reformulate(c("polknow_factual", ivs, .), response = "vote"),
-           data = data2012, subset = !is.na(polknow_factual), family=binomial("logit"))),
-  map(ivs_rob,
-      ~lm(reformulate(c("polknow_factual", ivs, .), response = "polint_att"),
-          data = data2012, subset = !is.na(polknow_factual))),
-  map(ivs_rob,
-      ~lm(reformulate(c("polknow_factual", ivs, .), response = "effic_int"),
-          data = data2012, subset = !is.na(polknow_factual))),
-  map(ivs_rob,
-      ~lm(reformulate(c("polknow_factual", ivs, .), response = "effic_ext"),
-          data = data2012, subset = !is.na(polknow_factual)))
+      ~lm(reformulate(c(ivs, .), response = "effic_ext"), data = data2012))
 )
 
-c(m1text, m1factual) %>%
-  map_dfr(~summary(marginaleffects(.)), .id = "model") %>%
+m1cont %>%
+  map_dfr(~tidy(comparisons(
+    ., variables = list(polknow_text_scale = c(-1,1),
+                        polknow_factual_scale = c(-1,1)))),
+    .id = "model") %>%
   as_tibble() %>%
-  filter(term %in% c("polknow_text_mean", "polknow_factual")) %>%
   mutate(
-    study = factor(rep(rep(c("2016 ANES", "2012 ANES"), each = 16), 2),
+    study = factor(rep(c("2016 ANES", "2012 ANES"), each = 32),
                    levels = c("2016 ANES", "2012 ANES")),
-    dv = recode_factor(rep(rep(dvs, each = 4), 4),
+    dv = recode_factor(rep(rep(dvs, each = 8), 2),
                        `vote` = "Turnout",
                        `polint_att` = "Political Interest",
                        `effic_int` = "Internal Efficacy",
                        `effic_ext` = "External Efficacy"),
-    Control = factor(rep(1:4, 16),
-                     labels = c("Extraversion",
-                                "Survey mode",
+    Control = factor(rep(rep(1:4, each = 2), 8),
+                     labels = c("Personality",
                                 "Wordsum score",
-                                "Response length")),
+                                "Response length",
+                                "Survey mode")),
     term = recode_factor(term,
-                         `polknow_factual` = "Factual\nKnowledge",
-                         `polknow_text_mean` = "Discursive\nSophistication")) %>%
+                         `polknow_factual_scale` = "Factual\nKnowledge",
+                         `polknow_text_scale` = "Discursive\nSophistication")) %>%
   ggplot(aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high,
              col = Control, shape = Control)) +
   geom_vline(xintercept = 0, color="grey") +
   geom_point(position = position_dodge(width = -.5)) +
   geom_errorbarh(height=0, position = position_dodge(width = -.5)) +
   facet_grid(study~dv) +
-  labs(x = "Average Marginal Effect", y = "Independent Variable") +
+  labs(x = "Estimated Effect of Discursive Sophistication and Factual Knowledge\n(for an increase from 1 SD below mean to 1 SD above mean)", y = "Independent Variable") +
   plot_default + theme(legend.position = "bottom")
 ggsave("fig/knoweff_robust.pdf", width=6.5, height=3.5)
 
 
 
+# Compare political OE to other OEs ---------------------------------------
+
+# TODO: CONTINUE HERE
+
+
 # Check selection models for CCES 2018 ------------------------------------
 
 ## check determinants of oe response >0
-glm(as.numeric(wc>0) ~ female + educ + faminc + age + black + relig,
+glm(as.numeric(wc>0) ~ female + age + black + educ + faminc + relig,
     data = cces, family=binomial("logit")) %>%
   summary()
 
@@ -531,53 +498,87 @@ table(heck_tmp$select)
 table(is.na(heck_tmp$polknow_text_mean), heck_tmp$wc>0)
 
 ## estimate heckit model (does this specification make sense theoretically?)
-heckit(select ~ female + educ + faminc + age + black + relig,
-       polknow_text_mean ~ female + educ + faminc + age + black + relig,
+heckit(select ~ female + age + black + educ + faminc + relig,
+       polknow_text_mean ~ female + age + black + educ + faminc + relig,
        data = heck_tmp) %>%
   summary()
 
-heckit(select ~ female + educ + faminc + age + black + relig,
-       polknow_factual ~ female + educ + faminc + age + black + relig,
+heckit(select ~ female + age + black + educ + faminc + relig,
+       polknow_factual ~ female + age + black + educ + faminc + relig,
        data = heck_tmp) %>%
   summary()
 
 ## heckit model for other outcomes
-heckit(select ~ female + educ + faminc + age + black + relig,
-       vote ~ polknow_text_mean + female + educ + faminc + age + black + relig,
+heckit(select ~ female + age + black + educ + faminc + relig,
+       vote ~ polknow_text_mean + female + age + black + educ + faminc + relig,
        data = heck_tmp) %>%
   summary()
 
-heckit(select ~ female + educ + faminc + age + black + relig,
-       vote ~ polknow_factual + female + educ + faminc + age + black + relig,
+heckit(select ~ female + age + black + educ + faminc + relig,
+       vote ~ polknow_factual + female + age + black + educ + faminc + relig,
        data = heck_tmp) %>%
   summary()
 
-heckit(select ~ female + educ + faminc + age + black + relig,
-       polint_att ~ polknow_text_mean + female + educ + faminc + age + black + relig,
+heckit(select ~ female + age + black + educ + faminc + relig,
+       polint_att ~ polknow_text_mean + female + age + black + educ + faminc + relig,
        data = heck_tmp) %>%
   summary()
 
-heckit(select ~ female + educ + faminc + age + black + relig,
-       polint_att ~ polknow_factual + female + educ + faminc + age + black + relig,
+heckit(select ~ female + age + black + educ + faminc + relig,
+       polint_att ~ polknow_factual + female + age + black + educ + faminc + relig,
        data = heck_tmp) %>%
   summary()
 
-heckit(select ~ female + educ + faminc + age + black + relig,
-       effic_int ~ polknow_text_mean + female + educ + faminc + age + black + relig,
+heckit(select ~ female + age + black + educ + faminc + relig,
+       effic_int ~ polknow_text_mean + female + age + black + educ + faminc + relig,
        data = heck_tmp) %>%
   summary()
 
-heckit(select ~ female + educ + faminc + age + black + relig,
-       effic_int ~ polknow_factual + female + educ + faminc + age + black + relig,
+heckit(select ~ female + age + black + educ + faminc + relig,
+       effic_int ~ polknow_factual + female + age + black + educ + faminc + relig,
        data = heck_tmp) %>%
   summary()
 
-heckit(select ~ female + educ + faminc + age + black + relig,
-       effic_ext ~ polknow_text_mean + female + educ + faminc + age + black + relig,
+heckit(select ~ female + age + black + educ + faminc + relig,
+       effic_ext ~ polknow_text_mean + female + age + black + educ + faminc + relig,
        data = heck_tmp) %>%
   summary()
 
-heckit(select ~ female + educ + faminc + age + black + relig,
-       effic_ext ~ polknow_factual + female + educ + faminc + age + black + relig,
+heckit(select ~ female + age + black + educ + faminc + relig,
+       effic_ext ~ polknow_factual + female + age + black + educ + faminc + relig,
        data = heck_tmp) %>%
   summary()
+
+
+
+# Discursive sophistication as a DV (reviewer request) --------------------
+
+m3rob <- list(
+  lm(polknow_text_scale ~ extraversion + newexperience + reserved + wordsum + mode +
+       female + age + black + educ_fact + faminc + relig, data = data2016),
+  lm(polknow_text_scale ~ extraversion + newexperience + reserved + wordsum + mode +
+       female + age + black + educ_fact + faminc + relig, data = data2012),
+  lm(polknow_factual_scale ~ extraversion + newexperience + reserved + wordsum + mode +
+       female + age + black + educ_fact + faminc + relig, data = data2016),
+  lm(polknow_factual_scale ~ extraversion + newexperience + reserved + wordsum + mode +
+       female + age + black + educ_fact + faminc + relig, data = data2012)
+  )
+
+stargazer(m3rob, type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
+          model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
+          dep.var.labels = c("Discursive Sophistication","Factual Knowledge"),
+          title="Personality, verbal skills, and survey mode as predictors
+          of discursive sophistication and factual knowledge in the 2016 and 2012 ANES.",
+          column.labels = rep(c("2016 ANES", "2012 ANES"), 2),
+          covariate.labels = c("Personality: Extraversion",
+                               "Personality: Openness to Experience",
+                               "Personality: Reserved",
+                               "Verbal Skills (Wordsum score)",
+                               "Survey Mode (Online)",
+                               "Female","Age", "Black",
+                               "Education: High School", "Education: Some College",
+                               "Education: Bachelor's Degree", "Education: Graduate Degree",
+                               "Household Income", "Church Attendance", "Constant"),
+          keep.stat = c("n", "rsq"), font.size = "footnotesize",
+          out = "tab/determinants_rob.tex", label = "tab:determinants_rob")
+

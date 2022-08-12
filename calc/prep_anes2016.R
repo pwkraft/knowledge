@@ -73,6 +73,26 @@ anes2016$educ <- Recode(raw2016$V161270, "c(-9,95,90)=NA; 1:12=0; 13:16=1")
 ## education (continuous)
 anes2016$educ_cont <- Recode(raw2016$V161270, "c(-9,95,90)=NA")
 
+## education (factor)
+anes2016$educ_fact <- recode_factor(anes2016$educ_cont,
+                                    `1` = "Less than high school",
+                                    `2` = "Less than high school",
+                                    `3` = "Less than high school",
+                                    `4` = "Less than high school",
+                                    `5` = "Less than high school",
+                                    `6` = "Less than high school",
+                                    `7` = "Less than high school",
+                                    `8` = "Less than high school",
+                                    `9` = "High school",
+                                    `10` = "Some college",
+                                    `11` = "Some college",
+                                    `12` = "Some college",
+                                    `13` = "Bachelor's degree",
+                                    `14` = "Graduate degree",
+                                    `15` = "Graduate degree",
+                                    `16` = "Graduate degree",
+                                    .default = NA_character_)
+
 ## political media exposure (only one item in 2016)
 anes2016$polmedia <- Recode(raw2016$V161008, "lo:-1=NA")/7
 
@@ -238,8 +258,9 @@ anes2016$tax <- Recode(raw2016$V162140, "lo:-1=NA; 2=0; 3=0.5")
 ###
 
 ## Personality characteristics: Extraversion
-anes2016$extraversion <- Recode(raw2016$V162333, "lo:0 = NA")
-anes2016$reserved <- Recode(raw2016$V162338, "lo:0 = NA")
+anes2016$extraversion <- (Recode(raw2016$V162333, "lo:0 = NA") - 1)/6
+anes2016$newexperience <- (Recode(raw2016$V162337, "lo:0 = NA") - 1)/6
+anes2016$reserved <- (Recode(raw2016$V162338, "lo:0 = NA") - 1)/6
 
 
 #########################
