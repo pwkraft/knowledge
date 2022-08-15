@@ -715,21 +715,52 @@ ggsave("fig/placements_dk.pdf", width = 6.5, height = 4)
 
 # Correct voting / proximity voting analysis ------------------------------
 
-SenCand1Avg <- cces %>%
+SenCand1Avg <- data_cces %>%
   group_by(SenCand1Name) %>%
   summarize(SenCand1Avg = mean(ideo_cand1, na.rm = T)) %>%
   na.omit()
 
-SenCand2Avg <- cces %>%
+SenCand2Avg <- data_cces %>%
   group_by(SenCand2Name) %>%
   summarize(SenCand2Avg = mean(ideo_cand2, na.rm = T)) %>%
   na.omit()
 
-tmp <- cces %>%
+data_cces <- data_cces %>%
   left_join(SenCand1Avg) %>%
   left_join(SenCand2Avg) %>%
-  mutate(correct_vote = as.numeric(abs(ideo_cand1 - SenCand1Avg) >= abs(ideo_cand2 - SenCand2Avg)) + 1,
+  mutate(correct_vote = as.numeric(abs(ideo_ego - SenCand1Avg) > abs(ideo_ego - SenCand2Avg)) + 1,
          correct_vote = as.numeric(correct_vote == senate_vote))
 
+m1cv <- glm(correct_vote ~ polknow_text_scale + polknow_factual_scale +
+              female + age + black + educ + faminc + relig, data = data_cces, family=binomial("logit"))
+
+bind_rows(
+  plot_cap(m1cv, condition = c("polknow_text_scale"), draw = F) %>%
+    transmute(iv = "polknow_text_scale", ivval = condition1,
+              mean = predicted, cilo = conf.low, cihi = conf.high),
+  plot_cap(m1cv, condition = c("polknow_factual_scale"), draw = F) %>%
+    transmute(iv = "polknow_factual_scale", ivval = condition1,
+              mean = predicted, cilo = conf.low, cihi = conf.high),
+) %>%
+  as_tibble() %>%
+  mutate(Variable = recode_factor(iv,
+                                  `polknow_text_scale` = "Discursive Sophistication",
+                                  `polknow_factual_scale` = "Factual Knowledge")) %>%
+  ggplot(aes(x=ivval, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_default +
+  geom_ribbon(alpha=0.4, lwd=.1) + geom_line() +
+  ylab("Pr(Ideological Proximity Vote)") + xlab("Value of Independent Variable")
+ggsave("fig/correct_vote.pdf", width=4, height=2)
+
+stargazer(m1cv, type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          title="Logistic regression predicting ideological proximity-based voting for
+          US Senators in the 2018 CES. Standard errors in parentheses.
+          Estimates are used for Figure \\ref{fig:correct_vote}.",
+          column.labels = "Ideological Proximity Vote",
+          covariate.labels = c("Discursive Soph.","Factual Knowledge",
+                               "Female", "Age", "Black", "College Degree",
+                               "Household Income","Church Attendance","Constant"),
+          keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
+          out = "tab/correct_vote.tex", label = "tab:correct_vote")
 
 

@@ -374,7 +374,7 @@ ggsave("fig/yg_disease.pdf", width=4, height=2)
 
 stargazer(m2, type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
-          title="Effects of sophistication on information retrieval in the 2015 YouGov study.
+          title="Linear regressions predicting information retrieval in the 2015 YouGov study.
           Standard errors in parentheses. Estimates are used for Figure \\ref{fig:yg_disease}
           in the main text.",
           column.labels = "Information Retrieval",
@@ -718,7 +718,7 @@ ggsave("fig/determinants.pdf",width=5,height=3)
 stargazer(c(m3text, m3swiss), type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
           dep.var.labels = "Discursive Sophistication",
-          title="Effects of gender on discursive sophistication in the CES, ANES, and YouGov study.
+          title="Linear regressions predicting discursive sophistication in the CES, ANES, and YouGov study.
           Estimates are used for Figure \\ref{fig:determinants} in the main text.",
           column.labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov",
                             "French", "German", "Italian"),
@@ -730,7 +730,7 @@ stargazer(c(m3text, m3swiss), type="text", align = TRUE, column.sep.width = "0pt
 stargazer(m3factual, type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
           dep.var.labels = "Factual Knowledge",
-          title="Effects of gender on factual knowledge in the CES, ANES, and YouGov study.
+          title="Linear regressions predicting  factual knowledge in the CES, ANES, and YouGov study.
           Estimates are used for Figure \\ref{fig:determinants} in the main text.",
           column.labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov"),
           covariate.labels = c("Female", "Age", "Black", "College Degree",
