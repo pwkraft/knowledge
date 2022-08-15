@@ -10,14 +10,15 @@
 \contentsline {subsection}{\numberline {II}Conventional Knowledge Items}{3}{subsection.a.A.2}%
 \contentsline {section}{\numberline {B}Information on Discursive Sophistication Components}{4}{appendix.a.B}%
 \contentsline {subsection}{\numberline {I}Distribution of Word Counts \& Proportion of Non-Response}{4}{subsection.a.B.1}%
-\contentsline {subsection}{\numberline {II}Preprocessing and Topic Model Specification}{6}{subsection.a.B.2}%
-\contentsline {subsection}{\numberline {III}Discursive Sophistication Components}{7}{subsection.a.B.3}%
-\contentsline {section}{\numberline {C}Robustness Checks}{8}{appendix.a.C}%
-\contentsline {subsection}{\numberline {I}PreText Analysis}{8}{subsection.a.C.1}%
-\contentsline {subsection}{\numberline {II}Discursive Sophistication for Varying Model Specifications}{9}{subsection.a.C.2}%
-\contentsline {subsection}{\numberline {III}Controlling for Personality and Verbal Skills}{11}{subsection.a.C.3}%
-\contentsline {paragraph}{Description of additional control variables:}{11}{section*.37}%
-\contentsline {subsection}{\numberline {IV}Personality and Verbal Skills as Predictors of Discursive Sophistication}{12}{subsection.a.C.4}%
+\contentsline {subsection}{\numberline {II}Preprocessing and Topic Model Specification}{5}{subsection.a.B.2}%
+\contentsline {subsection}{\numberline {III}Discursive Sophistication Components}{6}{subsection.a.B.3}%
+\contentsline {section}{\numberline {C}Robustness Checks}{7}{appendix.a.C}%
+\contentsline {subsection}{\numberline {I}PreText Analysis}{7}{subsection.a.C.1}%
+\contentsline {subsection}{\numberline {II}Discursive Sophistication for Varying Model Specifications}{8}{subsection.a.C.2}%
+\contentsline {subsection}{\numberline {III}Controlling for Personality and Verbal Skills}{10}{subsection.a.C.3}%
+\contentsline {paragraph}{Description of additional control variables:}{10}{section*.37}%
+\contentsline {subsection}{\numberline {IV}Personality and Verbal Skills as Predictors of Discursive Sophistication}{11}{subsection.a.C.4}%
+\contentsline {subsection}{\numberline {V}Political Sophistication and Uncertainty in Ideological Placements}{12}{subsection.a.C.5}%
 \contentsline {section}{\numberline {D}Tables of Model Estimates}{13}{appendix.a.D}%
 \contentsline {subsection}{\numberline {I}Figure~\ref {fig:knoweff}: Effects of sophistication on turnout, political interest, internal efficacy, and external efficacy}{13}{subsection.a.D.1}%
 \contentsline {subsection}{\numberline {II}Figure~\ref {fig:yg_disease}: Expected information retrieval in the 2015 YouGov Study as a function of political sophistication}{17}{subsection.a.D.2}%

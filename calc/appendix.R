@@ -582,3 +582,82 @@ stargazer(m3rob, type="text", align = TRUE, column.sep.width = "0pt", no.space =
           keep.stat = c("n", "rsq"), font.size = "footnotesize",
           out = "tab/determinants_rob.tex", label = "tab:determinants_rob")
 
+
+
+# Variance in ideological placements ----------
+
+var_compare <- function(yname, xname, data, quantiles = c(.25, .75)) {
+  y <- data.frame(data)[, yname]
+  x <- data.frame(data)[, xname]
+  x_lim <- quantile(x, probs = quantiles, na.rm = T)
+  y_lo <- y[x <= x_lim[1]]
+  y_hi <- y[x > x_lim[2]]
+
+  dplyr::tibble(
+    dv = yname,
+    iv = xname,
+    x_lo = x_lim[1],
+    x_hi = x_lim[2],
+    n_lo = length(y_lo),
+    n_hi = length(y_hi),
+    sd_lo = sd(y_lo, na.rm = T),
+    sd_hi = sd(y_hi, na.rm = T),
+    p_value = var.test(y_lo, y_hi)$p.value
+  ) %>%
+    mutate(
+      stars = case_when(
+        p_value < .001 ~ "***",
+        p_value < .01 ~ "**",
+        p_value < .05 ~ "*",
+        p_value >= .05 ~ "ns"
+      )
+    )
+}
+
+ideo <- c("ideo_dem", "ideo_rep", "ideo_sc", "ideo_trump", "ideo_warren", "ideo_ryan",
+          "ideo_mcconnel", "ideo_schumer", "ideo_pelosi", "ideo_murkowski", "ideo_collins",
+          "ideo_feinstein", "ideo_booker", "ideo_haley")
+
+bind_rows(
+  map_dfr(ideo, ~var_compare(., "polknow_text_scale", data_cces)),
+  map_dfr(ideo, ~var_compare(., "polknow_factual_scale", data_cces))
+) %>%
+  mutate(
+    iv = recode_factor(iv,
+                       `polknow_text_scale` = "Discursive\nSophistication",
+                       `polknow_factual_scale` = "Factual\nKnowledge"),
+    sd_mean = (sd_lo + sd_hi)/2,
+    dv = recode_factor(dv,
+                       `ideo_sc` = "Supreme Court",
+                       `ideo_collins` = "Susan Collins",
+                       `ideo_booker` = "Cory Booker",
+                       `ideo_haley` = "Nikki Haley",
+                       `ideo_feinstein` = "Dianne Feinstein",
+                       `ideo_murkowski` = "Lisa Murkowski",
+                       `ideo_dem` = "Democratic Party",
+                       `ideo_mcconnel` = "Mitch McConnell",
+                       `ideo_ryan` = "Paul Ryan",
+                       `ideo_schumer` = "Chuck Schumer",
+                       `ideo_rep` = "Republican Party",
+                       `ideo_warren` = "Elizabeth Warren",
+                       `ideo_pelosi` = "Nancy Pelosi",
+                       `ideo_trump` = "Donald Trump")
+  ) %>%
+  ggplot(aes(y = dv)) +
+  geom_vline(xintercept = 0, color="gray") +
+  geom_linerange(aes(xmin = sd_lo, xmax = sd_hi)) +
+  geom_point(aes(x = sd_lo, shape = "Low", col = "Low")) +
+  geom_point(aes(x = sd_hi, shape = "High", col = "High")) +
+  geom_text(aes(x = sd_mean, label = stars), nudge_y = .25, size = 2.5) +
+  facet_wrap(~iv) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(y = NULL,
+       x = "Uncertainty in Ideological Placements (Standard Deviation)",
+       col = "Sophistication/Knowledge",
+       shape = "Sophistication/Knowledge") +
+  plot_default +
+  theme(legend.position = "bottom")
+ggsave("fig/placements.pdf", width = 6.5, height = 4)
+
+
+
