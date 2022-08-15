@@ -586,12 +586,14 @@ stargazer(m3rob, type="text", align = TRUE, column.sep.width = "0pt", no.space =
 
 # Variance in ideological placements ----------
 
-var_compare <- function(yname, xname, data, quantiles = c(.25, .75)) {
+ideo_compare <- function(yname, xname, data, quantiles = c(.25, .75)) {
   y <- data.frame(data)[, yname]
   x <- data.frame(data)[, xname]
   x_lim <- quantile(x, probs = quantiles, na.rm = T)
   y_lo <- y[x <= x_lim[1]]
   y_hi <- y[x > x_lim[2]]
+  y_lo_na <- as.numeric(is.na(y_lo))
+  y_hi_na <- as.numeric(is.na(y_hi))
 
   dplyr::tibble(
     dv = yname,
@@ -602,14 +604,23 @@ var_compare <- function(yname, xname, data, quantiles = c(.25, .75)) {
     n_hi = length(y_hi),
     sd_lo = sd(y_lo, na.rm = T),
     sd_hi = sd(y_hi, na.rm = T),
-    p_value = var.test(y_lo, y_hi)$p.value
+    sd_pval = var.test(y_lo, y_hi)$p.value,
+    na_lo = mean(y_lo_na, na.rm = T),
+    na_hi = mean(y_hi_na, na.rm = T),
+    na_pval = t.test(y_lo_na, y_hi_na)$p.value
   ) %>%
     mutate(
-      stars = case_when(
-        p_value < .001 ~ "***",
-        p_value < .01 ~ "**",
-        p_value < .05 ~ "*",
-        p_value >= .05 ~ "ns"
+      sd_stars = case_when(
+        sd_pval < .001 ~ "***",
+        sd_pval < .01 ~ "**",
+        sd_pval < .05 ~ "*",
+        sd_pval >= .05 ~ "ns"
+      ),
+      na_stars = case_when(
+        na_pval < .001 ~ "***",
+        na_pval < .01 ~ "**",
+        na_pval < .05 ~ "*",
+        na_pval >= .05 ~ "ns"
       )
     )
 }
@@ -619,8 +630,8 @@ ideo <- c("ideo_dem", "ideo_rep", "ideo_sc", "ideo_trump", "ideo_warren", "ideo_
           "ideo_feinstein", "ideo_booker", "ideo_haley")
 
 bind_rows(
-  map_dfr(ideo, ~var_compare(., "polknow_text_scale", data_cces)),
-  map_dfr(ideo, ~var_compare(., "polknow_factual_scale", data_cces))
+  map_dfr(ideo, ~ideo_compare(., "polknow_text_scale", data_cces)),
+  map_dfr(ideo, ~ideo_compare(., "polknow_factual_scale", data_cces))
 ) %>%
   mutate(
     iv = recode_factor(iv,
@@ -648,7 +659,7 @@ bind_rows(
   geom_linerange(aes(xmin = sd_lo, xmax = sd_hi)) +
   geom_point(aes(x = sd_lo, shape = "Low", col = "Low")) +
   geom_point(aes(x = sd_hi, shape = "High", col = "High")) +
-  geom_text(aes(x = sd_mean, label = stars), nudge_y = .25, size = 2.5) +
+  geom_text(aes(x = sd_mean, label = sd_stars), nudge_y = .25, size = 2.5) +
   facet_wrap(~iv) +
   scale_color_brewer(palette = "Dark2") +
   labs(y = NULL,
@@ -658,6 +669,47 @@ bind_rows(
   plot_default +
   theme(legend.position = "bottom")
 ggsave("fig/placements.pdf", width = 6.5, height = 4)
+
+bind_rows(
+  map_dfr(ideo, ~ideo_compare(., "polknow_text_scale", data_cces)),
+  map_dfr(ideo, ~ideo_compare(., "polknow_factual_scale", data_cces))
+) %>%
+  mutate(
+    iv = recode_factor(iv,
+                       `polknow_text_scale` = "Discursive\nSophistication",
+                       `polknow_factual_scale` = "Factual\nKnowledge"),
+    na_mean = (na_lo + na_hi)/2,
+    dv = recode_factor(dv,
+                       `ideo_murkowski` = "Lisa Murkowski",
+                       `ideo_collins` = "Susan Collins",
+                       `ideo_haley` = "Nikki Haley",
+                       `ideo_booker` = "Cory Booker",
+                       `ideo_schumer` = "Chuck Schumer",
+                       `ideo_warren` = "Elizabeth Warren",
+                       `ideo_feinstein` = "Dianne Feinstein",
+                       `ideo_mcconnel` = "Mitch McConnell",
+                       `ideo_ryan` = "Paul Ryan",
+                       `ideo_pelosi` = "Nancy Pelosi",
+                       `ideo_trump` = "Donald Trump",
+                       `ideo_sc` = "Supreme Court",
+                       `ideo_rep` = "Republican Party",
+                       `ideo_dem` = "Democratic Party")
+  ) %>%
+  ggplot(aes(y = dv)) +
+  geom_vline(xintercept = 0, color="gray") +
+  geom_linerange(aes(xmin = na_lo, xmax = na_hi)) +
+  geom_point(aes(x = na_lo, shape = "Low", col = "Low")) +
+  geom_point(aes(x = na_hi, shape = "High", col = "High")) +
+  geom_text(aes(x = na_mean, label = na_stars), nudge_y = .25, size = 2.5) +
+  facet_wrap(~iv) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(y = NULL,
+       x = "Uncertainty in Ideological Placements (Standard Deviation)",
+       col = "Sophistication/Knowledge",
+       shape = "Sophistication/Knowledge") +
+  plot_default +
+  theme(legend.position = "bottom")
+ggsave("fig/placements_dk.pdf", width = 6.5, height = 4)
 
 
 
