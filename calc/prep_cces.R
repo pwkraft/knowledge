@@ -79,6 +79,19 @@ cces <- raw |>
     ideo_booker = dplyr::recode(as.numeric(UWM409), `8` = NA_real_),
     ideo_haley = dplyr::recode(as.numeric(UWM410), `8` = NA_real_),
 
+    ## CCES ideological placements (Senate race)
+    ideo_sen1 = dplyr::recode(as.numeric(CC18_334G), `8` = NA_real_),
+    ideo_sen2 = dplyr::recode(as.numeric(CC18_334H), `8` = NA_real_),
+    ideo_cand1 = dplyr::recode(as.numeric(CC18_334I), `8` = NA_real_),
+    ideo_cand2 = dplyr::recode(as.numeric(CC18_334J), `8` = NA_real_),
+    ideo_ego = dplyr::recode(as.numeric(CC18_334A), `8` = NA_real_),
+    CurrentSen1Name = CurrentSen1Name,
+    CurrentSen2Name = CurrentSen2Name,
+    SenCand1Name = SenCand1Name,
+    SenCand2Name = SenCand2Name,
+    senate_vote = as.numeric(CC18_351), # NOTE: count missings as 0 in CV?
+    senate_vote = ifelse(!is.na(senate_vote), senate_vote, as.numeric(CC18_351x)),
+
     ## CCES common core knowledge questions
     pk_house = as.numeric(CC18_309a == 1),
     pk_house_dk = as.numeric(dplyr::recode(as.numeric(CC18_309a), `4` = NA_real_) == 1),

@@ -713,3 +713,23 @@ ggsave("fig/placements_dk.pdf", width = 6.5, height = 4)
 
 
 
+# Correct voting / proximity voting analysis ------------------------------
+
+SenCand1Avg <- cces %>%
+  group_by(SenCand1Name) %>%
+  summarize(SenCand1Avg = mean(ideo_cand1, na.rm = T)) %>%
+  na.omit()
+
+SenCand2Avg <- cces %>%
+  group_by(SenCand2Name) %>%
+  summarize(SenCand2Avg = mean(ideo_cand2, na.rm = T)) %>%
+  na.omit()
+
+tmp <- cces %>%
+  left_join(SenCand1Avg) %>%
+  left_join(SenCand2Avg) %>%
+  mutate(correct_vote = as.numeric(abs(ideo_cand1 - SenCand1Avg) >= abs(ideo_cand2 - SenCand2Avg)) + 1,
+         correct_vote = as.numeric(correct_vote == senate_vote))
+
+
+
