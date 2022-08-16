@@ -35,6 +35,7 @@ load(here::here("calc/out/anes2020.Rdata"))
 load(here::here("calc/out/swiss.Rdata"))
 load(here::here("calc/out/yougov.Rdata"))
 load(here::here("calc/out/cces.Rdata"))
+load(here::here("calc/out/immig.Rdata"))
 source("calc/func.R")
 
 
@@ -763,4 +764,25 @@ stargazer(m1cv, type="text", align = TRUE, column.sep.width = "-25pt", no.space 
           keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
           out = "tab/correct_vote.tex", label = "tab:correct_vote")
 
+
+
+# Comparison with discursive sophistication in comments -------------------
+
+summary(lm(polint_att ~ polknow_text_scale + polknow_comments_scale +
+           female + age + black + educ + faminc + relig,
+           data = data_immig))
+
+summary(lm(polint_att ~ polknow_text_scale +
+             female + age + black + educ + faminc + relig,
+           data = data_immig))
+
+summary(lm(polint_att ~ polknow_comments_scale +
+             female + age + black + educ + faminc + relig,
+           data = data_immig))
+
+summary(lm(polint_att ~ polknow_text_scale,
+           data = data_immig))
+
+summary(lm(polint_att ~ polknow_comments_scale,
+           data = data_immig))
 
