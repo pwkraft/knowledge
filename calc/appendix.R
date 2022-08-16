@@ -786,3 +786,14 @@ summary(lm(polint_att ~ polknow_text_scale,
 summary(lm(polint_att ~ polknow_comments_scale,
            data = data_immig))
 
+summary(lm(polknow_text_scale ~ polknow_comments_scale,
+           data = data_immig))
+
+cor(data_immig$polknow_text_scale, data_immig$polknow_comments_scale, use = "complete.obs")
+
+summary(lm(polknow_text_scale ~ female + age + black + educ + faminc + relig,
+           data = data_immig))
+
+summary(lm(polknow_comments_scale ~ female + age + black + educ + faminc + relig,
+           data = data_immig))
+

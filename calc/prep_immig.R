@@ -67,68 +67,29 @@ immig <- num %>%
 opend_immig <- data.frame(select(immig, taxes_oe, jobs_oe, comments)) %>%
   apply(2, function(x){
     x <- gsub("(^\\s+|\\s+$)","", x)
-    x[x %in% c("N/A","n/a","na","Na","__NA__","no","not sure","none","nothing","good"
-               ,"don't know","don't no","","I have no clue","I do not know", "Don't know",
-               "Not sure", "No idea", "Idk", "None", "no comments", "?", "no", "yes",
-               "I dont know", "Dk", "???", "Don't know.", "Do not know", "NO idea",
-               "Unsure", "unsure", "Can't think of any", "Dont know", "None.", "bad", "for",
-               "Rt7", "Btgj", "Ftujvfjnu", "Btvni", "Ctbhhhh UK bbg", "Fvvgffvg", "Rthgfh",
-               "Egg digging f ghjvg", "Vytbn", "By my b", "ok", "yueah", "UNK",
-               "Against", "Favor", "on", "None!", "Bullshit", "No reason", "never",
-               "always", "Disagree", "No", "Yes", "Kind of", "i don't know", "do not know",
-               "nonsense", "unknown", "Know comment", "No comment", "NONE", "Nobe", "not",
-               "Nothing", "I don't care", "N/a", "im not sure", "do not know", "like it",
-               "i don't know", "I don’t nnow", "No opinion", "000", "I don’t really know",
-               "No response", "NA", "Not against", "NoZ.", "Dj.", "Who cares", "Not against",
-               "yes agree", "dont agree", "_____?", "-----????", "i dont know", "not against it.",
-               "no reason", "common sense", "no reasons", "Not", "notsure", "No thoughts", "NO",
-               "YES", "dont know", "I don't know.", "whatever", "get reak", "I don't know", "idk",
-               "dont know", "Wrong", "Right", "I dont kno", "H", ".", "Not against",
-               "I'm not against it", "Yep", "dont know", "I don't know.", "Not.","No option",
-               "Don’t know", "Im not sure", "I don't know", "Not", "NOT SURE", "NO OPINION",
-               "no idea", "I I'm not sure.", "I'm not sure.", "g jk;l g", "gre m;jkl e",
-               "jkl; grjkl g", "gs hjldsf", "tr.knjnjkger", "Zest Ajax's ;Oreg;Orr Gehrig arague rag",
-               "rehi ECG's Iguassu", "eragnk jg", "g JFK;l g", "Gere m;JFKl e", "JFKl; grJFKl g",
-               "gs holds", "tr.knjnjger", "no info", "I'm not.", "Have nothing", "Fuck if I know",
-               "not at this time", "Not applicable.", "NOTHING", "not against ...",
-               "I am not against it.", "I do not have the expertise in this area",
-               "i do not have expertise in this area", "I am against them", "Can’t think of one",
-               "know of no good reason..", "Hhh", "Agree", "Agree with this issue", "Ggg",
-               'See my answer in "for" appeal.', "Im for them", "None come to mind",
-               "None come to mind.", "needed", "not against", "na/", "None, this is crazy",
-               "Uncheck", "Check", "Mot sure", "Vheck", "Non check", "not sure what this is",
-               "nothing about his one", "Democrats", "Republicans", "I am against.",
-               "It should not happen.", "yes i am", "no im not", "the democrats", "democrats",
-               "republicans", "mpt sire", "bit syre", "Not against it.",
-               "i honestly have no response to this", "i do not have a response to this",
-               "no response sorry", "i dont know enough", "i dont enough about this",
-               "i dont know what a tariffs is", "no comment", "I have no argument",
-               "I don't have an opinion.", "I don't have an opinion", "I don’t knew", "I don’t know",
-               "I don’t make", "I’m not sure.", "Not completely sure.", "IDK", "conservatives",
-               "liberals", "Republican", "Honestly, I have no idea.", "i have no clue", "idk mah dude",
-               "Non", "for it", "no opinion", "not for it", "not for a repeal", "Same",
-               "Absolutely nothing.", "Nothing.", "ITS OK", "No clue", "I do not know of any",
-               "We need", "Not good", "I'm not at all", "I’m not against this", "No against",
-               "YEs I am", "No I am not", "Hell no I am not", "Yes, I am for this", "I am for this",
-               "I am not for this", "not against", "i'M NOT AGAINST THEM", "Jerbs",
-               "bad things", "good things", "goos things", "good news", "No reason not to.",
-               "tricky", "No at all", "Not for it.", "IM NOT AGAINST", "NOTHING AGAINST",
-               "in favor", "against", "not right", "right", "no comment", "Never.", "For it",
-               "none i know of", "none should be.", "Conservatives", "Liberals", "Not for it",
-               "no comment", "?? - not sure I can think of any", "nothing on this matter",
-               "All", "Rep", "Dem", "In not against", "No answer", "No knowledge", "No ideas on this",
-               "See other box.", "I have no idea", "I also have no idea", "Don'tknow", 'no good',
-               "a very crazy", "no good idea", "is a cool", "is a cool", "crazy", "is crazy",
-               "crazy total", "nothing to say", "also nothing", "positive", "negative",
-               "I am for", "I don't see any", "Don't know on this one", "do not know much about it",
-               "Can’t think of any.", "Don’t know enough on this topic", "confused", "High",
-               "Keep this policy", "I don't really know.", "I I'm not sure.", "I'm not sure.",
-               "I'm not sure", "I don't know what a tariffs is", "Don’t know.", "in certain cases",
-               "In favor", "ID.", "No idea.", "no opinion", "I'm for it", "Not sure.", "I do not know.",
-               "I don't know much about these.", "no good reasons", "I DINT KNOW MUCH ABOUT THIS TOPIC",
-               "I dint know much", "I'm not sure", "No need", "<-", "..?", "Please!!", "DINT KNOW",
-               "NOT AGAINST", "I really don't know", "not for it.","Can't think of a thing.",
-               "None I can think of", "dint have a good answer for this")] <- ""
+    x[x %in% c("nice....", "good", "I really don't have a clue.", "it's my decision",
+               "I have nothing to say", "nice and good", "super and good",
+               "it seems really", "it seems really good i love every part of it",
+               "use services is to be contented", "immigration work is satisified",
+               "I have no idea I work at a hospital", "I don't think it changes much of anything",
+               "very nice", "like it", "unsure", "really don't know possble",
+               "that is how i feel", "the movement is very useful too me.",
+               "very different", "nice", "ITS MY OPINION", "I THINK ITS MY OPINION",
+               "GREAT", "VERY NICE", "based on the above information",
+               "fackbook, instagram, twitter,youtube", "environmental",
+               "based on the information", "nothing", "I CHOOSE MY OPINION",
+               "I READ ALL THE INSTRUCTION SO I CHOOSE MY OPINION", "ITS MY OPINION READ A STORY RESULTS",
+               "us people is mostly invested in medical uses",
+               "my investment is based oon the environmental situation based on returns iis comes",
+               "based on the previous information", "its my opinion", "I dont know",
+               "based on my experience", "Please see response to previous question.",
+               "normal person like ones", "I think is that better", "Nothing",
+               "that our wish", "that's my own wish", "more than is that better",
+               "jobs is create for better", "Just a guess because I have no idea",
+               "Good study work.", "We are conducting an academic survey about media usage and news consumption. I hope this article has encouraged you to start answering or at least improve your answering method to benefit your business. This is definitely an important strategy to implement, but it shouldn’t be abused - don’t always link your answers back to your business.", "The taxes used for more people.",
+               "The creative job helps for more people.", "You have to give and take.",
+               "I think it is about equal", "breaking news", "economy rate",
+               "additional job", "additional jobs")] <- ""
     x <- gsub("//"," ", x , fixed = T)
     x <- gsub("\\s+"," ", x)
     x <- gsub("(^\\s+|\\s+$)","", x)
@@ -191,7 +152,7 @@ if(!is.null(out_oe$docs.removed)) data_oe <- data_oe[-out_oe$docs.removed,]
 ### stm fit with 49 topics
 stm_fit_oe <- stm(out_oe$documents, out_oe$vocab,
                      prevalence = as.matrix(out_oe$meta),
-                     K=25, seed=12345)
+                     K=0, seed=12345)
 
 ### compute number of considerations
 data_oe$size <- ntopics(stm_fit_oe, out_oe)
@@ -224,7 +185,7 @@ if(!is.null(out_comments$docs.removed)) data_comments <- data_comments[-out_comm
 ### stm fit with 49 topics
 stm_fit_comments <- stm(out_comments$documents, out_comments$vocab,
                         prevalence = as.matrix(out_comments$meta),
-                        K=25, seed=12345)
+                        K=0, seed=12345)
 
 ### compute number of considerations
 data_comments$size_comments <- ntopics(stm_fit_comments, out_comments)
