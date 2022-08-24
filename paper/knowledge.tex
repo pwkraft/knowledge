@@ -31,18 +31,11 @@
 }} % Anne Sch\"afer, Timon Forster, Simon Ellerbrock, Christiane Grill, Manuel Neumann, 
 \date{}
 
-% sans serif font
-% \renewcommand{\familydefault}{\sfdefault}
-
 % fancy font
 \usepackage{mathpazo}
 
-% assumption block
-\newtheorem{proposition}{Proposition}
-
 \begin{document}
 \maketitle
-%\onehalfspacing
 \doublespacing
 \thispagestyle{empty}
 
@@ -52,16 +45,7 @@
 %\end{center} 
 
 \hfill
-\begin{abstract}\singlespacing
-\noindent \input{knowledge_abstract}
-
-
-\vspace{\baselineskip}
-\noindent \textit{Keywords}: political sophistication, gender gap, open-ended responses, text analysis
-
-\vspace{\baselineskip}
-%\noindent \textit{Word count}: 5873 (via TeXcount)
-\end{abstract}
+\input{knowledge_abstract}
 \hfill
 
 \newpage\setcounter{page}{1}
@@ -79,16 +63,20 @@
 \counterwithin{table}{section}
 \setcounter{page}{1}
 \appendices
-%\textit{Online Appendix:}\\
-\textbf{Women Also Know Stuff: Challenging the Gender Gap in Political Sophistication}
-
-%\thispagestyle{empty}
+\subsubsection*{Women Also Know Stuff: Challenging the Gender Gap in Political Sophistication}
 \startcontents[sections]
 \printcontents[sections]{l}{1}{\setcounter{tocdepth}{2}}
+\thispagestyle{empty}
 \clearpage
-
+\newpage\setcounter{page}{1}
 \input{knowledge_appendix}
 
-
+\clearpage
+\singlespacing
+\setcounter{page}{1}
+\section*{Response to Reviewers}
+\subsubsection*{Women Also Know Stuff: Challenging the Gender Gap in Political Sophistication}
+\startcontents[memo]
+\input{knowledge_memo}
 
 \end{document}

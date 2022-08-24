@@ -1,27 +1,28 @@
 \babel@toc {USenglish}{}
 \contentsline {section}{Appendices}{1}{section*.25}%
 \ttl@starttoc {sections@1}
-\contentsline {section}{\numberline {A}Data Overview}{2}{appendix.a.A}%
-\contentsline {subsection}{\numberline {I}Open-Ended Items}{2}{subsection.a.A.1}%
-\contentsline {paragraph}{2018 Cooperative Election Study (CES):}{2}{section*.26}%
-\contentsline {paragraph}{2020, 2016, \& 2012 American National Election Study (ANES):}{2}{section*.27}%
-\contentsline {paragraph}{2015 YouGov Survey}{2}{section*.28}%
-\contentsline {paragraph}{Swiss Referendum Survey}{3}{section*.29}%
-\contentsline {subsection}{\numberline {II}Conventional Knowledge Items}{3}{subsection.a.A.2}%
-\contentsline {section}{\numberline {B}Information on Discursive Sophistication Components}{4}{appendix.a.B}%
-\contentsline {subsection}{\numberline {I}Distribution of Word Counts \& Proportion of Non-Response}{4}{subsection.a.B.1}%
-\contentsline {subsection}{\numberline {II}Preprocessing and Topic Model Specification}{5}{subsection.a.B.2}%
-\contentsline {subsection}{\numberline {III}Discursive Sophistication Components}{6}{subsection.a.B.3}%
-\contentsline {section}{\numberline {C}Robustness Checks}{7}{appendix.a.C}%
-\contentsline {subsection}{\numberline {I}PreText Analysis}{7}{subsection.a.C.1}%
-\contentsline {subsection}{\numberline {II}Discursive Sophistication for Varying Model Specifications}{8}{subsection.a.C.2}%
-\contentsline {subsection}{\numberline {III}Controlling for Personality and Verbal Skills}{10}{subsection.a.C.3}%
-\contentsline {paragraph}{Description of additional control variables:}{10}{section*.37}%
-\contentsline {subsection}{\numberline {IV}Personality and Verbal Skills as Predictors of Discursive Sophistication}{11}{subsection.a.C.4}%
-\contentsline {subsection}{\numberline {V}Discursive Sophistication and Uncertainty in Ideological Placements}{12}{subsection.a.C.5}%
-\contentsline {subsection}{\numberline {VI}Discursive Sophistication and Ideological Proximity Voting}{14}{subsection.a.C.6}%
-\contentsline {section}{\numberline {D}Tables of Model Estimates}{15}{appendix.a.D}%
-\contentsline {subsection}{\numberline {I}Figure~\ref {fig:knoweff}: Effects of sophistication on turnout, political interest, internal efficacy, and external efficacy}{15}{subsection.a.D.1}%
-\contentsline {subsection}{\numberline {II}Figure~\ref {fig:yg_disease}: Expected information retrieval in the 2015 YouGov Study as a function of political sophistication}{19}{subsection.a.D.2}%
-\contentsline {subsection}{\numberline {III}Figure~\ref {fig:determinants}: The gender gap in political sophistication after controlling for common determinants.}{20}{subsection.a.D.3}%
+\contentsline {section}{\numberline {A}Data Overview}{1}{appendix.a.A}%
+\contentsline {subsection}{\numberline {I}Open-Ended Items}{1}{subsection.a.A.1}%
+\contentsline {paragraph}{2018 Cooperative Election Study (CES):}{1}{section*.27}%
+\contentsline {paragraph}{2020, 2016, \& 2012 American National Election Study (ANES):}{1}{section*.28}%
+\contentsline {paragraph}{2015 YouGov Survey}{1}{section*.29}%
+\contentsline {paragraph}{Swiss Referendum Survey}{2}{section*.30}%
+\contentsline {subsection}{\numberline {II}Conventional Knowledge Items}{2}{subsection.a.A.2}%
+\contentsline {section}{\numberline {B}Information on Discursive Sophistication Components}{3}{appendix.a.B}%
+\contentsline {subsection}{\numberline {I}Distribution of Word Counts \& Proportion of Non-Response}{3}{subsection.a.B.1}%
+\contentsline {subsection}{\numberline {II}Preprocessing and Topic Model Specification}{4}{subsection.a.B.2}%
+\contentsline {subsection}{\numberline {III}Discursive Sophistication Components}{5}{subsection.a.B.3}%
+\contentsline {section}{\numberline {C}Robustness Checks}{6}{appendix.a.C}%
+\contentsline {subsection}{\numberline {I}PreText Analysis}{6}{subsection.a.C.1}%
+\contentsline {subsection}{\numberline {II}Discursive Sophistication for Varying Model Specifications}{7}{subsection.a.C.2}%
+\contentsline {subsection}{\numberline {III}Controlling for Personality and Verbal Skills}{9}{subsection.a.C.3}%
+\contentsline {paragraph}{Description of additional control variables:}{9}{section*.38}%
+\contentsline {subsection}{\numberline {IV}Personality and Verbal Skills as Predictors of Discursive Sophistication}{10}{subsection.a.C.4}%
+\contentsline {subsection}{\numberline {V}Discursive Sophistication and Uncertainty in Ideological Placements}{11}{subsection.a.C.5}%
+\contentsline {subsection}{\numberline {VI}Discursive Sophistication and Ideological Proximity Voting}{13}{subsection.a.C.6}%
+\contentsline {section}{\numberline {D}Tables of Model Estimates}{14}{appendix.a.D}%
+\contentsline {subsection}{\numberline {I}Figure~\ref {fig:knoweff}: Effects of sophistication on turnout, political interest, internal efficacy, and external efficacy}{14}{subsection.a.D.1}%
+\contentsline {subsection}{\numberline {II}Figure~\ref {fig:yg_disease}: Expected information retrieval in the 2015 YouGov Study as a function of political sophistication}{18}{subsection.a.D.2}%
+\contentsline {subsection}{\numberline {III}Figure~\ref {fig:determinants}: The gender gap in political sophistication after controlling for common determinants.}{19}{subsection.a.D.3}%
+\ttl@starttoc {memo@1}
 \contentsfinish 
