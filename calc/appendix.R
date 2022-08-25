@@ -557,30 +557,41 @@ heckit(select ~ female + age + black + educ + faminc + relig,
 m3rob <- list(
   lm(polknow_text_scale ~ extraversion + newexperience + reserved + wordsum + mode +
        female + age + black + educ_fact + faminc + relig, data = data2016),
+  lm(polknow_text_scale ~ extraversion + newexperience + reserved + wordsum + mode + polknow_factual_scale +
+       female + age + black + educ_fact + faminc + relig, data = data2016),
   lm(polknow_text_scale ~ extraversion + newexperience + reserved + wordsum + mode +
+       female + age + black + educ_fact + faminc + relig, data = data2012),
+  lm(polknow_text_scale ~ extraversion + newexperience + reserved + wordsum + mode + polknow_factual_scale +
        female + age + black + educ_fact + faminc + relig, data = data2012),
   lm(polknow_factual_scale ~ extraversion + newexperience + reserved + wordsum + mode +
        female + age + black + educ_fact + faminc + relig, data = data2016),
+  lm(polknow_factual_scale ~ extraversion + newexperience + reserved + wordsum + mode + polknow_text_scale +
+       female + age + black + educ_fact + faminc + relig, data = data2016),
   lm(polknow_factual_scale ~ extraversion + newexperience + reserved + wordsum + mode +
+       female + age + black + educ_fact + faminc + relig, data = data2012),
+  lm(polknow_factual_scale ~ extraversion + newexperience + reserved + wordsum + mode + polknow_text_scale +
        female + age + black + educ_fact + faminc + relig, data = data2012)
   )
 
-stargazer(m3rob, type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
+stargazer(m3rob, type="text", align = TRUE, column.sep.width = "-5pt", no.space = TRUE, digits = 3,
           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
           dep.var.labels = c("Discursive Sophistication","Factual Knowledge"),
           title="Personality, verbal skills, and survey mode as predictors
           of discursive sophistication and factual knowledge in the 2016 and 2012 ANES.",
           column.labels = rep(c("2016 ANES", "2012 ANES"), 2),
+          column.separate = rep(2,4),
           covariate.labels = c("Personality: Extraversion",
                                "Personality: Openness to Experience",
                                "Personality: Reserved",
                                "Verbal Skills (Wordsum score)",
                                "Survey Mode (Online)",
+                               "Factual Knowledge",
+                               "Discursive Soph.",
                                "Female","Age", "Black",
                                "Education: High School", "Education: Some College",
                                "Education: Bachelor's Degree", "Education: Graduate Degree",
                                "Household Income", "Church Attendance", "Constant"),
-          keep.stat = c("n", "rsq"), font.size = "footnotesize",
+          keep.stat = c("n", "rsq"), font.size = "tiny",
           out = "tab/determinants_rob.tex", label = "tab:determinants_rob")
 
 
