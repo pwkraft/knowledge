@@ -21,64 +21,28 @@
 \usepackage{chngcntr}
 \usepackage{amsthm}
 
-%\author{Patrick W. Kraft\footnote{Assistant Professor, University of Wisconsin-Milwaukee, \href{mailto:kraftp@uwm.edu}{kraftp@uwm.edu}.}}
-
-\title{Women Also Know Stuff \\
-%Alternative titles: Let's Talk Politics: A Naive Approach for Measuring Political Sophistication; Talking Politics; Looking for Answers; Why do Women Know Less About Politics? They Don't.
-\large{Challenging the Gender Gap in Political Sophistication}\footnote{This title is inspired by \url{https://womenalsoknowstuff.com/}, an organization that promotes the work of women in political science by providing a public database of relevant women experts for journalists, scholars, and others. %Previous versions of this manuscript have been presented at Polmeth 2016, MPSA 2017, EPSA 2017, ISPP 2017, APSA 2017, the Toronto Political Behavior Meeting 2018, and Zurich Text as Data 2019. 
-%Previous versions of this manuscript have been presented at Polmeth, MPSA, EPSA, ISPP, APSA, the Toronto Political Behavior Meeting, and Zurich Text as Data. 
-%I thank Alexa Bankert, Jason Barabas, Scott Clifford, Andy Delton, Milena Djourelova, Kathy Dolan, Peter DeScioli, Stanley Feldman, Roy Gava, Fabrizio Gilardi, Jennifer Jerit, Yanna Krupnikov, Emmy Lindstam, Hannah Nam, Michael Peress, Daniel Rubenson, R\"udiger Schmitt-Beck, and Arthur Spirling for helpful comments on previous versions of this manuscript. Special thanks to C{\'e}line Colombo, Scott Clifford, and Jennifer Jerit for sharing their data. The manuscript and code are available on GitHub: \url{https://github.com/pwkraft/knowledge}.
-}} % Anne Sch\"afer, Timon Forster, Simon Ellerbrock, Christiane Grill, Manuel Neumann, 
-\date{}
-
 % fancy font
 \usepackage{mathpazo}
 
+%\author{Patrick W. Kraft\footnote{Assistant Professor, University of Wisconsin-Milwaukee, \href{mailto:kraftp@uwm.edu}{kraftp@uwm.edu}.}}
+
+\title{Women Also Know Stuff \\
+\large{Challenging the Gender Gap in Political Sophistication}\footnote{This title is inspired by \url{https://womenalsoknowstuff.com/}, an organization that promotes the work of women in political science by providing a public database of relevant women experts for journalists, scholars, and others. 
+}} 
+\date{}
+
+% Previous versions of this manuscript have been presented at Polmeth 2016, MPSA 2017, EPSA 2017, ISPP 2017, APSA 2017, the Toronto Political Behavior Meeting 2018, and Zurich Text as Data 2019. 
+% Previous versions of this manuscript have been presented at Polmeth, MPSA, EPSA, ISPP, APSA, the Toronto Political Behavior Meeting, and Zurich Text as Data. 
+% I thank Alexa Bankert, Jason Barabas, Scott Clifford, Andy Delton, Milena Djourelova, Kathy Dolan, Peter DeScioli, Stanley Feldman, Roy Gava, Fabrizio Gilardi, Jennifer Jerit, Yanna Krupnikov, Emmy Lindstam, Hannah Nam, Michael Peress, Daniel Rubenson, R\"udiger Schmitt-Beck, and Arthur Spirling for helpful comments on previous versions of this manuscript. Special thanks to C{\'e}line Colombo, Scott Clifford, and Jennifer Jerit for sharing their data. The manuscript and code are available on GitHub: \url{https://github.com/pwkraft/knowledge}.
+% Additional thanks: Anne Sch\"afer, Timon Forster, Simon Ellerbrock, Christiane Grill, Manuel Neumann
+% Alternative titles: Let's Talk Politics: A Naive Approach for Measuring Political Sophistication; Talking Politics; Looking for Answers; Why do Women Know Less About Politics? They Don't.
+
 \begin{document}
-\maketitle
+
 \doublespacing
-\thispagestyle{empty}
-
-%\begin{center}
-%-- WORK IN PROGRESS -- \\
-%PLEASE DO NOT CITE OR REDISTRIBUTE WITHOUT PERMISSION
-%\end{center} 
-
-\hfill
-\input{knowledge_abstract}
-\hfill
-
-\newpage\setcounter{page}{1}
+\input{knowledge_title}
 \input{knowledge_maintext}
-
-\clearpage
-\singlespacing
-\bibliographystyle{/data/Dropbox/Uni/Lit/apsr2006}
-\bibliography{/data/Dropbox/Uni/Lit/Literature}
-
-\clearpage
-\singlespacing
-\renewcommand\thesubsection{\Roman{subsection}}
-\counterwithin{figure}{section}
-\counterwithin{table}{section}
-\setcounter{page}{1}
-\appendices
-\subsubsection*{Women Also Know Stuff: Challenging the Gender Gap in Political Sophistication}
-\startcontents[sections]
-\printcontents[sections]{l}{1}{\setcounter{tocdepth}{2}}
-\thispagestyle{empty}
-\clearpage
-\newpage\setcounter{page}{1}
 \input{knowledge_appendix}
-
-\clearpage
-\singlespacing
-\setcounter{page}{1}
-\setlength{\parskip}{1em}
-\setlength{\parindent}{0cm}
-\section*{Response to Reviewers}
-\subsubsection*{Women Also Know Stuff: Challenging the Gender Gap in Political Sophistication}
-\startcontents[memo]
 \input{knowledge_memo}
 
 \end{document}
