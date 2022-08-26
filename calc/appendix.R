@@ -668,14 +668,19 @@ bind_rows(
   ) %>%
   ggplot(aes(y = dv)) +
   geom_vline(xintercept = 0, color="gray") +
-  geom_linerange(aes(xmin = sd_lo, xmax = sd_hi)) +
-  geom_point(aes(x = sd_lo, shape = "Low", col = "Low")) +
-  geom_point(aes(x = sd_hi, shape = "High", col = "High")) +
+  geom_segment(aes(x = sd_lo, yend = dv,
+                   xend = ifelse(sd_hi < sd_lo, sd_hi + .02, sd_hi - .02)),
+               lineend = "round", linejoin = "mitre",
+               arrow = arrow(length = unit(0.1, "inches"))) +
+  geom_point(aes(x = sd_lo, shape = "Low (25th Percentile)",
+                 col = "Low (25th Percentile)"), size = 2) +
+  geom_point(aes(x = sd_hi, shape = "High (75th Percentile)",
+                 col = "High (75th Percentile)"), size = 2) +
   geom_text(aes(x = sd_mean, label = sd_stars), nudge_y = .25, size = 2.5) +
   facet_wrap(~iv) +
   scale_color_brewer(palette = "Dark2") +
   labs(y = NULL,
-       x = "Uncertainty in Ideological Placements (Standard Deviation)",
+       x = "Uncertainty in Ideological Placements (in Standard Deviations)",
        col = "Sophistication/Knowledge",
        shape = "Sophistication/Knowledge") +
   plot_default +
@@ -694,29 +699,35 @@ bind_rows(
     dv = recode_factor(dv,
                        `ideo_murkowski` = "Lisa Murkowski",
                        `ideo_collins` = "Susan Collins",
-                       `ideo_haley` = "Nikki Haley",
                        `ideo_booker` = "Cory Booker",
+                       `ideo_haley` = "Nikki Haley",
                        `ideo_schumer` = "Chuck Schumer",
-                       `ideo_warren` = "Elizabeth Warren",
-                       `ideo_feinstein` = "Dianne Feinstein",
                        `ideo_mcconnel` = "Mitch McConnell",
+                       `ideo_feinstein` = "Dianne Feinstein",
+                       `ideo_warren` = "Elizabeth Warren",
                        `ideo_ryan` = "Paul Ryan",
                        `ideo_pelosi` = "Nancy Pelosi",
-                       `ideo_trump` = "Donald Trump",
                        `ideo_sc` = "Supreme Court",
+                       `ideo_trump` = "Donald Trump",
                        `ideo_rep` = "Republican Party",
                        `ideo_dem` = "Democratic Party")
   ) %>%
   ggplot(aes(y = dv)) +
   geom_vline(xintercept = 0, color="gray") +
-  geom_linerange(aes(xmin = na_lo, xmax = na_hi)) +
-  geom_point(aes(x = na_lo, shape = "Low", col = "Low")) +
-  geom_point(aes(x = na_hi, shape = "High", col = "High")) +
+  geom_segment(aes(x = na_lo, yend = dv,
+                   xend = ifelse(na_hi < na_lo, na_hi + .01, na_hi - .01)),
+               lineend = "round", linejoin = "mitre",
+               arrow = arrow(length = unit(0.1, "inches"))) +
+  geom_point(aes(x = na_lo, shape = "Low (25th Percentile)",
+                 col = "Low (25th Percentile)"), size = 2) +
+  geom_point(aes(x = na_hi, shape = "High (75th Percentile)",
+                 col = "High (75th Percentile)"), size = 2) +
   geom_text(aes(x = na_mean, label = na_stars), nudge_y = .25, size = 2.5) +
   facet_wrap(~iv) +
   scale_color_brewer(palette = "Dark2") +
+  scale_x_continuous(labels = scales::percent) +
   labs(y = NULL,
-       x = "Uncertainty in Ideological Placements (Standard Deviation)",
+       x = "`Don't Know` in Ideological Placements (in Percent)",
        col = "Sophistication/Knowledge",
        shape = "Sophistication/Knowledge") +
   plot_default +
