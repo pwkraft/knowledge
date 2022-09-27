@@ -158,16 +158,30 @@ ggsave("fig/anes2012_corplot.png",width=3.2, height=3.2)
 
 data_cces %>%
   filter(wc > (median(wc) - 100) & wc < (median(wc) + 100),
-         polknow_old == 1) %>%
+         polknow_factual == 0.6) %>%
   filter((polknow_text_scale < quantile(polknow_text_scale,.25) & female == 0) |
            (polknow_text_scale > quantile(polknow_text_scale,.75) & female == 1)) %>%
   arrange(polknow_text_scale) %>%
-  select(caseid, female, polknow_old, polknow_text_scale) %>%
+  select(caseid, female, polknow_old, polknow_factual, polknow_text_scale) %>%
   #left_join(opend) %>%
   left_join(haven::read_sav("/data/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
               dplyr::select(caseid, UWM309, UWM310, UWM312, UWM313, UWM315,
                             UWM316, UWM318, UWM319, UWM321, UWM322)) %>%
   write_csv(file="calc/tmp/select_cces.csv")
+
+# Directly identify sample responses in revised submission
+data_cces %>% filter(caseid %in% c(418389435, 412523485)) %>%
+  select(caseid, female, polknow_old, polknow_factual, polknow_text_scale) %>%
+  left_join(haven::read_sav("/data/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
+              dplyr::select(caseid, UWM309, UWM310, UWM312, UWM313, UWM315,
+                            UWM316, UWM318, UWM319, UWM321, UWM322)) %>% View()
+
+# Old code to identify sample responses in original submission (using old factual scale):
+data_cces %>% filter(caseid %in% c(412380137, 414596729)) %>%
+  select(caseid, female, polknow_old, polknow_factual, polknow_text_scale) %>%
+  left_join(haven::read_sav("/data/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
+              dplyr::select(caseid, UWM309, UWM310, UWM312, UWM313, UWM315,
+                            UWM316, UWM318, UWM319, UWM321, UWM322)) %>% View()
 
 
 

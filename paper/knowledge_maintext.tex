@@ -116,14 +116,14 @@ The last component addresses the level of \textit{constraint} between considerat
 \end{equation}
 As before, I re-scale the measure to range from zero to one by dividing all values by the empirical maximum observed across all individuals in the data.
 
-Together, the three measures can be combined in a composite metric of sophistication in political attitude expression by averaging them for each respondent. Like each individual component, the resulting \textit{discursive sophistication} score ranges from 0 to 1:
+Together, the three measures can be combined in an additive scale of \textit{discursive sophistication} in political attitude expression:
 \begin{equation}
-\text{discursive sophistication}_i = \tfrac{1}{3}(\text{size}_i + \text{range}_i + \text{constraint}_i).
+\text{discursive sophistication}_i = \text{size}_i + \text{range}_i + \text{constraint}_i.
 \end{equation}
 
 % Discursive sophistication in attitude expression is then defined as the conjunction of these three basic dimensions.
 %In a questionnaire where respondents are asked to discuss their political attitudes in multiple open-ended items, I therefore define discursive sophistication as the conjunction of the three dimensions described here. 
-Overall, a highly sophisticated individual should therefore give a more \textit{elaborate} response across the full \textit{range} of questions by \textit{integrating} and/or \textit{differentiating} multiple considerations. Note that this simple framework makes no assumptions about the direction of people's attitudes or their specific ideology. Crucially, since it is solely based on \textit{how} individuals discuss their preferences, it can be directly applied in various settings to target specific political issues or tasks such as choosing between candidates running for election.
+Overall, a highly sophisticated individual should therefore give a more \textit{elaborate} response across the full \textit{range} of questions by \textit{integrating} and/or \textit{differentiating} multiple considerations. Note that this simple framework makes no assumptions about the direction of people's attitudes or their specific ideology. Crucially, since it is solely based on \textit{how} individuals discuss their preferences, it can be directly applied in various settings to target specific political issues or tasks such as choosing between candidates running for election. Given each individual input, the resulting metric has a theoretical range between 0 and 3. However, in order to allow for easier comparisons with conventional additive knowledge scores, I rescale discursive sophistication to mean zero and unit variance.
 % In the following, I discuss these three different attributes of open-ended survey responses that should be indicative of sophistication in attitude expression in more detail.
 
 Of course, this is not the first time a framework is developed to assess the complexity of written (or spoken) word. In fact, this task has been the subject of longstanding research in linguistics and educational sciences, resulting in a multitude of alternative metrics. Recently, these measures have been employed by political scientists who study different forms of elite communication. \citet{spirling2016democratization}, for example, uses a standard readability score based on the ratio of words per sentence and syllables per word to study the linguistic complexity of speeches in the British House of Commons over time. More recently, \citet{benoit2019measuring} expanded on previous metrics to develop a measure of comprehensibility that is more applicable in the realm of politics.
@@ -160,7 +160,7 @@ While each dimension of discursive sophistication outlined above provides a uniq
 
 \input{/data/Dropbox/Uni/projects/2016/knowledge/tab/factload}
 
-How does this discursive sophistication score compare to alternative metrics of political knowledge? As discussed, the standard approach to measuring political knowledge in surveys is to ask a set of factual questions about political institutions. The CES and ANES include such a basic item battery, inquiring for example about presidential term limits or the majority party in either chamber of Congress. I combine responses on these items to form an additive index of \textit{factual knowledge} about politics. As an additional benchmark, I consider \textit{interviewer assessments} of each respondent's political sophistication (see \citealt{bartels2005homer}; but cf. \citealt{ryan2011accuracy}).\footnote{Interviewer assessments were only recorded in the face-to-face sample of the 2012 and 2016 ANES.}
+How does this discursive sophistication score compare to alternative metrics of political knowledge? As discussed, the standard approach to measuring political knowledge in surveys is to ask a set of factual questions about political institutions. The CES and ANES include such a set of basic recall items, inquiring for example about presidential term limits or the majority party in either chamber of Congress. Borrowing the classification in \citet{barabas2014question}, the CES items focus on policy-specific facts whereas the ANES battery tests general institutional knowledge.\footnote{See Appendix~\ref{app:variables} for details.} I combine responses on these items to form an additive index of \textit{factual knowledge} about politics. In order to facilitate easier comparisons with discursive sophistication, each factual knowledge measure is rescaled to zero mean and unit variance. As an additional benchmark, I consider \textit{interviewer assessments} of each respondent's political sophistication (see \citealt{bartels2005homer}; but cf. \citealt{ryan2011accuracy}).\footnote{Interviewer assessments were only recorded in the face-to-face sample of the 2012 and 2016 ANES.}
 
 \begin{figure*}[ht]
     \centering
@@ -191,49 +191,50 @@ How does this discursive sophistication score compare to alternative metrics of 
 
 Figure~\ref{fig:corplot} compares discursive sophistication to conventional knowledge metrics for the CES and ANES. Each figure presents scatterplots between individual measures (lower triangular), univariate densities (diagonal), and correlation coefficients (upper triangular). The measure of discursive sophistication is positively correlated with both conventional metrics while capturing some additional variation. Interestingly, there is a stronger correlation between discursive sophistication and interviewer evaluations than between factual knowledge and interviewer evaluations ($r=.36$ vs. $r=.23$ in 2016, and $r=.45$ vs. $r=.31$ in 2012), which indicates that the open-ended measure captures characteristics that influence subjective assessments of sophistication. In other words, a respondent's verbatim answers seem to be more influential for subsequent knowledge assessments by the interviewer than a respondent's performance on the factual knowledge questions.
 
-While discursive sophistication and the alternative measures are clearly correlated, the relationship between each metric is far from perfect. To provide some intuition as to whether the variation in discursive sophistication is theoretically meaningful, I present an example of open-ended responses from two individuals in the 2018 CES who \textit{scored equally on factual knowledge} (3 out of 3 correct responses), but varied in discursive sophistication. 
+While discursive sophistication and the alternative measures are clearly correlated, the relationship between each metric is far from perfect. To provide some intuition as to whether the variation in discursive sophistication is theoretically meaningful, I present an example of open-ended responses from two individuals in the 2018 CES who \textit{scored equally on factual knowledge} (3 out of 5 correct responses), but varied in discursive sophistication. 
 
 \begin{table}[ht]\footnotesize\centering
-\begin{tabular}{l|p{6.8cm}|p{5.8cm}}
+\begin{tabular}{l|p{5.0cm}|p{7.6cm}}
 \toprule
 					& A: Low Sophistication Response 
 					& B: High Sophistication Response
 					\\\midrule
-Guns (+)			& Increases the fact that bad actors will be caught before getting guns to cause problems
-					& Making sure healthy law abiding citizens only can get guns
+Guns (+)			& Mental health.
+					& Mental health issues, prior domestic violence conviction.
 					\\\hdashline
-Guns (-)			& Can't think of any
-					& The second amendment....
+Guns (-)			& None.
+					& Violates second amendment.
 					\\\hdashline
-Abortion (+)		& Don't know
-					& Killing babies
+Abortion (+)		& None.
+					& Right to life, viability of the fetus, ability of the fetus to feel pain, should have been able to access care earlier.
 					\\\hdashline
-Abortion (-)		& Don't know
-					& Women want the right to decide what to do medically with their own bodies
+Abortion (-)		& Women will have to seek abortions elsewhere which is dangerous.
+					& Women's bodily autonomy and right to decide, comparatively tiny percentage of abortions, usually for health reasons.
 					\\\hdashline
-Immigration (+)		& It was not their fault they were brought here. If they are not committing crimes, they should be given a chance at citizenship
-					& They have been living here for years and should not have to be uprooted
+Immigration (+)		& We help people fleeing violence.
+					& They did not have a choice, many of them have been here since childhood, they do not have another home.
 					\\\hdashline
-Immigration (-)		& don't know
-					& They came here illegally and are criminals
+Immigration (-)		& Nothing.
+					& Their parents shouldn't have brought them in the first place, whether it’s their fault or not, they take jobs from ``real'' Americans.
 					\\\hdashline
-Health care (+)		& It is too expensive - it requires people who don't use insurance or haven't in the pas to pay for everybody who does, especially the people who are getting it for free.
-					& Cost to much, hurts the middle class, raised costs of health insurance
+Health care (+)		& None.
+					& Too expensive, doesn't allow consumers choice in whether or not to purchase healthcare, has increased costs.
 					\\\hdashline
-Health care (-)		& Can't think of a thing.
-					& Many people who get insurance through the ACA would be left uninsured
+Health care (-)		& Protect existing conditions.
+					& We need everyone to participate to keep costs down, healthcare is a human right, preexisting conditions should be covered, people should not be bankrupted by healthcare costs.
 					\\\hdashline
-Trade policy (-)	& don't know
-					& More money for the government without taxing the people
+Trade policy (-)	& None.
+					& Protects us jobs and businesses.
+					
 					\\\hdashline
-Trade policy (+)	& don't know
-					& They are affecting trade relations, making products brought into the us more expensive
+Trade policy (+)	& It's hurting our economy.
+					& Protects industries that are waning, raises costs for consumers, doesn't actually create jobs or think about the future.
 					\\\midrule
-Disc. Soph. 		& 0.289
-					& 0.517 
+Disc. Soph. 		& $-1.246$
+					& $0.947$
 					\\\bottomrule
 \end{tabular}
-\caption[Example of open-ended responses for low and high scores on discursive sophistication]{Example of open-ended responses for low and high scores on discursive sophistication with equal factual knowledge scores (3 out of 3 correct responses). Column A displays the verbatim responses of an individual who scored low on discursive sophistication and column B displays the verbatim responses of an individual who scored high on the open-ended measure. Note that the entries are original responses without editing.}\label{tab:ex1}
+\caption[Example of open-ended responses for low and high scores on discursive sophistication]{Example of open-ended responses for low and high scores on discursive sophistication with equal factual knowledge scores (3 out of 5 correct responses). Column A displays the verbatim responses of an individual who scored low on discursive sophistication and column B displays the verbatim responses of an individual who scored high on the open-ended measure. Note that responses are slightly edited for readability.}\label{tab:ex1}
 \end{table}
 
 The results are presented in Table~\ref{tab:ex1}. Each row represents one of the open-ended responses targeting specific policy issues. Column A displays the responses of an individual who scored low on discursive sophistication and column B displays the responses of a high scoring individual. Even though both individuals have the same factual knowledge score, there are systematic differences in their response behavior that suggest disparity in their political sophistication. Overall, respondent A provided a less elaborate response and only focused on a narrow range of issues. Irrespective of whether one agrees with the specific statements, A's response pattern is suggestive of a less sophisticated political belief system and a lower level of motivation to engage in in-depth reasoning about each issue. Overall, this initial result suggests that the variation in discursive sophistication captures meaningful differences in response behavior that overlaps with traditional knowledge metrics while displaying some unique variation. The following sections will show that this variation is also politically consequential.
@@ -258,6 +259,8 @@ Any measure of political sophistication should be strongly associated with indiv
 \end{figure}
 
 Each panel in Figure~\ref{fig:knoweff} compares the average marginal effects of both sophistication measures on the respective dependent variable while holding all other variables constant at their means. Of course, these effects are purely correlational and should not be interpreted causally. Nevertheless, across all four surveys, discursive sophistication is a stronger predictor of turnout, political interest, and internal efficacy. The results for external efficacy are more ambiguous. Factual knowledge has strikingly inconsistent effects---sometimes predicting higher, lower, or no change in external efficacy. Discursive sophistication, in contrast, is more consistently associated with higher external efficacy (the only exception is the 2018 CES, which uses a shorter battery to measure external efficacy).
+
+% TODO: refer to Table~\ref{tab:ex1} here to illustrate the meaning of a 2SD change.
 
 Considering these initial results, a potential concern may be that discursive sophistication is confounded by individual characteristics that influence verbatim response patterns as well as engagement. As a robustness check, Appendix~\ref{app:robustness}.\ref{app:personality} provides additional regression results controlling for various factors that might drive verbosity such as personality (extraversion), survey mode (face-to-face vs. online), verbal skills, as well as individual response length itself. The substantive conclusions remain unchanged.
 
