@@ -174,14 +174,14 @@ data_cces %>% filter(caseid %in% c(418389435, 412523485)) %>%
   select(caseid, female, polknow_old, polknow_factual, polknow_text_scale) %>%
   left_join(haven::read_sav("/data/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
               dplyr::select(caseid, UWM309, UWM310, UWM312, UWM313, UWM315,
-                            UWM316, UWM318, UWM319, UWM321, UWM322)) %>% View()
+                            UWM316, UWM318, UWM319, UWM321, UWM322))# %>% View()
 
 # Old code to identify sample responses in original submission (using old factual scale):
 data_cces %>% filter(caseid %in% c(412380137, 414596729)) %>%
   select(caseid, female, polknow_old, polknow_factual, polknow_text_scale) %>%
   left_join(haven::read_sav("/data/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
               dplyr::select(caseid, UWM309, UWM310, UWM312, UWM313, UWM315,
-                            UWM316, UWM318, UWM319, UWM321, UWM322)) %>% View()
+                            UWM316, UWM318, UWM319, UWM321, UWM322))# %>% View()
 
 
 
@@ -266,7 +266,7 @@ c(m1noc[1], m1[1], m1int[1],
   stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout, political interest, internal efficacy,
-          and external efficacy in the 2018 CES. Standard errors in parentheses. Estimates in model
+          and external efficacy in the 2018 CES. Standard errors in parentheses. Estimates of model
           (2), (5), (8), and (11) are used for Figure \\ref{fig:knoweff} in the main text."),
             column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
             column.separate = c(3,3,3,3),
@@ -284,7 +284,7 @@ c(m1noc[2], m1[2], m1int[2],
   stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout, political interest, internal efficacy,
-          and external efficacy in the 2020 ANES. Standard errors in parentheses. Estimates in model
+          and external efficacy in the 2020 ANES. Standard errors in parentheses. Estimates of model
           (2), (5), (8), and (11) are used for Figure \\ref{fig:knoweff} in the main text."),
             column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
             column.separate = c(3,3,3,3),
@@ -302,7 +302,7 @@ c(m1noc[3], m1[3], m1int[3],
   stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout, political interest, internal efficacy,
-          and external efficacy in the 2016 ANES. Standard errors in parentheses. Estimates in model
+          and external efficacy in the 2016 ANES. Standard errors in parentheses. Estimates of model
           (2), (5), (8), and (11) are used for Figure \\ref{fig:knoweff} in the main text."),
             column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
             column.separate = c(3,3,3,3),
@@ -320,7 +320,7 @@ c(m1noc[4], m1[4], m1int[4],
   stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout, political interest, internal efficacy,
-          and external efficacy in the 2012 ANES. Standard errors in parentheses. Estimates in model
+          and external efficacy in the 2012 ANES. Standard errors in parentheses. Estimates of model
           (2), (5), (8), and (11) are used for Figure \\ref{fig:knoweff} in the main text."),
             column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
             column.separate = c(3,3,3,3),
@@ -394,7 +394,7 @@ ggsave("fig/yg_disease.pdf", width=4, height=2)
 stargazer(m2, type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
           title="Linear regressions predicting information retrieval in the 2015 YouGov study.
-          Standard errors in parentheses. Estimates are used for Figure \\ref{fig:yg_disease}
+          Standard errors in parentheses. Estimates of model (2) are used for Figure \\ref{fig:yg_disease}
           in the main text.",
           column.labels = "Information Retrieval",
           column.separate = 3,

@@ -48,7 +48,7 @@ yougov$know_dis <- with(raw, (Q12_1==1)
                         + ((Q12_4==1)*!disgust) + ((Q12_4==2)*disgust)
                         + ((Q12_5==2)*!disgust) + ((Q12_5==1)*disgust)
                         + (Q12_6==2) + (Q12_7==2)
-                        + (Q13==1) + (Q14==2))/9
+                        + (Q13==1) + (Q14==2))#/9
 
 ## recode missing values in political knowledge questions
 raw$Q24[is.na(raw$Q24)] <- 8
