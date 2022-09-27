@@ -673,12 +673,12 @@ bind_rows(
                lineend = "round", linejoin = "mitre",
                arrow = arrow(length = unit(0.1, "inches"))) +
   geom_point(aes(x = sd_lo, shape = "Low (25th Percentile)",
-                 col = "Low (25th Percentile)"), size = 2) +
+                 col = iv), size = 2) +
   geom_point(aes(x = sd_hi, shape = "High (75th Percentile)",
-                 col = "High (75th Percentile)"), size = 2) +
+                 col = iv), size = 2) +
   geom_text(aes(x = sd_mean, label = sd_stars), nudge_y = .25, size = 2.5) +
   facet_wrap(~iv) +
-  scale_color_brewer(palette = "Dark2") +
+  scale_color_brewer(palette = "Dark2", guide = "none") +
   labs(y = NULL,
        x = "Uncertainty in Ideological Placements (in Standard Deviations)",
        col = "Sophistication/Knowledge",
@@ -719,12 +719,12 @@ bind_rows(
                lineend = "round", linejoin = "mitre",
                arrow = arrow(length = unit(0.1, "inches"))) +
   geom_point(aes(x = na_lo, shape = "Low (25th Percentile)",
-                 col = "Low (25th Percentile)"), size = 2) +
+                 col = iv), size = 2) +
   geom_point(aes(x = na_hi, shape = "High (75th Percentile)",
-                 col = "High (75th Percentile)"), size = 2) +
+                 col = iv), size = 2) +
   geom_text(aes(x = na_mean, label = na_stars), nudge_y = .25, size = 2.5) +
   facet_wrap(~iv) +
-  scale_color_brewer(palette = "Dark2") +
+  scale_color_brewer(palette = "Dark2", guide = "none") +
   scale_x_continuous(labels = scales::percent) +
   labs(y = NULL,
        x = "`Don't Know` in Ideological Placements (in Percent)",
@@ -770,8 +770,9 @@ bind_rows(
                                   `polknow_text_scale` = "Discursive Sophistication",
                                   `polknow_factual_scale` = "Factual Knowledge")) %>%
   ggplot(aes(x=ivval, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_default +
-  geom_ribbon(alpha=0.4, lwd=.1) + geom_line() +
-  ylab("Pr(Ideological Proximity Vote)") + xlab("Value of Independent Variable")
+  geom_ribbon(alpha=0.6, lwd=.1) + geom_line() +
+  ylab("Pr(Ideological Proximity Vote)") + xlab("Value of Independent Variable") +
+  scale_fill_brewer(palette = "Dark2")
 ggsave("fig/correct_vote.pdf", width=4, height=2)
 
 stargazer(m1cv, type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,

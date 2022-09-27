@@ -218,13 +218,17 @@ m1 %>%
                        `effic_int` = "Internal Efficacy",
                        `effic_ext` = "External Efficacy"),
     term = recode_factor(term,
-                         `polknow_factual_scale` = "Factual\nKnowledge",
-                         `polknow_text_scale` = "Discursive\nSophistication")) %>%
-  ggplot(aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high)) +
+                         `polknow_text_scale` = "Discursive\nSophistication",
+                         `polknow_factual_scale` = "Factual\nKnowledge")) %>%
+  ggplot(aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high,
+             col = term, shape = term)) +
   geom_vline(xintercept = 0, color="grey") +
   geom_point() + geom_errorbarh(height=0) + facet_grid(study~dv) +
   xlab("Estimated Effect of Discursive Sophistication and Factual Knowledge\n(for an increase from 1 SD below mean to 1 SD above mean)") +
-  ylab("Independent Variable") + plot_default
+  scale_color_brewer(palette = "Dark2") +
+  ylab("Independent Variable") + plot_default +
+  theme(legend.position = "none") +
+  scale_y_discrete(limits=rev)
 ggsave("fig/knoweff.pdf", width=6.5, height=4)
 
 
@@ -382,8 +386,9 @@ bind_rows(
                                   `polknow_text_scale` = "Discursive Sophistication",
                                   `polknow_factual_scale` = "Factual Knowledge")) %>%
   ggplot(aes(x=ivval, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_default +
-  geom_ribbon(alpha=0.4, lwd=.1) + geom_line() +
-  ylab("Information Retrieval") + xlab("Value of Independent Variable")
+  geom_ribbon(alpha=0.6, lwd=.1) + geom_line() +
+  ylab("Information Retrieval") + xlab("Value of Independent Variable") +
+  scale_fill_brewer(palette="Dark2") # old version = "Paired"
 ggsave("fig/yg_disease.pdf", width=4, height=2)
 
 stargazer(m2, type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
@@ -417,11 +422,12 @@ rbind(data.frame(opend_german, language = "German"),
       data.frame(opend_french, language = "French"),
       data.frame(opend_italian, language = "Italian")) %>%
   ggplot(aes(x=polknow_text_scale, y=as.factor(loj))) +
-  geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
+  geom_density_ridges(aes(fill="1"), scale = 4, alpha=.6) + plot_default +
   scale_y_discrete(expand = c(0.01, 0)) +
   scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=3) +
   geom_text(data=opend_cor, aes(label=cor),size=2,vjust=-9) +
-  ylab("Level of Justification") + xlab("Discursive sophistication")
+  ylab("Level of Justification") + xlab("Discursive sophistication") +
+  scale_fill_brewer(palette="Dark2") + theme(legend.position = "none")
 ggsave("fig/swiss_ggridges.pdf",width=6,height=2)
 
 rbind(data.frame(opend_german, language = "German"),
@@ -503,7 +509,7 @@ grid.arrange(
     geom_quasirandom(aes(col=Variable)) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) + ylab(NULL) + xlab(NULL) +
-    guides(col="none") + scale_color_brewer(palette="Paired") +
+    guides(col="none") + scale_color_brewer(palette="Dark2") +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 2,
                        comparisons = list(c("Male", "Female")),
@@ -524,7 +530,7 @@ grid.arrange(
     geom_quasirandom(aes(col=Variable)) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) + ylab(NULL) + xlab(NULL) +
-    guides(col="none") + scale_color_brewer(palette="Paired") +
+    guides(col="none") + scale_color_brewer(palette="Dark2") +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 2,
                        comparisons = list(c("Male", "Female")),
@@ -535,7 +541,7 @@ grid.arrange(
     `Measurement Type` = factor(1:2, labels = c("Open-ended", "Conventional"))) %>%
       ggplot(aes(x = `Measurement Type`, fill = `Measurement Type`)) +
       geom_bar() +
-      scale_fill_brewer(palette="Paired")),
+      scale_fill_brewer(palette="Dark2")),
 
   data2020 %>%
     select(polknow_text_scale,
@@ -551,7 +557,7 @@ grid.arrange(
     geom_quasirandom(aes(col=Variable)) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) + ylab(NULL) + xlab(NULL) +
-    guides(col="none") + scale_color_brewer(palette="Paired") +
+    guides(col="none") + scale_color_brewer(palette="Dark2") +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 2,
                        comparisons = list(c("Male", "Female")),
@@ -572,7 +578,7 @@ grid.arrange(
     geom_quasirandom(aes(col=Variable)) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) + ylab(NULL) + xlab(NULL) +
-    guides(col="none") + scale_color_brewer(palette="Paired") +
+    guides(col="none") + scale_color_brewer(palette="Dark2") +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 2,
                        comparisons = list(c("Male", "Female")),
@@ -593,7 +599,7 @@ grid.arrange(
     geom_quasirandom(aes(col=Variable)) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) + ylab(NULL) + xlab(NULL) +
-    guides(col="none") + scale_color_brewer(palette="Paired") +
+    guides(col="none") + scale_color_brewer(palette="Dark2") +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 2,
                        comparisons = list(c("Male", "Female")),
@@ -615,7 +621,7 @@ grid.arrange(
     geom_quasirandom(aes(col="Open-ended")) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) +
-    guides(col="none") + scale_color_brewer(palette="Paired") +
+    guides(col="none") + scale_color_brewer(palette="Dark2") +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 1.5,
                        comparisons = list(c("Male", "Female")),
@@ -638,7 +644,7 @@ grid.arrange(
     geom_quasirandom(aes(col="Open-ended")) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) +
-    guides(col="none") + scale_color_brewer(palette="Paired") +
+    guides(col="none") + scale_color_brewer(palette="Dark2") +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 1.5,
                        comparisons = list(c("Male", "Female")),
@@ -661,7 +667,7 @@ grid.arrange(
     geom_quasirandom(aes(col="Open-ended")) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) +
-    guides(col="none") + scale_color_brewer(palette="Paired") +
+    guides(col="none") + scale_color_brewer(palette="Dark2") +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 1.5,
                        comparisons = list(c("Male", "Female")),
@@ -671,7 +677,7 @@ grid.arrange(
          subtitle="Italian Respondents",
          y=NULL, x=NULL),
   ncol=3) %>%
-  ggsave("fig/meandiff.pdf", plot = ., width=6.5, height=8)
+  ggsave("fig/meandiff.png", plot = ., width=6.5, height=8)
 
 
 # Gender gap: differences w/ controls -------------------------------------
@@ -720,13 +726,16 @@ bind_rows(
       dv,
       levels = c("Discursive Sophistication", "Factual Knowledge"))
   ) %>%
-  ggplot(aes(y=study, x=estimate, xmin=conf.low, xmax=conf.high)) +
+  ggplot(aes(y=study, x=estimate, xmin=conf.low, xmax=conf.high,
+             col = dv, shape = dv)) +
   geom_vline(xintercept = 0, color="grey") +
   geom_vline(xintercept = c(-0.2,0.2), color="grey", lty="dashed") +
   geom_point() + geom_errorbarh(height=0) +
   geom_errorbarh(aes(xmin=conf.low90, xmax=conf.high90), height=.2) +
   facet_wrap(.~dv) + xlim(-.75, .25) +
-  xlab("Estimated Gender Gap") + ylab("Dataset") + plot_default
+  xlab("Estimated Gender Gap") + ylab("Dataset") + plot_default +
+  scale_color_brewer(palette = "Dark2") +
+  theme(legend.position = "none")
 ggsave("fig/determinants.pdf",width=5,height=3)
 
 stargazer(c(m3text, m3swiss), type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
