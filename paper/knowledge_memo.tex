@@ -172,41 +172,41 @@ The paper is well-written. It has a compelling conceptual argument and a compell
 
 I would like to see the concerns below addressed in a revised submission. I suspected they will require only a little work, and that any changes will improve (and not undermine) the argument. 
 
-One small suggestion, ``average marginal effect´´ is a bit vague. Perhaps I missed it, but I want to confirm that the effects shown in Figure 3\footnote{\textit{Figure~\ref{fig:knoweff} in revised manuscript.}} are comparable across discursive and factual knowledge. For example, are these the change in the probability of voting as the individual moves from the 25th to 75 percentile on each measure? If the factual and discursive measures are scaled differently, then the results are not comparable. It doesn’t seem trivial to select a comparable shift for the two measures. Even if both are scaled from 0 to 1, then the two effects might not be comparable, because a shift from .3 to .5 might be a shift from a person with very low discursive knowledge (say, 20th percentile) to very high (say, 80th percentile), while a comparable shift in factual knowledge might be 0.2 to 1.0. See the different distributions of factual and discursive knowledge in Figure 2\footnote{\textit{Figure~\ref{fig:corplot} in revised manuscript.}}, for example.
+One small suggestion, ``average marginal effect'' is a bit vague. Perhaps I missed it, but I want to confirm that the effects shown in Figure 3\footnote{\textit{Figure~\ref{fig:knoweff} in revised manuscript.}} are comparable across discursive and factual knowledge. For example, are these the change in the probability of voting as the individual moves from the 25th to 75 percentile on each measure? If the factual and discursive measures are scaled differently, then the results are not comparable. It doesn’t seem trivial to select a comparable shift for the two measures. Even if both are scaled from 0 to 1, then the two effects might not be comparable, because a shift from .3 to .5 might be a shift from a person with very low discursive knowledge (say, 20th percentile) to very high (say, 80th percentile), while a comparable shift in factual knowledge might be 0.2 to 1.0. See the different distributions of factual and discursive knowledge in Figure 2\footnote{\textit{Figure~\ref{fig:corplot} in revised manuscript.}}, for example.
 
 Alternatively, the authors might make the measure of discursive and factual knowledge comparable by rescaling the SD of each to one. This does not guarantee a comparable effect, but I think it’s a much more plausible default than rescaling from zero to one.
 
 \textit{This is a great point. In the original submission, both discursive sophistication and factual knowledge were scaled to range from zero to one but the underlying distributions are indeed different (with factual knowledge exhibiting a larger standard deviation than discursive sophistication). As R3 correctly points out, this makes it difficult to compare average marginal effect sizes, which illustrate the expected change in each outcome measure for a unit increase in each predictor.}
 
-\textit{I followed R3's suggestion to address this issue by rescaling both measures to unit variance / standard deviation and clarified the type of comparison in Figure~\ref{fig:knoweff} (now showing the expected change in each outcome for an increase in each predictor from 1 SD below the mean to 1 SD above the mean). In addition, I changed the example in Table~\ref{tab:ex1} to directly illustrate the substantive meaning of such a change in discursive sophistication. Although the relative effect sizes of discursive sophistication compared to factual knowledge in Figure~\ref{fig:knoweff} changed slightly, the substantive conclusions remain the same: both measures are significant predictors of important outcomes that are usually viewed as associated with political sophistication. This holds despite the fact that I now included both measures in a single model, which suggests that both are complements rather than competing indicators (see also the previous discussion in response to R1 on this point).}
+\textit{I followed R3's suggestion to address this issue by rescaling both measures to zero mean and unit variance / standard deviation and clarified the type of comparison in Figure~\ref{fig:knoweff} (now showing the expected change in each outcome for an increase in each predictor from 1 SD below the mean to 1 SD above the mean). In addition, I changed the example in Table~\ref{tab:ex1} to directly illustrate the substantive meaning of such a change in discursive sophistication. Although the relative effect sizes of discursive sophistication compared to factual knowledge in Figure~\ref{fig:knoweff} changed slightly, the substantive conclusions remain the same: both measures are significant predictors of important outcomes that are usually viewed as associated with political sophistication. This holds despite the fact that I now included both measures in a single model, which suggests that both are complements rather than competing indicators (see also the previous discussion in response to R1 on this point).}
 
 \textit{These revised results are equivalent to computing marginal effects for changes between specific percentiles as initially suggested by R3 above. I have decided to directly plot the expected effect for SD changes rather than specific percentiles, since rescaling both measures additionally addresses R3's later point regarding the comparability of gender differences in discursive sophistication and factual knowledge (see further discussion below).}
 
-% TODO: * Make necessary changes in manuscript.
+% DONE
 
 \rule{\linewidth}{.01cm}
 
 The same argument applies to Figure 4\footnote{\textit{Figure~\ref{fig:yg_disease} in revised manuscript.}}. It could be that the factual measure has many observations along the entire range from 0 to 1, while almost of the discursive measures fall between .2 and .5. In this case, increasing both measures from there 20th to 80th percentiles (a comparable shift, I suggest) would produce a similar difference in retrieval.
 
-\textit{This issue has been fixed by converting both knowledge measures to unit variance (see above)}
+\textit{This issue has been fixed by converting both knowledge measures to zero mean and unit variance (see discussion above). I have revised Figure~\ref{fig:yg_disease} accordingly and adapted the corresponding discussion in the manuscript. I believe that these changes strengthen the manuscript and provide additional insights, since the comparison of the rescaled measures reveals how conventional additive knowledge scales can suffer from ceiling effects since there is no way to differentiate respondents who answer all questions correctly (or incorrectly, although that is less common with standard batteries). Discursive sophistication suffers from no such constraints and therefore allows us to better represent the full spectrum of the underlying latent variable.}
 
-% TODO: Finalize response and make necessary changes in manuscript.
+% DONE
 
 \rule{\linewidth}{.01cm}
 
 It also isn’t clear why the authors use control variables in these models. I don’t understand the purpose of the control variables (not causal inference, see middle paragraph on p. 17), so it’s difficult to evaluate whether these are the appropriate control variables or not. The context makes me think the authors might want no control variables at all—just a simple linear or logistic regression with factual/discursive knowledge as the explanatory variable.
 
-\textit{I decided to use sociodemographic controls in order to address potential concerns regarding confounding factors (especially due to general verbosity etc.). That said, I have now included results for basic models without controls in the Appendix.}
+\textit{I decided to use sociodemographic controls in order to address potential concerns regarding confounding factors (e.g., due to varying levels of education etc.). That said, I have now included results for basic models without controls in the Appendix (see Tables \ref{tab:knoweff2018cces} through \ref{tab:yg_disease}. The substantive results regarding the comparison of discursive sophistication and factual knowledge remain unchanged across all models when omitting control variables.}
 
-% TODO: Finalize response and make necessary changes in manuscript.
+% DONE
 
 \rule{\linewidth}{.01cm}
 
 Rather than look at effect size at all, the authors might consider comparing the fit of the two models against each other using the AIC and/or BIC. I suspect this is the route I would have chosen if I had been trying to make a similar point.
 
-\textit{As discussed in the response to R1, I have now reframed the paper to reduce the competition between factual knowledge and discursive sophistication. To that end, I have also revised the models to include both measures simultaneously, so the comparison of model fit is not directly applicable since the goal is now to show that both are complementary measures.}
+\textit{As discussed in the response to R1, I have now reframed the paper to reduce the appearance of a competition between factual knowledge and discursive sophistication as mutually exclusive alternative measures. To that end, I have also revised the models to include both measures simultaneously in each model specification. Given these changes, the comparison of model fit is not directly applicable since the goal is now to show that both are complementary measures.}
 
-% TODO: Finalize response and make necessary changes in manuscript.
+% DONE
 
 \rule{\linewidth}{.01cm}
 
@@ -214,19 +214,19 @@ Rather than look at effect size at all, the authors might consider comparing the
 
 This is merely a suggestion for the authors. If they find my suggestion unhelpful or misguided, they should feel free to ignore it.
 
-I also suggest that the authors think more carefully about their argument for no gender gap. Rainey (2014, AJPS, “Arguing for a Negligible Effect”) shows that a lack of statistical significance is neither necessary nor sufficient to demonstrate “no effect.” Instead, he argues that the researcher should/must argue that all the effects in the 90\% confidence interval are substantively negligible. Looking at the CIs in Figure 7\footnote{\textit{Figure~\ref{fig:determinants} in revised manuscript.}}, it seems that the CIs contain only very small effects, but perhaps the authors should make the explicit argument that these effects are indeed negligible.
+I also suggest that the authors think more carefully about their argument for no gender gap. Rainey (2014, AJPS, ``Arguing for a Negligible Effect'') shows that a lack of statistical significance is neither necessary nor sufficient to demonstrate ``no effect.'' Instead, he argues that the researcher should/must argue that all the effects in the 90\% confidence interval are substantively negligible. Looking at the CIs in Figure 7\footnote{\textit{Figure~\ref{fig:determinants} in revised manuscript.}}, it seems that the CIs contain only very small effects, but perhaps the authors should make the explicit argument that these effects are indeed negligible.
 
-\textit{Thank you for this suggestion, I have added a discussion of Rainey and included tests for negligible effects in Figure~\ref{fig:determinants}.}
+\textit{Thank you for this suggestion, I have added a brief discussion of \citep{rainey2014arguing} and included the suggested tests for negligible effects in Figure~\ref{fig:determinants}. As described by R3, these revisions consist of displaying 90\% confidence intervals around the estimates in Figure~\ref{fig:determinants} and showing that these CIs contain only small effects. Rescaling discursive sophistication and factual knowledge proved useful here as well, since it allows for a direct identification of small effect sizes \citep[equivalent to Cohen's $d \leq 0.2$; see][]{sawilowsky2009new}. Revised Figure~\ref{fig:determinants} reveals only negligible differences in discursive sophistication between women and men across, whereas the gender gap in factual political knowledge remains substantively an statistically significant.}
 
-% TODO: Finalize response and make necessary changes in manuscript.
+% DONE
 
 \rule{\linewidth}{.01cm}
 
 Related to the point above, it is critical that the effects shown in Figure 7\footnote{\textit{Figure~\ref{fig:determinants} in revised manuscript.}} are comparable. I suspect it’s not the case, but it’s possible that a 0.01 gap in discursive knowledge is ``large,'' while a 0.05 gap in factual knowledge is ``small.'' It might be easiest to think of effect sizes in terms of standard deviations or percentile shifts in the original outcome. For example, perhaps a 0.01 gap in discursive knowledge is a 1 SD shift or a shift from the 25th to the 75th percentile, while a 0.05 shift in factual knowledge is a 0.25 SD shift or a shift from the 45th to the 55th percentile. (Figure 2\footnote{\textit{Figure~\ref{fig:corplot} in revised manuscript.}} shows the distributions, so I can almost work out—but not quite—whether these effects are comparable.)
 
-\textit{Agreed, this point is addressed by rescaling both measures to unit variance / standard deviation.}
+\textit{Agreed, I addressed this point by rescaling both measures to unit variance / standard deviation (discussed above) and revising Figure~\ref{fig:determinants} as well as the corresponding discussion in the manuscript. Gender differences are now shown in standard deviations rather than on a 0 to 1 scale, which facilitates the comparison between both measures. The substantive results remain the same, we only observe negligible gender differences for discursive sophistication and sizable differences for factual knowledge (in SD units).}
 
-% TODO: Finalize response and make necessary changes in manuscript.
+% DONE
 
 \rule{\linewidth}{.01cm}
 
@@ -235,14 +235,14 @@ Related to the point above, it is critical that the effects shown in Figure 7\fo
 
 This is merely a suggestion for the authors. If they find my suggestion unhelpful or misguided, they should feel free to ignore it.
 
-Figure 6\footnote{\textit{Figure~\ref{fig:meandiff} in revised manuscript.}} is awesome, and it makes a really powerful point. However, I wonder if a histogram of the entire distribution (for men and women separately, rather than showing only the average for each) would be informative. A “violin plot” or a “beeswarm” plot could show the entire distribution for men and women in a similar space. It would use the space above the error band (currently empty) and the space below the error band (filled by a not-strictly necessary bar) to show the entire distribution.
+Figure 6\footnote{\textit{Figure~\ref{fig:meandiff} in revised manuscript.}} is awesome, and it makes a really powerful point. However, I wonder if a histogram of the entire distribution (for men and women separately, rather than showing only the average for each) would be informative. A ``violin plot'' or a ``beeswarm'' plot could show the entire distribution for men and women in a similar space. It would use the space above the error band (currently empty) and the space below the error band (filled by a not-strictly necessary bar) to show the entire distribution.
 
 It could be that showing the entire distribution for men and women is not helpful, but I’m curious, as a reader, what it looks like.
 
-\textit{This is another excellent suggestion. I have replaced the bar chart with a beeswarm plot that now directly includes information regarding the statistical significance of the gender differences. This visualization is much more useful and provides a lot more information than the previous version.}
+\textit{This is another excellent suggestion. I have replaced the bar chart in Figure~\ref{fig:meandiff} with a beeswarm plot that allows for a direct comparison of the respective distributions. Furthermore, I included visual cues to directly assess the statistical significance of the gender differences across all surveys. I believe that this revised figure provides a lot more useful information than the previous version and I really appreciate R3's comment on this point.}
 
-\textit{´Thanks again to R3 for these helpful comments, I believe that each of them strengthen the paper and clarify important points.}
+\textit{´Thanks again to R3 for these helpful comments, I believe that each of them strengthen the paper and help clarify important arguments and results presented throughout the manuscript.}
 
-% TODO: Finalize response and make necessary changes in manuscript.
+% DONE
 
 \rule{\linewidth}{.01cm}
