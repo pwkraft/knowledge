@@ -555,22 +555,38 @@ heckit(select ~ female + age + black + educ + faminc + relig,
 # Discursive sophistication as a DV (reviewer request) --------------------
 
 m3rob <- list(
-  lm(polknow_text_scale ~ extraversion + newexperience + reserved + wordsum + mode +
-       female + age + black + educ_fact + faminc + relig, data = data2016),
-  lm(polknow_text_scale ~ extraversion + newexperience + reserved + wordsum + mode + polknow_factual_scale +
-       female + age + black + educ_fact + faminc + relig, data = data2016),
-  lm(polknow_text_scale ~ extraversion + newexperience + reserved + wordsum + mode +
-       female + age + black + educ_fact + faminc + relig, data = data2012),
-  lm(polknow_text_scale ~ extraversion + newexperience + reserved + wordsum + mode + polknow_factual_scale +
-       female + age + black + educ_fact + faminc + relig, data = data2012),
-  lm(polknow_factual_scale ~ extraversion + newexperience + reserved + wordsum + mode +
-       female + age + black + educ_fact + faminc + relig, data = data2016),
-  lm(polknow_factual_scale ~ extraversion + newexperience + reserved + wordsum + mode + polknow_text_scale +
-       female + age + black + educ_fact + faminc + relig, data = data2016),
-  lm(polknow_factual_scale ~ extraversion + newexperience + reserved + wordsum + mode +
-       female + age + black + educ_fact + faminc + relig, data = data2012),
-  lm(polknow_factual_scale ~ extraversion + newexperience + reserved + wordsum + mode + polknow_text_scale +
-       female + age + black + educ_fact + faminc + relig, data = data2012)
+  lm(polknow_text_scale ~ extraversion + newexperience + reserved +
+       wordsum + mode +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = data2016),
+  lm(polknow_text_scale ~ extraversion + newexperience + reserved +
+       wordsum + mode + polknow_factual_scale +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = data2016),
+  lm(polknow_text_scale ~ extraversion + newexperience + reserved +
+       wordsum + mode +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = data2012),
+  lm(polknow_text_scale ~ extraversion + newexperience + reserved +
+       wordsum + mode + polknow_factual_scale +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = data2012),
+  lm(polknow_factual_scale ~ extraversion + newexperience + reserved +
+       wordsum + mode +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = data2016),
+  lm(polknow_factual_scale ~ extraversion + newexperience + reserved +
+       wordsum + mode + polknow_text_scale +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = data2016),
+  lm(polknow_factual_scale ~ extraversion + newexperience + reserved +
+       wordsum + mode +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = data2012),
+  lm(polknow_factual_scale ~ extraversion + newexperience + reserved +
+       wordsum + mode + polknow_text_scale +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = data2012)
   )
 
 stargazer(m3rob, type="text", align = TRUE, column.sep.width = "-5pt", no.space = TRUE, digits = 3,
@@ -588,6 +604,7 @@ stargazer(m3rob, type="text", align = TRUE, column.sep.width = "-5pt", no.space 
                                "Factual Knowledge",
                                "Discursive Soph.",
                                "Female","Age", "Black",
+                               "PID: Democrat", "PID: Republican",
                                "Education: High School", "Education: Some College",
                                "Education: Bachelor's Degree", "Education: Graduate Degree",
                                "Household Income", "Church Attendance", "Constant"),
