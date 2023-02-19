@@ -5,6 +5,26 @@
 # - Date: 01/12/22
 # ========================================================================= #
 
+shannon_e <- function(x){
+  -sum(log(x^x))/log(length(x))
+}
+
+
+shannon_2 <- function(x){
+  -sum(log2(x^x)/log2(length(x)))
+}
+
+shannon_test <- function(x){
+  round(shannon_e(x),10) == round(shannon_2(x), 10)
+}
+
+tmp <- c(rpois(95,1), rpois(5, 10))
+tmp <- tmp/sum(tmp)
+
+
+shannon_e(tmp)
+shannon_2(tmp)
+shannon_test(tmp)
 
 
 # Preamble ----------------------------------------------------------------
