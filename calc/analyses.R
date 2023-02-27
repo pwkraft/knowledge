@@ -260,6 +260,22 @@ m1noc <- c(
 )
 
 c(m1noc[1], m1[1], m1int[1],
+  m1noc[5], m1[5], m1int[5]) %>%
+  stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
+            model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+            title=c("Effects of sophistication on turnout and political interest
+            in the 2018 CES. Standard errors in parentheses. Estimates of model
+          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
+            column.labels = c("Turnout","Political Interest"),
+            column.separate = c(3,3),
+            order = c(1,2,9,3:8,10),
+            covariate.labels = c("Discursive Soph.","Factual Knowledge", "Disc. X Factual",
+                                 "Female", "Age", "Black", "College Degree",
+                                 "Household Income","Church Attendance","Constant"),
+            keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
+            out = "tab/knoweff2018cces1.tex", label = "tab:knoweff2018cces1")
+
+c(m1noc[1], m1[1], m1int[1],
   m1noc[5], m1[5], m1int[5],
   m1noc[9], m1[9], m1int[9],
   m1noc[13], m1[13], m1int[13]) %>%
@@ -274,62 +290,104 @@ c(m1noc[1], m1[1], m1int[1],
             covariate.labels = c("Discursive Soph.","Factual Knowledge", "Disc. X Factual",
                                  "Female", "Age", "Black", "College Degree",
                                  "Household Income","Church Attendance","Constant"),
-            keep.stat = c("n", "rsq", "aic"), font.size = "scriptsize",
+            keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
             out = "tab/knoweff2018cces.tex", label = "tab:knoweff2018cces")
 
 c(m1noc[2], m1[2], m1int[2],
-  m1noc[6], m1[6], m1int[6],
-  m1noc[10], m1[10], m1int[10],
+  m1noc[6], m1[6], m1int[6]) %>%
+  stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
+            model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+            title=c("Effects of sophistication on turnout and political interest
+            in the 2020 ANES. Standard errors in parentheses. Estimates of model
+          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
+            column.labels = c("Turnout","Political Interest"),
+            column.separate = c(3,3),
+            order = c(1,2,9,3:8,10),
+            covariate.labels = c("Discursive Soph.","Factual Knowledge", "Disc. X Factual",
+                                 "Female", "Age", "Black", "College Degree",
+                                 "Household Income","Church Attendance","Constant"),
+            keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
+            out = "tab/knoweff2020anes1.tex", label = "tab:knoweff2020anes1")
+
+c(m1noc[10], m1[10], m1int[10],
   m1noc[14], m1[14], m1int[14]) %>%
   stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
-            title=c("Effects of sophistication on turnout, political interest, internal efficacy,
-          and external efficacy in the 2020 ANES. Standard errors in parentheses. Estimates of model
-          (2), (5), (8), and (11) are used for Figure \\ref{fig:knoweff} in the main text."),
+            title=c("Effects of sophistication on internal and external efficacy
+            in the 2020 ANES. Standard errors in parentheses. Estimates of model
+          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
             column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
-            column.separate = c(3,3,3,3),
+            column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
             covariate.labels = c("Discursive Soph.","Factual Knowledge", "Disc. X Factual",
                                  "Female", "Age", "Black", "College Degree",
                                  "Household Income","Church Attendance","Constant"),
-            keep.stat = c("n", "rsq", "aic"), font.size = "scriptsize",
-            out = "tab/knoweff2020anes.tex", label = "tab:knoweff2020anes")
+            keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
+            out = "tab/knoweff2020anes2.tex", label = "tab:knoweff2020anes2")
 
 c(m1noc[3], m1[3], m1int[3],
-  m1noc[7], m1[7], m1int[7],
-  m1noc[11], m1[11], m1int[11],
+  m1noc[7], m1[7], m1int[7]) %>%
+  stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
+            model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+            title=c("Effects of sophistication on turnout and political interest
+            in the 2016 ANES. Standard errors in parentheses. Estimates of model
+          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
+            column.labels = c("Turnout","Political Interest"),
+            column.separate = c(3,3),
+            order = c(1,2,9,3:8,10),
+            covariate.labels = c("Discursive Soph.","Factual Knowledge", "Disc. X Factual",
+                                 "Female", "Age", "Black", "College Degree",
+                                 "Household Income","Church Attendance","Constant"),
+            keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
+            out = "tab/knoweff2016anes1.tex", label = "tab:knoweff2016anes1")
+
+c(m1noc[11], m1[11], m1int[11],
   m1noc[15], m1[15], m1int[15]) %>%
   stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
-            title=c("Effects of sophistication on turnout, political interest, internal efficacy,
-          and external efficacy in the 2016 ANES. Standard errors in parentheses. Estimates of model
-          (2), (5), (8), and (11) are used for Figure \\ref{fig:knoweff} in the main text."),
-            column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
-            column.separate = c(3,3,3,3),
+            title=c("Effects of sophistication on internal and external efficacy
+            in the 2016 ANES. Standard errors in parentheses. Estimates of model
+          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
+            column.labels = c("Internal Efficacy","External Efficacy"),
+            column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
             covariate.labels = c("Discursive Soph.","Factual Knowledge", "Disc. X Factual",
                                  "Female", "Age", "Black", "College Degree",
                                  "Household Income","Church Attendance","Constant"),
-            keep.stat = c("n", "rsq", "aic"), font.size = "scriptsize",
-            out = "tab/knoweff2016anes.tex", label = "tab:knoweff2016anes")
+            keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
+            out = "tab/knoweff2016anes2.tex", label = "tab:knoweff2016anes2")
 
 c(m1noc[4], m1[4], m1int[4],
-  m1noc[8], m1[8], m1int[8],
-  m1noc[12], m1[12], m1int[12],
+  m1noc[8], m1[8], m1int[8]) %>%
+  stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
+            model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+            title=c("Effects of sophistication on turnout and political interest
+          in the 2012 ANES. Standard errors in parentheses. Estimates of model
+          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
+            column.labels = c("Turnout","Political Interest"),
+            column.separate = c(3,3),
+            order = c(1,2,9,3:8,10),
+            covariate.labels = c("Discursive Soph.","Factual Knowledge", "Disc. X Factual",
+                                 "Female", "Age", "Black", "College Degree",
+                                 "Household Income","Church Attendance","Constant"),
+            keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
+            out = "tab/knoweff2012anes1.tex", label = "tab:knoweff2012anes1")
+
+c(m1noc[12], m1[12], m1int[12],
   m1noc[16], m1[16], m1int[16]) %>%
   stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
-            title=c("Effects of sophistication on turnout, political interest, internal efficacy,
-          and external efficacy in the 2012 ANES. Standard errors in parentheses. Estimates of model
-          (2), (5), (8), and (11) are used for Figure \\ref{fig:knoweff} in the main text."),
-            column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
-            column.separate = c(3,3,3,3),
+            title=c("Effects of sophistication on internal and external efficacy
+            in the 2012 ANES. Standard errors in parentheses. Estimates of model
+          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
+            column.labels = c("Internal Efficacy","External Efficacy"),
+            column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
             covariate.labels = c("Discursive Soph.","Factual Knowledge", "Disc. X Factual",
                                  "Female", "Age", "Black", "College Degree",
                                  "Household Income","Church Attendance","Constant"),
-            keep.stat = c("n", "rsq", "aic"), font.size = "scriptsize",
-            out = "tab/knoweff2012anes.tex", label = "tab:knoweff2012anes")
+            keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
+            out = "tab/knoweff2012anes2.tex", label = "tab:knoweff2012anes2")
 
 
 # Validation: interaction by gender ---------------------------------------
@@ -738,17 +796,26 @@ bind_rows(
   theme(legend.position = "none")
 ggsave("fig/determinants.pdf",width=5,height=3)
 
-stargazer(c(m3text, m3swiss), type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
+stargazer(m3text, type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
           dep.var.labels = "Discursive Sophistication",
           title="Linear regressions predicting discursive sophistication in the CES, ANES, and YouGov study.
           Estimates are used for Figure \\ref{fig:determinants} in the main text.",
-          column.labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov",
-                            "French", "German", "Italian"),
+          column.labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov"),
           covariate.labels = c("Female", "Age", "Black", "College Degree",
                                "Household Income", "Church Attendance", "Constant"),
-          keep.stat = c("n", "rsq"), font.size = "tiny",
+          keep.stat = c("n", "rsq"), font.size = "footnotesize",
           out = "tab/determinants_text.tex", label = "tab:determinants_text")
+
+stargazer(m3swiss, type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
+          model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
+          dep.var.labels = "Discursive Sophistication",
+          title="Linear regressions predicting discursive sophistication in the Swiss referendum study.
+          Estimates are used for Figure \\ref{fig:determinants} in the main text.",
+          column.labels = c("French", "German", "Italian"),
+          covariate.labels = c("Female", "Age", "College Degree", "Constant"),
+          keep.stat = c("n", "rsq"), font.size = "footnotesize",
+          out = "tab/determinants_swiss.tex", label = "tab:determinants_swiss")
 
 stargazer(m3factual, type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
@@ -758,7 +825,7 @@ stargazer(m3factual, type="text", align = TRUE, column.sep.width = "0pt", no.spa
           column.labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov"),
           covariate.labels = c("Female", "Age", "Black", "College Degree",
                                "Household Income", "Church Attendance", "Constant"),
-          keep.stat = c("n", "rsq"), font.size = "scriptsize",
+          keep.stat = c("n", "rsq"), font.size = "footnotesize",
           out = "tab/determinants_factual.tex", label = "tab:determinants_factual")
 
 

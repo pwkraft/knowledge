@@ -554,7 +554,7 @@ heckit(select ~ female + age + black + educ + faminc + relig,
 
 # Discursive sophistication as a DV (reviewer request) --------------------
 
-m3rob <- list(
+m3rob_disc <- list(
   lm(polknow_text_scale ~ extraversion + newexperience + reserved +
        wordsum + mode +
        female + age + black + pid_dem + pid_rep +
@@ -570,7 +570,31 @@ m3rob <- list(
   lm(polknow_text_scale ~ extraversion + newexperience + reserved +
        wordsum + mode + polknow_factual_scale +
        female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = data2012),
+       educ_fact + faminc + relig, data = data2012)
+)
+
+stargazer(m3rob_disc, type="text", align = TRUE, column.sep.width = "-5pt", no.space = TRUE, digits = 3,
+          model.names=FALSE, star.cutoffs = c(.05,.01,.001),
+          dep.var.labels = "Discursive Sophistication",
+          title="Personality, verbal skills, and survey mode as predictors
+          of discursive sophistication in the 2016 and 2012 ANES.",
+          column.labels = rep(c("2016 ANES", "2012 ANES"), 2),
+          column.separate = rep(2,4),
+          covariate.labels = c("Personality: Extraversion",
+                               "Personality: Openness to Experience",
+                               "Personality: Reserved",
+                               "Verbal Skills (Wordsum score)",
+                               "Survey Mode (Online)",
+                               "Factual Knowledge",
+                               "Female","Age", "Black",
+                               "PID: Democrat", "PID: Republican",
+                               "Education: High School", "Education: Some College",
+                               "Education: Bachelor's Degree", "Education: Graduate Degree",
+                               "Household Income", "Church Attendance", "Constant"),
+          keep.stat = c("n", "rsq"), font.size = "footnotesize",
+          out = "tab/determinants_rob_disc.tex", label = "tab:determinants_rob_disc")
+
+m3rob_fact <- list(
   lm(polknow_factual_scale ~ extraversion + newexperience + reserved +
        wordsum + mode +
        female + age + black + pid_dem + pid_rep +
@@ -587,13 +611,13 @@ m3rob <- list(
        wordsum + mode + polknow_text_scale +
        female + age + black + pid_dem + pid_rep +
        educ_fact + faminc + relig, data = data2012)
-  )
+)
 
-stargazer(m3rob, type="text", align = TRUE, column.sep.width = "-5pt", no.space = TRUE, digits = 3,
-          model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
-          dep.var.labels = c("Discursive Sophistication","Factual Knowledge"),
+stargazer(m3rob_fact, type="text", align = TRUE, column.sep.width = "-5pt", no.space = TRUE, digits = 3,
+          model.names=FALSE, star.cutoffs = c(.05,.01,.001),
+          dep.var.labels = "Factual Knowledge",
           title="Personality, verbal skills, and survey mode as predictors
-          of discursive sophistication and factual knowledge in the 2016 and 2012 ANES.",
+          of factual knowledge in the 2016 and 2012 ANES.",
           column.labels = rep(c("2016 ANES", "2012 ANES"), 2),
           column.separate = rep(2,4),
           covariate.labels = c("Personality: Extraversion",
@@ -601,15 +625,14 @@ stargazer(m3rob, type="text", align = TRUE, column.sep.width = "-5pt", no.space 
                                "Personality: Reserved",
                                "Verbal Skills (Wordsum score)",
                                "Survey Mode (Online)",
-                               "Factual Knowledge",
                                "Discursive Soph.",
                                "Female","Age", "Black",
                                "PID: Democrat", "PID: Republican",
                                "Education: High School", "Education: Some College",
                                "Education: Bachelor's Degree", "Education: Graduate Degree",
                                "Household Income", "Church Attendance", "Constant"),
-          keep.stat = c("n", "rsq"), font.size = "tiny",
-          out = "tab/determinants_rob.tex", label = "tab:determinants_rob")
+          keep.stat = c("n", "rsq"), font.size = "footnotesize",
+          out = "tab/determinants_rob_fact.tex", label = "tab:determinants_rob_fact")
 
 
 
