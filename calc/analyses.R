@@ -265,7 +265,7 @@ c(m1noc[1], m1[1], m1int[1],
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout and political interest
             in the 2018 CES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
+          (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Turnout","Political Interest"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -281,7 +281,7 @@ c(m1noc[9], m1[9], m1int[9],
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout, political interest, internal efficacy,
           and external efficacy in the 2018 CES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
+          (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Internal Efficacy","External Efficacy"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -297,7 +297,7 @@ c(m1noc[2], m1[2], m1int[2],
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout and political interest
             in the 2020 ANES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
+          (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Turnout","Political Interest"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -313,7 +313,7 @@ c(m1noc[10], m1[10], m1int[10],
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on internal and external efficacy
             in the 2020 ANES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
+          (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -329,7 +329,7 @@ c(m1noc[3], m1[3], m1int[3],
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout and political interest
             in the 2016 ANES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
+          (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Turnout","Political Interest"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -345,7 +345,7 @@ c(m1noc[11], m1[11], m1int[11],
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on internal and external efficacy
             in the 2016 ANES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
+          (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Internal Efficacy","External Efficacy"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -361,7 +361,7 @@ c(m1noc[4], m1[4], m1int[4],
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout and political interest
           in the 2012 ANES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
+          (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Turnout","Political Interest"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -377,7 +377,7 @@ c(m1noc[12], m1[12], m1int[12],
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on internal and external efficacy
             in the 2012 ANES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure \\ref{fig:knoweff} in the main text."),
+          (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Internal Efficacy","External Efficacy"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -450,7 +450,7 @@ ggsave("fig/yg_disease.pdf", width=4, height=2)
 stargazer(m2, type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
           title="Linear regressions predicting information retrieval in the 2015 YouGov study.
-          Standard errors in parentheses. Estimates of model (2) are used for Figure \\ref{fig:yg_disease}
+          Standard errors in parentheses. Estimates of model (2) are used for Figure 3
           in the main text.",
           column.labels = "Information Retrieval",
           column.separate = 3,
@@ -798,7 +798,7 @@ stargazer(m3text, type="text", align = TRUE, column.sep.width = "0pt", no.space 
           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
           dep.var.labels = "Discursive Sophistication",
           title="Linear regressions predicting discursive sophistication in the CES, ANES, and YouGov study.
-          Estimates are used for Figure \\ref{fig:determinants} in the main text.",
+          Estimates are used for Figure 6 in the main text.",
           column.labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov"),
           covariate.labels = c("Female", "Age", "Black", "College Degree",
                                "Household Income", "Church Attendance", "Constant"),
@@ -809,7 +809,7 @@ stargazer(m3swiss, type="text", align = TRUE, column.sep.width = "0pt", no.space
           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
           dep.var.labels = "Discursive Sophistication",
           title="Linear regressions predicting discursive sophistication in the Swiss referendum study.
-          Estimates are used for Figure \\ref{fig:determinants} in the main text.",
+          Estimates are used for Figure 6 in the main text.",
           column.labels = c("French", "German", "Italian"),
           covariate.labels = c("Female", "Age", "College Degree", "Constant"),
           keep.stat = c("n", "rsq"), font.size = "footnotesize",
@@ -819,7 +819,7 @@ stargazer(m3factual, type="text", align = TRUE, column.sep.width = "0pt", no.spa
           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
           dep.var.labels = "Factual Knowledge",
           title="Linear regressions predicting  factual knowledge in the CES, ANES, and YouGov study.
-          Estimates are used for Figure \\ref{fig:determinants} in the main text.",
+          Estimates are used for Figure 6 in the main text.",
           column.labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov"),
           covariate.labels = c("Female", "Age", "Black", "College Degree",
                                "Household Income", "Church Attendance", "Constant"),
