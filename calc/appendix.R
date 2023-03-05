@@ -636,6 +636,54 @@ stargazer(m3rob_fact, type="text", align = TRUE, column.sep.width = "-5pt", no.s
 
 
 
+# Discursive sophistication and media consumption -------------------------
+
+data_immig %>%
+  select(polknow_factual_scale, polknow_text_scale,
+         tv_fox:tv_cbs, print_nyt:print_nyp, smedia_yt:smedia_tb) %>%
+  pivot_longer(-c(polknow_factual_scale, polknow_text_scale),
+               names_to = "source", values_to = "exposure") %>%
+  pivot_longer(-c(source, exposure),
+               names_to = "Variable", values_to = "polknow") %>%
+  ggplot(aes(x = exposure, y = polknow, col = Variable)) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~source, ncol = 3, dir = "v")
+
+data_immig %>%
+  select(polknow_factual_scale, polknow_text_scale,
+         tv_trust_fox:tv_trust_cbs, print_trust_nyt:print_trust_nyp) %>%
+  pivot_longer(-c(polknow_factual_scale, polknow_text_scale),
+               names_to = "src", values_to = "trust") %>%
+  pivot_longer(-c(src, trust),
+               names_to = "iv", values_to = "polknow") %>%
+  mutate(Variable = recode_factor(iv,
+                                  `polknow_text_scale` = "Discursive Sophistication",
+                                  `polknow_factual_scale` = "Factual Knowledge"),
+         Source = recode_factor(src,
+                                `print_trust_nyt` = "New York Times",
+                                `print_trust_wapo` = "Washington Post",
+                                `print_trust_wsj` = "Wall Street Journal",
+                                `print_trust_ust` = "USA Today",
+                                `print_trust_nyp` = "New York Post",
+                                `tv_trust_cnn` = "CNN",
+                                `tv_trust_nbc` = "NBC",
+                                `tv_trust_cbs` = "CBS",
+                                `tv_trust_msnbc` = "MSNBC",
+                                `tv_trust_fox` = "FOX News"),
+         Type = ifelse(grepl("print", src), "Print", "TV"),
+         Type = factor(Type, levels = c("TV","Print"))) %>%
+  ggplot(aes(y = trust, x = polknow, lty = Variable, fill = Variable)) +
+  plot_default +
+  geom_smooth(method = "lm", col = "black", alpha=0.6, lwd=.1) +
+  labs(y = "Trust that Reporting is Accurate",
+       x = "Value of Independent Variable") +
+  theme(legend.position = "bottom") +
+  facet_wrap(~Type+Source, ncol = 5, dir = "h") +
+  scale_fill_brewer(palette = "Dark2")
+ggsave("fig/media_trust.pdf", width=6.5, height=4)
+
+
+
 # Variance in ideological placements ----------
 
 ideo_compare <- function(yname, xname, data, quantiles = c(.25, .75)) {

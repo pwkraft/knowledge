@@ -101,7 +101,7 @@ Lastly, I examine survey data on Swiss citizens justifying their vote choices on
 \clearpage
 \subsection{Preprocessing and Topic Model Specification}
 
-I rely on the structural topic model framework to extract and differentiate considerations mentioned by respondents. I follow the guidelines in \citet{roberts2014structural} to preprocess our open-ended responses (lowercasing and stemming as well as removing stopwords, punctuation, numbers, and infrequent terms)\footnote{Prior to applying these preprocessing steps, responses are cleaned by removing open-ended item non-response such as `don't know' and correcting spelling errors using an implementation of the Aspell spell-checking algorithm (\url{www.aspell.net}).} and used age, gender, education, party identification, as well as an interaction between education and party identification as covariates for topic prevalence. With the exception of gender, this variable selection is equivalent to the procedure described in \citet{roberts2014structural} for open-ended survey responses such as those included in the ANES. I set the number of topics to 25 in order to focus on the differentiation of broader considerations, but we replicate equivalent results with larger numbers of topics below. Figure~\ref{fig:stm_prop} displays the resulting topic proportions for all data sets included in the analyses along with the most frequent and exclusive (FREX) terms associated with each topic.
+I rely on the structural topic model framework to extract and differentiate considerations mentioned by respondents. I follow the guidelines in \citet{roberts2014structural} to preprocess our open-ended responses (lowercasing and stemming as well as removing stopwords, punctuation, numbers, and infrequent terms)\footnote{Prior to applying these preprocessing steps, responses are cleaned by removing open-ended item non-response such as `don't know' and correcting spelling errors using an implementation of the Aspell spell-checking algorithm (\url{www.aspell.net}).} and used age, gender, education, party identification, as well as an interaction between education and party identification as covariates for topic prevalence. With the exception of gender, this variable selection is equivalent to the procedure described in \citet{roberts2014structural} for open-ended survey responses such as those included in the ANES. I set the number of topics to 25 in order to focus on the differentiation of broader considerations, but I replicate equivalent results with larger numbers of topics below. Figure~\ref{fig:stm_prop} displays the resulting topic proportions for all data sets included in the analyses along with the most frequent and exclusive (FREX) terms associated with each topic.
 
 \begin{figure}[h]\centering
 \includegraphics[width=.89\textwidth]{../fig/stm_prop.pdf}
@@ -230,11 +230,19 @@ Figure~\ref{fig:pretext_robustness} examines whether the proposed measure of dis
 \input{../tab/correct_vote}
 
 \clearpage
+\subsection{Discursive Sophistication and Trust in Different News Sources}\label{app:media}
+
+\begin{figure}[h]\centering
+	\includegraphics{../fig/media_trust.pdf}
+	\caption{Bivariate linear associations between trust in different news outlets and political sophistication in the 2019 MTurk Study (including 95\% confidence intervals).}\label{fig:media_trust}
+\end{figure}
+% Average trust in news media as a function of political sophistication in the 2019 MTurk Study (including 95\% confidence intervals). Estimates are based on bivariate linear regressions.
+
+\clearpage
 \subsection{Personality and Verbal Skills as Predictors of Discursive Sophistication}\label{app:determinants_rob}
 
 \input{../tab/determinants_rob_disc}
 \input{../tab/determinants_rob_fact}
-
 
 \clearpage
 \section{Tables of Model Estimates}\label{app:tables}

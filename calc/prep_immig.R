@@ -54,6 +54,40 @@ immig <- num %>%
                   dplyr::recode(pid_dem, `1`=-1, `2`=0, .missing=0) - 1)/6,
     polint_att = (5 - polint)/4,  ## 0 = never, 1 = always
     educ_pid = educ_cont * pid_cont,
+    smedia_yt = (7 - smedia_1)/6,  ## 0 = never, 1 = several times a day
+    smedia_fb = (7 - smedia_2)/6,
+    smedia_ig = (7 - smedia_3)/6,
+    smedia_tw = (7 - smedia_4)/6,
+    smedia_tb = (7 - smedia_5)/6,
+    smedia = (smedia_yt + smedia_fb + smedia_ig + smedia_tw + smedia_tb)/5,
+    tv_fox = (7 - tv_1)/6,  ## 0 = never, 1 = several times a day
+    tv_msnbc = (7 - tv_2)/6,
+    tv_cnn = (7 - tv_3)/6,
+    tv_nbc = (7 - tv_4)/6,
+    tv_cbs = (7 - tv_5)/6,
+    tv = (tv_fox + tv_msnbc + tv_cnn + tv_nbc + tv_cbs)/5,
+    print_nyt = (7 - print_1)/6,  ## 0 = never, 1 = several times a day
+    print_wapo = (7 - print_2)/6,
+    print_wsj = (7 - print_3)/6,
+    print_ust = (7 - print_4)/6,
+    print_nyp = (7 - print_5)/6,
+    print = (print_nyt + print_wapo + print_wsj + print_ust + print_nyp)/5,
+    tv_trust_fox = (5 - tv_trust_1)/4,  ## 0 = never, 1 = always
+    tv_trust_msnbc = (5 - tv_trust_2)/4,
+    tv_trust_cnn = (5 - tv_trust_3)/4,
+    tv_trust_nbc = (5 - tv_trust_4)/4,
+    tv_trust_cbs = (5 - tv_trust_5)/4,
+    tv_trust = (tv_trust_fox + tv_trust_msnbc + tv_trust_cnn + tv_trust_nbc + tv_trust_cbs)/5,
+    print_trust_nyt = (5 - print_trust_1)/4,  ## 0 = never, 1 = always
+    print_trust_wapo = (5 - print_trust_2)/4,
+    print_trust_wsj = (5 - print_trust_3)/4,
+    print_trust_ust = (5 - print_trust_4)/4,
+    print_trust_nyp = (5 - print_trust_5)/4,
+    print_trust = (print_trust_nyt + print_trust_wapo + print_trust_wsj + print_trust_ust + print_trust_nyp)/5,
+    employ_correct = as.numeric(employ == 4),
+    sales_correct = as.numeric(sales == 3),
+    polknow_factual = (employ_correct + sales_correct)/2,
+    polknow_factual_scale = as.numeric(scale(polknow_factual)),
     taxes_oe = taxes_oe,
     jobs_oe = jobs_oe,
     comments = comments) %>%
@@ -143,7 +177,7 @@ data_oe <- data_oe[apply(!is.na(data_oe[,meta]),1,prod)==1,]
 processed_oe <- textProcessor(data_oe$resp, metadata = data_oe[,meta],
                                 customstopwords = c("dont", "hes", "shes", "that", "etc"))
 out_oe <- prepDocuments(processed_oe$documents, processed_oe$vocab,
-                        processed_oe$meta, lower.thresh = 1)
+                        processed_oe$meta, lower.thresh = 10)
 
 ### remove discarded observations from data
 data_oe <- data_oe[-processed_oe$docs.removed,]
@@ -152,68 +186,27 @@ if(!is.null(out_oe$docs.removed)) data_oe <- data_oe[-out_oe$docs.removed,]
 ### stm fit with 49 topics
 stm_fit_oe <- stm(out_oe$documents, out_oe$vocab,
                      prevalence = as.matrix(out_oe$meta),
-                     K=0, seed=12345)
+                     K=25, seed=12345)
 
 ### compute number of considerations
 data_oe$size <- ntopics(stm_fit_oe, out_oe)
 data_oe <- select(data_oe, id, resp, size)
 
 
-## Size: Number of topics mentioned (comments) -----------------------------
-
-### combine regular survey and open-ended data, remove empty responses
-meta <- c("age", "educ_cont", "pid_cont", "educ_pid", "female")
-data_comments <- immig
-
-### remove additional whitespaces
-data_comments$comments <- gsub("\\s+"," ", data_comments$comments)
-data_comments$comments <- gsub("(^\\s+|\\s+$)","", data_comments$comments)
-
-### remove missings on metadata
-data_comments <- data_comments[apply(!is.na(data_comments[,meta]),1,prod)==1,]
-
-### process for stm
-processed_comments <- textProcessor(data_comments$comments, metadata = data_comments[,meta],
-                                    customstopwords = c("dont", "hes", "shes", "that", "etc"))
-out_comments <- prepDocuments(processed_comments$documents, processed_comments$vocab,
-                              processed_comments$meta, lower.thresh = 1)
-
-### remove discarded observations from data
-data_comments <- data_comments[-processed_comments$docs.removed,]
-if(!is.null(out_comments$docs.removed)) data_comments <- data_comments[-out_comments$docs.removed,]
-
-### stm fit with 49 topics
-stm_fit_comments <- stm(out_comments$documents, out_comments$vocab,
-                        prevalence = as.matrix(out_comments$meta),
-                        K=0, seed=12345)
-
-### compute number of considerations
-data_comments$size_comments <- ntopics(stm_fit_comments, out_comments)
-data_comments <- select(data_comments, id, size_comments)
-
-
 # Merge data --------------------------------------------------------------
 
 immig <- immig %>%
-  left_join(data_oe) %>%
-  left_join(data_comments)
+  left_join(data_oe)
 
 
 ## Constraint: LIWC component ---------------------------------------------
 
 oe_liwc <- liwcalike(immig$resp, liwc)
-comments_liwc <- liwcalike(immig$comments, liwc)
 
 ## combine exclusive words and conjunctions (see Tausczik and Pennebaker 2010: 35)
 immig$constraint <- with(oe_liwc, (conj + differ) * WC)
-immig$constraint_comments <- with(comments_liwc, (conj + differ) * WC)
-
 immig$constraint <- immig$constraint - min(immig$constraint)
 immig$constraint <- immig$constraint / max(immig$constraint)
-
-immig$constraint_comments <- immig$constraint_comments - min(immig$constraint_comments)
-immig$constraint_comments <- immig$constraint_comments / max(immig$constraint_comments)
-
 
 ## Merge with full data and save -------------------------------------------
 
@@ -221,11 +214,6 @@ immig$constraint_comments <- immig$constraint_comments / max(immig$constraint_co
 immig$polknow_text <- with(immig, size * range * constraint)
 immig$polknow_text_mean <- with(immig, size + range + constraint)/3
 immig$polknow_text_scale <- as.numeric(scale(immig$polknow_text_mean))
-
-immig$polknow_comments <- with(immig, size_comments * constraint_comments)
-immig$polknow_comments_mean <- with(immig, size_comments + constraint_comments)/2
-immig$polknow_comments_scale <- as.numeric(scale(immig$polknow_comments_mean))
-
 
 
 # Save Output -------------------------------------------------------------
@@ -235,5 +223,4 @@ data_immig <- immig
 
 save(data_immig, opend_immig, spell_immig, meta,
      processed_oe, out_oe, stm_fit_oe,
-     processed_comments, out_comments, stm_fit_comments,
      file="calc/out/immig.Rdata")
