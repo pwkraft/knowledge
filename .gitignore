@@ -3,6 +3,7 @@
 #*
 .#*
 /data/
+dataverse/data/
 /info/
 *.csv
 *.dta
