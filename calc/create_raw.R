@@ -5,41 +5,27 @@
 # =================================
 
 library(tidyverse)
+library(haven)
+
+rm(list = ls())
 
 
 
 # 2018 CES ----------------------------------------------------------------
 
-raw_ces <- haven::read_sav("~/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
-  select(caseid, birthyr, gender, educ)
+raw_ces <- read_sav("~/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
+  select(caseid, birthyr, gender, educ, race, faminc_new, pew_churatd,
+         CC18_334A:CC18_334J, CC18_350, CC18_351, CC18_351x,
+         UWM329, UWM331:UWM334, UWM401:UWM410,
+         SenCand1Name, SenCand2Name)
 
 
-dvs <- c("vote", "polint_att", "effic_int", "effic_ext")
-ivs <- c("polknow_text_scale", "polknow_factual_scale",
-         "female", "age", "black", "educ", "faminc", "relig"
-)
-ivs <- c("polknow_text_scale * polknow_factual_scale",
-         "educ", "age", "black", "faminc", "relig")
 
-ideo <- c("ideo_dem", "ideo_rep", "ideo_sc", "ideo_trump", "ideo_warren", "ideo_ryan",
-          "ideo_mcconnel", "ideo_schumer", "ideo_pelosi", "ideo_murkowski", "ideo_collins",
-          "ideo_feinstein", "ideo_booker", "ideo_haley")
+# 2020 ANES ---------------------------------------------------------------
 
-SenCand1Avg <- data_cces %>%
-  group_by(SenCand1Name) %>%
-  summarize(SenCand1Avg = mean(ideo_cand1, na.rm = T)) %>%
-  na.omit()
+raw_anes2020 <- read_dta("~/Dropbox/Uni/Data/anes2020/anes_timeseries_2020_stata_20210324.dta")
 
-SenCand2Avg <- data_cces %>%
-  group_by(SenCand2Name) %>%
-  summarize(SenCand2Avg = mean(ideo_cand2, na.rm = T)) %>%
-  na.omit()
 
-data_cces <- data_cces %>%
-  left_join(SenCand1Avg) %>%
-  left_join(SenCand2Avg) %>%
-  mutate(correct_vote = as.numeric(abs(ideo_ego - SenCand1Avg) > abs(ideo_ego - SenCand2Avg)) + 1,
-         correct_vote = as.numeric(correct_vote == senate_vote))
 
 
 # 2015 YouGov -------------------------------------------------------------
@@ -116,3 +102,5 @@ oe_na <- sort(unique(c("N/A","n/a","na","Na","__NA__","no","not sure","none","no
                        "I dint know much", "I'm not sure", "No need", "<-", "..?", "Please!!", "DINT KNOW",
                        "NOT AGAINST", "I really don't know", "not for it.","Can't think of a thing.",
                        "None I can think of", "dint have a good answer for this")))
+
+save.image("dataverse/data/raw.Rdata")
