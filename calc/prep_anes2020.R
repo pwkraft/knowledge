@@ -77,7 +77,7 @@ anes2020 <- raw2020 %>% transmute(
 
   ## internal efficacy
   effic_int = (na_in(V202214, -9:-1) - 1
-               - na_in(V202213, -9:-1) + 5)/8,
+               - na_in(V202215, -9:-1) + 5)/8,
 
   ## external efficacy
   effic_ext = (na_in(V202212, -9:-1) - 1

@@ -241,7 +241,7 @@ anes2016$wordsum <- with(raw2016, Recode(V161497, "lo:-1=NA")
                          + Recode(V161500, "lo:-1=NA") + Recode(V161501, "lo:-1=NA")
                          + Recode(V161502, "lo:-1=NA") + Recode(V161503, "lo:-1=NA")
                          + Recode(V161504, "lo:-1=NA") + Recode(V161505, "lo:-1=NA")
-                         + Recode(V161500, "lo:-1=NA"))/10
+                         + Recode(V161506, "lo:-1=NA"))/10
 
 ## Pro-redistribution attitude: (new scale: 0-1)
 ## Services and spending tradeoff placement (1-7, max = increase spending)

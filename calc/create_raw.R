@@ -13,7 +13,7 @@ rm(list = ls())
 
 # 2018 CES ----------------------------------------------------------------
 
-raw_ces <- read_sav("~/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
+ces2018raw <- read_sav("~/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
   select(caseid, birthyr, gender, educ, race, faminc_new, pew_churatd,
          CC18_334A:CC18_334J, CC18_350, CC18_351, CC18_351x,
          UWM329, UWM331:UWM334, UWM401:UWM410,
@@ -23,23 +23,95 @@ raw_ces <- read_sav("~/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
 
 # 2020 ANES ---------------------------------------------------------------
 
-raw_anes2020 <- read_dta("~/Dropbox/Uni/Data/anes2020/anes_timeseries_2020_stata_20210324.dta")
+anes2020raw <- read_dta("~/Dropbox/Uni/Data/anes2020/anes_timeseries_2020_stata_20210324.dta") %>%
+  select(V200001, V200002, V201001, V201005, V201600, V201231x, V201452:V201454,
+         V201507x, V201511x, V201549x, V201617x, V202109x, V202212:V202215)
 
+anes2020opend <- read_csv("~/Dropbox/Uni/Data/anes2020/anes_timeseries_2020_redacted_openends.csv")
+
+
+
+# 2016 ANES ---------------------------------------------------------------
+
+anes2016raw <- read_dta("~/Dropbox/Uni/Data/anes2016/anes_timeseries_2016.dta") %>%
+  select(V160001, V160501, V161003, V161024x, V161026, V161030, V161158x,
+         V161244, V161245, V161245a, V161267, V161270, V161310x, V161342,
+         V161361x, V161497:V161506, V161513:V161516, V162215:V162218,
+         V162333, V162337, V162338)
+
+anes2016oe <- read.csv("~/Dropbox/Uni/Data/anes2016/anes_timeseries_2016_redacted_openends.csv", as.is = T)
+
+
+
+# 2012 ANES ---------------------------------------------------------------
+
+anes2012raw <- read_dta("~/Dropbox/Uni/Data/anes2012/anes_timeseries_2012.dta") %>%
+  select(caseid, mode, gender_respondent_x, dem_age_r_x, dem_raceeth_x,
+         dem_edugroup_x, incgroup_prepost_x, iwrobspre_levinfo,
+         relig_churchoft, relig_church, relig_churchwk, pid_x,
+         rvote2012_x, interest_attention, wordsum_setb:wordsum_seto,
+         effic_complicstd, effic_complicrev, effic_undstd, effic_undrev,
+         effic_carestd, effic_carerev, effic_saystd, effic_sayrev,
+         profile_spanishsurv, admin_pre_lang_start, admin_post_lang_start,
+         preknow_prestimes, preknow_sizedef, preknow_senterm,
+         preknow_medicare, preknow_leastsp)
+
+anes2012oe <- read.csv("~/Dropbox/Uni/Data/anes2012/anes2012TS_openends.csv", as.is = T) %>%
+  dplyr::select(caseid, candlik_likewhatdpc, candlik_dislwhatdpc, candlik_likewhatrpc,
+                candlik_dislwhatrpc, ptylik_lwhatdp, ptylik_dwhatdp,
+                ptylik_lwhatrp, ptylik_dwhatrp)
 
 
 
 # 2015 YouGov -------------------------------------------------------------
 
-raw_yg <- read_csv("/data/Dropbox/Uni/Data/YouGov2015/STBR0007_OUTPUT.csv") %>%
+yg2015raw <- read_csv("~/Dropbox/Uni/Data/YouGov2015/STBR0007_OUTPUT.csv") %>%
   select(caseid, Q2, Q3, Q5, Q6, starts_with("Q12"), Q13, Q14, Q24:Q31,
          gender, birthyr, race, educ, faminc, pew_churatd, pid7)
 
 
 
+# 2008 - 2012 Swiss Surveys -----------------------------------------------
+
+swiss2012raw <- read_dta("~/Dropbox/Uni/Data/colombo/citizencompetence_colombo.dta", encoding = "latin 1") %>%
+  select(nummer, sprache, lojr, age, edu, ideol, male, polint,
+         prostring1, prostring2, constring1, constring2)
+
+
+
+# 2019 MTurk Study --------------------------------------------------------
+
+mturk2019raw <- read_csv(
+  "~/Dropbox/Uni/Lab/immigration/data/Immigration_December 19, 2019_05.20.csv", skip = 3,
+  col_names = read_lines("~/Dropbox/Uni/Lab/immigration/data/Immigration_December 19, 2019_05.20.csv", n_max = 1) %>%
+    strsplit(",") %>% unlist()
+)
+
+
+
 # Open-ended missing responses --------------------------------------------
 
-oe_na <- sort(unique(c("N/A","n/a","na","Na","__NA__","no","not sure","none","nothing","good",
-                       "don't know","don't no","","I have no clue","I do not know",
+oe_na <- sort(unique(c("-1 inapplicable","-7 refused","n/a","no","none","#(43042)","i am","nome",
+                       "i refuse", "i rwfuse to disclose", "refuse to disclose",
+                       "dk","skip","no5","don't know","same","not really", "ditto",
+                       "no idea", "can't say","no comment","no views","nope","not at all",
+                       "no i can't","no i cant", "i don't know","iguess not","i dont know",
+                       "dont know", "dint care","no no comment","no not really", "again no",
+                       "1", "1 dk","dk5","no answer","hi","i","not","no commont",
+                       "can't answer","no can not","dosen't know","he is not sure",
+                       "its confidential","no answwer","not reaslly","lkjlkj","skjzhdkjhsd",
+                       "you can", "even", "can","dont know dont talk about politics",
+                       "dont knoiw","nono","not sure","do not know it","quit",
+                       "doesnt know","she doesnt know","no not thinking","cant say",
+                       "i don't know much", "would rather not explain","past",
+                       "skipped question", "skip the question", "hjkdhfkjhdskjh",
+                       "theuyidhfjdhkjdhfiaesjrhdjhflike shit", "dfdsjfksdjfkdsjf","dfsadfsf",
+                       "god knows no i can't","no comments","dont want to comment",
+                       "doesn't know","wants to skip","no not sure","no i caint", "not really no",
+                       "i really cant say let me think","nope i don't know what liberal is",
+                       "dont know what a conservative is dont care","she cannot",
+                       "doesn't klnow", "no i cain't", "decline", "really can't",
+                       "i choose not to","no i don't want to","no skip", "-1", "-9",
                        "N/A","n/a","na","Na","__NA__","no","not sure","none","nothing","good",
                        "don't know","don't no","","I have no clue","I do not know", "Don't know",
                        "Not sure", "No idea", "Idk", "None", "no comments", "?", "no", "yes",
@@ -101,6 +173,87 @@ oe_na <- sort(unique(c("N/A","n/a","na","Na","__NA__","no","not sure","none","no
                        "I don't know much about these.", "no good reasons", "I DINT KNOW MUCH ABOUT THIS TOPIC",
                        "I dint know much", "I'm not sure", "No need", "<-", "..?", "Please!!", "DINT KNOW",
                        "NOT AGAINST", "I really don't know", "not for it.","Can't think of a thing.",
-                       "None I can think of", "dint have a good answer for this")))
+                       "None I can think of", "dint have a good answer for this",
+                       "nice....", "good", "I really don't have a clue.", "it's my decision",
+                       "I have nothing to say", "nice and good", "super and good",
+                       "it seems really", "it seems really good i love every part of it",
+                       "use services is to be contented", "immigration work is satisified",
+                       "I have no idea I work at a hospital", "I don't think it changes much of anything",
+                       "very nice", "like it", "unsure", "really don't know possble",
+                       "that is how i feel", "the movement is very useful too me.",
+                       "very different", "nice", "ITS MY OPINION", "I THINK ITS MY OPINION",
+                       "GREAT", "VERY NICE", "based on the above information",
+                       "fackbook, instagram, twitter,youtube", "environmental",
+                       "based on the information", "nothing", "I CHOOSE MY OPINION",
+                       "I READ ALL THE INSTRUCTION SO I CHOOSE MY OPINION", "ITS MY OPINION READ A STORY RESULTS",
+                       "us people is mostly invested in medical uses",
+                       "my investment is based oon the environmental situation based on returns iis comes",
+                       "based on the previous information", "its my opinion", "I dont know",
+                       "based on my experience", "Please see response to previous question.",
+                       "normal person like ones", "I think is that better", "Nothing",
+                       "that our wish", "that's my own wish", "more than is that better",
+                       "jobs is create for better", "Just a guess because I have no idea",
+                       "Good study work.", "We are conducting an academic survey about media usage and news consumption. I hope this article has encouraged you to start answering or at least improve your answering method to benefit your business. This is definitely an important strategy to implement, but it shouldn’t be abused - don’t always link your answers back to your business.", "The taxes used for more people.",
+                       "The creative job helps for more people.", "You have to give and take.",
+                       "I think it is about equal", "breaking news", "economy rate",
+                       "additional job", "additional jobs",
+                       "N/A","n/a","na","Na","__NA__","no","not sure","none","nothing","good",
+                       "don't know","don't no","","I have no clue","I do not know",
+                       "no","non","nein","rien","nichts","keinen","nsp","ka","n","prive","nono",
+                       "si","oooooooooooo","ooooooooooo","ooooooooooo","ooooooooooooooo",
+                       "llll","lll","xxx","xx","niente","weiss nicht","weis nicht","weiss nichts",
+                       "keine ahnung","c","keine gründe","même raison","pas d'opinion","non mi ricordo",
+                       "nessun motivo","non so","weis nicht mehr","weiss nicht mehr","kein kommentar",
+                       "keine 2 grund","rien dautre","weis es nicht mehr","weiss es nicht mehr",
+                       "keins","k angaben","kein weitere grund","keine anderen gründen","wn","keine",
+                       "keiner","nichts mehr", # added below to address German responses (all loj = 0 codes)
+                       "war mir nicht klar", "-", "---", "keine", "nein", "kam nicht draus um was es ging",
+                       "nichts", "kam nicht draus", "97", "nicht^s", "wusste nicht um was es geht.",
+                       "keine antwort", "nein.", "wusste nicht genau um was es geht", "keinen",
+                       "1, nicht so befasst damit2. kein zweiter grund", "gar kein intresse",
+                       "will grund nicht angeben", "ooooooooooooooo", "die gleichen gründe",
+                       "nicht gedacht dabei", "war ratlos also nein", "ok", "weeeee", "wieso nicht",
+                       "sie weiss es nicht mehr genau", "- weiss nicht", "gleiche antwort", "wie vorhin",
+                       "weil das muss nicht jeder wissen", "weiss nicht mehr", "nichts mehr", ".",
+                       "k.a.", "nix", "keinen wirklichen grund", "weiss es nicht mehr so genau.",
+                       "wn", "nichts.", "n", "oooooooooo", "keine genauen gründe", "rigrnbrdtimmung",
+                       "grund war ihm nicht so klar.", "s", "habe es nicht verstanden", "weis nicht",
+                       "lesefehler gemacht darum falsch gewaehlt", "wenig informiert", "ooooooooooo",
+                       "weiss nichts", "nicht genau verstanden um was es geht", "kene", "gleich wie vorher",
+                       "habe es nicht ganz begriffen", "weiss nichts mehr.", "-----", "----",
+                       "keine gründe", "grundlos", "hat sie nicht interessiert", "keinen", "vergessen",
+                       "kann es nicht mehr sagen", "nicht mehr", "weiss nicht genau", "keines",
+                       "weiss nicht genau,", "ssfds", "interessiert mich nicht", "weis nich habe",
+                       "weis nich habe", "nichts mehr", "llll", "lll", "keine 2. grund", "...",
+                       "war zuwenig informiert", "das gleiche", "kein weiterer grund", "...........",
+                       "kein grund mehr", "kann nicht begründet", "kein 2. grund", "keine 2.grund",
+                       "kann ich nicht sagen", "nichts.", "xx", "weis es nicht mehr", "weiss es nicht mehr",
+                       "weiss nicht genau", "kein anderes grund", "bin nicht drausgekommen", "=",
+                       "wusste nicht genau", "hat sich nicht damit befasst", "nein.", "das war alles",
+                       "eigentliche nicht genau überlegt", "alles", "zu enig informiert", "hg",
+                       "dito", "keine angabe", "hat sich icht damit b efasst, deshalb das nein",
+                       "habe das zu wenig verstanden darum abgelehnt", "man hat sie nicht ganz verstanden",
+                       "zuviel auf einmal", "macht sinn", "---------", "ich weissnicht",
+                       "zu wenig befasst weiss nicht", "nichts mehr anderse", "weil bin nicht nachnahmen",
+                       "habe mich nicht wirklich damit auseinander gesetzt", "schlecht erklärt",
+                       "ist schon lange her", "weiss ich schlicht nicht mehr", "weiss nicht wieso",
+                       "weiss es nicht mehr", "niochts", "der glich berüdig  lang so wie es ist",
+                       "frage falsch verstanden", "kennt die gründe nicht.", "ist ihr zu fremt",
+                       "das braucht es nicht", "nicht formulierbar", "bin nicht ganz genau nachgekommen",
+                       "oooooooooooo", "hat mich nicht interessiert", "(verwechselt es mit osterweiterung)",
+                       "weiss nicht mehr genau", "nichst mehr", "nein w.n.", "keines", "....",
+                       ".....kennt sich zuwenig aus...", "neinn", "pers.", "-------------", "keiner",
+                       "ein anderer grund", "nichts mehr", "hatte keinen durchblick.", "nicht genau",
+                       "gleich", "überflog es nur kurz", "keine angaben", "kannte mich zuwenig aus",
+                       "weiss grund nicht mehr", "nicht mehr", "kein", "ws", "ooooooooooo", "??",
+                       "das interessiert uns garnicht", "der kugelschreiber hat nein geschrieben.",
+                       "persönlich", "auch das gleiche", "kann ich nicht sagen bin sehr emotional")))
+
+
+
+# LIWC word lists ---------------------------------------------------------
+
+dict_constraint <- read_csv("~/Dropbox/Uni/projects/2016/knowledge/calc/in/constraint.csv")
+
 
 save.image("dataverse/data/raw.Rdata")
