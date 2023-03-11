@@ -286,7 +286,7 @@ dict_constraint_it <- data.frame(original = c(liwc_it$Inclusi, liwc_it$Esclusi))
          regex = gsub("*\b", "", regex, fixed = T))
 
 ## remove LIWC files
-rm(ls()[grep("liwc", ls())])
+rm(list = ls()[grep("liwc", ls())])
 
 
 
