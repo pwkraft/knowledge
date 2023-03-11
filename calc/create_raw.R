@@ -74,7 +74,7 @@ yg2015raw <- read_csv("~/Dropbox/Uni/Data/YouGov2015/STBR0007_OUTPUT.csv") %>%
 # 2008 - 2012 Swiss Surveys -----------------------------------------------
 
 swiss2012raw <- read_dta("~/Dropbox/Uni/Data/colombo/citizencompetence_colombo.dta", encoding = "latin 1") %>%
-  select(nummer, sprache, lojr, age, edu, ideol, male, polint,
+  select(nummer, sprache, lojr, age, edu, P04, male, polint,
          prostring1, prostring2, constring1, constring2)
 
 
@@ -86,6 +86,8 @@ mturk2019raw <- read_csv(
   col_names = read_lines("~/Dropbox/Uni/Lab/immigration/data/Immigration_December 19, 2019_05.20.csv", n_max = 1) %>%
     strsplit(",") %>% unlist()
 )
+
+## TODO: Select variables in MTurk Study
 
 
 
@@ -253,7 +255,41 @@ oe_na <- sort(unique(c("-1 inapplicable","-7 refused","n/a","no","none","#(43042
 
 # LIWC word lists ---------------------------------------------------------
 
-dict_constraint <- read_csv("~/Dropbox/Uni/projects/2016/knowledge/calc/in/constraint.csv")
+## English dictionary
+load("~/Dropbox/Uni/Data/LIWC/liwc2015.Rdata")
+dict_constraint <- data.frame(original = c(as.list(liwc)$Conj, as.list(liwc)$Differ)) %>%
+  mutate(regex = paste0("\b", original, "\b"),
+         regex = gsub("*\b", "", regex, fixed = T))
 
+## German dictionary
+liwc_de <- as.list(
+  dictionary(file = "~/Dropbox/Uni/Data/LIWC/German_LIWC2001_Dictionary.dic", format = "LIWC")
+)
+dict_constraint_de <- data.frame(original = c(liwc_de$Incl, liwc_de$Excl)) %>%
+  mutate(regex = paste0("\b", original, "\b"),
+         regex = gsub("*\b", "", regex, fixed = T))
+
+## French dictionary
+liwc_fr <- as.list(
+  dictionary(file = "~/Dropbox/Uni/Data/LIWC/French_LIWC2007_Dictionary.dic", format = "LIWC", encoding = "LATIN1")
+)
+dict_constraint_fr <- data.frame(original = c(liwc_fr$conjonction, liwc_fr$exclusion)) %>%
+  mutate(regex = paste0("\b", original, "\b"),
+         regex = gsub("*\b", "", regex, fixed = T))
+
+## Italian dictionary
+liwc_it <- as.list(
+  dictionary(file = "~/Dropbox/Uni/Data/LIWC/Italian_LIWC2007_Dictionary.dic", format = "LIWC", encoding = "LATIN1")
+)
+dict_constraint_it <- data.frame(original = c(liwc_it$Inclusi, liwc_it$Esclusi)) %>%
+  mutate(regex = paste0("\b", original, "\b"),
+         regex = gsub("*\b", "", regex, fixed = T))
+
+## remove LIWC files
+rm(ls()[grep("liwc", ls())])
+
+
+
+# Save raw data files -----------------------------------------------------
 
 save.image("dataverse/data/raw.Rdata")
