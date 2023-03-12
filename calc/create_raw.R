@@ -14,9 +14,9 @@ rm(list = ls())
 # 2018 CES ----------------------------------------------------------------
 
 ces2018raw <- read_sav("~/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
-  select(caseid, birthyr, gender, educ, race, faminc_new, pew_churatd,
+  select(caseid, birthyr, gender, educ, race, faminc_new, pew_churatd, pid7,
          CC18_334A:CC18_334J, CC18_350, CC18_351, CC18_351x,
-         UWM329, UWM331:UWM334, UWM401:UWM410,
+         UWM309:UWM323, UWM329, UWM331:UWM334, UWM401:UWM410,
          SenCand1Name, SenCand2Name)
 
 
@@ -85,9 +85,9 @@ mturk2019raw <- read_csv(
   "~/Dropbox/Uni/Lab/immigration/data/Immigration_December 19, 2019_05.20.csv", skip = 3,
   col_names = read_lines("~/Dropbox/Uni/Lab/immigration/data/Immigration_December 19, 2019_05.20.csv", n_max = 1) %>%
     strsplit(",") %>% unlist()
-)
-
-## TODO: Select variables in MTurk Study
+) %>%
+  select(`Random ID`, age, gender, educ, income, church, pid, pid_lean, pid_rep, pid_dem,
+         employ, sales, taxes_oe, jobs_oe, contains("_trust_"))
 
 
 
@@ -253,37 +253,43 @@ oe_na <- sort(unique(c("-1 inapplicable","-7 refused","n/a","no","none","#(43042
 
 
 
+# Custom stopwords for STM ------------------------------------------------
+
+oe_sw <- c("dont", "hes", "shes", "that", "etc")
+
+
+
 # LIWC word lists ---------------------------------------------------------
 
 ## English dictionary
 load("~/Dropbox/Uni/Data/LIWC/liwc2015.Rdata")
 dict_constraint <- data.frame(original = c(as.list(liwc)$Conj, as.list(liwc)$Differ)) %>%
-  mutate(regex = paste0("\b", original, "\b"),
-         regex = gsub("*\b", "", regex, fixed = T))
+  mutate(regex = paste0("\\b", original, "\\b"),
+         regex = gsub("*\\b", "", regex, fixed = T))
 
 ## German dictionary
 liwc_de <- as.list(
   dictionary(file = "~/Dropbox/Uni/Data/LIWC/German_LIWC2001_Dictionary.dic", format = "LIWC")
 )
 dict_constraint_de <- data.frame(original = c(liwc_de$Incl, liwc_de$Excl)) %>%
-  mutate(regex = paste0("\b", original, "\b"),
-         regex = gsub("*\b", "", regex, fixed = T))
+  mutate(regex = paste0("\\b", original, "\\b"),
+         regex = gsub("*\\b", "", regex, fixed = T))
 
 ## French dictionary
 liwc_fr <- as.list(
   dictionary(file = "~/Dropbox/Uni/Data/LIWC/French_LIWC2007_Dictionary.dic", format = "LIWC", encoding = "LATIN1")
 )
 dict_constraint_fr <- data.frame(original = c(liwc_fr$conjonction, liwc_fr$exclusion)) %>%
-  mutate(regex = paste0("\b", original, "\b"),
-         regex = gsub("*\b", "", regex, fixed = T))
+  mutate(regex = paste0("\\b", original, "\\b"),
+         regex = gsub("*\\b", "", regex, fixed = T))
 
 ## Italian dictionary
 liwc_it <- as.list(
   dictionary(file = "~/Dropbox/Uni/Data/LIWC/Italian_LIWC2007_Dictionary.dic", format = "LIWC", encoding = "LATIN1")
 )
 dict_constraint_it <- data.frame(original = c(liwc_it$Inclusi, liwc_it$Esclusi)) %>%
-  mutate(regex = paste0("\b", original, "\b"),
-         regex = gsub("*\b", "", regex, fixed = T))
+  mutate(regex = paste0("\\b", original, "\\b"),
+         regex = gsub("*\\b", "", regex, fixed = T))
 
 ## remove LIWC files
 rm(list = ls()[grep("liwc", ls())])
@@ -292,4 +298,4 @@ rm(list = ls()[grep("liwc", ls())])
 
 # Save raw data files -----------------------------------------------------
 
-save.image("dataverse/data/raw.Rdata")
+save.image("~/Dropbox/Uni/projects/2016/knowledge/dataverse/data/raw.Rdata")
