@@ -24,10 +24,9 @@ ces2018raw <- read_sav("~/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %
 # 2020 ANES ---------------------------------------------------------------
 
 anes2020raw <- read_dta("~/Dropbox/Uni/Data/anes2020/anes_timeseries_2020_stata_20210324.dta") %>%
-  select(V200001, V200002, V201001, V201005, V201600, V201231x, V201452:V201454,
-         V201507x, V201511x, V201549x, V201617x, V202109x, V202212:V202215)
-
-anes2020opend <- read_csv("~/Dropbox/Uni/Data/anes2020/anes_timeseries_2020_redacted_openends.csv")
+  select(V200001, V201001, V201005, V201600, V201231x, V201452:V201454, V201507x, V201511x,
+         V201549x, V201617x, V201644:V201647, V202001, V202109x, V202212:V202215) %>%
+  left_join(read_csv("~/Dropbox/Uni/Data/anes2020/anes_timeseries_2020_redacted_openends.csv"))
 
 
 
@@ -37,9 +36,8 @@ anes2016raw <- read_dta("~/Dropbox/Uni/Data/anes2016/anes_timeseries_2016.dta") 
   select(V160001, V160501, V161003, V161024x, V161026, V161030, V161158x,
          V161244, V161245, V161245a, V161267, V161270, V161310x, V161342,
          V161361x, V161497:V161506, V161513:V161516, V162215:V162218,
-         V162333, V162337, V162338)
-
-anes2016oe <- read.csv("~/Dropbox/Uni/Data/anes2016/anes_timeseries_2016_redacted_openends.csv", as.is = T)
+         V162333, V162337, V162338, V168016) %>%
+  left_join(read.csv("~/Dropbox/Uni/Data/anes2016/anes_timeseries_2016_redacted_openends.csv", as.is = T))
 
 
 
@@ -54,12 +52,11 @@ anes2012raw <- read_dta("~/Dropbox/Uni/Data/anes2012/anes_timeseries_2012.dta") 
          effic_carestd, effic_carerev, effic_saystd, effic_sayrev,
          profile_spanishsurv, admin_pre_lang_start, admin_post_lang_start,
          preknow_prestimes, preknow_sizedef, preknow_senterm,
-         preknow_medicare, preknow_leastsp)
-
-anes2012oe <- read.csv("~/Dropbox/Uni/Data/anes2012/anes2012TS_openends.csv", as.is = T) %>%
-  dplyr::select(caseid, candlik_likewhatdpc, candlik_dislwhatdpc, candlik_likewhatrpc,
-                candlik_dislwhatrpc, ptylik_lwhatdp, ptylik_dwhatdp,
-                ptylik_lwhatrp, ptylik_dwhatrp)
+         preknow_medicare, preknow_leastsp, tipi_extra, tipi_open, tipi_resv) %>%
+  left_join(select(read.csv("~/Dropbox/Uni/Data/anes2012/anes2012TS_openends.csv", as.is = T),
+                   caseid, candlik_likewhatdpc, candlik_dislwhatdpc, candlik_likewhatrpc,
+                   candlik_dislwhatrpc, ptylik_lwhatdp, ptylik_dwhatdp,
+                   ptylik_lwhatrp, ptylik_dwhatrp))
 
 
 
@@ -67,7 +64,21 @@ anes2012oe <- read.csv("~/Dropbox/Uni/Data/anes2012/anes2012TS_openends.csv", as
 
 yg2015raw <- read_csv("~/Dropbox/Uni/Data/YouGov2015/STBR0007_OUTPUT.csv") %>%
   select(caseid, Q2, Q3, Q5, Q6, starts_with("Q12"), Q13, Q14, Q24:Q31,
-         gender, birthyr, race, educ, faminc, pew_churatd, pid7)
+         gender, birthyr, race, educ, faminc, pew_churatd, pid7, treat_rand1)
+
+## recode missing values in disease knowledge question
+yg2015raw$Q13[is.na(yg2015raw$Q13)] <- 8
+yg2015raw$Q14[is.na(yg2015raw$Q14)] <- 8
+
+## recode missing values in political knowledge questions
+yg2015raw$Q24[is.na(yg2015raw$Q24)] <- 8
+yg2015raw$Q25[is.na(yg2015raw$Q25)] <- 8
+yg2015raw$Q26[is.na(yg2015raw$Q26)] <- 8
+yg2015raw$Q27[is.na(yg2015raw$Q27)] <- 8
+yg2015raw$Q28[is.na(yg2015raw$Q28)] <- 8
+yg2015raw$Q29[is.na(yg2015raw$Q29)] <- 8
+yg2015raw$Q30[is.na(yg2015raw$Q30)] <- 8
+yg2015raw$Q31[is.na(yg2015raw$Q31)] <- 8
 
 
 
@@ -255,7 +266,7 @@ oe_na <- sort(unique(c("-1 inapplicable","-7 refused","n/a","no","none","#(43042
 
 # Custom stopwords for STM ------------------------------------------------
 
-oe_sw <- c("dont", "hes", "shes", "that", "etc")
+stopwords <- c("dont", "hes", "shes", "that", "etc")
 
 
 

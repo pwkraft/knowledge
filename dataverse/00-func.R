@@ -5,6 +5,7 @@
 # ========================================================================= #
 
 
+
 # Required packages -------------------------------------------------------
 
 ## general purpose
@@ -14,13 +15,12 @@ library(here)
 ## text analysis
 library(discursive)
 library(SnowballC)
+library(cld2)
 library(stm)
 
 ## plots / tables
 library(gridExtra)
 library(xtable)
-
-
 
 
 
@@ -32,15 +32,27 @@ plot_default <- theme_classic(base_size=9) +
 plot_empty <- theme_classic(base_size=9) +
   theme(panel.border = element_rect(fill="white"))
 
+## quickly declare missing values
+na_in <- function(x, y) {
+  x[x %in% y] <- NA
+  x
+}
 
 ## Remove empty open-ended responses, fix spelling
+oe_clean <- function(x, spell = TRUE, tolower = FALSE){
+  if(tolower){
+    x <- tolower(x)
+    oe_na <- unique(tolower(oe_na))
+  }
 
-oe_clean <- function(x, spell = TRUE){
   x <- gsub("(^\\s+|\\s+$)","", x)
   x[x %in% oe_na] <- ""
-  x <- gsub("//"," ", x , fixed = T) %>%
-    gsub("\\s+"," ", .) %>%
-    gsub("(^\\s+|\\s+$)","", .)
+  x <- gsub("//", " ", x, fixed = T) %>%
+    gsub("\\", " ", ., fixed = T) %>%
+    gsub("...", " ", ., fixed = T) %>%
+    gsub("/", " ", ., fixed = T) %>%
+    gsub("\\s+", " ", .) %>%
+    gsub("(^\\s+|\\s+$)", "", .)
 
   if(spell){
     tmp <- tempfile(fileext = ".csv")
