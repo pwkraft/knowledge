@@ -24,7 +24,7 @@ ces2018 <- ces2018raw %>% transmute(
   educ_cont =  educ,
   educ = as.numeric(educ > 4),
   pid_cont = recode(as.numeric(pid7), `8` = 4),
-  educ_pid = educ_cont * pid,
+  educ_pid = educ_cont * pid_cont,
   faminc = (na_if(faminc_new, 97)-1)/15,
   relig = (6-na_if(pew_churatd, 7))/5,
 
@@ -312,50 +312,144 @@ yg2015 <- yg2015raw %>% transmute(
   faminc = (recode(faminc, `31`=12, `97`=NA_real_) - 1)/15,
   relig = (6 - na_if(pew_churatd, 7))/5,
 
-  ## TODO: Continue here
-
   ## Factual knowledge
-  treat = treat_rand1 == 3 | treat_rand1 == 4,
-  polknow = as.numeric(scale((preknow_prestimes==2) + (preknow_sizedef==1)
-                             + (preknow_senterm==6) + (preknow_medicare==1)
-                             + (preknow_leastsp==1))),
+  polknow = as.numeric(scale((Q24==3) + (Q25==1) + (Q26==1) + (Q27==2)
+                             + (Q28==2) + (Q29==1) + (Q30==2) + (Q31==1))),
 
   ## Open-ended responses
-  oe_likedpc = oe_clean(candlik_likewhatdpc, tolower = TRUE),
-  oe_disldpc = oe_clean(candlik_dislwhatdpc, tolower = TRUE),
-  oe_likerpc = oe_clean(candlik_likewhatrpc, tolower = TRUE),
-  oe_dislrpc = oe_clean(candlik_dislwhatrpc, tolower = TRUE),
-  oe_likedp = oe_clean(ptylik_lwhatdp, tolower = TRUE),
-  oe_disldp = oe_clean(ptylik_dwhatdp, tolower = TRUE),
-  oe_likerp = oe_clean(ptylik_lwhatrp, tolower = TRUE),
-  oe_dislrp = oe_clean(ptylik_dwhatrp, tolower = TRUE),
-  wc = str_count(oe_likedpc, '\\w+') + str_count(oe_disldpc, '\\w+') +
-    str_count(oe_likerpc, '\\w+') + str_count(oe_dislrpc, '\\w+') +
-    str_count(oe_likedp, '\\w+') + str_count(oe_disldp, '\\w+') +
-    str_count(oe_likerp, '\\w+') + str_count(oe_dislrp, '\\w+'),
+  oe_guns1 = oe_clean(Q2),
+  oe_guns2 = oe_clean(Q3),
+  oe_health1 = oe_clean(Q5),
+  oe_health2 = oe_clean(Q6),
+  wc = str_count(oe_guns1, '\\w+') + str_count(oe_guns2, '\\w+') +
+    str_count(oe_health1, '\\w+') + str_count(oe_health2, '\\w+'),
 
   ## Miscellaneous
-  polknow_evalpre <- (5 - na_in(iwrobspre_levinfo, -9:-1))/4,
-  wordsum = ((wordsum_setb == 5) + (wordsum_setd == 3)
-             + (wordsum_sete == 1) + (wordsum_setf == 3)
-             + (wordsum_setg == 5) + (wordsum_seth == 4)
-             + (wordsum_setj == 1) + (wordsum_setk == 1)
-             + (wordsum_setl == 4) + (wordsum_seto == 2))/10,
-  extraversion = (na_in(tipi_extra, -9:-1) - 1)/6,
-  newexperience = (na_in(tipi_open, -9:-1) - 1)/6,
-  reserved = (na_in(tipi_resv, -9:-1) - 1)/6,
-  spanish = as.numeric(profile_spanishsurv == 1 |
-                         admin_pre_lang_start == 2 |
-                         admin_post_lang_start == 2)) %>%
-  filter(!spanish)
+  treat = treat_rand1 == 3 | treat_rand1 == 4,
+  know_disease = ((Q12_1==1)
+                  + ((Q12_2==1)*!treat) + ((Q12_2==2)*treat)
+                  + ((Q12_3==2)*!treat) + ((Q12_3==1)*treat)
+                  + ((Q12_4==1)*!treat) + ((Q12_4==2)*treat)
+                  + ((Q12_5==2)*!treat) + ((Q12_5==1)*treat)
+                  + (Q12_6==2) + (Q12_7==2)
+                  + (Q13==1) + (Q14==2))
+)
 yg2015disc <- discursive(data = yg2015,
-                           openends = colnames(yg2015)[grep("oe_", colnames(yg2015))],
-                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                           args_textProcessor = list(customstopwords = stopwords),
-                           args_prepDocuments = list(lower.thresh = 10),
-                           args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                           dictionary = dict_constraint$regex)
+                         openends = colnames(yg2015)[grep("oe_", colnames(yg2015))],
+                         meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                         args_textProcessor = list(customstopwords = stopwords),
+                         args_prepDocuments = list(lower.thresh = 10),
+                         args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                         dictionary = dict_constraint$regex)
 yg2015 <- bind_cols(yg2015, yg2015disc$output)
+
+
+
+# 2008 - 2012 Swiss Surveys -----------------------------------------------
+
+swiss2012 <- swiss2012raw %>% transmute(
+
+  ## Sociodemographics and other controls
+  caseid = nummer,
+  lang = sprache,
+  female = 1 - male,
+  age = age,
+  educ = as.numeric(edu == 4),
+  educ_cont = (edu - 1)/3,
+  ideo_cont = (na_in(P04, c(11,12)) - 5)/5,
+  educ_ideo = educ_cont * ideo_cont,
+
+  ## Open-ended responses
+  oe_string1 = oe_clean(paste(prostring1, constring1), tolower = TRUE, spell = FALSE),
+  oe_string2 = oe_clean(paste(prostring2, constring2), tolower = TRUE, spell = FALSE),
+  wc = str_count(oe_string1, '\\w+') + str_count(oe_string2, '\\w+'),
+
+  ## Miscellaneous
+  loj <- lojr,
+  loj_scale <- as.numeric(scale(loj))
+)
+
+swiss2012_de <- filter(swiss2012, lang == 1, wc != 0)
+swiss2012disc_de <- discursive(data = swiss2012_de,
+                               openends = colnames(swiss2012_de)[grep("oe_", colnames(swiss2012_de))],
+                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                               args_textProcessor = list(language = "german"),
+                               args_prepDocuments = list(lower.thresh = 10),
+                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                               dictionary = dict_constraint_de$regex)
+swiss2012_de <- bind_cols(swiss2012_de, swiss2012disc_de$output)
+
+swiss2012_fr <- filter(swiss2012, lang == 2, wc != 0)
+swiss2012disc_fr <- discursive(data = swiss2012_fr,
+                               openends = colnames(swiss2012_fr)[grep("oe_", colnames(swiss2012_fr))],
+                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                               args_textProcessor = list(language = "french"),
+                               args_prepDocuments = list(lower.thresh = 10),
+                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                               dictionary = dict_constraint_fr$regex)
+swiss2012_fr <- bind_cols(swiss2012_fr, swiss2012disc_fr$output)
+
+swiss2012_it <- filter(swiss2012, lang == 3, wc != 0)
+swiss2012disc_it <- discursive(data = swiss2012_it,
+                               openends = colnames(swiss2012_it)[grep("oe_", colnames(swiss2012_it))],
+                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                               args_textProcessor = list(language = "italian"),
+                               args_prepDocuments = list(lower.thresh = 10),
+                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                               dictionary = dict_constraint_it$regex)
+swiss2012_it <- bind_cols(swiss2012_it, swiss2012disc_it$output)
+
+
+
+# 2019 MTurk Study --------------------------------------------------------
+
+mturk2019 <- mturk2019raw %>% transmute(
+
+  ## Sociodemographics and other controls
+  caseid = row_number(),
+  ranid = `Random ID`,
+  female = recode(gender, `1`=1, `2`=0, `3`=NA_real_),
+  age = age,
+  black = race == 2,
+  educ_cont = (educ - 1)/5,
+  educ = educ > 4,
+  pid_cont = (recode(pid, `1`=6, `2`=2, `3`=4, `4`=4) +
+                recode(pid_lean, `1`=1, `2`=-1, `3`=0, .missing=0) +
+                recode(pid_rep, `1`=1, `2`=0, .missing=0) +
+                recode(pid_dem, `1`=-1, `2`=0, .missing=0) - 1)/6,
+  educ_pid = educ_cont * pid_cont,
+  faminc = (income - 1)/6,
+  relig = (church - 1)/8,
+
+  ## Factual knowledge
+  polknow = as.numeric(scale((employ == 4) + (sales == 3))),
+
+  ## Open-ended responses
+  oe_taxes = oe_clean(taxes_oe),
+  oe_jobs = oe_clean(jobs_oe),
+  wc = str_count(oe_taxes, '\\w+') + str_count(oe_jobs, '\\w+'),
+
+  ## Miscellaneous
+  tv_trust_fox = (5 - tv_trust_1)/4,
+  tv_trust_msnbc = (5 - tv_trust_2)/4,
+  tv_trust_cnn = (5 - tv_trust_3)/4,
+  tv_trust_nbc = (5 - tv_trust_4)/4,
+  tv_trust_cbs = (5 - tv_trust_5)/4,
+  print_trust_nyt = (5 - print_trust_1)/4,
+  print_trust_wapo = (5 - print_trust_2)/4,
+  print_trust_wsj = (5 - print_trust_3)/4,
+  print_trust_ust = (5 - print_trust_4)/4,
+  print_trust_nyp = (5 - print_trust_5)/4
+)
+mturk2019disc <- discursive(data = mturk2019,
+                            openends = colnames(mturk2019)[grep("oe_", colnames(mturk2019))],
+                            meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                            args_textProcessor = list(customstopwords = stopwords),
+                            args_prepDocuments = list(lower.thresh = 10),
+                            args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                            dictionary = dict_constraint$regex)
+mturk2019 <- bind_cols(mturk2019, mturk2019disc$output)
+
 
 
 # Export processed data files ---------------------------------------------

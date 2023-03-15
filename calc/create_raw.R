@@ -85,8 +85,14 @@ yg2015raw$Q31[is.na(yg2015raw$Q31)] <- 8
 # 2008 - 2012 Swiss Surveys -----------------------------------------------
 
 swiss2012raw <- read_dta("~/Dropbox/Uni/Data/colombo/citizencompetence_colombo.dta", encoding = "latin 1") %>%
-  select(nummer, sprache, lojr, age, edu, P04, male, polint,
+  select(nummer, sprache, lojr, age, edu, male, P04,
          prostring1, prostring2, constring1, constring2)
+
+## empty strings
+swiss2012raw$prostring1[swiss2012raw$prostring1 %in% c(99999997,99999998)] <- ""
+swiss2012raw$prostring2[swiss2012raw$prostring2 %in% c(99999997,99999998)] <- ""
+swiss2012raw$constring1[swiss2012raw$constring1 %in% c(99999997,99999998)] <- ""
+swiss2012raw$constring2[swiss2012raw$constring2 %in% c(99999997,99999998)] <- ""
 
 
 
@@ -97,8 +103,9 @@ mturk2019raw <- read_csv(
   col_names = read_lines("~/Dropbox/Uni/Lab/immigration/data/Immigration_December 19, 2019_05.20.csv", n_max = 1) %>%
     strsplit(",") %>% unlist()
 ) %>%
-  select(`Random ID`, age, gender, educ, income, church, pid, pid_lean, pid_rep, pid_dem,
-         employ, sales, taxes_oe, jobs_oe, contains("_trust_"))
+  select(`Random ID`, gender, age, race, educ, income, church, pid, pid_lean, pid_rep, pid_dem,
+         employ, sales, taxes_oe, jobs_oe, contains("_trust_")) %>%
+  filter(!is.na(`Random ID`))
 
 
 
