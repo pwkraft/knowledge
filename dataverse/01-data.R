@@ -135,7 +135,7 @@ anes2020 <- anes2020raw %>% transmute(
 
   ## Miscellaneous
   spanish = as.numeric(V201001 == 2 | V202001 == 2)) %>%
-  filter(spanish == 0)
+  filter(spanish == 0, wc != 0)
 anes2020disc <- discursive(data = anes2020,
                            openends = colnames(anes2020)[grep("oe_", colnames(anes2020))],
                            meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
@@ -194,7 +194,7 @@ anes2016 <- anes2016raw %>% transmute(
     str_count(oe_likerp, '\\w+') + str_count(oe_dislrp, '\\w+'),
 
   ## Miscellaneous
-  polknow_evalpre <- (5 - na_in(V168016, -9:-1))/4,
+  polknow_evalpre = (5 - na_in(V168016, -9:-1))/4,
   wordsum = (na_in(V161497, -9:-1) + na_in(V161498, -9:-1)
              + na_in(V161499, -9:-1) + na_in(V161500, -9:-1)
              + na_in(V161501, -9:-1) + na_in(V161502, -9:-1)
@@ -206,7 +206,7 @@ anes2016 <- anes2016raw %>% transmute(
   spanish = detect_language(
     paste(oe_likedpc, oe_disldpc, oe_likerpc, oe_dislrpc,
           oe_likedp, oe_disldp, oe_likerp, oe_dislrp)) != "en") %>%
-  filter(!spanish)
+  filter(!spanish, wc != 0)
 anes2016disc <- discursive(data = anes2016,
                            openends = colnames(anes2016)[grep("oe_", colnames(anes2016))],
                            meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
@@ -268,7 +268,7 @@ anes2012 <- anes2012raw %>% transmute(
     str_count(oe_likerp, '\\w+') + str_count(oe_dislrp, '\\w+'),
 
   ## Miscellaneous
-  polknow_evalpre <- (5 - na_in(iwrobspre_levinfo, -9:-1))/4,
+  polknow_evalpre = (5 - na_in(iwrobspre_levinfo, -9:-1))/4,
   wordsum = ((wordsum_setb == 5) + (wordsum_setd == 3)
              + (wordsum_sete == 1) + (wordsum_setf == 3)
              + (wordsum_setg == 5) + (wordsum_seth == 4)
@@ -280,7 +280,7 @@ anes2012 <- anes2012raw %>% transmute(
   spanish = as.numeric(profile_spanishsurv == 1 |
                          admin_pre_lang_start == 2 |
                          admin_post_lang_start == 2)) %>%
-  filter(!spanish)
+  filter(!spanish, wc != 0)
 anes2012disc <- discursive(data = anes2012,
                            openends = colnames(anes2012)[grep("oe_", colnames(anes2012))],
                            meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),

@@ -9,6 +9,7 @@
 
 ## general purpose
 library(tidyverse)
+library(GGally)
 library(here)
 
 ## text analysis
