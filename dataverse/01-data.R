@@ -11,7 +11,6 @@ source(here::here("00-func.R"))
 load(here("data/raw.Rdata"))
 
 
-
 # 2018 CES ----------------------------------------------------------------
 
 ces2018 <- ces2018raw %>% transmute(
@@ -90,7 +89,6 @@ ces2018disc <- discursive(data = ces2018,
 ces2018 <- bind_cols(ces2018, ces2018disc$output)
 
 
-
 # 2020 ANES ---------------------------------------------------------------
 
 anes2020 <- anes2020raw %>% transmute(
@@ -146,7 +144,6 @@ anes2020disc <- discursive(data = anes2020,
                            args_stm = list(K = 25, seed = 12345, verbose = FALSE),
                            dictionary = dict_constraint$regex)
 anes2020 <- bind_cols(anes2020, anes2020disc$output)
-
 
 
 # 2016 ANES ---------------------------------------------------------------
@@ -218,7 +215,6 @@ anes2016disc <- discursive(data = anes2016,
                            args_stm = list(K = 25, seed = 12345, verbose = FALSE),
                            dictionary = dict_constraint$regex)
 anes2016 <- bind_cols(anes2016, anes2016disc$output)
-
 
 
 # 2012 ANES ---------------------------------------------------------------
@@ -295,7 +291,6 @@ anes2012disc <- discursive(data = anes2012,
 anes2012 <- bind_cols(anes2012, anes2012disc$output)
 
 
-
 # 2015 YouGov -------------------------------------------------------------
 
 yg2015 <- yg2015raw %>% transmute(
@@ -342,7 +337,6 @@ yg2015disc <- discursive(data = yg2015,
                          args_stm = list(K = 25, seed = 12345, verbose = FALSE),
                          dictionary = dict_constraint$regex)
 yg2015 <- bind_cols(yg2015, yg2015disc$output)
-
 
 
 # 2008 - 2012 Swiss Surveys -----------------------------------------------
@@ -400,7 +394,6 @@ swiss2012disc_it <- discursive(data = swiss2012_it,
 swiss2012_it <- bind_cols(swiss2012_it, swiss2012disc_it$output)
 
 
-
 # 2019 MTurk Study --------------------------------------------------------
 
 mturk2019 <- mturk2019raw %>% transmute(
@@ -449,7 +442,6 @@ mturk2019disc <- discursive(data = mturk2019,
                             args_stm = list(K = 25, seed = 12345, verbose = FALSE),
                             dictionary = dict_constraint$regex)
 mturk2019 <- bind_cols(mturk2019, mturk2019disc$output)
-
 
 
 # Export processed data files ---------------------------------------------
