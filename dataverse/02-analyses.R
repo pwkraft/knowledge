@@ -8,7 +8,7 @@
 # Load raw data, packages, and custom functions ---------------------------
 
 source(here::here("00-func.R"))
-load(here("data/raw.Rdata"))
+load(here("data/processed.Rdata"))
 
 
 # Factor analysis of sophistication components ----------------------------
@@ -772,11 +772,11 @@ stargazer(m3factual, type="text", align = TRUE, column.sep.width = "0pt", no.spa
 
 ## estimate topic prevalence effects
 prep2012 <- estimateEffect(~ female + age + educ_cont + pid_cont + educ_pid,
-                           stm_fit2012, meta = out2012$meta, uncertainty = "Global")
+                           stm_fit2012, meta = anes2012disc$prepDocuments$meta, uncertainty = "Global")
 prep2016 <- estimateEffect(~ female + age + educ_cont + pid_cont + educ_pid,
-                           stm_fit2016, meta = out2016$meta, uncertainty = "Global")
+                           stm_fit2016, meta = anes2016disc$prepDocuments$meta, uncertainty = "Global")
 prep2020 <- estimateEffect(~ female + age + educ_cont + pid_cont + educ_pid,
-                           stm_fit2020, meta = out2020$meta, uncertainty = "Global")
+                           stm_fit2020, meta = anes2020disc$prepDocuments$meta, uncertainty = "Global")
 
 ## select topics with largest gender effects
 tmp2012 <- tibble(estimate = sapply(summary(prep2012)$tables,
@@ -795,15 +795,15 @@ topics2020 <- c(head(tmp2020$topics, 5), tail(tmp2020$topics, 5))
 ## plot gender differences in topic proportions
 png("fig/stm_gender.png", height=5.5, width=6.5, units = "in", res = 400)
 par(mfrow=c(3,1), mar=c(2.2,0.5,2.2,0.5))
-plot.estimateEffect(prep2012, covariate = "female", topics = topics2012, model = stm_fit2012,
+plot.estimateEffect(prep2012, covariate = "female", topics = topics2012, model = anes2012disc$stm,
                     xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
                     labeltype = "frex", n=5, verbose.labels = F, width=50,
                     main = "2012 ANES")
-plot.estimateEffect(prep2016, covariate = "female", topics = topics2016, model = stm_fit2016,
+plot.estimateEffect(prep2016, covariate = "female", topics = topics2016, model = anes2016disc$stm,
                     xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
                     labeltype = "frex", n=5, verbose.labels = F, width=50,
                     main = "2016 ANES")
-plot.estimateEffect(prep2020, covariate = "female", topics = topics2020, model = stm_fit2020,
+plot.estimateEffect(prep2020, covariate = "female", topics = topics2020, model = anes2020disc$stm,
                     xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
                     labeltype = "frex", n=5, verbose.labels = F, width=50,
                     main = "2020 ANES")
@@ -811,7 +811,7 @@ dev.off()
 
 png("fig/stm_gender1.png", height=3.5, width=7.5, units = "in", res = 400)
 par(mfrow=c(1,1), mar=c(2.2,0.5,2.2,0.5))
-plot.estimateEffect(prep2020, covariate = "female", topics = topics2020, model = stm_fit2020,
+plot.estimateEffect(prep2020, covariate = "female", topics = topics2020, model = anes2020disc$stm,
                     xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
                     labeltype = "frex", n=5, verbose.labels = F, width=50,
                     main = "2020 ANES")
