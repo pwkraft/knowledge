@@ -80,55 +80,47 @@ anes2012 %>% transmute(
 ggsave(here("out/fig1d-corplot_anes2012.png"),width=3.2, height=3.2)
 
 
-# Sample responses --------------------------------------------------------
+# Table 2: Example of open-ended responses for low and high scores --------
 
+## Identify collection of responses that match criteria
 ces2018 %>%
   filter(wc > (median(wc) - 100) & wc < (median(wc) + 100),
-         polknow_factual == 0.6) %>%
-  filter((discursive < quantile(discursive,.25) & female == 0) |
-           (discursive > quantile(discursive,.75) & female == 1)) %>%
+         polknow > 1 & polknow < 1.1) %>%
+  filter((discursive < quantile(discursive, .25, na.rm = T) & female == 0) |
+           (discursive > quantile(discursive, .75, na.rm = T) & female == 1)) %>%
   arrange(discursive) %>%
-  select(caseid, female, polknow_old, polknow_factual, discursive) %>%
-  #left_join(opend) %>%
-  left_join(haven::read_sav("/data/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
-              select(caseid, UWM309, UWM310, UWM312, UWM313, UWM315,
-                            UWM316, UWM318, UWM319, UWM321, UWM322)) %>%
-  write_csv(file="calc/tmp/select_cces.csv")
+  select(caseid, female, polknow, discursive) %>%
+  left_join(select(ces2018raw, caseid, UWM309, UWM310, UWM312, UWM313, UWM315,
+                   UWM316, UWM318, UWM319, UWM321, UWM322)) %>%
+  write_csv(file= here("out/tab2-examples.csv"))
 
-# Directly identify sample responses in revised submission
+## Select two specific examples for Table 2
 ces2018 %>% filter(caseid %in% c(418389435, 412523485)) %>%
-  select(caseid, female, polknow_old, polknow_factual, discursive) %>%
-  left_join(haven::read_sav("/data/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
-              select(caseid, UWM309, UWM310, UWM312, UWM313, UWM315,
-                            UWM316, UWM318, UWM319, UWM321, UWM322))# %>% View()
-
-# Old code to identify sample responses in original submission (using old factual scale):
-ces2018 %>% filter(caseid %in% c(412380137, 414596729)) %>%
-  select(caseid, female, polknow_old, polknow_factual, discursive) %>%
-  left_join(haven::read_sav("/data/Dropbox/Uni/Data/cces2018/CCES18_UWM_OUTPUT_vv.sav") %>%
-              select(caseid, UWM309, UWM310, UWM312, UWM313, UWM315,
-                            UWM316, UWM318, UWM319, UWM321, UWM322))# %>% View()
+  select(caseid, female, polknow, discursive) %>%
+  left_join(select(ces2018raw, caseid, UWM309, UWM310, UWM312, UWM313, UWM315,
+                   UWM316, UWM318, UWM319, UWM321, UWM322)) %>%
+  write_csv(file = here("out/tab2-selection.csv"))
 
 
+# Figure 2: Effects of political sophistication on turnout, politi --------
 
-# Validation: competence and engagement -----------------------------------
+## Select dependent and independent variables
+dvs <- c("vote", "polint", "effic_int", "effic_ext")
+ivs <- c("discursive", "polknow", "female", "age", "black", "educ", "faminc", "relig")
 
-dvs <- c("vote", "polint_att", "effic_int", "effic_ext")
-ivs <- c("discursive", "polknow",
-         "female", "age", "black", "educ", "faminc", "relig"
-)
-
+## Estimate models
 m1 <- c(
   map(list(ces2018, anes2020, anes2016, anes2012),
       ~glm(reformulate(ivs, response = "vote"), data = ., family=binomial("logit"))),
   map(list(ces2018, anes2020, anes2016, anes2012),
-      ~lm(reformulate(ivs, response = "polint_att"), data = .)),
+      ~lm(reformulate(ivs, response = "polint"), data = .)),
   map(list(ces2018, anes2020, anes2016, anes2012),
       ~lm(reformulate(ivs, response = "effic_int"), data = .)),
   map(list(ces2018, anes2020, anes2016, anes2012),
       ~lm(reformulate(ivs, response = "effic_ext"), data = .))
 )
 
+## Create figure
 m1 %>%
   map_dfr(~tidy(comparisons(
     ., variables = list(discursive = c(-1,1),
@@ -140,7 +132,7 @@ m1 %>%
                    levels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES")),
     dv = recode_factor(rep(dvs, each = 8),
                        `vote` = "Turnout",
-                       `polint_att` = "Political Interest",
+                       `polint` = "Political Interest",
                        `effic_int` = "Internal Efficacy",
                        `effic_ext` = "External Efficacy"),
     term = recode_factor(term,
@@ -155,43 +147,45 @@ m1 %>%
   ylab("Independent Variable") + plot_default +
   theme(legend.position = "none") +
   scale_y_discrete(limits=rev)
-ggsave("out/fig-knoweff.pdf", width=6.5, height=4)
+ggsave(here("out/fig2-knoweff.pdf"), width=6.5, height=4)
 
 
-# Validation: interaction b/w measures and no controls --------------------
+# Appendix D.I: Effects of sophistication on turnout, political in --------
 
-ivs <- c("discursive * polknow",
-         "female", "age", "black", "educ", "faminc", "relig")
+## Estimate additional models with interactions (reviewer request)
+ivs <- c("discursive * polknow", "female", "age", "black", "educ", "faminc", "relig")
 m1int <- c(
   map(list(ces2018, anes2020, anes2016, anes2012),
       ~glm(reformulate(ivs, response = "vote"), data = ., family=binomial("logit"))),
   map(list(ces2018, anes2020, anes2016, anes2012),
-      ~lm(reformulate(ivs, response = "polint_att"), data = .)),
+      ~lm(reformulate(ivs, response = "polint"), data = .)),
   map(list(ces2018, anes2020, anes2016, anes2012),
       ~lm(reformulate(ivs, response = "effic_int"), data = .)),
   map(list(ces2018, anes2020, anes2016, anes2012),
       ~lm(reformulate(ivs, response = "effic_ext"), data = .))
 )
 
+## Estimate additional models without controls (reviewer request)
 ivs <- c("discursive", "polknow")
 m1noc <- c(
   map(list(ces2018, anes2020, anes2016, anes2012),
       ~glm(reformulate(ivs, response = "vote"), data = ., family=binomial("logit"))),
   map(list(ces2018, anes2020, anes2016, anes2012),
-      ~lm(reformulate(ivs, response = "polint_att"), data = .)),
+      ~lm(reformulate(ivs, response = "polint"), data = .)),
   map(list(ces2018, anes2020, anes2016, anes2012),
       ~lm(reformulate(ivs, response = "effic_int"), data = .)),
   map(list(ces2018, anes2020, anes2016, anes2012),
       ~lm(reformulate(ivs, response = "effic_ext"), data = .))
 )
 
+## Create tables
 c(m1noc[1], m1[1], m1int[1],
   m1noc[5], m1[5], m1int[5]) %>%
   stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout and political interest
             in the 2018 CES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure 2 in the main text."),
+            (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Turnout","Political Interest"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -199,15 +193,15 @@ c(m1noc[1], m1[1], m1int[1],
                                  "Female", "Age", "Black", "College Degree",
                                  "Household Income","Church Attendance","Constant"),
             keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
-            out = "out/tab-knoweff2018cces1.tex", label = "tab:knoweff2018cces1")
+            out = here("out/appD01-knoweff2018cces1.tex"), label = "app:knoweff2018cces1")
 
 c(m1noc[9], m1[9], m1int[9],
   m1noc[13], m1[13], m1int[13]) %>%
   stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout, political interest, internal efficacy,
-          and external efficacy in the 2018 CES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure 2 in the main text."),
+            and external efficacy in the 2018 CES. Standard errors in parentheses. Estimates of model
+            (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Internal Efficacy","External Efficacy"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -215,7 +209,7 @@ c(m1noc[9], m1[9], m1int[9],
                                  "Female", "Age", "Black", "College Degree",
                                  "Household Income","Church Attendance","Constant"),
             keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
-            out = "out/tab-knoweff2018cces2.tex", label = "tab:knoweff2018cces2")
+            out = here("out/appD02-knoweff2018cces2.tex"), label = "app:knoweff2018cces2")
 
 c(m1noc[2], m1[2], m1int[2],
   m1noc[6], m1[6], m1int[6]) %>%
@@ -223,7 +217,7 @@ c(m1noc[2], m1[2], m1int[2],
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout and political interest
             in the 2020 ANES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure 2 in the main text."),
+            (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Turnout","Political Interest"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -231,7 +225,7 @@ c(m1noc[2], m1[2], m1int[2],
                                  "Female", "Age", "Black", "College Degree",
                                  "Household Income","Church Attendance","Constant"),
             keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
-            out = "out/tab-knoweff2020anes1.tex", label = "tab:knoweff2020anes1")
+            out = here("out/appD03-knoweff2020anes1.tex"), label = "app:knoweff2020anes1")
 
 c(m1noc[10], m1[10], m1int[10],
   m1noc[14], m1[14], m1int[14]) %>%
@@ -239,7 +233,7 @@ c(m1noc[10], m1[10], m1int[10],
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on internal and external efficacy
             in the 2020 ANES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure 2 in the main text."),
+            (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Turnout","Political Interest","Internal Efficacy","External Efficacy"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -247,7 +241,7 @@ c(m1noc[10], m1[10], m1int[10],
                                  "Female", "Age", "Black", "College Degree",
                                  "Household Income","Church Attendance","Constant"),
             keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
-            out = "out/tab-knoweff2020anes2.tex", label = "tab:knoweff2020anes2")
+            out = here("out/appD04-knoweff2020anes2.tex"), label = "app:knoweff2020anes2")
 
 c(m1noc[3], m1[3], m1int[3],
   m1noc[7], m1[7], m1int[7]) %>%
@@ -255,7 +249,7 @@ c(m1noc[3], m1[3], m1int[3],
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout and political interest
             in the 2016 ANES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure 2 in the main text."),
+            (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Turnout","Political Interest"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -263,7 +257,7 @@ c(m1noc[3], m1[3], m1int[3],
                                  "Female", "Age", "Black", "College Degree",
                                  "Household Income","Church Attendance","Constant"),
             keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
-            out = "out/tab-knoweff2016anes1.tex", label = "tab:knoweff2016anes1")
+            out = here("out/appD05-knoweff2016anes1.tex"), label = "app:knoweff2016anes1")
 
 c(m1noc[11], m1[11], m1int[11],
   m1noc[15], m1[15], m1int[15]) %>%
@@ -271,7 +265,7 @@ c(m1noc[11], m1[11], m1int[11],
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on internal and external efficacy
             in the 2016 ANES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure 2 in the main text."),
+            (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Internal Efficacy","External Efficacy"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -279,15 +273,15 @@ c(m1noc[11], m1[11], m1int[11],
                                  "Female", "Age", "Black", "College Degree",
                                  "Household Income","Church Attendance","Constant"),
             keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
-            out = "out/tab-knoweff2016anes2.tex", label = "tab:knoweff2016anes2")
+            out = here("out/appD06-knoweff2016anes2.tex"), label = "app:knoweff2016anes2")
 
 c(m1noc[4], m1[4], m1int[4],
   m1noc[8], m1[8], m1int[8]) %>%
   stargazer(type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on turnout and political interest
-          in the 2012 ANES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure 2 in the main text."),
+            in the 2012 ANES. Standard errors in parentheses. Estimates of model
+            (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Turnout","Political Interest"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -295,7 +289,7 @@ c(m1noc[4], m1[4], m1int[4],
                                  "Female", "Age", "Black", "College Degree",
                                  "Household Income","Church Attendance","Constant"),
             keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
-            out = "out/tab-knoweff2012anes1.tex", label = "tab:knoweff2012anes1")
+            out = here("out/appD07-knoweff2012anes1.tex"), label = "app:knoweff2012anes1")
 
 c(m1noc[12], m1[12], m1int[12],
   m1noc[16], m1[16], m1int[16]) %>%
@@ -303,7 +297,7 @@ c(m1noc[12], m1[12], m1int[12],
             model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
             title=c("Effects of sophistication on internal and external efficacy
             in the 2012 ANES. Standard errors in parentheses. Estimates of model
-          (2) and (5) are used for Figure 2 in the main text."),
+            (2) and (5) are used for Figure 2 in the main text."),
             column.labels = c("Internal Efficacy","External Efficacy"),
             column.separate = c(3,3),
             order = c(1,2,9,3:8,10),
@@ -311,50 +305,19 @@ c(m1noc[12], m1[12], m1int[12],
                                  "Female", "Age", "Black", "College Degree",
                                  "Household Income","Church Attendance","Constant"),
             keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
-            out = "out/tab-knoweff2012anes2.tex", label = "tab:knoweff2012anes2")
+            out = here("out/appD08-knoweff2012anes2.tex"), label = "app:knoweff2012anes2")
 
 
-# Validation: interaction by gender ---------------------------------------
+# Figure 3: Expected information retrieval in the 2015 YouGov Stud --------
 
-ivs <- c("discursive * polknow",
-         "educ", "age", "black", "faminc", "relig")
-c(map(list(ces2018, anes2020, anes2016, anes2012),
-      ~glm(reformulate(ivs, response = "vote"), family=binomial("logit"),
-           data = ., subset = female == 1)),
-  map(list(ces2018, anes2020, anes2016, anes2012),
-      ~lm(reformulate(ivs, response = "polint_att"),
-          data = ., subset = female == 1)),
-  map(list(ces2018, anes2020, anes2016, anes2012),
-      ~lm(reformulate(ivs, response = "effic_int"),
-          data = ., subset = female == 1)),
-  map(list(ces2018, anes2020, anes2016, anes2012),
-      ~lm(reformulate(ivs, response = "effic_ext"),
-          data = ., subset = female == 1))) %>%
-  map(summary)
-
-c(map(list(ces2018, anes2020, anes2016, anes2012),
-      ~glm(reformulate(ivs, response = "vote"), family=binomial("logit"),
-           data = ., subset = female == 0)),
-  map(list(ces2018, anes2020, anes2016, anes2012),
-      ~lm(reformulate(ivs, response = "polint_att"),
-          data = ., subset = female == 0)),
-  map(list(ces2018, anes2020, anes2016, anes2012),
-      ~lm(reformulate(ivs, response = "effic_int"),
-          data = ., subset = female == 0)),
-  map(list(ces2018, anes2020, anes2016, anes2012),
-      ~lm(reformulate(ivs, response = "effic_ext"),
-          data = ., subset = female == 0))) %>%
-  map(summary)
-
-
-# Validation: information retrieval ---------------------------------------
-
+## Estimate models
 m2 <- list(
-  lm(know_dis ~ discursive + polknow, data = yg2015),
-  lm(know_dis ~ discursive + polknow + female + age + black + educ + faminc + relig, data = yg2015),
-  lm(know_dis ~ discursive * polknow + female + age + black + educ + faminc + relig, data = yg2015)
+  lm(know_disease ~ discursive + polknow, data = yg2015),
+  lm(know_disease ~ discursive + polknow + female + age + black + educ + faminc + relig, data = yg2015),
+  lm(know_disease ~ discursive * polknow + female + age + black + educ + faminc + relig, data = yg2015)
 )
 
+## Create figure
 bind_rows(
   plot_cap(m2[[2]], condition = c("discursive"), draw = F) %>%
     transmute(iv = "discursive", ivval = condition1,
@@ -370,9 +333,13 @@ bind_rows(
   ggplot(aes(x=ivval, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_default +
   geom_ribbon(alpha=0.6, lwd=.1) + geom_line() +
   ylab("Information Retrieval") + xlab("Value of Independent Variable") +
-  scale_fill_brewer(palette="Dark2") # old version = "Paired"
-ggsave("out/fig-yg_disease.pdf", width=4, height=2)
+  scale_fill_brewer(palette="Dark2")
+ggsave(here("out/fig3-yg_disease.pdf"), width=4, height=2)
 
+
+# Appendix D.II: Expected information retrieval in the 2015 YouGov --------
+
+## Create table
 stargazer(m2, type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
           model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
           title="Linear regressions predicting information retrieval in the 2015 YouGov study.
@@ -385,21 +352,22 @@ stargazer(m2, type="text", align = TRUE, column.sep.width = "-25pt", no.space = 
                                "Female", "Age", "Black", "College Degree",
                                "Household Income","Church Attendance","Constant"),
           keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
-          out = "out/tab-yg_disease.tex", label = "tab:yg_disease")
+          out = here("out/appD09-yg_disease.tex"), label = "app:yg_disease")
 
 
+# Figure 4: Discursive sophistication and manually coded level of  --------
 
-# Validation: manual coding -----------------------------------------------
-
+## Compute correlations
 opend_cor <- tibble(
-  cor = c(cor(swiss2012_de$discursive, swiss2012_de$loj),
-          cor(swiss2012_fr$discursive, swiss2012_fr$loj),
-          cor(swiss2012_it$discursive, swiss2012_it$loj)),
+  cor = c(cor(swiss2012_de$discursive, swiss2012_de$loj, use = "complete"),
+          cor(swiss2012_fr$discursive, swiss2012_fr$loj, use = "complete"),
+          cor(swiss2012_it$discursive, swiss2012_it$loj, use = "complete")),
   language = c("German", "French", "Italian"),
   discursive = -1,
   loj = 4) %>%
   mutate(cor = paste0("r = ",round(cor, 2)))
 
+## Create figure
 rbind(data.frame(swiss2012_de, language = "German"),
       data.frame(swiss2012_fr, language = "French"),
       data.frame(swiss2012_it, language = "Italian")) %>%
@@ -410,77 +378,17 @@ rbind(data.frame(swiss2012_de, language = "German"),
   geom_text(data=opend_cor, aes(label=cor),size=2,vjust=-9) +
   ylab("Level of Justification") + xlab("Discursive sophistication") +
   scale_fill_brewer(palette="Dark2") + theme(legend.position = "none")
-ggsave("out/fig-swiss_ggridges.pdf",width=6,height=2)
-
-rbind(data.frame(swiss2012_de, language = "German"),
-      data.frame(swiss2012_fr, language = "French"),
-      data.frame(swiss2012_it, language = "Italian")) %>%
-  ggplot(aes(x=discursive, y=as.factor(loj))) +
-  geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_empty +
-  scale_y_discrete(expand = c(0.01, 0)) +
-  scale_x_continuous(expand = c(0, 0), limits = c(-.1,.9)) +
-  facet_wrap(~language,ncol=3) +
-  geom_text(data=opend_cor, aes(label=cor),size=2,vjust=-9) +
-  ylab("Level of Justification") + xlab("Discursive sophistication")
-ggsave("out/fig-swiss_ggridges0.pdf",width=6,height=2)
-
-rbind(data.frame(swiss2012_de, language = "German"),
-      data.frame(swiss2012_fr, language = "French"),
-      data.frame(swiss2012_it, language = "Italian")) %>%
-  mutate(discursive = ifelse(language == "German", NA, discursive),
-         discursive = ifelse(language == "Italian", NA, discursive)) %>%
-  ggplot(aes(x=discursive, y=as.factor(loj))) +
-  geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
-  scale_y_discrete(expand = c(0.01, 0)) +
-  scale_x_continuous(expand = c(0, 0), limits = c(-.1,.9)) +
-  facet_wrap(~language,ncol=3) +
-  geom_text(data = filter(opend_cor, language == "French"),
-            aes(label=cor),size=2,vjust=-9) +
-  ylab("Level of Justification") + xlab("Discursive sophistication")
-ggsave("out/fig-swiss_ggridges1.pdf",width=6,height=2)
-
-rbind(data.frame(swiss2012_de, language = "German"),
-      data.frame(swiss2012_fr, language = "French"),
-      data.frame(swiss2012_it, language = "Italian")) %>%
-  mutate(discursive = ifelse(language == "Italian", NA, discursive)) %>%
-  ggplot(aes(x=discursive, y=as.factor(loj))) +
-  geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
-  scale_y_discrete(expand = c(0.01, 0)) +
-  scale_x_continuous(expand = c(0, 0), limits = c(-.1,.9)) +
-  facet_wrap(~language,ncol=3) +
-  geom_text(data = filter(opend_cor, language != "Italian"),
-            aes(label=cor),size=2,vjust=-9) +
-  ylab("Level of Justification") + xlab("Discursive sophistication")
-ggsave("out/fig-swiss_ggridges2.pdf",width=6,height=2)
-
-rbind(data.frame(swiss2012_de, language = "German"),
-      data.frame(swiss2012_fr, language = "French"),
-      data.frame(swiss2012_it, language = "Italian")) %>%
-  ggplot(aes(x=discursive, y=as.factor(loj))) +
-  geom_density_ridges(scale = 4, alpha=.5, fill="blue") + plot_default +
-  scale_y_discrete(expand = c(0.01, 0)) +
-  scale_x_continuous(expand = c(0, 0), limits = c(-.1,.9)) +
-  facet_wrap(~language,ncol=3) +
-  geom_text(data=opend_cor, aes(label=cor),size=2,vjust=-9) +
-  ylab("Level of Justification") + xlab("Discursive sophistication")
-ggsave("out/fig-swiss_ggridges3.pdf",width=6,height=2)
+ggsave(here("out/fig4-swiss_ggridges.pdf"),width=6,height=2)
 
 
+# Figure 5: The gender gap in political sophistication --------------------
 
-# Gender gap: levels w/o controls -----------------------------------------
-
-data_summary <- function(x) {
-  m <- mean(x)
-  ymin <- m-1.96*sd(x)/sqrt(length(x))
-  ymax <- m+1.96*sd(x)/sqrt(length(x))
-  return(c(y=m,ymin=ymin,ymax=ymax))
-}
-
+## Create figure
 grid.arrange(
+
+  ### 2018 CES
   ces2018 %>%
-    select(discursive,
-           polknow,
-           female) %>%
+    select(discursive, polknow, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
@@ -498,10 +406,10 @@ grid.arrange(
                        symnum.args = list(cutpoints = c(0, 0.001, 0.01, 0.05, 1),
                                           symbols = c("***", "**", "*", "ns"))) +
     ggtitle("2018 CES"),
+
+  ### 2015 YouGov
   yg2015 %>%
-    select(discursive,
-           polknow,
-           female) %>%
+    select(discursive, polknow, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
@@ -519,16 +427,17 @@ grid.arrange(
                        symnum.args = list(cutpoints = c(0, 0.001, 0.01, 0.05, 1),
                                           symbols = c("***", "**", "*", "ns"))) +
     ggtitle("2015 YouGov"),
+
+  ### Legend
   cowplot::get_legend(tibble(
     `Measurement Type` = factor(1:2, labels = c("Open-ended", "Conventional"))) %>%
       ggplot(aes(x = `Measurement Type`, fill = `Measurement Type`)) +
       geom_bar() +
       scale_fill_brewer(palette="Dark2")),
 
+  ### 2020 ANES
   anes2020 %>%
-    select(discursive,
-           polknow,
-           female) %>%
+    select(discursive, polknow, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
@@ -546,10 +455,10 @@ grid.arrange(
                        symnum.args = list(cutpoints = c(0, 0.001, 0.01, 0.05, 1),
                                           symbols = c("***", "**", "*", "ns"))) +
     ggtitle("2020 ANES"),
+
+  ### 2016 ANES
   anes2016 %>%
-    select(discursive,
-           polknow,
-           female) %>%
+    select(discursive, polknow, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
@@ -567,10 +476,10 @@ grid.arrange(
                        symnum.args = list(cutpoints = c(0, 0.001, 0.01, 0.05, 1),
                                           symbols = c("***", "**", "*", "ns"))) +
     ggtitle("2016 ANES"),
+
+  ### 2012 ANES
   anes2012 %>%
-    select(discursive,
-           polknow,
-           female) %>%
+    select(discursive, polknow, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
@@ -589,10 +498,9 @@ grid.arrange(
                                           symbols = c("***", "**", "*", "ns"))) +
     ggtitle("2012 ANES"),
 
+  ### Swiss (French)
   swiss2012_fr %>%
-    select(discursive,
-           loj_scale,
-           female) %>%
+    select(discursive, loj_scale, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
@@ -612,10 +520,10 @@ grid.arrange(
     labs(title="Swiss Survey",
          subtitle="French Respondents",
          y=NULL, x=NULL),
+
+  ### Swiss (German)
   swiss2012_de %>%
-    select(discursive,
-           loj_scale,
-           female) %>%
+    select(discursive, loj_scale, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
@@ -635,10 +543,10 @@ grid.arrange(
     labs(title=" ",
          subtitle="German Respondents",
          y=NULL, x=NULL),
+
+  ### Swiss (Italian)
   swiss2012_it %>%
-    select(discursive,
-           loj_scale,
-           female) %>%
+    select(discursive, loj_scale, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
            Variable = recode_factor(name,
@@ -659,11 +567,12 @@ grid.arrange(
          subtitle="Italian Respondents",
          y=NULL, x=NULL),
   ncol=3) %>%
-  ggsave("out/fig-meandiff.png", plot = ., width=6.5, height=8)
+  ggsave(here("out/fig5-meandiff.png"), plot = ., width=6.5, height=8)
 
 
-# Gender gap: differences w/ controls -------------------------------------
+# Figure 6: The gender gap in political sophistication after contr --------
 
+## Estimate models
 ivs <- c("female", "age", "black", "educ", "faminc", "relig")
 m3text <- list(ces2018, anes2020, anes2016, anes2012, yg2015) %>%
   map(~lm(reformulate(ivs, response = "discursive"),
@@ -671,22 +580,11 @@ m3text <- list(ces2018, anes2020, anes2016, anes2012, yg2015) %>%
 m3factual <- list(ces2018, anes2020, anes2016, anes2012, yg2015) %>%
   map(~lm(reformulate(ivs, response = "polknow"),
           data = ., subset = !is.na(discursive)))
-
 ivs <- c("female", "age", "educ")
 m3swiss <- list(swiss2012_fr, swiss2012_de, swiss2012_it) %>%
   map(~lm(reformulate(ivs, response = "discursive"), data = .))
 
-map_tidy <- function(x, iv = "female"){
-  left_join(
-    x %>%
-      map_dfr(~tidy(., conf.int = T), .id = "model"),
-    x %>%
-      map_dfr(~tidy(., conf.int = T, conf.level = 0.90), .id = "model") %>%
-      transmute(model = model, term = term, conf.low90 = conf.low, conf.high90 = conf.high)
-  ) %>%
-    filter(term == iv)
-}
-
+## Create figure
 bind_rows(
   map_tidy(m3text) %>%
     mutate(study = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov"),
@@ -718,7 +616,10 @@ bind_rows(
   xlab("Estimated Gender Gap") + ylab("Dataset") + plot_default +
   scale_color_brewer(palette = "Dark2") +
   theme(legend.position = "none")
-ggsave("out/fig-determinants.pdf",width=5,height=3)
+ggsave(here("out/fig6-determinants.pdf"),width=5,height=3)
+
+
+# Appendix D.III: The gender gap in political sophistication after --------
 
 stargazer(m3text, type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
@@ -729,7 +630,7 @@ stargazer(m3text, type="text", align = TRUE, column.sep.width = "0pt", no.space 
           covariate.labels = c("Female", "Age", "Black", "College Degree",
                                "Household Income", "Church Attendance", "Constant"),
           keep.stat = c("n", "rsq"), font.size = "footnotesize",
-          out = "out/tab-determinants_text.tex", label = "tab:determinants_text")
+          out = here("out/appD10-determinants_text.tex"), label = "app:determinants_text")
 
 stargazer(m3swiss, type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
@@ -739,7 +640,7 @@ stargazer(m3swiss, type="text", align = TRUE, column.sep.width = "0pt", no.space
           column.labels = c("French", "German", "Italian"),
           covariate.labels = c("Female", "Age", "College Degree", "Constant"),
           keep.stat = c("n", "rsq"), font.size = "footnotesize",
-          out = "out/tab-determinants_swiss.tex", label = "tab:determinants_swiss")
+          out = here("out/appD11-determinants_swiss.tex"), label = "app:determinants_swiss")
 
 stargazer(m3factual, type="text", align = TRUE, column.sep.width = "0pt", no.space = TRUE, digits = 3,
           model.names=FALSE, dep.var.labels.include = T, star.cutoffs = c(.05,.01,.001),
@@ -750,20 +651,20 @@ stargazer(m3factual, type="text", align = TRUE, column.sep.width = "0pt", no.spa
           covariate.labels = c("Female", "Age", "Black", "College Degree",
                                "Household Income", "Church Attendance", "Constant"),
           keep.stat = c("n", "rsq"), font.size = "footnotesize",
-          out = "out/tab-determinants_factual.tex", label = "tab:determinants_factual")
+          out = here("out/appD12-determinants_factual.tex"), label = "app:determinants_factual")
 
 
-# Explaining the gender gap -----------------------------------------------
+# Figure 7: Gender differences in topic proportions in open-ended r -------
 
-## estimate topic prevalence effects
+## Estimate topic prevalence effects
 prep2012 <- estimateEffect(~ female + age + educ_cont + pid_cont + educ_pid,
-                           stm_fit2012, meta = anes2012disc$prepDocuments$meta, uncertainty = "Global")
+                           anes2012disc$stm, meta = anes2012disc$prepDocuments$meta, uncertainty = "Global")
 prep2016 <- estimateEffect(~ female + age + educ_cont + pid_cont + educ_pid,
-                           stm_fit2016, meta = anes2016disc$prepDocuments$meta, uncertainty = "Global")
+                           anes2016disc$stm, meta = anes2016disc$prepDocuments$meta, uncertainty = "Global")
 prep2020 <- estimateEffect(~ female + age + educ_cont + pid_cont + educ_pid,
-                           stm_fit2020, meta = anes2020disc$prepDocuments$meta, uncertainty = "Global")
+                           anes2020disc$stm, meta = anes2020disc$prepDocuments$meta, uncertainty = "Global")
 
-## select topics with largest gender effects
+## Select topics with largest gender effects
 tmp2012 <- tibble(estimate = sapply(summary(prep2012)$tables,
                                     function(x) x["female","Estimate"]),
                   topics = prep2012$topics) %>% arrange(estimate)
@@ -777,8 +678,8 @@ tmp2020 <- tibble(estimate = sapply(summary(prep2020)$tables,
                   topics = prep2020$topics) %>% arrange(estimate)
 topics2020 <- c(head(tmp2020$topics, 5), tail(tmp2020$topics, 5))
 
-## plot gender differences in topic proportions
-png("out/fig-stm_gender.png", height=5.5, width=6.5, units = "in", res = 400)
+## Plot gender differences in topic proportions
+png(here("out/fig7-stm_gender.png"), height=5.5, width=6.5, units = "in", res = 400)
 par(mfrow=c(3,1), mar=c(2.2,0.5,2.2,0.5))
 plot.estimateEffect(prep2012, covariate = "female", topics = topics2012, model = anes2012disc$stm,
                     xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
@@ -792,20 +693,4 @@ plot.estimateEffect(prep2020, covariate = "female", topics = topics2020, model =
                     xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
                     labeltype = "frex", n=5, verbose.labels = F, width=50,
                     main = "2020 ANES")
-dev.off()
-
-png("out/fig-stm_gender1.png", height=3.5, width=7.5, units = "in", res = 400)
-par(mfrow=c(1,1), mar=c(2.2,0.5,2.2,0.5))
-plot.estimateEffect(prep2020, covariate = "female", topics = topics2020, model = anes2020disc$stm,
-                    xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
-                    labeltype = "frex", n=5, verbose.labels = F, width=50,
-                    main = "2020 ANES")
-dev.off()
-
-png("out/fig-stm_gender0.png", height=3.5, width=7.5, units = "in", res = 400)
-par(mfrow=c(1,1), mar=c(2.2,0.5,2.2,0.5))
-plot(x=c(-.05,.02), y = 1:2,
-     type = "n", xlim = c(-.05,.02), main = "2020 ANES",
-     yaxt='n', xlab = "", ylab = "")
-abline(v = 0, lty = "dashed")
 dev.off()

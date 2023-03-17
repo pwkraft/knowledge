@@ -78,7 +78,8 @@ ces2018 <- ces2018raw %>% transmute(
   ideo_ego = recode(as.numeric(CC18_334A), `8` = NA_real_),
   senate_vote = as.numeric(CC18_351),
   senate_vote = ifelse(!is.na(senate_vote), senate_vote, as.numeric(CC18_351x))
-)
+) %>%
+  filter(wc != 0)
 ces2018disc <- discursive(data = ces2018,
                           openends = colnames(ces2018)[grep("oe_", colnames(ces2018))],
                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
@@ -327,8 +328,8 @@ yg2015 <- yg2015raw %>% transmute(
                   + ((Q12_4==1)*!treat) + ((Q12_4==2)*treat)
                   + ((Q12_5==2)*!treat) + ((Q12_5==1)*treat)
                   + (Q12_6==2) + (Q12_7==2)
-                  + (Q13==1) + (Q14==2))
-)
+                  + (Q13==1) + (Q14==2))) %>%
+  filter(wc != 0)
 yg2015disc <- discursive(data = yg2015,
                          openends = colnames(yg2015)[grep("oe_", colnames(yg2015))],
                          meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
@@ -359,8 +360,8 @@ swiss2012 <- swiss2012raw %>% transmute(
   wc = str_count(oe_string1, '\\w+') + str_count(oe_string2, '\\w+'),
 
   ## Miscellaneous
-  loj <- lojr,
-  loj_scale <- as.numeric(scale(loj))
+  loj = lojr,
+  loj_scale = as.numeric(scale(loj))
 )
 
 swiss2012_de <- filter(swiss2012, lang == 1, wc != 0)
@@ -433,7 +434,8 @@ mturk2019 <- mturk2019raw %>% transmute(
   print_trust_wsj = (5 - print_trust_3)/4,
   print_trust_ust = (5 - print_trust_4)/4,
   print_trust_nyp = (5 - print_trust_5)/4
-)
+) %>%
+  filter(wc != 0)
 mturk2019disc <- discursive(data = mturk2019,
                             openends = colnames(mturk2019)[grep("oe_", colnames(mturk2019))],
                             meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),

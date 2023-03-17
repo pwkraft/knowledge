@@ -287,7 +287,8 @@ dict_constraint <- data.frame(original = c(as.list(liwc)$Conj, as.list(liwc)$Dif
 
 ## German dictionary
 liwc_de <- as.list(
-  dictionary(file = "~/Dropbox/Uni/Data/LIWC/German_LIWC2001_Dictionary.dic", format = "LIWC")
+  dictionary(file = "~/Dropbox/Uni/Data/LIWC/German_LIWC2001_Dictionary.dic",
+             format = "LIWC")
 )
 dict_constraint_de <- data.frame(original = c(liwc_de$Incl, liwc_de$Excl)) %>%
   mutate(regex = paste0("\\b", original, "\\b"),
@@ -295,7 +296,8 @@ dict_constraint_de <- data.frame(original = c(liwc_de$Incl, liwc_de$Excl)) %>%
 
 ## French dictionary
 liwc_fr <- as.list(
-  dictionary(file = "~/Dropbox/Uni/Data/LIWC/French_LIWC2007_Dictionary.dic", format = "LIWC", encoding = "LATIN1")
+  dictionary(file = "~/Dropbox/Uni/Data/LIWC/French_LIWC2007_Dictionary.dic",
+             format = "LIWC", encoding = "LATIN1")
 )
 dict_constraint_fr <- data.frame(original = c(liwc_fr$conjonction, liwc_fr$exclusion)) %>%
   mutate(regex = paste0("\\b", original, "\\b"),
@@ -303,7 +305,8 @@ dict_constraint_fr <- data.frame(original = c(liwc_fr$conjonction, liwc_fr$exclu
 
 ## Italian dictionary
 liwc_it <- as.list(
-  dictionary(file = "~/Dropbox/Uni/Data/LIWC/Italian_LIWC2007_Dictionary.dic", format = "LIWC", encoding = "LATIN1")
+  dictionary(file = "~/Dropbox/Uni/Data/LIWC/Italian_LIWC2007_Dictionary.dic",
+             format = "LIWC", encoding = "LATIN1")
 )
 dict_constraint_it <- data.frame(original = c(liwc_it$Inclusi, liwc_it$Esclusi)) %>%
   mutate(regex = paste0("\\b", original, "\\b"),
