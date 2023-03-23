@@ -15,10 +15,11 @@ load(here("data/processed.Rdata"))
 
 ## Compute average word count
 wc_mean <- tibble(
-  study = factor(1:6, labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES",
-                                 "2015 YouGov", "Swiss Survey")),
-  wc = c(mean(ces2018$wc), mean(anes2020$wc), mean(anes2016$wc), mean(anes2012$wc),
-         mean(yg2015$wc), mean(c(swiss2012_fr$wc, swiss2012_de$wc, swiss2012_it$wc)))
+  study = factor(1:6, labels = c("2020 ANES", "2016 ANES", "2012 ANES",
+                                 "2018 CES", "2015 YouGov", "Swiss Survey")),
+  wc = c(mean(anes2020$wc[anes2020$wc != 0]), mean(anes2016$wc[anes2016$wc != 0]),
+         mean(anes2012$wc[anes2012$wc != 0]), mean(ces2018$wc[ces2018$wc != 0]),
+         mean(yg2015$wc[yg2015$wc != 0]), mean(swiss2012$wc[swiss2012$wc != 0]))
 )
 
 ## Create figure
@@ -31,28 +32,28 @@ bind_rows(
   transmute(swiss2012_fr, wc = wc, study = 6),
   transmute(swiss2012_de, wc = wc, study = 6),
   transmute(swiss2012_it, wc = wc, study = 6)
-) %>% mutate(
-  study = factor(study,
-                 labels = c("2020 ANES", "2016 ANES", "2012 ANES",
-                            "2018 CES", "2015 YouGov", "Swiss Survey"))) %>%
+) %>%
+  filter(wc != 0) %>%
+  mutate(study = factor(study, labels = c("2020 ANES", "2016 ANES", "2012 ANES",
+                                          "2018 CES", "2015 YouGov", "Swiss Survey"))) %>%
   ggplot(aes(wc)) + geom_histogram(fill = "grey") + theme_classic(base_size = 8) +
   theme(panel.border = element_rect(fill=NA)) +
   facet_wrap(.~study, ncol = 3, scales = "free") +
   geom_vline(aes(xintercept = wc), colour="red", linetype = "longdash",data = wc_mean) +
   ylab("Number of Respondents") + xlab("Word Count")
-ggsave(here("out/app-wc.png"), width = 6, height = 2.5)
+ggsave(here("out/appB1-wc.png"), width = 6, height = 2.5)
 
 
+# Figure B.2: Proportion of non-response comparing male and female --------
 
-# Plot non-response by gender ---------------------------------------------
-
+## Create figure
 bind_rows(
   transmute(anes2020, noresp = wc == 0, female = female, study = 1),
   transmute(anes2016, noresp = wc == 0, female = female, study = 2),
   transmute(anes2012, noresp = wc == 0, female = female, study = 3),
-  transmute(cces, noresp = wc == 0, female = female, study = 4),
-  transmute(yougov, noresp = wc == 0, female = female, study = 5),
-  transmute(swiss, noresp = wc == 0, female = female, study = 6)
+  transmute(ces2018, noresp = wc == 0, female = female, study = 4),
+  transmute(yg2015, noresp = wc == 0, female = female, study = 5),
+  transmute(swiss2012, noresp = wc == 0, female = female, study = 6)
 ) %>% mutate(
   study = factor(study,
                  labels = c("2020 ANES", "2016 ANES", "2012 ANES",
@@ -71,7 +72,8 @@ bind_rows(
   guides(fill="none") + scale_fill_brewer(palette="Paired")
 ggsave("out/app-noresponse.png", width = 6, height = 2.5)
 
-transmute(cces, noresp = wc == 0, female = female) %>%
+ces2018 %>%
+  transmute(noresp = wc == 0, female = female) %>%
   t.test(noresp ~ female, data = .)
 
 

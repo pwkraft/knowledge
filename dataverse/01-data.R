@@ -78,8 +78,7 @@ ces2018 <- ces2018raw %>% transmute(
   ideo_ego = recode(as.numeric(CC18_334A), `8` = NA_real_),
   senate_vote = as.numeric(CC18_351),
   senate_vote = ifelse(!is.na(senate_vote), senate_vote, as.numeric(CC18_351x))
-) %>%
-  filter(wc != 0)
+)
 ces2018disc <- discursive(data = ces2018,
                           openends = colnames(ces2018)[grep("oe_", colnames(ces2018))],
                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
@@ -136,7 +135,7 @@ anes2020 <- anes2020raw %>% transmute(
 
   ## Miscellaneous
   spanish = as.numeric(V201001 == 2 | V202001 == 2)) %>%
-  filter(spanish == 0, wc != 0)
+  filter(spanish == 0)
 anes2020disc <- discursive(data = anes2020,
                            openends = colnames(anes2020)[grep("oe_", colnames(anes2020))],
                            meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
@@ -204,10 +203,10 @@ anes2016 <- anes2016raw %>% transmute(
   extraversion = (na_in(V162333, -9:-1) - 1)/6,
   newexperience = (na_in(V162337, -9:-1) - 1)/6,
   reserved = (na_in(V162338, -9:-1) - 1)/6,
-  spanish = detect_language(
+  language = detect_language(
     paste(oe_likedpc, oe_disldpc, oe_likerpc, oe_dislrpc,
-          oe_likedp, oe_disldp, oe_likerp, oe_dislrp)) != "en") %>%
-  filter(!spanish, wc != 0)
+          oe_likedp, oe_disldp, oe_likerp, oe_dislrp))) %>%
+  filter(language == "en" | wc == 0)
 anes2016disc <- discursive(data = anes2016,
                            openends = colnames(anes2016)[grep("oe_", colnames(anes2016))],
                            meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
@@ -281,7 +280,7 @@ anes2012 <- anes2012raw %>% transmute(
   spanish = as.numeric(profile_spanishsurv == 1 |
                          admin_pre_lang_start == 2 |
                          admin_post_lang_start == 2)) %>%
-  filter(!spanish, wc != 0)
+  filter(!spanish)
 anes2012disc <- discursive(data = anes2012,
                            openends = colnames(anes2012)[grep("oe_", colnames(anes2012))],
                            meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
@@ -328,8 +327,7 @@ yg2015 <- yg2015raw %>% transmute(
                   + ((Q12_4==1)*!treat) + ((Q12_4==2)*treat)
                   + ((Q12_5==2)*!treat) + ((Q12_5==1)*treat)
                   + (Q12_6==2) + (Q12_7==2)
-                  + (Q13==1) + (Q14==2))) %>%
-  filter(wc != 0)
+                  + (Q13==1) + (Q14==2)))
 yg2015disc <- discursive(data = yg2015,
                          openends = colnames(yg2015)[grep("oe_", colnames(yg2015))],
                          meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
@@ -364,7 +362,7 @@ swiss2012 <- swiss2012raw %>% transmute(
   loj_scale = as.numeric(scale(loj))
 )
 
-swiss2012_de <- filter(swiss2012, lang == 1, wc != 0)
+swiss2012_de <- filter(swiss2012, lang == 1)
 swiss2012disc_de <- discursive(data = swiss2012_de,
                                openends = colnames(swiss2012_de)[grep("oe_", colnames(swiss2012_de))],
                                meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
@@ -374,7 +372,7 @@ swiss2012disc_de <- discursive(data = swiss2012_de,
                                dictionary = dict_constraint_de$regex)
 swiss2012_de <- bind_cols(swiss2012_de, swiss2012disc_de$output)
 
-swiss2012_fr <- filter(swiss2012, lang == 2, wc != 0)
+swiss2012_fr <- filter(swiss2012, lang == 2)
 swiss2012disc_fr <- discursive(data = swiss2012_fr,
                                openends = colnames(swiss2012_fr)[grep("oe_", colnames(swiss2012_fr))],
                                meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
@@ -384,7 +382,7 @@ swiss2012disc_fr <- discursive(data = swiss2012_fr,
                                dictionary = dict_constraint_fr$regex)
 swiss2012_fr <- bind_cols(swiss2012_fr, swiss2012disc_fr$output)
 
-swiss2012_it <- filter(swiss2012, lang == 3, wc != 0)
+swiss2012_it <- filter(swiss2012, lang == 3)
 swiss2012disc_it <- discursive(data = swiss2012_it,
                                openends = colnames(swiss2012_it)[grep("oe_", colnames(swiss2012_it))],
                                meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
@@ -434,8 +432,7 @@ mturk2019 <- mturk2019raw %>% transmute(
   print_trust_wsj = (5 - print_trust_3)/4,
   print_trust_ust = (5 - print_trust_4)/4,
   print_trust_nyp = (5 - print_trust_5)/4
-) %>%
-  filter(wc != 0)
+)
 mturk2019disc <- discursive(data = mturk2019,
                             openends = colnames(mturk2019)[grep("oe_", colnames(mturk2019))],
                             meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),

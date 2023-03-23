@@ -11,7 +11,7 @@ source(here::here("00-func.R"))
 load(here("data/processed.Rdata"))
 
 
-# Table 1: Factor Loadings of Discursive Sophistication Components --------
+# Table 1: Factor loadings of discursive sophistication components --------
 
 tibble(Variable = c("Size","Range", "Constraint"),
        `2018 CES` = factanal(na.omit(select(ces2018, size, range, constraint)),
@@ -22,7 +22,7 @@ tibble(Variable = c("Size","Range", "Constraint"),
                               1, rotation = "varimax")$loadings[,1],
        `2012 ANES` = factanal(na.omit(select(anes2012, size, range, constraint)),
                               1, rotation = "varimax")$loadings[,1]) %>%
-  xtable(caption = "Factor Loadings of Discursive Sophistication Components",
+  xtable(caption = "Factor loadings of discursive sophistication components",
          label = "tab:factload", digits = 3, align = "llcccc") %>%
   print(file = here("out/tab1-factload.tex"),
         caption.placement = "bottom",
@@ -32,51 +32,60 @@ tibble(Variable = c("Size","Range", "Constraint"),
 # Figure 1: Correlation matrix of discursive sophistication and co --------
 
 ## 2018 CES
-ces2018 %>% transmute(
-  v1 = discursive,
-  v2 = polknow) %>%
+ces2018 %>%
+  filter(wc != 0) %>%
+  transmute(
+    v1 = discursive,
+    v2 = polknow) %>%
   ggpairs(lower = list(continuous = wrap("smooth", alpha =.05, size=.2)),
           axisLabels="none",
           columnLabels = c("Discursive\nSophistication",
-                           "Factual\nKnowledge")
-  ) + plot_default
+                           "Factual\nKnowledge")) +
+  plot_default
 ggsave(here("out/fig1a-corplot_cces2018.png"),width=3.2, height=3.2)
 
 ## 2020 ANES
-anes2020 %>% transmute(
-  v1 = discursive,
-  v2 = polknow) %>%
+anes2020 %>%
+  filter(wc != 0) %>%
+  transmute(
+    v1 = discursive,
+    v2 = polknow) %>%
   ggpairs(lower = list(continuous = wrap("smooth", alpha =.05, size=.2)),
           axisLabels="none",
           columnLabels = c("Discursive\nSophistication",
-                           "Factual\nKnowledge")
-  ) + plot_default
+                           "Factual\nKnowledge")) +
+  plot_default
 ggsave(here("out/fig1b-corplot_anes2020.png"),width=3.2, height=3.2)
 
 ## 2016 ANES
-anes2016 %>% transmute(
-  v1 = discursive,
-  v2 = polknow,
-  v3 = polknow_evalpre) %>%
+anes2016 %>%
+  filter(wc != 0) %>%
+  transmute(
+    v1 = discursive,
+    v2 = polknow,
+    v3 = polknow_evalpre) %>%
+  filter(!is.na(discursive)) %>%
   ggpairs(lower = list(continuous = wrap("smooth", alpha =.05, size=.2)),
           axisLabels="none",
           columnLabels = c("Discursive\nSophistication",
                            "Factual\nKnowledge",
-                           "Interviewer\nEvaluation")
-  ) + plot_default
+                           "Interviewer\nEvaluation")) +
+  plot_default
 ggsave(here("out/fig1c-corplot_anes2016.png"),width=3.2, height=3.2)
 
 ## 2012 ANES
-anes2012 %>% transmute(
-  v1 = discursive,
-  v2 = polknow,
-  v3 = polknow_evalpre) %>%
+anes2012 %>%
+  filter(wc != 0) %>%
+  transmute(
+    v1 = discursive,
+    v2 = polknow,
+    v3 = polknow_evalpre) %>%
   ggpairs(lower = list(continuous = wrap("smooth", alpha =.05, size=.2)),
           axisLabels="none",
           columnLabels = c("Discursive\nSophistication",
                            "Factual\nKnowledge",
-                           "Interviewer\nEvaluation")
-  ) + plot_default
+                           "Interviewer\nEvaluation")) +
+  plot_default
 ggsave(here("out/fig1d-corplot_anes2012.png"),width=3.2, height=3.2)
 
 
@@ -388,6 +397,7 @@ grid.arrange(
 
   ### 2018 CES
   ces2018 %>%
+    filter(wc != 0) %>%
     select(discursive, polknow, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
@@ -409,6 +419,7 @@ grid.arrange(
 
   ### 2015 YouGov
   yg2015 %>%
+    filter(wc != 0) %>%
     select(discursive, polknow, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
@@ -437,6 +448,7 @@ grid.arrange(
 
   ### 2020 ANES
   anes2020 %>%
+    filter(wc != 0) %>%
     select(discursive, polknow, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
@@ -458,6 +470,7 @@ grid.arrange(
 
   ### 2016 ANES
   anes2016 %>%
+    filter(wc != 0) %>%
     select(discursive, polknow, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
@@ -479,6 +492,7 @@ grid.arrange(
 
   ### 2012 ANES
   anes2012 %>%
+    filter(wc != 0) %>%
     select(discursive, polknow, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
@@ -500,6 +514,7 @@ grid.arrange(
 
   ### Swiss (French)
   swiss2012_fr %>%
+    filter(wc != 0) %>%
     select(discursive, loj_scale, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
@@ -523,6 +538,7 @@ grid.arrange(
 
   ### Swiss (German)
   swiss2012_de %>%
+    filter(wc != 0) %>%
     select(discursive, loj_scale, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
@@ -546,6 +562,7 @@ grid.arrange(
 
   ### Swiss (Italian)
   swiss2012_it %>%
+    filter(wc != 0) %>%
     select(discursive, loj_scale, female) %>%
     pivot_longer(-female) %>%
     mutate(Gender = factor(female, labels = c("Male","Female")),
