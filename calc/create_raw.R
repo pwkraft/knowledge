@@ -5,6 +5,7 @@
 # =================================
 
 library(tidyverse)
+library(quanteda)
 library(haven)
 
 rm(list = ls())
@@ -279,38 +280,30 @@ stopwords <- c("dont", "hes", "shes", "that", "etc")
 
 # LIWC word lists ---------------------------------------------------------
 
-## English dictionary
+## Load dictionaries
 load("~/Dropbox/Uni/Data/LIWC/liwc2015.Rdata")
-dict_constraint <- data.frame(original = c(as.list(liwc)$Conj, as.list(liwc)$Differ)) %>%
-  mutate(regex = paste0("\\b", original, "\\b"),
-         regex = gsub("*\\b", "", regex, fixed = T))
+liwc_de <- dictionary(file = "~/Dropbox/Uni/Data/LIWC/German_LIWC2001_Dictionary.dic",
+                      format = "LIWC", encoding = "LATIN1")
+liwc_fr <- dictionary(file = "~/Dropbox/Uni/Data/LIWC/French_LIWC2007_Dictionary.dic",
+                      format = "LIWC", encoding = "LATIN1")
+liwc_it <- dictionary(file = "~/Dropbox/Uni/Data/LIWC/Italian_LIWC2007_Dictionary.dic",
+                      format = "LIWC", encoding = "LATIN1")
 
-## German dictionary
-liwc_de <- as.list(
-  dictionary(file = "~/Dropbox/Uni/Data/LIWC/German_LIWC2001_Dictionary.dic",
-             format = "LIWC")
+## Create regex for contraint terms
+dict_constraint <- list(
+  en = sort(c(liwc$Conj, liwc$Differ)) %>%
+    paste0("\\b", ., "\\b") %>%
+    gsub("*\\b", "", ., fixed = T),
+  de = sort(c(liwc_de$Incl, liwc_de$Excl)) %>%
+    paste0("\\b", ., "\\b") %>%
+    gsub("*\\b", "", ., fixed = T),
+  fr = sort(c(liwc_fr$conjonction, liwc_fr$exclusion)) %>%
+    paste0("\\b", ., "\\b") %>%
+    gsub("*\\b", "", ., fixed = T),
+  it = sort(c(liwc_it$Inclusi, liwc_it$Esclusi)) %>%
+    paste0("\\b", ., "\\b") %>%
+    gsub("*\\b", "", ., fixed = T)
 )
-dict_constraint_de <- data.frame(original = c(liwc_de$Incl, liwc_de$Excl)) %>%
-  mutate(regex = paste0("\\b", original, "\\b"),
-         regex = gsub("*\\b", "", regex, fixed = T))
-
-## French dictionary
-liwc_fr <- as.list(
-  dictionary(file = "~/Dropbox/Uni/Data/LIWC/French_LIWC2007_Dictionary.dic",
-             format = "LIWC", encoding = "LATIN1")
-)
-dict_constraint_fr <- data.frame(original = c(liwc_fr$conjonction, liwc_fr$exclusion)) %>%
-  mutate(regex = paste0("\\b", original, "\\b"),
-         regex = gsub("*\\b", "", regex, fixed = T))
-
-## Italian dictionary
-liwc_it <- as.list(
-  dictionary(file = "~/Dropbox/Uni/Data/LIWC/Italian_LIWC2007_Dictionary.dic",
-             format = "LIWC", encoding = "LATIN1")
-)
-dict_constraint_it <- data.frame(original = c(liwc_it$Inclusi, liwc_it$Esclusi)) %>%
-  mutate(regex = paste0("\\b", original, "\\b"),
-         regex = gsub("*\\b", "", regex, fixed = T))
 
 ## remove LIWC files
 rm(list = ls()[grep("liwc", ls())])

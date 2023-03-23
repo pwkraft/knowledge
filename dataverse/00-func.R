@@ -18,6 +18,7 @@ library(discursive)
 library(SnowballC)
 library(cld2)
 library(stm)
+library(preText)
 
 ## plots / tables
 library(ggpubr)
@@ -95,4 +96,53 @@ oe_clean <- function(x, spell = TRUE, tolower = FALSE){
     unlink(tmp)
   }
   x
+}
+
+## Select & combine sample of open-ended responses (for preText)
+oe_sample <- function(x, n = 500) {
+  x %>%
+    filter(wc != 0) %>%
+    slice_sample(n = n) %>%
+    select(starts_with("oe_")) %>%
+    apply(1, paste, collapse = " ")
+}
+
+## Compare variance & non-response in ideological placements
+ideo_compare <- function(yname, xname, data, quantiles = c(.25, .75)) {
+  y <- data.frame(data)[, yname]
+  x <- data.frame(data)[, xname]
+  x_lim <- quantile(x, probs = quantiles, na.rm = T)
+  y_lo <- y[x <= x_lim[1]]
+  y_hi <- y[x > x_lim[2]]
+  y_lo_na <- as.numeric(is.na(y_lo))
+  y_hi_na <- as.numeric(is.na(y_hi))
+
+  dplyr::tibble(
+    dv = yname,
+    iv = xname,
+    x_lo = x_lim[1],
+    x_hi = x_lim[2],
+    n_lo = length(y_lo),
+    n_hi = length(y_hi),
+    sd_lo = sd(y_lo, na.rm = T),
+    sd_hi = sd(y_hi, na.rm = T),
+    sd_pval = var.test(y_lo, y_hi)$p.value,
+    na_lo = mean(y_lo_na, na.rm = T),
+    na_hi = mean(y_hi_na, na.rm = T),
+    na_pval = t.test(y_lo_na, y_hi_na)$p.value
+  ) %>%
+    mutate(
+      sd_stars = case_when(
+        sd_pval < .001 ~ "***",
+        sd_pval < .01 ~ "**",
+        sd_pval < .05 ~ "*",
+        sd_pval >= .05 ~ "ns"
+      ),
+      na_stars = case_when(
+        na_pval < .001 ~ "***",
+        na_pval < .01 ~ "**",
+        na_pval < .05 ~ "*",
+        na_pval >= .05 ~ "ns"
+      )
+    )
 }

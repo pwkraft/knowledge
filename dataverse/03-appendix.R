@@ -72,167 +72,115 @@ bind_rows(
   guides(fill="none") + scale_fill_brewer(palette="Paired")
 ggsave("out/app-noresponse.png", width = 6, height = 2.5)
 
-ces2018 %>%
-  transmute(noresp = wc == 0, female = female) %>%
-  t.test(noresp ~ female, data = .)
 
+# Figure B.3: Estimated topic proportions based on the structural  --------
 
-
-# STM topic proportions ---------------------------------------------------
-
-pdf("out/app-stm_prop.pdf", width=12, height=10)
+pdf("out/appB3-stm_prop.pdf", width=12, height=10)
 par(mfrow = c(2,4), mar=c(4.2,0.5,2.5,0.5))
-plot(stm_fit_cces, n = 5, labeltype = "frex", text.cex = 1,
-     main = paste0("2018 CES (k = ", stm_fit_cces$settings$dim$K,")", collapse = ""))
-plot(stm_fit2020, n = 5, labeltype = "frex", text.cex = 1,
-     main = paste0("2020 ANES (k = ", stm_fit2020$settings$dim$K,")", collapse = ""))
-plot(stm_fit2016, n = 5, labeltype = "frex", text.cex = 1,
-     main = paste0("2016 ANES (k = ", stm_fit2016$settings$dim$K,")", collapse = ""))
-plot(stm_fit2012, n = 5, labeltype = "frex", text.cex = 1,
-     main = paste0("2012 ANES (k = ", stm_fit2012$settings$dim$K,")", collapse = ""))
-plot(stm_fit_yg, n = 5, labeltype = "frex", text.cex = 1,
-     main = paste0("2015 YouGov (k = ", stm_fit_yg$settings$dim$K,")", collapse = ""))
-plot(stm_fit_french, n = 5, labeltype = "frex", text.cex = 1,
-     main = paste0("Swiss Survey - French (k = ", stm_fit_french$settings$dim$K,")", collapse = ""))
-plot(stm_fit_german, n = 5, labeltype = "frex", text.cex = 1,
-     main = paste0("Swiss Survey - German (k = ", stm_fit_german$settings$dim$K,")", collapse = ""))
-plot(stm_fit_italian, n = 5, labeltype = "frex", text.cex = 1,
-     main = paste0("Swiss Survey - Italian (k = ", stm_fit_italian$settings$dim$K,")", collapse = ""))
-dev.off()
-
-pdf("out/app-stm_prop_pres.pdf", width=16, height=8)
-par(mfrow = c(1,2), mar=c(4.2,0.5,2.5,0.5))
-plot(stm_fit_cces, n = 5, labeltype = "frex", text.cex = 1,
-     main = paste0("2018 CES (k = ", stm_fit_cces$settings$dim$K,")", collapse = ""))
-plot(stm_fit2020, n = 5, labeltype = "frex", text.cex = 1,
-     main = paste0("2020 ANES (k = ", stm_fit2020$settings$dim$K,")", collapse = ""))
+plot(ces2018disc$stm, n = 5, labeltype = "frex", text.cex = 1,
+     main = paste0("2018 CES (k = ", ces2018disc$stm$settings$dim$K,")", collapse = ""))
+plot(anes2020disc$stm, n = 5, labeltype = "frex", text.cex = 1,
+     main = paste0("2020 ANES (k = ", anes2020disc$stm$settings$dim$K,")", collapse = ""))
+plot(anes2016disc$stm, n = 5, labeltype = "frex", text.cex = 1,
+     main = paste0("2016 ANES (k = ", anes2016disc$stm$settings$dim$K,")", collapse = ""))
+plot(anes2012disc$stm, n = 5, labeltype = "frex", text.cex = 1,
+     main = paste0("2012 ANES (k = ", anes2012disc$stm$settings$dim$K,")", collapse = ""))
+plot(yg2015disc$stm, n = 5, labeltype = "frex", text.cex = 1,
+     main = paste0("2015 YouGov (k = ", yg2015disc$stm$settings$dim$K,")", collapse = ""))
+plot(swiss2012disc_fr$stm, n = 5, labeltype = "frex", text.cex = 1,
+     main = paste0("Swiss Survey - French (k = ", swiss2012disc_fr$stm$settings$dim$K,")", collapse = ""))
+plot(swiss2012disc_de$stm, n = 5, labeltype = "frex", text.cex = 1,
+     main = paste0("Swiss Survey - German (k = ", swiss2012disc_de$stm$settings$dim$K,")", collapse = ""))
+plot(swiss2012disc_it$stm, n = 5, labeltype = "frex", text.cex = 1,
+     main = paste0("Swiss Survey - Italian (k = ", swiss2012disc_it$stm$settings$dim$K,")", collapse = ""))
 dev.off()
 
 
-
-# Discursive sophistication components ------------------------------------
+# Figure B.4: Correlation matrix of individual components of discu --------
 
 ## 2018 CES
-ces2018 %>% transmute(
-  v1 = size,
-  v2 = range,
-  v3 = constraint) %>%
+ces2018 %>%
+  transmute(v1 = size, v2 = range, v3 = constraint) %>%
   ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
           axisLabels = "none",
-          columnLabels = c("Size", "Range", "Constraint")
-  ) + plot_default
-ggsave("out/app-cces2018_components.png", width = 2.6, height = 2.6)
-
-ces2018 %>% transmute(
-  v1 = size,
-  v2 = range,
-  v3 = constraint) %>%
-  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
-          axisLabels = "none",
-          columnLabels = c("Size", "Range", "Constraint")
-  ) + plot_empty
-ggsave("out/app-cces2018_components0.png", width = 2.6, height = 2.6)
-
-## 2020 ANES
-anes2020 %>% transmute(
-  v1 = size,
-  v2 = range,
-  v3 = constraint) %>%
-  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
-          axisLabels = "none",
-          columnLabels = c("Size", "Range", "Constraint")
-  ) + plot_default
-ggsave("out/app-anes2020_components.png", width = 2.6, height = 2.6)
-
-## 2016 ANES
-anes2016 %>% transmute(
-  v1 = size,
-  v2 = range,
-  v3 = constraint) %>%
-  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
-          axisLabels = "none",
-          columnLabels = c("Size", "Range", "Constraint")
-  ) + plot_default
-ggsave("out/app-anes2016_components.png", width = 2.6, height = 2.6)
-
-## 2012 ANES
-anes2012 %>% transmute(
-  v1 = size,
-  v2 = range,
-  v3 = constraint) %>%
-  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
-          axisLabels = "none",
-          columnLabels = c("Size", "Range", "Constraint")
-  ) + plot_default
-ggsave("out/app-anes2012_components.png", width = 2.6, height = 2.6)
+          columnLabels = c("Size", "Range", "Constraint")) +
+  plot_default
+ggsave("out/appB4a-ces20182018_components.png", width = 2.6, height = 2.6)
 
 ## 2015 YouGov
-yg2015 %>% transmute(
-  v1 = size,
-  v2 = range,
-  v3 = constraint) %>%
+yg2015 %>%
+  transmute(v1 = size, v2 = range, v3 = constraint) %>%
   ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
           axisLabels = "none",
-          columnLabels = c("Size", "Range", "Constraint")
-  ) + plot_default
-ggsave("out/app-yg_components.png", width = 2.6, height = 2.6)
+          columnLabels = c("Size", "Range", "Constraint")) +
+  plot_default
+ggsave("out/appB4b-yg_components.png", width = 2.6, height = 2.6)
+
+## 2020 ANES
+anes2020 %>%
+  transmute(v1 = size, v2 = range, v3 = constraint) %>%
+  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
+          axisLabels = "none",
+          columnLabels = c("Size", "Range", "Constraint")) +
+  plot_default
+ggsave("out/appB4c-anes2020_components.png", width = 2.6, height = 2.6)
+
+## 2016 ANES
+anes2016 %>%
+  transmute(v1 = size, v2 = range, v3 = constraint) %>%
+  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
+          axisLabels = "none",
+          columnLabels = c("Size", "Range", "Constraint")) +
+  plot_default
+ggsave("out/appB4d-anes2016_components.png", width = 2.6, height = 2.6)
+
+## 2012 ANES
+anes2012 %>%
+  transmute(v1 = size, v2 = range, v3 = constraint) %>%
+  ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
+          axisLabels = "none",
+          columnLabels = c("Size", "Range", "Constraint")) +
+  plot_default
+ggsave("out/appB4e-anes2012_components.png", width = 2.6, height = 2.6)
+
 
 ## Swiss - French
-swiss2012_fr %>% transmute(
-  v1 = size,
-  v2 = range,
-  v3 = constraint) %>%
+swiss2012_fr %>%
+  transmute(v1 = size, v2 = range, v3 = constraint) %>%
   ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
           axisLabels = "none",
-          columnLabels = c("Size", "Range", "Constraint")
-  ) + plot_default
-ggsave("out/app-french_components.png", width = 2.6, height = 2.6)
+          columnLabels = c("Size", "Range", "Constraint")) +
+  plot_default
+ggsave("out/appB4f-french_components.png", width = 2.6, height = 2.6)
 
 ## Swiss - German
-swiss2012_de %>% transmute(
-  v1 = size,
-  v2 = range,
-  v3 = constraint) %>%
+swiss2012_de %>%
+  transmute(v1 = size, v2 = range, v3 = constraint) %>%
   ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
           axisLabels = "none",
-          columnLabels = c("Size", "Range", "Constraint")
-  ) + plot_default
-ggsave("out/app-german_components.png", width = 2.6, height = 2.6)
+          columnLabels = c("Size", "Range", "Constraint")) +
+  plot_default
+ggsave("out/appB4g-german_components.png", width = 2.6, height = 2.6)
 
 ## Swiss - Italian
-swiss2012_it %>% transmute(
-  v1 = size,
-  v2 = range,
-  v3 = constraint) %>%
+swiss2012_it %>%
+  transmute(v1 = size, v2 = range, v3 = constraint) %>%
   ggpairs(lower = list(continuous = wrap("smooth", alpha = .05, size = .2)),
           axisLabels = "none",
-          columnLabels = c("Size", "Range", "Constraint")
-  ) + plot_default
-ggsave("out/app-italian_components.png", width = 2.6, height = 2.6)
+          columnLabels = c("Size", "Range", "Constraint")) +
+  plot_default
+ggsave("out/appB4h-italian_components.png", width = 2.6, height = 2.6)
 
 
+# Figure C.1: PreText analysis of preprocessing decisions of open- --------
 
-# PreText analysis --------------------------------------------------------
+# TODO: clean preText code
 
 ## select raw documents
-res <- list(
-  cces2018 = apply(opend_cces[opend_cces$caseid %in% ces2018$caseid[1:500], -1],
-                   1, paste, collapse = " "),
-  anes2020 = apply(anes2020spell[anes2020spell$caseid %in% anes2020$caseid[1:500], -1],
-                   1, paste, collapse = " "),
-  anes2016 = apply(anes2016spell[anes2016spell$caseid %in% anes2016$caseid[1:500], -1],
-                   1, paste, collapse = " "),
-  anes2012 = apply(anes2012spell[anes2012spell$caseid %in% anes2012$caseid[1:500], -1],
-                   1, paste, collapse = " "),
-  yougov = apply(opend_yg[opend_yg$caseid %in% yg2015$caseid[1:500], -1],
-                 1, paste, collapse = " "),
-  french = apply(cbind(swiss2012_fr$string1[1:500],swiss2012_fr$string2[1:500]),
-                 1, paste, collapse=' '),
-  german = apply(cbind(swiss2012_de$string1[1:500],swiss2012_de$string2[1:500]),
-                 1, paste, collapse=' '),
-  italian = apply(cbind(swiss2012_it$string1[1:500],swiss2012_it$string2[1:500]),
-                  1, paste, collapse=' ')
-) %>%
+set.seed(12345)
+res <- list(ces2018, anes2020, anes2016, anes2012, yg2015,
+            swiss2012_fr, swiss2012_de, swiss2012_it) %>%
+  map(oe_sample) %>%
   map(factorial_preprocessing, use_ngrams = FALSE, parallel = TRUE, cores = 12) %>%
   map(preText, parallel = TRUE, cores = 12)
 
@@ -251,22 +199,21 @@ extractData <- function(x){
 res %>%
   map(regression_coefficient_plot, remove_intercept = TRUE) %>%
   map_dfr("data", .id = "study") %>%
-  mutate(study = factor(study, levels = c("cces2018", "anes2020", "anes2016", "anes2012",
+  mutate(study = factor(study, levels = c("ces20182018", "anes2020", "anes2016", "anes2012",
                                           "yougov", "french","german","italian"),
                         labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES","2015 YouGov",
                                    "Swiss (French)","Swiss (German)","Swiss (Italian)"))) %>%
   ggplot(aes(x = Coefficient, xmin = Coefficient-2*SE, xmax = Coefficient+2*SE, y = Variable)) +
   geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
   facet_wrap(~study, ncol=2) + labs(y=NULL, x = "Regression Coefficient") + plot_default
-ggsave("out/app-pretext.png",width = 6, height = 4.5)
-
+ggsave("out/appC1-pretext.png",width = 6, height = 4.5)
 
 
 # Discursive sophistication for varying model specifications --------------
 
 ## compute alternative measures (save intermediate steps)
 plot_df <- bind_rows(
-  robustSoph(ces2018, 35, stm_fit_cces$settings$dim$K, "2018 CES"),
+  robustSoph(ces2018, 35, stm_fit_ces2018$settings$dim$K, "2018 CES"),
   robustSoph(anes2020, 35, stm_fit2020$settings$dim$K, "2020 ANES"),
   robustSoph(anes2016, 35, stm_fit2016$settings$dim$K, "2016 ANES"),
   robustSoph(anes2012, 35, stm_fit2012$settings$dim$K, "2012 ANES"),
@@ -281,7 +228,7 @@ plot_df <- bind_rows(
 save(plot_df, file = "calc/tmp/tmp01.Rdata")
 
 plot_df <- plot_df %>% bind_rows(
-  robustSoph(ces2018, 25, stm_fit_cces$settings$dim$K, "2018 CES", stem = FALSE),
+  robustSoph(ces2018, 25, stm_fit_ces2018$settings$dim$K, "2018 CES", stem = FALSE),
   robustSoph(anes2020, 25, stm_fit2020$settings$dim$K, "2020 ANES", stem = FALSE),
   robustSoph(anes2016, 25, stm_fit2016$settings$dim$K, "2016 ANES", stem = FALSE),
   robustSoph(anes2012, 25, stm_fit2012$settings$dim$K, "2012 ANES", stem = FALSE),
@@ -296,7 +243,7 @@ plot_df <- plot_df %>% bind_rows(
 save(plot_df, file = "calc/tmp/tmp02.Rdata")
 
 plot_df <- plot_df %>% bind_rows(
-  robustSoph(ces2018, 25, stm_fit_cces$settings$dim$K, "2018 CES", removestopwords = FALSE),
+  robustSoph(ces2018, 25, stm_fit_ces2018$settings$dim$K, "2018 CES", removestopwords = FALSE),
   robustSoph(anes2020, 25, stm_fit2020$settings$dim$K, "2020 ANES", removestopwords = FALSE),
   robustSoph(anes2016, 25, stm_fit2016$settings$dim$K, "2016 ANES", removestopwords = FALSE),
   robustSoph(anes2012, 25, stm_fit2012$settings$dim$K, "2012 ANES", removestopwords = FALSE),
@@ -323,11 +270,11 @@ plot_df <- plot_df %>%
 ## compute correlations for subgroups
 plot_cor <- plot_df %>%
   group_by(datalab, condition) %>%
-  summarize(cor = paste0("r = ",round(cor(polknow_text_mean, polknow_text_rep), 3))) %>%
-  mutate(polknow_text_mean = .9, polknow_text_rep = .1)
+  summarize(cor = paste0("r = ",round(cor(discursive, polknow_text_rep), 3))) %>%
+  mutate(discursive = .9, polknow_text_rep = .1)
 
 ## generate plot
-ggplot(plot_df, aes(y=polknow_text_mean, x=polknow_text_rep)) +
+ggplot(plot_df, aes(y=discursive, x=polknow_text_rep)) +
   geom_point(alpha=.05) + geom_smooth(method="lm") +
   facet_grid(datalab~condition) +
   geom_text(data=plot_cor, aes(label=cor), size=2) + xlim(0,1) + ylim(0,1) +
@@ -337,77 +284,39 @@ ggplot(plot_df, aes(y=polknow_text_mean, x=polknow_text_rep)) +
 ggsave("out/app-pretext_robustness.png", width=5, height=8.5)
 
 
+# Figure C.3: Controlling for Personality and Verbal Skills ---------------
 
-# PreText Robustness for presentation -------------------------------------
-
-## compute alternative measures (save intermediate steps)
-plot_df <- bind_rows(
-  robustSoph(ces2018, 35, stm_fit_cces$settings$dim$K, "2018 CES"),
-  robustSoph(anes2020, 35, stm_fit2020$settings$dim$K, "2020 ANES"),
-  robustSoph(ces2018, 25, stm_fit_cces$settings$dim$K, "2018 CES", stem = FALSE),
-  robustSoph(anes2020, 25, stm_fit2020$settings$dim$K, "2020 ANES", stem = FALSE),
-  robustSoph(ces2018, 25, stm_fit_cces$settings$dim$K, "2018 CES", removestopwords = FALSE),
-  robustSoph(anes2020, 25, stm_fit2020$settings$dim$K, "2020 ANES", removestopwords = FALSE),
-)
-
-## prepare data for plotting
-plot_df <- plot_df %>%
-  mutate(
-    datalab = factor(datalab,
-                     levels = c("2018 CES", "2020 ANES")),
-    condition = factor(100*k + 10*stem + 1*removestopwords, levels = c("3511","2501","2510"),
-                       labels = c("More topics (k = 35)", "No stemming", "Keep stopwords"))
-  )
-
-## compute correlations for subgroups
-plot_cor <- plot_df %>%
-  group_by(datalab, condition) %>%
-  summarize(cor = paste0("r = ",round(cor(polknow_text_mean, polknow_text_rep), 3))) %>%
-  mutate(polknow_text_mean = .9, polknow_text_rep = .1)
-
-## generate plot
-ggplot(plot_df, aes(y=polknow_text_mean, x=polknow_text_rep)) +
-  geom_point(alpha=.05) + geom_smooth(method="lm") +
-  facet_grid(datalab~condition) +
-  geom_text(data=plot_cor, aes(label=cor), size=2) + xlim(0,1) + ylim(0,1) +
-  labs(y = "Discursive Sophistication (Preferred Specification)",
-       x = "Discursive Sophistication (Alternative Specifications)") +
-  plot_default
-ggsave("out/app-pretext_robustness_pres.png", width=5, height=3)
-
-
-
-# Controlling for Personality and Verbal Skills --------------------------
-
-dvs <- c("vote", "polint_att", "effic_int", "effic_ext")
-ivs <- c("polknow_text_scale", "polknow_factual_scale",
+## Select dependent and independent variables
+dvs <- c("vote", "polint", "effic_int", "effic_ext")
+ivs <- c("discursive", "polknow",
          "female", "age", "black", "educ", "faminc", "relig")
 ivs_rob <- c("extraversion + newexperience + reserved", "wordsum", "wc", "mode")
 
+## Estimate models
 m1cont <- c(
   map(ivs_rob,
       ~glm(reformulate(c(ivs, .), response = "vote"), data = anes2016, family=binomial("logit"))),
   map(ivs_rob,
-      ~lm(reformulate(c(ivs, .), response = "polint_att"), data = anes2016)),
+      ~lm(reformulate(c(ivs, .), response = "polint"), data = anes2016)),
   map(ivs_rob,
       ~lm(reformulate(c(ivs, .), response = "effic_int"), data = anes2016)),
   map(ivs_rob,
       ~lm(reformulate(c(ivs, .), response = "effic_ext"), data = anes2016)),
-
   map(ivs_rob,
       ~glm(reformulate(c(ivs, .), response = "vote"), data = anes2012, family=binomial("logit"))),
   map(ivs_rob,
-      ~lm(reformulate(c(ivs, .), response = "polint_att"), data = anes2012)),
+      ~lm(reformulate(c(ivs, .), response = "polint"), data = anes2012)),
   map(ivs_rob,
       ~lm(reformulate(c(ivs, .), response = "effic_int"), data = anes2012)),
   map(ivs_rob,
       ~lm(reformulate(c(ivs, .), response = "effic_ext"), data = anes2012))
 )
 
+## Create figure
 m1cont %>%
   map_dfr(~tidy(comparisons(
-    ., variables = list(polknow_text_scale = c(-1,1),
-                        polknow_factual_scale = c(-1,1)))),
+    ., variables = list(discursive = c(-1,1),
+                        polknow = c(-1,1)))),
     .id = "model") %>%
   as_tibble() %>%
   mutate(
@@ -415,7 +324,7 @@ m1cont %>%
                    levels = c("2016 ANES", "2012 ANES")),
     dv = recode_factor(rep(rep(dvs, each = 8), 2),
                        `vote` = "Turnout",
-                       `polint_att` = "Political Interest",
+                       `polint` = "Political Interest",
                        `effic_int` = "Internal Efficacy",
                        `effic_ext` = "External Efficacy"),
     Control = factor(rep(rep(1:4, each = 2), 8),
@@ -424,8 +333,8 @@ m1cont %>%
                                 "Response length",
                                 "Survey mode")),
     term = recode_factor(term,
-                         `polknow_factual_scale` = "Factual\nKnowledge",
-                         `polknow_text_scale` = "Discursive\nSophistication")) %>%
+                         `polknow` = "Factual\nKnowledge",
+                         `discursive` = "Discursive\nSophistication")) %>%
   ggplot(aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high,
              col = Control, shape = Control)) +
   geom_vline(xintercept = 0, color="grey") +
@@ -434,323 +343,25 @@ m1cont %>%
   facet_grid(study~dv) +
   labs(x = "Estimated Effect of Discursive Sophistication and Factual Knowledge\n(for an increase from 1 SD below mean to 1 SD above mean)", y = "Independent Variable") +
   plot_default + theme(legend.position = "bottom")
-ggsave("out/app-knoweff_robust.pdf", width=6.5, height=3.5)
+ggsave("out/appC3-knoweff_robust.pdf", width=6.5, height=3.5)
 
 
+# Figure C.4: Effects of sophistication on the probability of resp --------
 
-# Compare political OE to other OEs ---------------------------------------
-
-# TODO: CONTINUE HERE
-
-
-# Check selection models for CCES 2018 ------------------------------------
-
-## check determinants of oe response >0
-glm(as.numeric(wc>0) ~ female + age + black + educ + faminc + relig,
-    data = cces, family=binomial("logit")) %>%
-  summary()
-
-## gender differences in willingness to respond & length of response
-mean(cces$wc>0)
-t.test(as.numeric(wc>0)~female, data = cces)
-prop.test(table(cces$female, cces$wc==0))
-mean(ces2018$wc)
-t.test(wc~female, data = ces2018)
-
-## prep data for heckit model
-heck_tmp <- ces2018 %>%
-  select(caseid, polknow_text_mean) %>%
-  right_join(cces) %>%
-  mutate(select = as.numeric(!is.na(polknow_text_mean)))
-
-table(heck_tmp$select)
-table(is.na(heck_tmp$polknow_text_mean), heck_tmp$wc>0)
-
-## estimate heckit model (does this specification make sense theoretically?)
-heckit(select ~ female + age + black + educ + faminc + relig,
-       polknow_text_mean ~ female + age + black + educ + faminc + relig,
-       data = heck_tmp) %>%
-  summary()
-
-heckit(select ~ female + age + black + educ + faminc + relig,
-       polknow_factual ~ female + age + black + educ + faminc + relig,
-       data = heck_tmp) %>%
-  summary()
-
-## heckit model for other outcomes
-heckit(select ~ female + age + black + educ + faminc + relig,
-       vote ~ polknow_text_mean + female + age + black + educ + faminc + relig,
-       data = heck_tmp) %>%
-  summary()
-
-heckit(select ~ female + age + black + educ + faminc + relig,
-       vote ~ polknow_factual + female + age + black + educ + faminc + relig,
-       data = heck_tmp) %>%
-  summary()
-
-heckit(select ~ female + age + black + educ + faminc + relig,
-       polint_att ~ polknow_text_mean + female + age + black + educ + faminc + relig,
-       data = heck_tmp) %>%
-  summary()
-
-heckit(select ~ female + age + black + educ + faminc + relig,
-       polint_att ~ polknow_factual + female + age + black + educ + faminc + relig,
-       data = heck_tmp) %>%
-  summary()
-
-heckit(select ~ female + age + black + educ + faminc + relig,
-       effic_int ~ polknow_text_mean + female + age + black + educ + faminc + relig,
-       data = heck_tmp) %>%
-  summary()
-
-heckit(select ~ female + age + black + educ + faminc + relig,
-       effic_int ~ polknow_factual + female + age + black + educ + faminc + relig,
-       data = heck_tmp) %>%
-  summary()
-
-heckit(select ~ female + age + black + educ + faminc + relig,
-       effic_ext ~ polknow_text_mean + female + age + black + educ + faminc + relig,
-       data = heck_tmp) %>%
-  summary()
-
-heckit(select ~ female + age + black + educ + faminc + relig,
-       effic_ext ~ polknow_factual + female + age + black + educ + faminc + relig,
-       data = heck_tmp) %>%
-  summary()
-
-
-
-# Discursive sophistication as a DV (reviewer request) --------------------
-
-m3rob_disc <- list(
-  lm(polknow_text_scale ~ extraversion + newexperience + reserved +
-       wordsum + mode +
-       female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2016),
-  lm(polknow_text_scale ~ extraversion + newexperience + reserved +
-       wordsum + mode + polknow_factual_scale +
-       female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2016),
-  lm(polknow_text_scale ~ extraversion + newexperience + reserved +
-       wordsum + mode +
-       female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2012),
-  lm(polknow_text_scale ~ extraversion + newexperience + reserved +
-       wordsum + mode + polknow_factual_scale +
-       female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2012)
-)
-
-stargazer(m3rob_disc, type="text", align = TRUE, column.sep.width = "-5pt", no.space = TRUE, digits = 3,
-          model.names=FALSE, star.cutoffs = c(.05,.01,.001),
-          dep.var.labels = "Discursive Sophistication",
-          title="Personality, verbal skills, and survey mode as predictors
-          of discursive sophistication in the 2016 and 2012 ANES.",
-          column.labels = rep(c("2016 ANES", "2012 ANES"), 2),
-          column.separate = rep(2,4),
-          covariate.labels = c("Personality: Extraversion",
-                               "Personality: Openness to Experience",
-                               "Personality: Reserved",
-                               "Verbal Skills (Wordsum score)",
-                               "Survey Mode (Online)",
-                               "Factual Knowledge",
-                               "Female","Age", "Black",
-                               "PID: Democrat", "PID: Republican",
-                               "Education: High School", "Education: Some College",
-                               "Education: Bachelor's Degree", "Education: Graduate Degree",
-                               "Household Income", "Church Attendance", "Constant"),
-          keep.stat = c("n", "rsq"), font.size = "footnotesize",
-          out = "out/app-determinants_rob_disc.tex", label = "tab:determinants_rob_disc")
-
-m3rob_fact <- list(
-  lm(polknow_factual_scale ~ extraversion + newexperience + reserved +
-       wordsum + mode +
-       female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2016),
-  lm(polknow_factual_scale ~ extraversion + newexperience + reserved +
-       wordsum + mode + polknow_text_scale +
-       female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2016),
-  lm(polknow_factual_scale ~ extraversion + newexperience + reserved +
-       wordsum + mode +
-       female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2012),
-  lm(polknow_factual_scale ~ extraversion + newexperience + reserved +
-       wordsum + mode + polknow_text_scale +
-       female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2012)
-)
-
-stargazer(m3rob_fact, type="text", align = TRUE, column.sep.width = "-5pt", no.space = TRUE, digits = 3,
-          model.names=FALSE, star.cutoffs = c(.05,.01,.001),
-          dep.var.labels = "Factual Knowledge",
-          title="Personality, verbal skills, and survey mode as predictors
-          of factual knowledge in the 2016 and 2012 ANES.",
-          column.labels = rep(c("2016 ANES", "2012 ANES"), 2),
-          column.separate = rep(2,4),
-          covariate.labels = c("Personality: Extraversion",
-                               "Personality: Openness to Experience",
-                               "Personality: Reserved",
-                               "Verbal Skills (Wordsum score)",
-                               "Survey Mode (Online)",
-                               "Discursive Soph.",
-                               "Female","Age", "Black",
-                               "PID: Democrat", "PID: Republican",
-                               "Education: High School", "Education: Some College",
-                               "Education: Bachelor's Degree", "Education: Graduate Degree",
-                               "Household Income", "Church Attendance", "Constant"),
-          keep.stat = c("n", "rsq"), font.size = "footnotesize",
-          out = "out/app-determinants_rob_fact.tex", label = "tab:determinants_rob_fact")
-
-
-
-# Discursive sophistication and media consumption -------------------------
-
-data_immig %>%
-  select(polknow_factual_scale, polknow_text_scale,
-         tv_fox:tv_cbs, print_nyt:print_nyp, smedia_yt:smedia_tb) %>%
-  pivot_longer(-c(polknow_factual_scale, polknow_text_scale),
-               names_to = "source", values_to = "exposure") %>%
-  pivot_longer(-c(source, exposure),
-               names_to = "Variable", values_to = "polknow") %>%
-  ggplot(aes(x = exposure, y = polknow, col = Variable)) +
-  geom_smooth(method = "lm") +
-  facet_wrap(~source, ncol = 3, dir = "v")
-
-data_immig %>%
-  select(polknow_factual_scale, polknow_text_scale,
-         tv_trust_fox:tv_trust_cbs, print_trust_nyt:print_trust_nyp) %>%
-  pivot_longer(-c(polknow_factual_scale, polknow_text_scale),
-               names_to = "src", values_to = "trust") %>%
-  pivot_longer(-c(src, trust),
-               names_to = "iv", values_to = "polknow") %>%
-  mutate(Variable = recode_factor(iv,
-                                  `polknow_text_scale` = "Discursive Sophistication",
-                                  `polknow_factual_scale` = "Factual Knowledge"),
-         Source = recode_factor(src,
-                                `print_trust_nyt` = "New York Times",
-                                `print_trust_wapo` = "Washington Post",
-                                `print_trust_wsj` = "Wall Street Journal",
-                                `print_trust_ust` = "USA Today",
-                                `print_trust_nyp` = "New York Post",
-                                `tv_trust_cnn` = "CNN",
-                                `tv_trust_nbc` = "NBC",
-                                `tv_trust_cbs` = "CBS",
-                                `tv_trust_msnbc` = "MSNBC",
-                                `tv_trust_fox` = "FOX News"),
-         Type = ifelse(grepl("print", src), "Print", "TV"),
-         Type = factor(Type, levels = c("TV","Print"))) %>%
-  ggplot(aes(y = trust, x = polknow, lty = Variable, fill = Variable)) +
-  plot_default +
-  geom_smooth(method = "lm", col = "black", alpha=0.6, lwd=.1) +
-  labs(y = "Trust that Reporting is Accurate",
-       x = "Value of Independent Variable") +
-  theme(legend.position = "bottom") +
-  facet_wrap(~Type+Source, ncol = 5, dir = "h") +
-  scale_fill_brewer(palette = "Dark2")
-ggsave("out/app-media_trust.pdf", width=6.5, height=4)
-
-
-
-# Variance in ideological placements ----------
-
-ideo_compare <- function(yname, xname, data, quantiles = c(.25, .75)) {
-  y <- data.frame(data)[, yname]
-  x <- data.frame(data)[, xname]
-  x_lim <- quantile(x, probs = quantiles, na.rm = T)
-  y_lo <- y[x <= x_lim[1]]
-  y_hi <- y[x > x_lim[2]]
-  y_lo_na <- as.numeric(is.na(y_lo))
-  y_hi_na <- as.numeric(is.na(y_hi))
-
-  dplyr::tibble(
-    dv = yname,
-    iv = xname,
-    x_lo = x_lim[1],
-    x_hi = x_lim[2],
-    n_lo = length(y_lo),
-    n_hi = length(y_hi),
-    sd_lo = sd(y_lo, na.rm = T),
-    sd_hi = sd(y_hi, na.rm = T),
-    sd_pval = var.test(y_lo, y_hi)$p.value,
-    na_lo = mean(y_lo_na, na.rm = T),
-    na_hi = mean(y_hi_na, na.rm = T),
-    na_pval = t.test(y_lo_na, y_hi_na)$p.value
-  ) %>%
-    mutate(
-      sd_stars = case_when(
-        sd_pval < .001 ~ "***",
-        sd_pval < .01 ~ "**",
-        sd_pval < .05 ~ "*",
-        sd_pval >= .05 ~ "ns"
-      ),
-      na_stars = case_when(
-        na_pval < .001 ~ "***",
-        na_pval < .01 ~ "**",
-        na_pval < .05 ~ "*",
-        na_pval >= .05 ~ "ns"
-      )
-    )
-}
-
+## Select variables
 ideo <- c("ideo_dem", "ideo_rep", "ideo_sc", "ideo_trump", "ideo_warren", "ideo_ryan",
           "ideo_mcconnel", "ideo_schumer", "ideo_pelosi", "ideo_murkowski", "ideo_collins",
           "ideo_feinstein", "ideo_booker", "ideo_haley")
 
+## Create figure
 bind_rows(
-  map_dfr(ideo, ~ideo_compare(., "polknow_text_scale", ces2018)),
-  map_dfr(ideo, ~ideo_compare(., "polknow_factual_scale", ces2018))
+  map_dfr(ideo, ~ideo_compare(., "discursive", filter(ces2018, wc != 0))),
+  map_dfr(ideo, ~ideo_compare(., "polknow", filter(ces2018, wc != 0)))
 ) %>%
   mutate(
     iv = recode_factor(iv,
-                       `polknow_text_scale` = "Discursive\nSophistication",
-                       `polknow_factual_scale` = "Factual\nKnowledge"),
-    sd_mean = (sd_lo + sd_hi)/2,
-    dv = recode_factor(dv,
-                       `ideo_sc` = "Supreme Court",
-                       `ideo_collins` = "Susan Collins",
-                       `ideo_booker` = "Cory Booker",
-                       `ideo_haley` = "Nikki Haley",
-                       `ideo_feinstein` = "Dianne Feinstein",
-                       `ideo_murkowski` = "Lisa Murkowski",
-                       `ideo_dem` = "Democratic Party",
-                       `ideo_mcconnel` = "Mitch McConnell",
-                       `ideo_ryan` = "Paul Ryan",
-                       `ideo_schumer` = "Chuck Schumer",
-                       `ideo_rep` = "Republican Party",
-                       `ideo_warren` = "Elizabeth Warren",
-                       `ideo_pelosi` = "Nancy Pelosi",
-                       `ideo_trump` = "Donald Trump")
-  ) %>%
-  ggplot(aes(y = dv)) +
-  geom_vline(xintercept = 0, color="gray") +
-  geom_segment(aes(x = sd_lo, yend = dv,
-                   xend = ifelse(sd_hi < sd_lo, sd_hi + .02, sd_hi - .02)),
-               lineend = "round", linejoin = "mitre",
-               arrow = arrow(length = unit(0.1, "inches"))) +
-  geom_point(aes(x = sd_lo, shape = "Low (25th Percentile)",
-                 col = iv), size = 2) +
-  geom_point(aes(x = sd_hi, shape = "High (75th Percentile)",
-                 col = iv), size = 2) +
-  geom_text(aes(x = sd_mean, label = sd_stars), nudge_y = .25, size = 2.5) +
-  facet_wrap(~iv) +
-  scale_color_brewer(palette = "Dark2", guide = "none") +
-  labs(y = NULL,
-       x = "Uncertainty in Ideological Placements (in Standard Deviations)",
-       col = "Sophistication/Knowledge",
-       shape = "Sophistication/Knowledge") +
-  plot_default +
-  theme(legend.position = "bottom")
-ggsave("out/app-placements.pdf", width = 6.5, height = 4)
-
-bind_rows(
-  map_dfr(ideo, ~ideo_compare(., "polknow_text_scale", ces2018)),
-  map_dfr(ideo, ~ideo_compare(., "polknow_factual_scale", ces2018))
-) %>%
-  mutate(
-    iv = recode_factor(iv,
-                       `polknow_text_scale` = "Discursive\nSophistication",
-                       `polknow_factual_scale` = "Factual\nKnowledge"),
+                       `discursive` = "Discursive\nSophistication",
+                       `polknow` = "Factual\nKnowledge"),
     na_mean = (na_lo + na_hi)/2,
     dv = recode_factor(dv,
                        `ideo_murkowski` = "Lisa Murkowski",
@@ -783,13 +394,62 @@ bind_rows(
   scale_color_brewer(palette = "Dark2", guide = "none") +
   scale_x_continuous(labels = scales::percent) +
   labs(y = NULL,
-       x = "`Don't Know` in Ideological Placements (in Percent)",
+       x = "'Don't Know' in Ideological Placements (in Percent)",
        col = "Sophistication/Knowledge",
        shape = "Sophistication/Knowledge") +
   plot_default +
   theme(legend.position = "bottom")
-ggsave("out/app-placements_dk.pdf", width = 6.5, height = 4)
+ggsave("out/appC4-placements_dk.pdf", width = 6.5, height = 4)
 
+
+# Figure C.5: Effects of sophistication on the uncertainty around  --------
+
+## Create figure
+bind_rows(
+  map_dfr(ideo, ~ideo_compare(., "discursive", filter(ces2018, wc != 0))),
+  map_dfr(ideo, ~ideo_compare(., "polknow", filter(ces2018, wc != 0)))
+) %>%
+  mutate(
+    iv = recode_factor(iv,
+                       `discursive` = "Discursive\nSophistication",
+                       `polknow` = "Factual\nKnowledge"),
+    sd_mean = (sd_lo + sd_hi)/2,
+    dv = recode_factor(dv,
+                       `ideo_sc` = "Supreme Court",
+                       `ideo_collins` = "Susan Collins",
+                       `ideo_feinstein` = "Dianne Feinstein",
+                       `ideo_haley` = "Nikki Haley",
+                       `ideo_murkowski` = "Lisa Murkowski",
+                       `ideo_booker` = "Cory Booker",
+                       `ideo_dem` = "Democratic Party",
+                       `ideo_mcconnel` = "Mitch McConnell",
+                       `ideo_ryan` = "Paul Ryan",
+                       `ideo_schumer` = "Chuck Schumer",
+                       `ideo_rep` = "Republican Party",
+                       `ideo_warren` = "Elizabeth Warren",
+                       `ideo_pelosi` = "Nancy Pelosi",
+                       `ideo_trump` = "Donald Trump")
+  ) %>%
+  ggplot(aes(y = dv)) +
+  geom_vline(xintercept = 0, color="gray") +
+  geom_segment(aes(x = sd_lo, yend = dv,
+                   xend = ifelse(sd_hi < sd_lo, sd_hi + .02, sd_hi - .02)),
+               lineend = "round", linejoin = "mitre",
+               arrow = arrow(length = unit(0.1, "inches"))) +
+  geom_point(aes(x = sd_lo, shape = "Low (25th Percentile)",
+                 col = iv), size = 2) +
+  geom_point(aes(x = sd_hi, shape = "High (75th Percentile)",
+                 col = iv), size = 2) +
+  geom_text(aes(x = sd_mean, label = sd_stars), nudge_y = .25, size = 2.5) +
+  facet_wrap(~iv) +
+  scale_color_brewer(palette = "Dark2", guide = "none") +
+  labs(y = NULL,
+       x = "Uncertainty in Ideological Placements (in Standard Deviations)",
+       col = "Sophistication/Knowledge",
+       shape = "Sophistication/Knowledge") +
+  plot_default +
+  theme(legend.position = "bottom")
+ggsave("out/appC5-placements.pdf", width = 6.5, height = 4)
 
 
 # Correct voting / proximity voting analysis ------------------------------
@@ -810,21 +470,21 @@ ces2018 <- ces2018 %>%
   mutate(correct_vote = as.numeric(abs(ideo_ego - SenCand1Avg) > abs(ideo_ego - SenCand2Avg)) + 1,
          correct_vote = as.numeric(correct_vote == senate_vote))
 
-m1cv <- glm(correct_vote ~ polknow_text_scale + polknow_factual_scale +
+m1cv <- glm(correct_vote ~ discursive + polknow +
               female + age + black + educ + faminc + relig, data = ces2018, family=binomial("logit"))
 
 bind_rows(
-  plot_cap(m1cv, condition = c("polknow_text_scale"), draw = F) %>%
-    transmute(iv = "polknow_text_scale", ivval = condition1,
+  plot_cap(m1cv, condition = c("discursive"), draw = F) %>%
+    transmute(iv = "discursive", ivval = condition1,
               mean = predicted, cilo = conf.low, cihi = conf.high),
-  plot_cap(m1cv, condition = c("polknow_factual_scale"), draw = F) %>%
-    transmute(iv = "polknow_factual_scale", ivval = condition1,
+  plot_cap(m1cv, condition = c("polknow"), draw = F) %>%
+    transmute(iv = "polknow", ivval = condition1,
               mean = predicted, cilo = conf.low, cihi = conf.high),
 ) %>%
   as_tibble() %>%
   mutate(Variable = recode_factor(iv,
-                                  `polknow_text_scale` = "Discursive Sophistication",
-                                  `polknow_factual_scale` = "Factual Knowledge")) %>%
+                                  `discursive` = "Discursive Sophistication",
+                                  `polknow` = "Factual Knowledge")) %>%
   ggplot(aes(x=ivval, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_default +
   geom_ribbon(alpha=0.6, lwd=.1) + geom_line() +
   ylab("Pr(Ideological Proximity Vote)") + xlab("Value of Independent Variable") +
@@ -842,3 +502,138 @@ stargazer(m1cv, type="text", align = TRUE, column.sep.width = "-25pt", no.space 
                                "Household Income","Church Attendance","Constant"),
           keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
           out = "out/app-correct_vote.tex", label = "tab:correct_vote")
+
+
+# Discursive sophistication and media consumption -------------------------
+
+data_immig %>%
+  select(polknow, discursive,
+         tv_fox:tv_cbs, print_nyt:print_nyp, smedia_yt:smedia_tb) %>%
+  pivot_longer(-c(polknow, discursive),
+               names_to = "source", values_to = "exposure") %>%
+  pivot_longer(-c(source, exposure),
+               names_to = "Variable", values_to = "polknow") %>%
+  ggplot(aes(x = exposure, y = polknow, col = Variable)) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~source, ncol = 3, dir = "v")
+
+data_immig %>%
+  select(polknow, discursive,
+         tv_trust_fox:tv_trust_cbs, print_trust_nyt:print_trust_nyp) %>%
+  pivot_longer(-c(polknow, discursive),
+               names_to = "src", values_to = "trust") %>%
+  pivot_longer(-c(src, trust),
+               names_to = "iv", values_to = "polknow") %>%
+  mutate(Variable = recode_factor(iv,
+                                  `discursive` = "Discursive Sophistication",
+                                  `polknow` = "Factual Knowledge"),
+         Source = recode_factor(src,
+                                `print_trust_nyt` = "New York Times",
+                                `print_trust_wapo` = "Washington Post",
+                                `print_trust_wsj` = "Wall Street Journal",
+                                `print_trust_ust` = "USA Today",
+                                `print_trust_nyp` = "New York Post",
+                                `tv_trust_cnn` = "CNN",
+                                `tv_trust_nbc` = "NBC",
+                                `tv_trust_cbs` = "CBS",
+                                `tv_trust_msnbc` = "MSNBC",
+                                `tv_trust_fox` = "FOX News"),
+         Type = ifelse(grepl("print", src), "Print", "TV"),
+         Type = factor(Type, levels = c("TV","Print"))) %>%
+  ggplot(aes(y = trust, x = polknow, lty = Variable, fill = Variable)) +
+  plot_default +
+  geom_smooth(method = "lm", col = "black", alpha=0.6, lwd=.1) +
+  labs(y = "Trust that Reporting is Accurate",
+       x = "Value of Independent Variable") +
+  theme(legend.position = "bottom") +
+  facet_wrap(~Type+Source, ncol = 5, dir = "h") +
+  scale_fill_brewer(palette = "Dark2")
+ggsave("out/app-media_trust.pdf", width=6.5, height=4)
+
+
+
+
+
+# Discursive sophistication as a DV (reviewer request) --------------------
+
+m3rob_disc <- list(
+  lm(discursive ~ extraversion + newexperience + reserved +
+       wordsum + mode +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = anes2016),
+  lm(discursive ~ extraversion + newexperience + reserved +
+       wordsum + mode + polknow +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = anes2016),
+  lm(discursive ~ extraversion + newexperience + reserved +
+       wordsum + mode +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = anes2012),
+  lm(discursive ~ extraversion + newexperience + reserved +
+       wordsum + mode + polknow +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = anes2012)
+)
+
+stargazer(m3rob_disc, type="text", align = TRUE, column.sep.width = "-5pt", no.space = TRUE, digits = 3,
+          model.names=FALSE, star.cutoffs = c(.05,.01,.001),
+          dep.var.labels = "Discursive Sophistication",
+          title="Personality, verbal skills, and survey mode as predictors
+          of discursive sophistication in the 2016 and 2012 ANES.",
+          column.labels = rep(c("2016 ANES", "2012 ANES"), 2),
+          column.separate = rep(2,4),
+          covariate.labels = c("Personality: Extraversion",
+                               "Personality: Openness to Experience",
+                               "Personality: Reserved",
+                               "Verbal Skills (Wordsum score)",
+                               "Survey Mode (Online)",
+                               "Factual Knowledge",
+                               "Female","Age", "Black",
+                               "PID: Democrat", "PID: Republican",
+                               "Education: High School", "Education: Some College",
+                               "Education: Bachelor's Degree", "Education: Graduate Degree",
+                               "Household Income", "Church Attendance", "Constant"),
+          keep.stat = c("n", "rsq"), font.size = "footnotesize",
+          out = "out/app-determinants_rob_disc.tex", label = "tab:determinants_rob_disc")
+
+m3rob_fact <- list(
+  lm(polknow ~ extraversion + newexperience + reserved +
+       wordsum + mode +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = anes2016),
+  lm(polknow ~ extraversion + newexperience + reserved +
+       wordsum + mode + discursive +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = anes2016),
+  lm(polknow ~ extraversion + newexperience + reserved +
+       wordsum + mode +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = anes2012),
+  lm(polknow ~ extraversion + newexperience + reserved +
+       wordsum + mode + discursive +
+       female + age + black + pid_dem + pid_rep +
+       educ_fact + faminc + relig, data = anes2012)
+)
+
+stargazer(m3rob_fact, type="text", align = TRUE, column.sep.width = "-5pt", no.space = TRUE, digits = 3,
+          model.names=FALSE, star.cutoffs = c(.05,.01,.001),
+          dep.var.labels = "Factual Knowledge",
+          title="Personality, verbal skills, and survey mode as predictors
+          of factual knowledge in the 2016 and 2012 ANES.",
+          column.labels = rep(c("2016 ANES", "2012 ANES"), 2),
+          column.separate = rep(2,4),
+          covariate.labels = c("Personality: Extraversion",
+                               "Personality: Openness to Experience",
+                               "Personality: Reserved",
+                               "Verbal Skills (Wordsum score)",
+                               "Survey Mode (Online)",
+                               "Discursive Soph.",
+                               "Female","Age", "Black",
+                               "PID: Democrat", "PID: Republican",
+                               "Education: High School", "Education: Some College",
+                               "Education: Bachelor's Degree", "Education: Graduate Degree",
+                               "Household Income", "Church Attendance", "Constant"),
+          keep.stat = c("n", "rsq"), font.size = "footnotesize",
+          out = "out/app-determinants_rob_fact.tex", label = "tab:determinants_rob_fact")
+
+

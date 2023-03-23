@@ -85,7 +85,7 @@ ces2018disc <- discursive(data = ces2018,
                           args_textProcessor = list(customstopwords = stopwords),
                           args_prepDocuments = list(lower.thresh = 10),
                           args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                          dictionary = dict_constraint$regex)
+                          dictionary = dict_constraint$en)
 ces2018 <- bind_cols(ces2018, ces2018disc$output)
 
 
@@ -142,7 +142,7 @@ anes2020disc <- discursive(data = anes2020,
                            args_textProcessor = list(customstopwords = stopwords),
                            args_prepDocuments = list(lower.thresh = 10),
                            args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                           dictionary = dict_constraint$regex)
+                           dictionary = dict_constraint$en)
 anes2020 <- bind_cols(anes2020, anes2020disc$output)
 
 
@@ -213,7 +213,7 @@ anes2016disc <- discursive(data = anes2016,
                            args_textProcessor = list(customstopwords = stopwords),
                            args_prepDocuments = list(lower.thresh = 10),
                            args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                           dictionary = dict_constraint$regex)
+                           dictionary = dict_constraint$en)
 anes2016 <- bind_cols(anes2016, anes2016disc$output)
 
 
@@ -287,7 +287,7 @@ anes2012disc <- discursive(data = anes2012,
                            args_textProcessor = list(customstopwords = stopwords),
                            args_prepDocuments = list(lower.thresh = 10),
                            args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                           dictionary = dict_constraint$regex)
+                           dictionary = dict_constraint$en)
 anes2012 <- bind_cols(anes2012, anes2012disc$output)
 
 
@@ -334,7 +334,7 @@ yg2015disc <- discursive(data = yg2015,
                          args_textProcessor = list(customstopwords = stopwords),
                          args_prepDocuments = list(lower.thresh = 10),
                          args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                         dictionary = dict_constraint$regex)
+                         dictionary = dict_constraint$en)
 yg2015 <- bind_cols(yg2015, yg2015disc$output)
 
 
@@ -369,7 +369,7 @@ swiss2012disc_de <- discursive(data = swiss2012_de,
                                args_textProcessor = list(language = "german"),
                                args_prepDocuments = list(lower.thresh = 10),
                                args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                               dictionary = dict_constraint_de$regex)
+                               dictionary = dict_constraint$de)
 swiss2012_de <- bind_cols(swiss2012_de, swiss2012disc_de$output)
 
 swiss2012_fr <- filter(swiss2012, lang == 2)
@@ -379,7 +379,7 @@ swiss2012disc_fr <- discursive(data = swiss2012_fr,
                                args_textProcessor = list(language = "french"),
                                args_prepDocuments = list(lower.thresh = 10),
                                args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                               dictionary = dict_constraint_fr$regex)
+                               dictionary = dict_constraint$fr)
 swiss2012_fr <- bind_cols(swiss2012_fr, swiss2012disc_fr$output)
 
 swiss2012_it <- filter(swiss2012, lang == 3)
@@ -389,7 +389,7 @@ swiss2012disc_it <- discursive(data = swiss2012_it,
                                args_textProcessor = list(language = "italian"),
                                args_prepDocuments = list(lower.thresh = 10),
                                args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                               dictionary = dict_constraint_it$regex)
+                               dictionary = dict_constraint$it)
 swiss2012_it <- bind_cols(swiss2012_it, swiss2012disc_it$output)
 
 
@@ -439,7 +439,7 @@ mturk2019disc <- discursive(data = mturk2019,
                             args_textProcessor = list(customstopwords = stopwords),
                             args_prepDocuments = list(lower.thresh = 10),
                             args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                            dictionary = dict_constraint$regex)
+                            dictionary = dict_constraint$en)
 mturk2019 <- bind_cols(mturk2019, mturk2019disc$output)
 
 
