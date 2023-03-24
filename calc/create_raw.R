@@ -274,7 +274,7 @@ oe_na <- sort(unique(c("-1 inapplicable","-7 refused","n/a","no","none","#(43042
 
 # Custom stopwords for STM ------------------------------------------------
 
-stopwords <- c("dont", "hes", "shes", "that", "etc")
+stopwords <- sort(c("dont", "dint", "cant", "hes", "shes", "that", "etc"))
 
 
 

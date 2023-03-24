@@ -174,36 +174,22 @@ ggsave("out/appB4h-italian_components.png", width = 2.6, height = 2.6)
 
 # Figure C.1: PreText analysis of preprocessing decisions of open- --------
 
-# TODO: clean preText code
-
 ## Select raw documents
 set.seed(12345)
 preText_res <- list(ces2018, anes2020, anes2016, anes2012, yg2015,
-            swiss2012_fr, swiss2012_de, swiss2012_it) %>%
+                    swiss2012_fr, swiss2012_de, swiss2012_it) %>%
   map(oe_sample) %>%
   map(factorial_preprocessing, use_ngrams = FALSE, parallel = TRUE, cores = 12) %>%
   map(preText, parallel = TRUE, cores = 12)
-
-## Generate preText score plot
-preText_res %>% map(preText_score_plot)
-
-## Plot regression results
-extractData <- function(x){
-  out <- x[[2]]
-  out$xmean <- x[[3]]$x
-  out$ylab <- factor(out$y, labels = c("Lowercase","Remove Infrequent Terms","Remove Numbers",
-                                       "Remove Punctuation","Remove Stopwords","Stemming"))
-  out
-}
+names(preText_res) <- c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES","2015 YouGov",
+                        "Swiss (French)","Swiss (German)","Swiss (Italian)")
 
 ## Create plot
 preText_res %>%
   map(regression_coefficient_plot, remove_intercept = TRUE) %>%
   map_dfr("data", .id = "study") %>%
-  mutate(study = factor(study, levels = c("ces20182018", "anes2020", "anes2016", "anes2012",
-                                          "yougov", "french","german","italian"),
-                        labels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES","2015 YouGov",
-                                   "Swiss (French)","Swiss (German)","Swiss (Italian)"))) %>%
+  mutate(study = factor(study, levels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES","2015 YouGov",
+                                          "Swiss (French)","Swiss (German)","Swiss (Italian)"))) %>%
   ggplot(aes(x = Coefficient, xmin = Coefficient-2*SE, xmax = Coefficient+2*SE, y = Variable)) +
   geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
   facet_wrap(~study, ncol=2) + labs(y=NULL, x = "Regression Coefficient") + plot_default
