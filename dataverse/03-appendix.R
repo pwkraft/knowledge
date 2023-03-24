@@ -178,14 +178,14 @@ ggsave("out/appB4h-italian_components.png", width = 2.6, height = 2.6)
 
 ## Select raw documents
 set.seed(12345)
-res <- list(ces2018, anes2020, anes2016, anes2012, yg2015,
+preText_res <- list(ces2018, anes2020, anes2016, anes2012, yg2015,
             swiss2012_fr, swiss2012_de, swiss2012_it) %>%
   map(oe_sample) %>%
   map(factorial_preprocessing, use_ngrams = FALSE, parallel = TRUE, cores = 12) %>%
   map(preText, parallel = TRUE, cores = 12)
 
 ## Generate preText score plot
-res %>% map(preText_score_plot)
+preText_res %>% map(preText_score_plot)
 
 ## Plot regression results
 extractData <- function(x){
@@ -197,7 +197,7 @@ extractData <- function(x){
 }
 
 ## Create plot
-res %>%
+preText_res %>%
   map(regression_coefficient_plot, remove_intercept = TRUE) %>%
   map_dfr("data", .id = "study") %>%
   mutate(study = factor(study, levels = c("ces20182018", "anes2020", "anes2016", "anes2012",
@@ -212,247 +212,73 @@ ggsave("out/appC1-pretext.png",width = 6, height = 4.5)
 
 # Figure C.2: Robustness of discursive sophistication measure for  --------
 
-## Discursive sophistication with more topics
-ces2018topics <- discursive(data = ces2018,
-                          openends = colnames(ces2018)[grep("oe_", colnames(ces2018))],
-                          meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                          args_textProcessor = list(customstopwords = stopwords),
-                          args_prepDocuments = list(lower.thresh = 10),
-                          args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                          dictionary = dict_constraint$en)
-anes2020topics <- discursive(data = anes2020,
-                           openends = colnames(anes2020)[grep("oe_", colnames(anes2020))],
-                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                           args_textProcessor = list(customstopwords = stopwords),
-                           args_prepDocuments = list(lower.thresh = 10),
-                           args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                           dictionary = dict_constraint$en)
-anes2016topics <- discursive(data = anes2016,
-                           openends = colnames(anes2016)[grep("oe_", colnames(anes2016))],
-                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                           args_textProcessor = list(customstopwords = stopwords),
-                           args_prepDocuments = list(lower.thresh = 10),
-                           args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                           dictionary = dict_constraint$en)
-anes2012topics <- discursive(data = anes2012,
-                           openends = colnames(anes2012)[grep("oe_", colnames(anes2012))],
-                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                           args_textProcessor = list(customstopwords = stopwords),
-                           args_prepDocuments = list(lower.thresh = 10),
-                           args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                           dictionary = dict_constraint$en)
-yg2015topics <- discursive(data = yg2015,
-                         openends = colnames(yg2015)[grep("oe_", colnames(yg2015))],
-                         meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                         args_textProcessor = list(customstopwords = stopwords),
-                         args_prepDocuments = list(lower.thresh = 10),
-                         args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                         dictionary = dict_constraint$en)
-swiss2012topics_de <- discursive(data = swiss2012_de,
-                               openends = colnames(swiss2012_de)[grep("oe_", colnames(swiss2012_de))],
-                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
-                               args_textProcessor = list(language = "german"),
-                               args_prepDocuments = list(lower.thresh = 10),
-                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                               dictionary = dict_constraint$de)
-swiss2012topics_fr <- discursive(data = swiss2012_fr,
-                               openends = colnames(swiss2012_fr)[grep("oe_", colnames(swiss2012_fr))],
-                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
-                               args_textProcessor = list(language = "french"),
-                               args_prepDocuments = list(lower.thresh = 10),
-                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                               dictionary = dict_constraint$fr)
-swiss2012topics_it <- discursive(data = swiss2012_it,
-                               openends = colnames(swiss2012_it)[grep("oe_", colnames(swiss2012_it))],
-                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
-                               args_textProcessor = list(language = "italian"),
-                               args_prepDocuments = list(lower.thresh = 10),
-                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                               dictionary = dict_constraint$it)
-
-## Discursive sophistication without stemming
-ces2018stemming <- discursive(data = ces2018,
-                          openends = colnames(ces2018)[grep("oe_", colnames(ces2018))],
-                          meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                          args_textProcessor = list(customstopwords = stopwords),
-                          args_prepDocuments = list(lower.thresh = 10),
-                          args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                          dictionary = dict_constraint$en)
-anes2020stemming <- discursive(data = anes2020,
-                           openends = colnames(anes2020)[grep("oe_", colnames(anes2020))],
-                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                           args_textProcessor = list(customstopwords = stopwords),
-                           args_prepDocuments = list(lower.thresh = 10),
-                           args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                           dictionary = dict_constraint$en)
-anes2016stemming <- discursive(data = anes2016,
-                           openends = colnames(anes2016)[grep("oe_", colnames(anes2016))],
-                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                           args_textProcessor = list(customstopwords = stopwords),
-                           args_prepDocuments = list(lower.thresh = 10),
-                           args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                           dictionary = dict_constraint$en)
-anes2012stemming <- discursive(data = anes2012,
-                           openends = colnames(anes2012)[grep("oe_", colnames(anes2012))],
-                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                           args_textProcessor = list(customstopwords = stopwords),
-                           args_prepDocuments = list(lower.thresh = 10),
-                           args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                           dictionary = dict_constraint$en)
-yg2015stemming <- discursive(data = yg2015,
-                         openends = colnames(yg2015)[grep("oe_", colnames(yg2015))],
-                         meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                         args_textProcessor = list(customstopwords = stopwords),
-                         args_prepDocuments = list(lower.thresh = 10),
-                         args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                         dictionary = dict_constraint$en)
-swiss2012stemming_de <- discursive(data = swiss2012_de,
-                               openends = colnames(swiss2012_de)[grep("oe_", colnames(swiss2012_de))],
-                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
-                               args_textProcessor = list(language = "german"),
-                               args_prepDocuments = list(lower.thresh = 10),
-                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                               dictionary = dict_constraint$de)
-swiss2012stemming_fr <- discursive(data = swiss2012_fr,
-                               openends = colnames(swiss2012_fr)[grep("oe_", colnames(swiss2012_fr))],
-                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
-                               args_textProcessor = list(language = "french"),
-                               args_prepDocuments = list(lower.thresh = 10),
-                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                               dictionary = dict_constraint$fr)
-swiss2012stemming_it <- discursive(data = swiss2012_it,
-                               openends = colnames(swiss2012_it)[grep("oe_", colnames(swiss2012_it))],
-                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
-                               args_textProcessor = list(language = "italian"),
-                               args_prepDocuments = list(lower.thresh = 10),
-                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                               dictionary = dict_constraint$it)
-
-## Discursive sophistication without removing stopwords
-ces2018stemming <- discursive(data = ces2018,
-                              openends = colnames(ces2018)[grep("oe_", colnames(ces2018))],
-                              meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                              args_textProcessor = list(customstopwords = stopwords),
-                              args_prepDocuments = list(lower.thresh = 10),
-                              args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                              dictionary = dict_constraint$en)
-anes2020stemming <- discursive(data = anes2020,
-                               openends = colnames(anes2020)[grep("oe_", colnames(anes2020))],
-                               meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                               args_textProcessor = list(customstopwords = stopwords),
-                               args_prepDocuments = list(lower.thresh = 10),
-                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                               dictionary = dict_constraint$en)
-anes2016stemming <- discursive(data = anes2016,
-                               openends = colnames(anes2016)[grep("oe_", colnames(anes2016))],
-                               meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                               args_textProcessor = list(customstopwords = stopwords),
-                               args_prepDocuments = list(lower.thresh = 10),
-                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                               dictionary = dict_constraint$en)
-anes2012stemming <- discursive(data = anes2012,
-                               openends = colnames(anes2012)[grep("oe_", colnames(anes2012))],
-                               meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                               args_textProcessor = list(customstopwords = stopwords),
-                               args_prepDocuments = list(lower.thresh = 10),
-                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                               dictionary = dict_constraint$en)
-yg2015stemming <- discursive(data = yg2015,
-                             openends = colnames(yg2015)[grep("oe_", colnames(yg2015))],
-                             meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
-                             args_textProcessor = list(customstopwords = stopwords),
-                             args_prepDocuments = list(lower.thresh = 10),
-                             args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                             dictionary = dict_constraint$en)
-swiss2012stemming_de <- discursive(data = swiss2012_de,
-                                   openends = colnames(swiss2012_de)[grep("oe_", colnames(swiss2012_de))],
-                                   meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
-                                   args_textProcessor = list(language = "german"),
-                                   args_prepDocuments = list(lower.thresh = 10),
-                                   args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                                   dictionary = dict_constraint$de)
-swiss2012stemming_fr <- discursive(data = swiss2012_fr,
-                                   openends = colnames(swiss2012_fr)[grep("oe_", colnames(swiss2012_fr))],
-                                   meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
-                                   args_textProcessor = list(language = "french"),
-                                   args_prepDocuments = list(lower.thresh = 10),
-                                   args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                                   dictionary = dict_constraint$fr)
-swiss2012stemming_it <- discursive(data = swiss2012_it,
-                                   openends = colnames(swiss2012_it)[grep("oe_", colnames(swiss2012_it))],
-                                   meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
-                                   args_textProcessor = list(language = "italian"),
-                                   args_prepDocuments = list(lower.thresh = 10),
-                                   args_stm = list(K = 25, seed = 12345, verbose = FALSE),
-                                   dictionary = dict_constraint$it)
-
-
+## Compute discursive sophistication with alternative specifications
 plot_df <- bind_rows(
-  robustSoph(ces2018, 35, stm_fit_ces2018$settings$dim$K, "2018 CES"),
-  robustSoph(anes2020, 35, stm_fit2020$settings$dim$K, "2020 ANES"),
-  robustSoph(anes2016, 35, stm_fit2016$settings$dim$K, "2016 ANES"),
-  robustSoph(anes2012, 35, stm_fit2012$settings$dim$K, "2012 ANES"),
-  robustSoph(yg2015, 35, stm_fit_yg$settings$dim$K, "2015 YouGov"),
-  robustSoph(swiss2012_fr, 35, stm_fit_french$settings$dim$K, "Swiss (French)",
-             lang = "french", meta = c("age", "edu", "ideol", "edu_ideol", "female")),
-  robustSoph(swiss2012_de, 35, stm_fit_german$settings$dim$K, "Swiss (German)",
-             lang = "german", meta = c("age", "edu", "ideol", "edu_ideol", "female")),
-  robustSoph(swiss2012_it, 35, stm_fit_italian$settings$dim$K, "Swiss (Italian)",
-             lang = "italian", meta = c("age", "edu", "ideol", "edu_ideol", "female"))
-)
-save(plot_df, file = "calc/tmp/tmp01.Rdata")
+  robust_discursive(data = ces2018, datalab = "2018 CES", K = 35),
+  robust_discursive(data = anes2020, datalab = "2020 ANES", K = 35),
+  robust_discursive(data = anes2016, datalab = "2016 ANES", K = 35),
+  robust_discursive(data = anes2012, datalab = "2012 ANES", K = 35),
+  robust_discursive(data = yg2015, datalab = "2015 YouGov", K = 35),
+  robust_discursive(data = swiss2012_fr, datalab = "Swiss (French)", K = 35,
+                    meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                    language = "french", dictionary = dict_constraint$fr),
+  robust_discursive(data = swiss2012_de, datalab = "Swiss (German)", K = 35,
+                    meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                    language = "german", dictionary = dict_constraint$de),
+  robust_discursive(data = swiss2012_it, datalab = "Swiss (Italian)", K = 35,
+                    meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                    language = "italian", dictionary = dict_constraint$it),
 
-plot_df <- plot_df %>% bind_rows(
-  robustSoph(ces2018, 25, stm_fit_ces2018$settings$dim$K, "2018 CES", stem = FALSE),
-  robustSoph(anes2020, 25, stm_fit2020$settings$dim$K, "2020 ANES", stem = FALSE),
-  robustSoph(anes2016, 25, stm_fit2016$settings$dim$K, "2016 ANES", stem = FALSE),
-  robustSoph(anes2012, 25, stm_fit2012$settings$dim$K, "2012 ANES", stem = FALSE),
-  robustSoph(yg2015, 25, stm_fit_yg$settings$dim$K, "2015 YouGov", stem = FALSE),
-  robustSoph(swiss2012_fr, 25, stm_fit_french$settings$dim$K, "Swiss (French)", stem = FALSE,
-             lang = "french", meta = c("age", "edu", "ideol", "edu_ideol", "female")),
-  robustSoph(swiss2012_de, 25, stm_fit_german$settings$dim$K, "Swiss (German)", stem = FALSE,
-             lang = "german", meta = c("age", "edu", "ideol", "edu_ideol", "female")),
-  robustSoph(swiss2012_it, 25, stm_fit_italian$settings$dim$K, "Swiss (Italian)", stem = FALSE,
-             lang = "italian", meta = c("age", "edu", "ideol", "edu_ideol", "female"))
-)
-save(plot_df, file = "calc/tmp/tmp02.Rdata")
+  robust_discursive(data = ces2018, datalab = "2018 CES", stem = FALSE),
+  robust_discursive(data = anes2020, datalab = "2020 ANES", stem = FALSE),
+  robust_discursive(data = anes2016, datalab = "2016 ANES", stem = FALSE),
+  robust_discursive(data = anes2012, datalab = "2012 ANES", stem = FALSE),
+  robust_discursive(data = yg2015, datalab = "2015 YouGov", stem = FALSE),
+  robust_discursive(data = swiss2012_fr, datalab = "Swiss (French)", stem = FALSE,
+                    meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                    language = "french", dictionary = dict_constraint$fr),
+  robust_discursive(data = swiss2012_de, datalab = "Swiss (German)", stem = FALSE,
+                    meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                    language = "german", dictionary = dict_constraint$de),
+  robust_discursive(data = swiss2012_it, datalab = "Swiss (Italian)", stem = FALSE,
+                    meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                    language = "italian", dictionary = dict_constraint$it),
 
-plot_df <- plot_df %>% bind_rows(
-  robustSoph(ces2018, 25, stm_fit_ces2018$settings$dim$K, "2018 CES", removestopwords = FALSE),
-  robustSoph(anes2020, 25, stm_fit2020$settings$dim$K, "2020 ANES", removestopwords = FALSE),
-  robustSoph(anes2016, 25, stm_fit2016$settings$dim$K, "2016 ANES", removestopwords = FALSE),
-  robustSoph(anes2012, 25, stm_fit2012$settings$dim$K, "2012 ANES", removestopwords = FALSE),
-  robustSoph(yg2015, 25, stm_fit_yg$settings$dim$K, "2015 YouGov", removestopwords = FALSE),
-  robustSoph(swiss2012_fr, 25, stm_fit_french$settings$dim$K, "Swiss (French)", removestopwords = FALSE,
-             lang = "french", meta = c("age", "edu", "ideol", "edu_ideol", "female")),
-  robustSoph(swiss2012_de, 25, stm_fit_german$settings$dim$K, "Swiss (German)", removestopwords = FALSE,
-             lang = "german", meta = c("age", "edu", "ideol", "edu_ideol", "female")),
-  robustSoph(swiss2012_it, 25, stm_fit_italian$settings$dim$K, "Swiss (Italian)", removestopwords = FALSE,
-             lang = "italian", meta = c("age", "edu", "ideol", "edu_ideol", "female"))
-)
-save(plot_df, file = "calc/tmp/tmp03.Rdata")
-
-## Prepare plotting data
-plot_df <- plot_df %>%
+  robust_discursive(data = ces2018, datalab = "2018 CES", removestopwords = FALSE),
+  robust_discursive(data = anes2020, datalab = "2020 ANES", removestopwords = FALSE),
+  robust_discursive(data = anes2016, datalab = "2016 ANES", removestopwords = FALSE),
+  robust_discursive(data = anes2012, datalab = "2012 ANES", removestopwords = FALSE),
+  robust_discursive(data = yg2015, datalab = "2015 YouGov", removestopwords = FALSE),
+  robust_discursive(data = swiss2012_fr, datalab = "Swiss (French)", removestopwords = FALSE,
+                    meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                    language = "french", dictionary = dict_constraint$fr),
+  robust_discursive(data = swiss2012_de, datalab = "Swiss (German)", removestopwords = FALSE,
+                    meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                    language = "german", dictionary = dict_constraint$de),
+  robust_discursive(data = swiss2012_it, datalab = "Swiss (Italian)", removestopwords = FALSE,
+                    meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                    language = "italian", dictionary = dict_constraint$it)
+) %>%
   mutate(
     datalab = factor(datalab,
                      levels = c("2018 CES", "2020 ANES", "2016 ANES", "2012 ANES", "2015 YouGov",
                                 "Swiss (French)", "Swiss (German)", "Swiss (Italian)")),
-    condition = factor(100*k + 10*stem + 1*removestopwords, levels = c("3511","2501","2510"),
+    condition = factor(100*K + 10*stem + 1*removestopwords,
+                       levels = c("3511","2501","2510"),
                        labels = c("More topics (k = 35)", "No stemming", "Keep stopwords"))
   )
 
 ## Compute correlations for subgroups
 plot_cor <- plot_df %>%
   group_by(datalab, condition) %>%
-  summarize(cor = paste0("r = ",round(cor(discursive, polknow_text_rep), 3))) %>%
-  mutate(discursive = .9, polknow_text_rep = .1)
+  summarize(cor = paste0("r = ",round(cor(original, replication), 3))) %>%
+  mutate(original = 4, replication = -2.5)
 
 ## Create figure
-ggplot(plot_df, aes(y=discursive, x=polknow_text_rep)) +
+ggplot(plot_df, aes(y = original, x = replication)) +
   geom_point(alpha=.05) + geom_smooth(method="lm") +
   facet_grid(datalab~condition) +
-  geom_text(data=plot_cor, aes(label=cor), size=2) + xlim(0,1) + ylim(0,1) +
+  geom_text(data=plot_cor, aes(label=cor), size=2) +
   labs(y = "Discursive Sophistication (Preferred Specification)",
        x = "Discursive Sophistication (Alternative Specifications)") +
   plot_default

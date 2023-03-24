@@ -146,3 +146,40 @@ ideo_compare <- function(yname, xname, data, quantiles = c(.25, .75)) {
       )
     )
 }
+
+## Wrapper to compute discursive sophistication w/ varying model specifications
+robust_discursive <- function(data, datalab,
+                              K = 25, stem = TRUE, removestopwords = TRUE,
+                              language = "english", dictionary = dict_constraint$en,
+                              meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                              seed = 12345, verbose = FALSE){
+  cat("\nProcessing ", datalab,
+      ": K = ", K,
+      ", stem = ", stem,
+      ", removestopwords = ", removestopwords,
+      sep = "")
+  discursive(data = data,
+             openends = colnames(data)[grep("oe_", colnames(data))],
+             meta = meta,
+             args_textProcessor = list(stem = stem,
+                                       removestopwords = removestopwords,
+                                       language = language,
+                                       verbose = verbose),
+             args_prepDocuments = list(lower.thresh = 10,
+                                       verbose = verbose),
+             args_stm = list(K = K,
+                             seed = seed,
+                             verbose = verbose),
+             keep_stm = FALSE,
+             dictionary = dictionary) %>%
+    discard(is.null) %>%
+    flatten() %>%
+    as_tibble() %>%
+    transmute(original = data$discursive,
+              replication = discursive,
+              K = K,
+              stem = stem,
+              removestopwords = removestopwords,
+              datalab = datalab) %>%
+    na.omit()
+}
