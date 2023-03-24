@@ -176,7 +176,7 @@ ggsave("out/appB4h-italian_components.png", width = 2.6, height = 2.6)
 
 # TODO: clean preText code
 
-## select raw documents
+## Select raw documents
 set.seed(12345)
 res <- list(ces2018, anes2020, anes2016, anes2012, yg2015,
             swiss2012_fr, swiss2012_de, swiss2012_it) %>%
@@ -184,10 +184,10 @@ res <- list(ces2018, anes2020, anes2016, anes2012, yg2015,
   map(factorial_preprocessing, use_ngrams = FALSE, parallel = TRUE, cores = 12) %>%
   map(preText, parallel = TRUE, cores = 12)
 
-## generate preText score plot
+## Generate preText score plot
 res %>% map(preText_score_plot)
 
-## plot regression results
+## Plot regression results
 extractData <- function(x){
   out <- x[[2]]
   out$xmean <- x[[3]]$x
@@ -196,6 +196,7 @@ extractData <- function(x){
   out
 }
 
+## Create plot
 res %>%
   map(regression_coefficient_plot, remove_intercept = TRUE) %>%
   map_dfr("data", .id = "study") %>%
@@ -209,9 +210,183 @@ res %>%
 ggsave("out/appC1-pretext.png",width = 6, height = 4.5)
 
 
-# Discursive sophistication for varying model specifications --------------
+# Figure C.2: Robustness of discursive sophistication measure for  --------
 
-## compute alternative measures (save intermediate steps)
+## Discursive sophistication with more topics
+ces2018topics <- discursive(data = ces2018,
+                          openends = colnames(ces2018)[grep("oe_", colnames(ces2018))],
+                          meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                          args_textProcessor = list(customstopwords = stopwords),
+                          args_prepDocuments = list(lower.thresh = 10),
+                          args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                          dictionary = dict_constraint$en)
+anes2020topics <- discursive(data = anes2020,
+                           openends = colnames(anes2020)[grep("oe_", colnames(anes2020))],
+                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                           args_textProcessor = list(customstopwords = stopwords),
+                           args_prepDocuments = list(lower.thresh = 10),
+                           args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                           dictionary = dict_constraint$en)
+anes2016topics <- discursive(data = anes2016,
+                           openends = colnames(anes2016)[grep("oe_", colnames(anes2016))],
+                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                           args_textProcessor = list(customstopwords = stopwords),
+                           args_prepDocuments = list(lower.thresh = 10),
+                           args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                           dictionary = dict_constraint$en)
+anes2012topics <- discursive(data = anes2012,
+                           openends = colnames(anes2012)[grep("oe_", colnames(anes2012))],
+                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                           args_textProcessor = list(customstopwords = stopwords),
+                           args_prepDocuments = list(lower.thresh = 10),
+                           args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                           dictionary = dict_constraint$en)
+yg2015topics <- discursive(data = yg2015,
+                         openends = colnames(yg2015)[grep("oe_", colnames(yg2015))],
+                         meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                         args_textProcessor = list(customstopwords = stopwords),
+                         args_prepDocuments = list(lower.thresh = 10),
+                         args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                         dictionary = dict_constraint$en)
+swiss2012topics_de <- discursive(data = swiss2012_de,
+                               openends = colnames(swiss2012_de)[grep("oe_", colnames(swiss2012_de))],
+                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                               args_textProcessor = list(language = "german"),
+                               args_prepDocuments = list(lower.thresh = 10),
+                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                               dictionary = dict_constraint$de)
+swiss2012topics_fr <- discursive(data = swiss2012_fr,
+                               openends = colnames(swiss2012_fr)[grep("oe_", colnames(swiss2012_fr))],
+                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                               args_textProcessor = list(language = "french"),
+                               args_prepDocuments = list(lower.thresh = 10),
+                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                               dictionary = dict_constraint$fr)
+swiss2012topics_it <- discursive(data = swiss2012_it,
+                               openends = colnames(swiss2012_it)[grep("oe_", colnames(swiss2012_it))],
+                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                               args_textProcessor = list(language = "italian"),
+                               args_prepDocuments = list(lower.thresh = 10),
+                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                               dictionary = dict_constraint$it)
+
+## Discursive sophistication without stemming
+ces2018stemming <- discursive(data = ces2018,
+                          openends = colnames(ces2018)[grep("oe_", colnames(ces2018))],
+                          meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                          args_textProcessor = list(customstopwords = stopwords),
+                          args_prepDocuments = list(lower.thresh = 10),
+                          args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                          dictionary = dict_constraint$en)
+anes2020stemming <- discursive(data = anes2020,
+                           openends = colnames(anes2020)[grep("oe_", colnames(anes2020))],
+                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                           args_textProcessor = list(customstopwords = stopwords),
+                           args_prepDocuments = list(lower.thresh = 10),
+                           args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                           dictionary = dict_constraint$en)
+anes2016stemming <- discursive(data = anes2016,
+                           openends = colnames(anes2016)[grep("oe_", colnames(anes2016))],
+                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                           args_textProcessor = list(customstopwords = stopwords),
+                           args_prepDocuments = list(lower.thresh = 10),
+                           args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                           dictionary = dict_constraint$en)
+anes2012stemming <- discursive(data = anes2012,
+                           openends = colnames(anes2012)[grep("oe_", colnames(anes2012))],
+                           meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                           args_textProcessor = list(customstopwords = stopwords),
+                           args_prepDocuments = list(lower.thresh = 10),
+                           args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                           dictionary = dict_constraint$en)
+yg2015stemming <- discursive(data = yg2015,
+                         openends = colnames(yg2015)[grep("oe_", colnames(yg2015))],
+                         meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                         args_textProcessor = list(customstopwords = stopwords),
+                         args_prepDocuments = list(lower.thresh = 10),
+                         args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                         dictionary = dict_constraint$en)
+swiss2012stemming_de <- discursive(data = swiss2012_de,
+                               openends = colnames(swiss2012_de)[grep("oe_", colnames(swiss2012_de))],
+                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                               args_textProcessor = list(language = "german"),
+                               args_prepDocuments = list(lower.thresh = 10),
+                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                               dictionary = dict_constraint$de)
+swiss2012stemming_fr <- discursive(data = swiss2012_fr,
+                               openends = colnames(swiss2012_fr)[grep("oe_", colnames(swiss2012_fr))],
+                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                               args_textProcessor = list(language = "french"),
+                               args_prepDocuments = list(lower.thresh = 10),
+                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                               dictionary = dict_constraint$fr)
+swiss2012stemming_it <- discursive(data = swiss2012_it,
+                               openends = colnames(swiss2012_it)[grep("oe_", colnames(swiss2012_it))],
+                               meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                               args_textProcessor = list(language = "italian"),
+                               args_prepDocuments = list(lower.thresh = 10),
+                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                               dictionary = dict_constraint$it)
+
+## Discursive sophistication without removing stopwords
+ces2018stemming <- discursive(data = ces2018,
+                              openends = colnames(ces2018)[grep("oe_", colnames(ces2018))],
+                              meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                              args_textProcessor = list(customstopwords = stopwords),
+                              args_prepDocuments = list(lower.thresh = 10),
+                              args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                              dictionary = dict_constraint$en)
+anes2020stemming <- discursive(data = anes2020,
+                               openends = colnames(anes2020)[grep("oe_", colnames(anes2020))],
+                               meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                               args_textProcessor = list(customstopwords = stopwords),
+                               args_prepDocuments = list(lower.thresh = 10),
+                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                               dictionary = dict_constraint$en)
+anes2016stemming <- discursive(data = anes2016,
+                               openends = colnames(anes2016)[grep("oe_", colnames(anes2016))],
+                               meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                               args_textProcessor = list(customstopwords = stopwords),
+                               args_prepDocuments = list(lower.thresh = 10),
+                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                               dictionary = dict_constraint$en)
+anes2012stemming <- discursive(data = anes2012,
+                               openends = colnames(anes2012)[grep("oe_", colnames(anes2012))],
+                               meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                               args_textProcessor = list(customstopwords = stopwords),
+                               args_prepDocuments = list(lower.thresh = 10),
+                               args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                               dictionary = dict_constraint$en)
+yg2015stemming <- discursive(data = yg2015,
+                             openends = colnames(yg2015)[grep("oe_", colnames(yg2015))],
+                             meta = c("age", "educ_cont", "pid_cont", "educ_pid", "female"),
+                             args_textProcessor = list(customstopwords = stopwords),
+                             args_prepDocuments = list(lower.thresh = 10),
+                             args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                             dictionary = dict_constraint$en)
+swiss2012stemming_de <- discursive(data = swiss2012_de,
+                                   openends = colnames(swiss2012_de)[grep("oe_", colnames(swiss2012_de))],
+                                   meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                                   args_textProcessor = list(language = "german"),
+                                   args_prepDocuments = list(lower.thresh = 10),
+                                   args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                                   dictionary = dict_constraint$de)
+swiss2012stemming_fr <- discursive(data = swiss2012_fr,
+                                   openends = colnames(swiss2012_fr)[grep("oe_", colnames(swiss2012_fr))],
+                                   meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                                   args_textProcessor = list(language = "french"),
+                                   args_prepDocuments = list(lower.thresh = 10),
+                                   args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                                   dictionary = dict_constraint$fr)
+swiss2012stemming_it <- discursive(data = swiss2012_it,
+                                   openends = colnames(swiss2012_it)[grep("oe_", colnames(swiss2012_it))],
+                                   meta = c("age", "educ_cont", "ideo_cont", "educ_ideo", "female"),
+                                   args_textProcessor = list(language = "italian"),
+                                   args_prepDocuments = list(lower.thresh = 10),
+                                   args_stm = list(K = 25, seed = 12345, verbose = FALSE),
+                                   dictionary = dict_constraint$it)
+
+
 plot_df <- bind_rows(
   robustSoph(ces2018, 35, stm_fit_ces2018$settings$dim$K, "2018 CES"),
   robustSoph(anes2020, 35, stm_fit2020$settings$dim$K, "2020 ANES"),
@@ -257,7 +432,7 @@ plot_df <- plot_df %>% bind_rows(
 )
 save(plot_df, file = "calc/tmp/tmp03.Rdata")
 
-## prepare data for plotting
+## Prepare plotting data
 plot_df <- plot_df %>%
   mutate(
     datalab = factor(datalab,
@@ -267,13 +442,13 @@ plot_df <- plot_df %>%
                        labels = c("More topics (k = 35)", "No stemming", "Keep stopwords"))
   )
 
-## compute correlations for subgroups
+## Compute correlations for subgroups
 plot_cor <- plot_df %>%
   group_by(datalab, condition) %>%
   summarize(cor = paste0("r = ",round(cor(discursive, polknow_text_rep), 3))) %>%
   mutate(discursive = .9, polknow_text_rep = .1)
 
-## generate plot
+## Create figure
 ggplot(plot_df, aes(y=discursive, x=polknow_text_rep)) +
   geom_point(alpha=.05) + geom_smooth(method="lm") +
   facet_grid(datalab~condition) +
@@ -281,7 +456,7 @@ ggplot(plot_df, aes(y=discursive, x=polknow_text_rep)) +
   labs(y = "Discursive Sophistication (Preferred Specification)",
        x = "Discursive Sophistication (Alternative Specifications)") +
   plot_default
-ggsave("out/app-pretext_robustness.png", width=5, height=8.5)
+ggsave("out/appC2-pretext_robustness.png", width=5, height=8.5)
 
 
 # Figure C.3: Controlling for Personality and Verbal Skills ---------------
@@ -452,35 +627,38 @@ bind_rows(
 ggsave("out/appC5-placements.pdf", width = 6.5, height = 4)
 
 
-# Correct voting / proximity voting analysis ------------------------------
+# Figure C.6: Expected probability to vote for the senatorial cand --------
 
+## Compute average candidate positions
 SenCand1Avg <- ces2018 %>%
   group_by(SenCand1Name) %>%
   summarize(SenCand1Avg = mean(ideo_cand1, na.rm = T)) %>%
   na.omit()
-
 SenCand2Avg <- ces2018 %>%
   group_by(SenCand2Name) %>%
   summarize(SenCand2Avg = mean(ideo_cand2, na.rm = T)) %>%
   na.omit()
 
+## Compare vote choice to relative candidate proximity
 ces2018 <- ces2018 %>%
   left_join(SenCand1Avg) %>%
   left_join(SenCand2Avg) %>%
   mutate(correct_vote = as.numeric(abs(ideo_ego - SenCand1Avg) > abs(ideo_ego - SenCand2Avg)) + 1,
          correct_vote = as.numeric(correct_vote == senate_vote))
 
+## Estimate model
 m1cv <- glm(correct_vote ~ discursive + polknow +
-              female + age + black + educ + faminc + relig, data = ces2018, family=binomial("logit"))
+              female + age + black + educ + faminc + relig,
+            data = ces2018, family=binomial("logit"))
 
+## Create figure
 bind_rows(
   plot_cap(m1cv, condition = c("discursive"), draw = F) %>%
     transmute(iv = "discursive", ivval = condition1,
               mean = predicted, cilo = conf.low, cihi = conf.high),
   plot_cap(m1cv, condition = c("polknow"), draw = F) %>%
     transmute(iv = "polknow", ivval = condition1,
-              mean = predicted, cilo = conf.low, cihi = conf.high),
-) %>%
+              mean = predicted, cilo = conf.low, cihi = conf.high)) %>%
   as_tibble() %>%
   mutate(Variable = recode_factor(iv,
                                   `discursive` = "Discursive Sophistication",
@@ -489,35 +667,13 @@ bind_rows(
   geom_ribbon(alpha=0.6, lwd=.1) + geom_line() +
   ylab("Pr(Ideological Proximity Vote)") + xlab("Value of Independent Variable") +
   scale_fill_brewer(palette = "Dark2")
-ggsave("out/app-correct_vote.pdf", width=4, height=2)
-
-stargazer(m1cv, type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
-          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
-          title="Logistic regression predicting ideological proximity-based voting for
-          US Senators in the 2018 CES. Standard errors in parentheses.
-          Estimates are used for Figure \\ref{fig:correct_vote}.",
-          column.labels = "Ideological Proximity Vote",
-          covariate.labels = c("Discursive Soph.","Factual Knowledge",
-                               "Female", "Age", "Black", "College Degree",
-                               "Household Income","Church Attendance","Constant"),
-          keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
-          out = "out/app-correct_vote.tex", label = "tab:correct_vote")
+ggsave("out/appC6-correct_vote.pdf", width=4, height=2)
 
 
-# Discursive sophistication and media consumption -------------------------
+# Figure C.7: Average trust in different news outlets as a functio --------
 
-data_immig %>%
-  select(polknow, discursive,
-         tv_fox:tv_cbs, print_nyt:print_nyp, smedia_yt:smedia_tb) %>%
-  pivot_longer(-c(polknow, discursive),
-               names_to = "source", values_to = "exposure") %>%
-  pivot_longer(-c(source, exposure),
-               names_to = "Variable", values_to = "polknow") %>%
-  ggplot(aes(x = exposure, y = polknow, col = Variable)) +
-  geom_smooth(method = "lm") +
-  facet_wrap(~source, ncol = 3, dir = "v")
-
-data_immig %>%
+## Create figure
+mturk2019 %>%
   select(polknow, discursive,
          tv_trust_fox:tv_trust_cbs, print_trust_nyt:print_trust_nyp) %>%
   pivot_longer(-c(polknow, discursive),
@@ -548,33 +704,52 @@ data_immig %>%
   theme(legend.position = "bottom") +
   facet_wrap(~Type+Source, ncol = 5, dir = "h") +
   scale_fill_brewer(palette = "Dark2")
-ggsave("out/app-media_trust.pdf", width=6.5, height=4)
+ggsave("out/appC7-media_trust.pdf", width=6.5, height=4)
 
 
+# Table C.1: Logistic regression predicting ideological proximity- --------
+
+## Create table
+stargazer(m1cv, type="text", align = TRUE, column.sep.width = "-25pt", no.space = TRUE, digits = 3,
+          model.names=FALSE, dep.var.labels.include = FALSE, star.cutoffs = c(.05,.01,.001),
+          title="Logistic regression predicting ideological proximity-based voting for
+          US Senators in the 2018 CES. Standard errors in parentheses.
+          Estimates are used for Figure \\ref{fig:correct_vote}.",
+          column.labels = "Ideological Proximity Vote",
+          covariate.labels = c("Discursive Soph.","Factual Knowledge",
+                               "Female", "Age", "Black", "College Degree",
+                               "Household Income","Church Attendance","Constant"),
+          keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
+          out = "out/appC1-correct_vote.tex", label = "tab:correct_vote")
 
 
+# Table C.2: Personality, verbal skills, and survey mode as predic --------
 
-# Discursive sophistication as a DV (reviewer request) --------------------
-
+## Estimate models
 m3rob_disc <- list(
   lm(discursive ~ extraversion + newexperience + reserved +
        wordsum + mode +
        female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2016),
+       educ_fact + faminc + relig,
+     data = anes2016, subset = !is.na(polknow)),
   lm(discursive ~ extraversion + newexperience + reserved +
        wordsum + mode + polknow +
        female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2016),
+       educ_fact + faminc + relig,
+     data = anes2016, subset = !is.na(polknow)),
   lm(discursive ~ extraversion + newexperience + reserved +
        wordsum + mode +
        female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2012),
+       educ_fact + faminc + relig,
+     data = anes2012, subset = !is.na(polknow)),
   lm(discursive ~ extraversion + newexperience + reserved +
        wordsum + mode + polknow +
        female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2012)
+       educ_fact + faminc + relig,
+     data = anes2012, subset = !is.na(polknow))
 )
 
+## Create table
 stargazer(m3rob_disc, type="text", align = TRUE, column.sep.width = "-5pt", no.space = TRUE, digits = 3,
           model.names=FALSE, star.cutoffs = c(.05,.01,.001),
           dep.var.labels = "Discursive Sophistication",
@@ -594,27 +769,36 @@ stargazer(m3rob_disc, type="text", align = TRUE, column.sep.width = "-5pt", no.s
                                "Education: Bachelor's Degree", "Education: Graduate Degree",
                                "Household Income", "Church Attendance", "Constant"),
           keep.stat = c("n", "rsq"), font.size = "footnotesize",
-          out = "out/app-determinants_rob_disc.tex", label = "tab:determinants_rob_disc")
+          out = "out/appC2-determinants_rob_disc.tex", label = "tab:determinants_rob_disc")
 
+
+# Table C.3: Personality, verbal skills, and survey mode as predic --------
+
+## Estimate models
 m3rob_fact <- list(
   lm(polknow ~ extraversion + newexperience + reserved +
        wordsum + mode +
        female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2016),
+       educ_fact + faminc + relig,
+     data = anes2016, subset = !is.na(discursive)),
   lm(polknow ~ extraversion + newexperience + reserved +
        wordsum + mode + discursive +
        female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2016),
+       educ_fact + faminc + relig,
+     data = anes2016, subset = !is.na(discursive)),
   lm(polknow ~ extraversion + newexperience + reserved +
        wordsum + mode +
        female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2012),
+       educ_fact + faminc + relig,
+     data = anes2012, subset = !is.na(discursive)),
   lm(polknow ~ extraversion + newexperience + reserved +
        wordsum + mode + discursive +
        female + age + black + pid_dem + pid_rep +
-       educ_fact + faminc + relig, data = anes2012)
+       educ_fact + faminc + relig,
+     data = anes2012, subset = !is.na(discursive))
 )
 
+## Create table
 stargazer(m3rob_fact, type="text", align = TRUE, column.sep.width = "-5pt", no.space = TRUE, digits = 3,
           model.names=FALSE, star.cutoffs = c(.05,.01,.001),
           dep.var.labels = "Factual Knowledge",
@@ -634,6 +818,4 @@ stargazer(m3rob_fact, type="text", align = TRUE, column.sep.width = "-5pt", no.s
                                "Education: Bachelor's Degree", "Education: Graduate Degree",
                                "Household Income", "Church Attendance", "Constant"),
           keep.stat = c("n", "rsq"), font.size = "footnotesize",
-          out = "out/app-determinants_rob_fact.tex", label = "tab:determinants_rob_fact")
-
-
+          out = "out/appC3-determinants_rob_fact.tex", label = "tab:determinants_rob_fact")
