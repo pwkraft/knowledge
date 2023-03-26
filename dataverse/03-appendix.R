@@ -271,7 +271,7 @@ ggplot(plot_df, aes(y = original, x = replication)) +
 ggsave("out/appC2-pretext_robustness.png", width=5, height=8.5)
 
 
-# Figure C.3: Controlling for Personality and Verbal Skills ---------------
+# Figure C.3: Controlling for personality and verbal skills ---------------
 
 ## Select dependent and independent variables
 dvs <- c("vote", "polint", "effic_int", "effic_ext")

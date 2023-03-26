@@ -1,0 +1,641 @@
+---
+title: 'Women Also Know Stuff'
+subtitle: 'Challenging the Gender Gap in Political Sophistication'
+author: 'Patrick W. Kraft^[Ramón y Cajal Fellow, Juan March Institute and Department of Social Sciences, University Carlos III of Madrid, patrickwilli.kraft@uc3m.es]'
+date: 'Survey Question Overview'
+output:
+  pdf_document:
+    number_sections: yes
+    template: null
+    fig_caption: yes
+  html_document:
+    df_print: paged
+fontsize: 11pt
+geometry: margin=1in
+linestretch: 1
+
+header-includes: 
+    \usepackage{mathpazo}
+    \usepackage{enumitem}
+    \setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+```
+
+
+# 2018 CES
+
+**[gender]** Are you...?
+
+- 1. Male
+- 2. Female
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[birthyr]** In what year were you born?
+
+- SELECT (1900 - 2010)
+
+**[race]** What racial or ethnic group best describes you?
+
+- 1. White
+- 2. Black or African-American
+- 3. Hispanic or Latino
+- 4. Asian or Asian-American
+- 5. Native American
+- 8. Middle Eastern
+- 6. Mixed Race
+- 7. Other
+- 98. *Skipped*
+- 99. *Not Asked*
+
+**[educ]** What is the highest level of education you have completed?
+
+- 1. Did not graduate from high school
+- 2. High school graduate
+- 3. Some college, but no degree (yet)
+- 4. 2-year college degree
+- 5. 4-year college degree
+- 6. Postgraduate degree (MA, MBA, MD, JD, PhD, etc.)
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[pid7]** Generally speaking, do you think of yourself as a ...?
+
+- 1. Strong Democrat
+- 2. Not very strong Democrat
+- 3. Lean Democrat
+- 4. Neither
+- 5. Lean Republican
+- 6. Not very strong Republican
+- 7. Strong Republican
+- 8. Not sure
+- 9. Don't know
+- 98. *Skipped*
+- 99. *Not Asked*
+
+**[faminc_new]** Thinking back over the last year, what was your family's annual income?
+
+- 1. Less than \$10,000
+- 2. \$10,000 - \$19,999
+- 3. \$20,000 - \$29,999
+- 4. \$30,000 - \$39,999
+- 5. \$40,000 - \$49,999
+- 6. \$50,000 - \$59,999
+- 7. \$60,000 - \$69,999
+- 8. \$70,000 - \$79,999
+- 9. \$80,000 - \$99,999
+- 10. \$100,000 - \$119,999
+- 11. \$120,000 - \$149,999
+- 12. \$150,000 - \$199,999
+- 13. \$200,000 - \$249,999
+- 14. \$250,000 - \$349,999
+- 15. \$350,000 - \$499,999
+- 16. \$500,000 or more
+- 97. Prefer not to say
+- 98. *Skipped*
+- 99. *Not Asked*
+
+**[pew_churatd]** Aside from weddings and funerals, how often do you attend religious services?
+
+- 1. More than once a week
+- 2. Once a week
+- 3. Once or twice a month
+- 4. A few times a year
+- 5. Seldom
+- 6. Never
+- 7. Don't know
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[CC18_350]** Do you intend to vote in the 2018 midterm election on November 6?
+
+- 1. Yes, definitely
+- 2. Probably
+- 3. I already voted (early or absentee)
+- 4. I plan to vote before November 6th
+- 5. No
+- 6. Undecided
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[UWM329]** How often do you pay attention to what's going on in government and politics?
+
+- 1.	Always
+- 2.	Most of the time
+- 3.	About half the time
+- 4.	Some of the time
+- 5.	Never
+
+**[GRID]** Please tell me how strongly you agree or disagree with each of the following statements.
+
+- **[UWM330]** Sometimes, politics and government seem so complicated that a person like me can't really understand what's going on.
+- **[UWM331]** I feel that I have a pretty good understanding of the important political issues facing our country.
+- **[UWM332]** Public officials don't care much what people like me think.
+- **[UWM333]** People like me don't have any say about what the government does.
+
+1.	Agree strongly
+2.	Agree somewhat
+3.	Neither agree nor disagree
+4.	Disagree somewhat
+5.	Disagree strongly
+
+**[UWM311]** Taking your best guess, which of the following statements regarding assault weapons legislation in the United States is most accurate? Purchasing assault weapons...
+
+- 1.	...is currently legal and has never been banned in the past.
+- 2.	...is currently legal but has been banned in the past.
+- 3.	...is currently banned but has been legal in the past.
+- 4.	...is currently banned and has never been legal in the past.
+- 5.	*Don't know.*
+
+**[UWM314]** To the best of your knowledge, does the Planned Parenthood receive federal funding (e.g., through Medicaid reimbursements) to perform abortions?
+
+- 1.	Yes, for all abortions that are legal under federal law.
+- 2. 	Yes, but only if pregnancies endanger the woman's life, or when the pregnancy results from rape or incest.
+- 3. 	Yes, but only if pregnancies endanger the woman's life.
+- 4. 	No, federal funding has been blocked for all abortion services.
+- 5.	*Don't know.*
+
+**[UWM317]** Taking your best guess, which of the following is NOT a basic requirement that applicants must meet to qualify for DACA (meeting them does not automatically guarantee approval)? 
+
+- 1.	Came to the United States before their 16th birthday
+- 2.	Have lived continuously in the United States since June 15, 2007
+- 3.	Were under age 31 on June 15, 2012 (born on June 16, 1981 or after)
+- 4.	Had a lawful status on June 15, 2012
+- 5.	*Don't know.*
+
+**[UWM320]** Do you happen to know which of the following is NOT a provision of the Affordable Care Act enacted in 2010?
+
+- 1.	All Americans are required to obtain health insurance (individual mandate).
+- 2.	Insurers are not allowed to deny coverage for pre-existing conditions.
+- 3.	Children are permitted to remain under their parent's insurance until their 28th birthday.
+- 4.	Insurers are required to cover essential health benefits like emergency services and hospitalization.
+- 5.	*Don't know.*
+
+**[UWM323]** Which of the following statements is most accurate regarding the most recent (2017) trade balance in goods and services between the United States and Canada?
+
+- 1.	The United States has a trade surplus with Canada.
+- 2.	The United States has a trade deficit with Canada.
+- 3.	Trade between the United States and Canada is balanced.
+- 4.	*Don't know.*
+
+**[UWM309, UWM310]** On the issue of gun legislation, please outline the main arguments that come to mind in favor and against background checks for all gun sales, including at gun shows and over the Internet.
+
+- TEXT BOX 1
+- TEXT BOX 2
+
+**[UWM312, UWM313]** On the issue of abortion, please outline the main arguments that come to mind in favor and against banning abortions after the 20th week of pregnancy.
+
+- TEXT BOX 1
+- TEXT BOX 2
+
+**[UWM315, UWM316]** On the issue of immigration, please outline the main arguments that come to mind in favor and against providing a legal status for recipients of the Deferred Action for Childhood Arrivals (DACA) status.
+
+- TEXT BOX 1
+- TEXT BOX 2
+
+**[UWM318, UWM319]** On the issue of health care, please outline the main arguments that come to mind in favor and against repealing the Affordable Care Act (Obamacare).
+
+- TEXT BOX 1
+- TEXT BOX 2
+
+**[UWM321, UWM322]** On the issue of trade policies, please outline the main arguments that come to mind in favor and against imposing tariffs on imported steel and aluminum from countries including Canada, Europe, and Mexico.
+
+- TEXT BOX 1
+- TEXT BOX 2
+
+**[GRID]** How would you rate each of the following individuals and groups?
+
+- **[CC18_334A]** Yourself
+- **[CC18_334C]** Donald Trump
+- **[CC18_334D]** The Democratic Party
+- **[CC18_334E]** The Republican Party
+- **[CC18_334F]** The United States Supreme Court
+- **[CC18_334I]** \$SenCand1Name
+- **[CC18_334J]** \$SenCand2Name
+
+1. Very Liberal
+2. Liberal
+3. Somewhat Liberal
+4. Middle of the Road
+5. Somewhat Conservative
+6. Conservative
+7. Very Conservative
+8. Not sure
+8. *Skipped*
+9. *Not Asked*
+
+**[GRID]** We hear a lot of talk these days about liberals and conservatives. Here is a seven-point scale on which the political views that people might hold are arranged from extremely liberal to extremely conservative. Where would you place the following politicians on this scale?
+
+- **[UWM401]**	Elizabeth Warren
+- **[UWM402]**	Paul Ryan
+- **[UWM403]**	Mitch McConnell
+- **[UWM404]**	Chuck Schumer
+- **[UWM405]**	Nancy Pelosi
+- **[UWM406]**	Lisa Murkowski
+- **[UWM407]**	Susan Collins
+- **[UWM408]**	Dianne Feinstein
+- **[UWM409]**	Cory Booker
+- **[UWM410]**	Nikki Haley
+
+1.	Very liberal
+2.	Liberal
+3.	Somewhat liberal
+4.	Middle of the road
+5.	Somewhat conservative
+6.	Conservative
+7.	Very conservative
+8.	Not Sure
+
+**[CC18_351]** In the race for U.S. Senator in your state, who do you prefer?
+
+- 1. \$SenCand1Name (\$SenCand1Party)
+- 2. \$SenCand2Name (\$SenCand2Party)
+- 3. \$SenCand3Name (\$SenCand3Party)
+- 7. Other
+- 8. I'm not sure
+- 9. No one
+- 98. *Skipped*
+- 99. *Not Asked*
+
+**[CC18_351x]** For whom did you vote for U.S. Senator?
+
+- 1. \$SenCand1Name (\$SenCand1Party)
+- 2. \$SenCand2Name (\$SenCand2Party)
+- 3. \$SenCand3Name (\$SenCand3Party)
+- 4. Other
+- 5. I did not vote in this race
+- 6. I did not vote
+- 7. Not sure
+- 98. *Skipped*
+- 99. *Not Asked*
+
+
+# 2020 ANES
+
+Complete survey questionnaire can be found here:\newline https://electionstudies.org/data-center/2020-time-series-study/
+
+# 2016 ANES
+
+Complete survey questionnaire can be found here:\newline https://electionstudies.org/data-center/2016-time-series-study/
+
+# 2012 ANES
+
+Complete survey questionnaire can be found here:\newline https://electionstudies.org/data-center/2012-time-series-study/
+
+# 2015 YouGov
+
+**[gender]** Are you...?
+
+- 1. Male
+- 2. Female
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[birthyr]** In what year were you born?
+
+- SELECT (1900 - 2010)
+
+**[race]** What racial or ethnic group best describes you?
+
+- 1. White
+- 2. Black
+- 3. Hispanic
+- 4. Asian
+- 5. Native American
+- 8. Middle Eastern
+- 6. Mixed
+- 7. Other
+- 98. *Skipped*
+- 99. *Not Asked*
+
+**[educ]** What is the highest level of education you have completed?
+
+- 1. Did not graduate from high school
+- 2. High school graduate
+- 3. Some college, but no degree (yet)
+- 4. 2-year college degree
+- 5. 4-year college degree
+- 6. Postgraduate degree (MA, MBA, MD, JD, PhD, etc.)
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[pid7]** Generally speaking, do you think of yourself as a ...?
+
+- 1. Strong Democrat
+- 2. Not very strong Democrat
+- 3. Lean Democrat
+- 4. Neither
+- 5. Lean Republican
+- 6. Not very strong Republican
+- 7. Strong Republican
+- 8. Not sure
+- 9. Don't know
+- 98. *Skipped*
+- 99. *Not Asked*
+
+**[faminc_new]** Thinking back over the last year, what was your family's annual income?
+
+- 1. Less than \$10,000
+- 2. \$10,000 - \$19,999
+- 3. \$20,000 - \$29,999
+- 4. \$30,000 - \$39,999
+- 5. \$40,000 - \$49,999
+- 6. \$50,000 - \$59,999
+- 7. \$60,000 - \$69,999
+- 8. \$70,000 - \$79,999
+- 9. \$80,000 - \$99,999
+- 10. \$100,000 - \$119,999
+- 11. \$120,000 - \$149,999
+- 12. \$150,000 - \$199,999
+- 13. \$200,000 - \$249,999
+- 14. \$250,000 - \$349,999
+- 15. \$350,000 - \$499,999
+- 16. \$500,000 or more
+- 97. Prefer not to say
+- 98. *Skipped*
+- 99. *Not Asked*
+
+**[pew_churatd]** Aside from weddings and funerals, how often do you attend religious services?
+
+- 1. More than once a week
+- 2. Once a week
+- 3. Once or twice a month
+- 4. A few times a year
+- 5. Seldom
+- 6. Never
+- 7. Don't know
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[Q24]** Do you happen to know the name of the current Speaker of the U.S. House of Representatives? Is it...
+
+- 1. John Boehner
+- 2. Kevin McCarthy
+- 3. Paul Ryan
+- 4. Mitch McConnell
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[Q25]** The U.S. and 11 Pacific Rim nations recently reached an agreement that would...
+
+- 1. Open up free trade between these nations
+- 2. Increase immigration between these nations
+- 3. Improve the quality of water in the Pacific Ocean
+- 4. Reduce the emission of greenhouse gases
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[Q26]** What is the name of the Chair of the Federal Reserve Board? 
+
+- 1. Janet Yellen
+- 2. Ben Bernanke
+- 3. Kirsten Gillibrand
+- 4. Elizabeth Warren
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[Q27]** What is the current unemployment rate in this country?  Is it closer to...
+
+- 1. 2%
+- 2. 5%
+- 3. 10%
+- 4. 15%
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[Q28]** How much of a majority is required for the U.S. Senate and U.S. House to override a presidential veto?
+
+- 1. One-half
+- 2. Two-thirds
+- 3. Three-fourths
+- 4. Three-fifths
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[Q29]** What does the term "Common Core" refer to? 
+
+- 1. School curriculum standards for language and math
+- 2. The military's code of conduct
+- 3. A set of nutrition standards for school lunches
+- 4. A plan to mandate English as the official language
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[Q30]** What is the leading source of electricity in the United States? Is it...
+
+- 1. Renewable energy sources (wind, solar)
+- 2. Coal
+- 3. Natural Gas
+- 4. Nuclear power
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[Q31]** Which party has the most seats in the U.S. Senate? Is it the...
+
+- 1. Republican Party
+- 2. Democratic Party
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[Q1]** Do you favor or oppose stricter gun control laws? 
+
+- 1. Favor
+- 2. Oppose
+- 3. Unsure
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[Q2]** Still thinking about the question you just answered, what thoughts came to mind while you were answering that question? Please try to list everything that came to mind.
+
+- TEXT BOX
+
+**[Q3]** Thinking about the mass shootings that have occurred in the U.S. in the last few years, what factors do you think are responsible for the shootings?
+
+- TEXT BOX
+
+**[Q4]** Do you support or oppose the health care law passed by the President and Congress in 2010?
+
+- 1. Support
+- 2. Oppose
+- 3. Unsure
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[Q5]** Still thinking about the question you just answered, what thoughts came to mind while you were answering that question? Please try to list everything that came to mind.
+
+- TEXT BOX
+
+**[Q6]** For decades, experts have observed that the United States spends far more per person on health care than any other country. However, the U.S. falls behind on most measures of health care outcomes, such as life expectancy. What factors do you think are responsible for the state of our health care system?
+
+- TEXT BOX
+
+**[GRID]** What are the symptoms of Tugela River Virus? Check all that apply. [Randomize order.]
+
+- **[Q12_1]** Fatigue
+- **[Q12_2]** Headaches
+- **[Q12_3]** Diarrhea
+- **[Q12_4]** Joint pain
+- **[Q12_5]** Boils
+- **[Q12_6]** Warts
+- **[Q12_7]** Fever
+
+1. Yes
+2. No
+8. *Skipped*
+9. *Not Asked*
+
+**[Q13]** How is Tugela River Virus spread? [Randomize order.]
+
+- 1. Person-to-person contact
+- 2. The air
+- 3. Animals
+- 4. Insects
+- 5. Food
+- 8. *Skipped*
+- 9. *Not Asked*
+
+**[Q14]** Is there currently a cure for Tugela River Virus?
+
+- 1. Yes
+- 2. No
+- 8. *Skipped*
+- 9. *Not Asked*
+
+
+# 2019 MTurk Study
+
+**[gender]** Do you consider yourself Male, Female, or other?
+
+- 1. Male
+- 2. Female
+- 3. Other
+
+**[age]** What is your age?
+
+- TEXT BOX
+
+**[race]** What racial or ethnic group best describes you?
+
+- 1. Asian/Pacific Islanders
+- 2. Black or African-American (non-Hispanic)
+- 3. Caucasian/White (non-Hispanic)
+- 4. Hispanic or Latino
+- 5. Middle eastern
+- 6. Native American or Aleut
+- 7. Other
+
+**[educ]** What is the highest level of education that you have completed?
+
+- 1. Less than a high school diploma
+- 2. Graduated high school or GED
+- 3. Some college but no college degree
+- 4. Graduated 2-year college
+- 5. Graduated 4-year college
+- 6. Completed post-graduate or professional school, with degree
+- 7. Don't know
+
+**[pid]** Generally speaking, do you think of yourself as a Republican, a Democrat, an independent, or other?
+
+- 1. Republican
+- 2. Democrat
+- 3. Independent
+- 4. Other
+
+**[pid_lean]** (if [pid] == other | independent) Do you think of yourself as CLOSER to the Republican party or to the Democratic party?
+
+- 1. Republican party
+- 2. Democratic party
+- 3. Neither party
+
+**[pid_rep/pid_dem]** (if [pid] == Republican | Democrat) Would you consider yourself a strong Republican/Democrat or a not very strong Republican/Democrat?
+
+- 1. Strong
+- 2. Not very strong
+
+**[income]** Thinking back over the last year, what was your family's annual income?
+
+- 1. Less than \$20,000
+- 2. \$20,000 - \$39,999
+- 3. \$40,000 - \$59,999
+- 4. \$60,000 - \$79,999
+- 5. \$80,000 - \$99,999
+- 6. \$100,000 - \$119,999
+- 7. \$120,000 or more
+- 8. Prefer not to say
+
+**[church]** Not counting weddings and funerals, how often do you attend religious services?
+
+- 1. Never
+- 2. Less than once a year
+- 3. Once a year
+- 4. Several times a year
+- 5. Once a month
+- 6. Two to three times a month
+- 7. Nearly every week
+- 8. Every week
+- 9. More than once per week
+
+**[employ]** Across the United States, how many workers -- immigrant and US-born -- do you think are employed by immigrant-owned businesses?
+
+- 1. Less than 500,000
+- 2. 500,000 - 1 million
+- 3. 1 million - 5 million
+- 4. 5 million - 10 million
+- 5. More than 10 million
+
+**[sales]** Taking your best guess, what was the total amount of sales revenue of immigrant-owned businesses in the last year?
+
+- 1. Less than $500 billion
+- 2. \$500 billion - \$1 trillion
+- 3. \$1 trillion - \$1.5 trillion
+- 4. \$1.5 trillion - \$2 trillion
+- 5. More than \$2 trillion
+
+**[taxes]** Most people who come to live in the U.S. work and pay taxes.  They also use health and social services.  On balance, do you think people who come here take out more than they put in or put in more than they take out?
+
+- 0 (Generally take out more) - 10 (Generally put in more)
+
+**[taxes_oe]** Please explain your answer to the previous question in a few short sentences.
+
+- TEXT BOX
+
+**[jobs]** On average, would you say that people who come to live here from other countries will take jobs away from people already here or add to the economy by creating additional jobs?
+
+- 0 (Take jobs away) - 10 (Create additional jobs)
+
+**[jobs_oe]** Please explain your answer to the previous question in a few short sentences.
+
+- TEXT BOX
+
+**[GRID]** *(show same response options for each, randomize order)* Overall, how often can you trust the following TV channels that their political news reporting is accurate?
+
+- **[tv_trust_1]** Fox News
+- **[tv_trust_2]** MSNBC
+- **[tv_trust_3]** CNN
+- **[tv_trust_4]** NBC
+- **[tv_trust_5]** CBS
+
+1. Always
+2. Most of the time
+3. About half the time
+4. Sometimes
+5. Never
+6. Don't Know
+
+**[GRID]** *(show same response options for each, randomize order)* And how often can you trust the following newspapers that their political reporting is accurate?
+
+- **[print_trust_1]** New York Times
+- **[print_trust_2]** Washington Post
+- **[print_trust_3]** Wall Street Journal
+- **[print_trust_4]** USA Today
+- **[print_trust_5]** New York Post
+
+1. Always
+2. Most of the time
+3. About half the time
+4. Sometimes
+5. Never
+6. Don't Know
