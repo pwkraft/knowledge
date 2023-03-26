@@ -70,7 +70,7 @@ bind_rows(
   geom_bar(stat="identity", fill="grey") + geom_errorbar(width=.1) +
   facet_wrap(~study, ncol = 3) + ylab("Average Values") + xlab(NULL) +
   guides(fill="none") + scale_fill_brewer(palette="Paired")
-ggsave("out/app-noresponse.png", width = 6, height = 2.5)
+ggsave("out/appB2-noresponse.png", width = 6, height = 2.5)
 
 
 # Figure B.3: Estimated topic proportions based on the structural  --------
