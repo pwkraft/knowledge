@@ -1,0 +1,552 @@
+% Encoding: UTF-8
+
+@Article{clifford2016cheating,
+  author  = {Clifford, Scott and Jerit, Jennifer},
+  journal = {Public Opinion Quarterly},
+  title   = {Cheating on Political Knowledge Questions in Online Surveys: An Assessment of the Problem and Solutions},
+  year    = {2016},
+  number  = {4},
+  pages   = {858--887},
+  volume  = {80},
+}
+
+@Article{clifford2018disgust,
+  author    = {Scott Clifford and Jennifer Jerit},
+  journal   = {American Journal of Political Science},
+  title     = {Disgust, Anxiety, and Political Learning in the Face of Threat},
+  year      = {2018},
+  number    = {2},
+  pages     = {266--279},
+  volume    = {62},
+  publisher = {Wiley Online Library},
+}
+
+@Article{abrajano2014reexamining,
+  author    = {Abrajano, Marisa},
+  journal   = {The Journal of Politics},
+  title     = {Reexamining the “Racial Gap” in Political Knowledge},
+  year      = {2014},
+  number    = {1},
+  pages     = {44--54},
+  volume    = {77},
+  publisher = {University of Chicago Press Chicago, IL},
+}
+
+@Misc{anes2021timeseries,
+  author = {{American National Election Studies}},
+  title  = {ANES 2012 Time Series Study Full Release [dataset and documentation].},
+  year   = {2012},
+  groups = {4 - Datasets & Packages},
+  url    = {https://www.electionstudies.org},
+}
+
+@Misc{anes2021timeseries,
+  author = {{American National Election Studies}},
+  title  = {ANES 2016 Time Series Study Full Release [dataset and documentation].},
+  year   = {2016},
+  groups = {4 - Datasets & Packages},
+  url    = {https://www.electionstudies.org},
+}
+
+@Data{ces2018common,
+  author    = {Brian Schaffner and Stephen Ansolabehere and Sam Luks},
+  doi       = {10.7910/DVN/ZSBZ7K},
+  groups    = {4 - Datasets & Packages},
+  publisher = {Harvard Dataverse},
+  title     = {{CCES Common Content, 2018}},
+  unf       = {UNF:6:hFVU8vQ/SLTMUXPgmUw3JQ==},
+  url       = {https://doi.org/10.7910/DVN/ZSBZ7K},
+  version   = {V6},
+  year      = {2019},
+}
+
+@Misc{anes2021timeseries,
+  author = {{American National Election Studies}},
+  note   = {July 19, 2021 version.},
+  title  = {ANES 2020 Time Series Study Full Release [dataset and documentation].},
+  year   = {2021},
+  groups = {4 - Datasets & Packages},
+  url    = {https://www.electionstudies.org},
+}
+
+@Article{althaus1998information,
+  author  = {Althaus, Scott L.},
+  journal = {American Political Science Review},
+  title   = {Information effects in collective preferences},
+  year    = {1998},
+  number  = {3},
+  pages   = {545--558},
+  volume  = {92},
+}
+
+@Article{barabas2014question,
+  author    = {Barabas, Jason and Jennifer Jerit and William Pollock and Carlisle Rainey},
+  journal   = {American Political Science Review},
+  title     = {The Question(s) of Political Knowledge},
+  year      = {2014},
+  number    = {4},
+  pages     = {840--855},
+  volume    = {108},
+  publisher = {Cambridge Univ Press},
+}
+
+@Article{bartels2005homer,
+  author    = {Bartels, Larry M},
+  journal   = {Perspectives on Politics},
+  title     = {Homer gets a tax cut: Inequality and public policy in the American mind},
+  year      = {2005},
+  number    = {1},
+  pages     = {15--31},
+  volume    = {3},
+  publisher = {Cambridge University Press},
+}
+
+@Article{benoit2019measuring,
+  author    = {Benoit, Kenneth and Munger, Kevin and Spirling, Arthur},
+  journal   = {American Journal of Political Science},
+  title     = {Measuring and explaining political sophistication through textual complexity},
+  year      = {2019},
+  number    = {2},
+  pages     = {491--508},
+  volume    = {63},
+  publisher = {Wiley Online Library},
+}
+
+@Article{bernhard2020more,
+  author    = {Bernhard, Rachel and Freeder, Sean},
+  journal   = {Political Behavior},
+  title     = {The more you know: Voter heuristics and the information search},
+  year      = {2020},
+  number    = {2},
+  pages     = {603--623},
+  volume    = {42},
+  publisher = {Springer},
+}
+
+@Article{bos2022one,
+  author    = {Bos, Angela L and Greenlee, Jill S and Holman, Mirya R and Oxley, Zoe M and Lay, J Celeste},
+  journal   = {American Political Science Review},
+  title     = {This One’s for the Boys: How Gendered Political Socialization Limits Girls’ Political Ambition and Interest},
+  year      = {2022},
+  number    = {2},
+  pages     = {484--501},
+  volume    = {116},
+  publisher = {Cambridge University Press},
+}
+
+@Article{bullock2022response,
+  author    = {Bullock, John G. and Rader, Kelly},
+  journal   = {British Journal of Political Science},
+  title     = {Response Options and the Measurement of Political Knowledge},
+  year      = {2022},
+  number    = {3},
+  pages     = {1418--1427},
+  volume    = {52},
+  publisher = {Cambridge University Press},
+}
+
+@Article{burnett2018political,
+  author    = {Burnett, Craig M and McCubbins, Mathew D},
+  journal   = {Political Science Research and Methods},
+  title     = {Is political knowledge unique?},
+  year      = {2018},
+  number    = {1},
+  pages     = {188--195},
+  volume    = {8},
+  publisher = {Cambridge University Press},
+}
+
+@Article{colombo2016justifications,
+  author    = {Colombo, C{\'e}line},
+  journal   = {British Journal of Political Science},
+  title     = {Justifications and Citizen Competence in Direct Democracy: A Multilevel Analysis},
+  year      = {2018},
+  number    = {3},
+  pages     = {787--806},
+  volume    = {48},
+  publisher = {Cambridge Univ Press},
+}
+
+@InCollection{converse1964nature,
+  author    = {Converse, Philip E.},
+  booktitle = {Ideology and Discontent},
+  publisher = {New York: Free Press},
+  title     = {The Nature of Belief Systems in Mass Publics},
+  year      = {1964},
+  editor    = {David E. Apter},
+  pages     = {206--261},
+}
+
+@Article{cramer2017fact,
+  author    = {Cramer, Katherine J and Toff, Benjamin},
+  journal   = {Perspectives on Politics},
+  title     = {The Fact of Experience: Rethinking Political Knowledge and Civic Competence},
+  year      = {2017},
+  number    = {3},
+  pages     = {754--770},
+  volume    = {15},
+  publisher = {Cambridge University Press},
+}
+@article{dancey2013heuristics,
+  title={Heuristics behaving badly: Party cues and voter knowledge},
+  author={Dancey, Logan and Sheagley, Geoffrey},
+  journal={American Journal of Political Science},
+  volume={57},
+  number={2},
+  pages={312--325},
+  year={2013},
+  publisher={Wiley Online Library}
+}
+@Article{dassonneville2020women,
+  author  = {Dassonneville, Ruth and Nugent, Mary and Hooghe, Marc and Lau, Richard R},
+  journal = {Journal of Politics},
+  title   = {Do Women Vote Less Correctly? The Effect of Gender on Ideological Proximity Voting and Correct Voting},
+  year    = {2020},
+  number  = {3},
+  pages   = {1156--1160},
+  volume  = {82},
+}
+
+@Article{debell2013harder,
+  author  = {DeBell, Matthew},
+  journal = {Political Analysis},
+  title   = {Harder than it looks: Coding political knowledge on the ANES},
+  year    = {2013},
+  number  = {4},
+  pages   = {393--406},
+  volume  = {21},
+}
+
+@Article{carpini1993measuring,
+  author  = {Delli Carpini, Michael X and Keeter, Scott},
+  journal = {American Journal of Political Science},
+  title   = {Measuring political knowledge: Putting first things first},
+  year    = {1993},
+  number  = {4},
+  pages   = {1179--1206},
+  volume  = {37},
+}
+
+@Book{carpini1996americans,
+  author    = {Delli Carpini, Michael X. and Keeter, Scott},
+  publisher = {New Haven, London: Yale University Press},
+  title     = {What Americans Know about Politics and Why It Matters},
+  year      = {1996},
+}
+
+@Article{denny2018text,
+  author  = {Matthew J. Denny and Arthur Spirling},
+  journal = {Political Analysis},
+  title   = {Text Preprocessing For Unsupervised Learning: Why It Matters, When It Misleads, And What To Do About It},
+  year    = {2018},
+  number  = {2},
+  pages   = {168--189},
+  volume  = {26},
+}
+
+@Article{dolan2011women,
+  author    = {Dolan, Kathleen},
+  journal   = {The Journal of Politics},
+  title     = {Do women and men know different things? Measuring gender differences in political knowledge},
+  year      = {2011},
+  number    = {01},
+  pages     = {97--107},
+  volume    = {73},
+  publisher = {Cambridge Univ Press},
+}
+
+@Article{dow2009gender,
+  author    = {Dow, Jay K},
+  journal   = {Political Behavior},
+  title     = {Gender differences in political knowledge: Distinguishing characteristics-based and returns-based differences},
+  year      = {2009},
+  number    = {1},
+  pages     = {117--136},
+  volume    = {31},
+  publisher = {Springer},
+}
+
+@Article{druckman2014pathologies,
+  author    = {Druckman, James N},
+  journal   = {Political Communication},
+  title     = {Pathologies of studying public opinion, political communication, and democratic responsiveness},
+  year      = {2014},
+  number    = {3},
+  pages     = {467--492},
+  volume    = {31},
+  publisher = {Routledge},
+}
+
+@Article{ferrin2017gender,
+  author    = {Ferr{\'\i}n, M{\'o}nica and Fraile, Marta and Garc{\'\i}a-Albacete, Gema},
+  journal   = {International Journal of Public Opinion Research},
+  title     = {The Gender Gap in Political Knowledge: Is It All about Guessing? An Experimental Approach},
+  year      = {2017},
+  number    = {1},
+  pages     = {111--132},
+  volume    = {29},
+  publisher = {Oxford University Press},
+}
+
+@Article{ferrin2018simply,
+  author    = {Ferr{\'\i}n, Monica and Fraile, Marta and Garc{\'\i}a-Albacete, Gema},
+  journal   = {Politics \& Gender},
+  title     = {Is It Simply Gender? Content, Format, and Time in Political Knowledge Measures},
+  year      = {2018},
+  number    = {2},
+  pages     = {162–185},
+  volume    = {14},
+  publisher = {Cambridge University Press},
+}
+
+@Article{ferrin2020gender,
+  author    = {Ferr{\'\i}n, Monica and Fraile, Marta and Garc{\'\i}a-Albacete, Gema M and G{\'o}mez, Raul},
+  journal   = {International Political Science Review},
+  title     = {The gender gap in political interest revisited},
+  year      = {2020},
+  number    = {4},
+  pages     = {473--489},
+  volume    = {41},
+  publisher = {Sage Publications Sage UK: London, England},
+}
+
+@Article{fortin2016cross,
+  author    = {Fortin-Rittberger, Jessica},
+  journal   = {Political Research Quarterly},
+  title     = {Cross-National Gender Gaps in Political Knowledge How Much Is Due to Context?},
+  year      = {2016},
+  number    = {3},
+  pages     = {391--402},
+  volume    = {69},
+  publisher = {SAGE Publications},
+}
+
+@Article{fortin2020political,
+  author    = {Fortin-Rittberger, Jessica},
+  journal   = {International Journal of Public Opinion Research},
+  title     = {Political knowledge: Assessing the stability of gender gaps cross-nationally},
+  year      = {2020},
+  number    = {1},
+  pages     = {46--65},
+  volume    = {32},
+  publisher = {Oxford University Press},
+}
+
+@Article{fraile2014women,
+  author    = {Fraile, Marta},
+  journal   = {Social Politics: International Studies in Gender, State \& Society},
+  title     = {Do women know less about politics than men? The gender gap in political knowledge in Europe},
+  year      = {2014},
+  number    = {2},
+  pages     = {261--289},
+  volume    = {21},
+  publisher = {Oxford Univ Press},
+}
+
+@Article{fraile2014does,
+  author    = {Fraile, Marta},
+  journal   = {European Union Politics},
+  title     = {Does deliberation contribute to decreasing the gender gap in knowledge?},
+  year      = {2014},
+  number    = {3},
+  pages     = {372--388},
+  volume    = {15},
+  publisher = {Sage Publications},
+}
+
+@Article{fraile2020unpacking,
+  author    = {Fraile, Marta and Fortin-Rittberger, Jessica},
+  journal   = {Social Science Quarterly},
+  title     = {Unpacking gender, age, and education knowledge inequalities: A systematic comparison},
+  year      = {2020},
+  number    = {4},
+  pages     = {1653--1669},
+  volume    = {101},
+  publisher = {Wiley Online Library},
+}
+
+@Article{gibson2009knowing,
+  author    = {Gibson, James L and Caldeira, Gregory A},
+  journal   = {The Journal of Politics},
+  title     = {Knowing the Supreme Court? A reconsideration of public ignorance of the high court},
+  year      = {2009},
+  number    = {02},
+  pages     = {429--441},
+  volume    = {71},
+  publisher = {Cambridge Univ Press},
+}
+
+@Article{gilens2001political,
+  author  = {Gilens, Martin},
+  journal = {American Political Science Review},
+  title   = {Political ignorance and collective policy preferences},
+  year    = {2001},
+  number  = {2},
+  pages   = {379--396},
+  volume  = {95},
+}
+
+@Article{gomez2001political,
+  author  = {Gomez, B.T. and Wilson, J.M.},
+  journal = {American Journal of Political Science},
+  title   = {Political sophistication and economic voting in the American electorate: A theory of heterogeneous attribution},
+  year    = {2001},
+  number  = {4},
+  pages   = {899--914},
+  volume  = {45},
+}
+
+@Book{graber2001processing,
+  author    = {Graber, Doris A},
+  publisher = {University of Chicago Press},
+  title     = {Processing politics: Learning from television in the Internet age},
+  year      = {2001},
+}
+
+@Article{hohne2020looking,
+  author    = {H{\"o}hne, Jan Karem and Cornesse, Carina and Schlosser, Stephan and Couper, Mick P and Blom, Annelies G},
+  journal   = {Public Opinion Quarterly},
+  title     = {Looking up answers to political knowledge questions in web surveys},
+  year      = {2020},
+  number    = {4},
+  pages     = {986--999},
+  volume    = {84},
+  publisher = {Oxford University Press},
+}
+
+@Article{jerit2017revisiting,
+  author  = {Jerit, Jennifer and Jason Barabas},
+  journal = {Political Behavior},
+  title   = {Revisiting the Gender Gap in Political Knowledge},
+  year    = {2017},
+  number  = {4},
+  pages   = {817--838},
+  volume  = {39},
+}
+
+@Article{kraft2018measuring,
+  author  = {Kraft, Patrick W},
+  journal = {The Journal of Politics},
+  title   = {Measuring Morality in Political Attitude Expression},
+  year    = {2018},
+  number  = {3},
+  pages   = {1028--1033},
+  volume  = {80},
+}
+
+@Article{kraft2023asking,
+  author  = {Patrick W Kraft and Kathleen Dolan},
+  journal = {Political Research Quarterly},
+  title   = {Asking the Right Questions: A Framework for Developing Gender-Balanced Political Knowledge Batteries},
+  year    = {2023},
+  number  = {1},
+  pages   = {393--406},
+  volume  = {76},
+}
+
+@Article{kraft2023glass,
+  author    = {Kraft, Patrick W and Dolan, Kathleen},
+  journal   = {Journal of Women, Politics \& Policy},
+  title     = {Glass Half Full or Half Empty: Does Optimism about Women’s Representation in Elected Office Matter?},
+  year      = {2023},
+  pages     = {1--13},
+  volume    = {forthcoming},
+  publisher = {Taylor \& Francis},
+}
+
+@TechReport{krosnick2008problems,
+  author      = {Krosnick, Jon A and Lupia, Arthur and DeBell, Matthew and Donakowski, Darrell},
+  institution = {Ann Arbor, MI: American National Election Studies Report},
+  title       = {Problems with ANES questions measuring political knowledge},
+  year        = {2008},
+}
+
+@Article{kuklinski2000misinformation,
+  author    = {Kuklinski, James H and Quirk, Paul J and Jerit, Jennifer and Schwieder, David and Rich, Robert F},
+  journal   = {Journal of Politics},
+  title     = {Misinformation and the currency of democratic citizenship},
+  year      = {2000},
+  number    = {3},
+  pages     = {790--816},
+  volume    = {62},
+  publisher = {Wiley Online Library},
+}
+
+@Article{lau2008exploration,
+  author    = {Lau, Richard R and Andersen, David J and Redlawsk, David P},
+  journal   = {American Journal of Political Science},
+  title     = {An exploration of correct voting in recent US presidential elections},
+  year      = {2008},
+  number    = {2},
+  pages     = {395--411},
+  volume    = {52},
+  publisher = {Wiley Online Library},
+}
+
+@Article{lau2001advantages,
+  author  = {Lau, Richard R. and Redlawsk, David P.},
+  journal = {American Journal of Political Science},
+  title   = {Advantages and Disadvantages of Cognitive Heuristics in Political Decision Making},
+  year    = {2001},
+  number  = {4},
+  pages   = {951-971},
+  volume  = {45},
+}
+
+@Article{lizotte2009explaining,
+  author    = {Lizotte, Mary-Kate and Sidman, Andrew H},
+  journal   = {Politics \& Gender},
+  title     = {Explaining the gender gap in political knowledge},
+  year      = {2009},
+  number    = {2},
+  pages     = {127--151},
+  volume    = {5},
+  publisher = {Cambridge Univ Press},
+}
+
+@Book{lodge2013rationalizing,
+  author    = {Lodge, Milton and Taber, Charles S},
+  publisher = {Cambridge University Press},
+  title     = {The Rationalizing Voter},
+  year      = {2013},
+}
+
+@Article{lupia1994shortcuts,
+  author  = {Lupia, Arthur},
+  journal = {American Political Science Review},
+  title   = {Shortcuts Versus Encyclopedias: Information and Voting Behavior in California Insurance Reform Elections},
+  year    = {1994},
+  number  = {1},
+  pages   = {63-76},
+  volume  = {88},
+}
+
+@Article{lupia2006elitism,
+  author    = {Lupia, Arthur},
+  journal   = {Critical Review},
+  title     = {How elitism undermines the study of voter competence},
+  year      = {2006},
+  number    = {1-3},
+  pages     = {217--232},
+  volume    = {18},
+  publisher = {Taylor \& Francis},
+}
+
+@Book{lupia2015uninformed,
+  author    = {Lupia, Arthur},
+  publisher = {Oxford University Press},
+  title     = {Uninformed: Why people seem to know so little about politics and what we can do about it},
+  year      = {2015},
+}
+
+@Article{luskin1987measuring,
+  author  = {Luskin, Robert C},
+  journal = {American Journal of Political Science},
+  title   = {Measuring political sophistication},
+  year    = {1987},
+  number  = {4},
+  pages   = {856--899},
+  volume  = {31},
+}
+
+@Comment{jabref-meta: databaseType:bibtex;}

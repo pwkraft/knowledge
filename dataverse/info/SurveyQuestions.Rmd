@@ -1,19 +1,17 @@
 ---
 title: 'Women Also Know Stuff'
 subtitle: 'Challenging the Gender Gap in Political Sophistication'
-author: 'Patrick W. Kraft^[Ramón y Cajal Fellow, Juan March Institute and Department of Social Sciences, University Carlos III of Madrid, patrickwilli.kraft@uc3m.es]'
+author: 'Patrick W. Kraft^[Ramón y Cajal Fellow; Juan March Institute and Department of Social Sciences, University Carlos III of Madrid, Spain. Email: patrickwilli.kraft@uc3m.es; ORCID iD: [0000-0003-0123-221X](https://orcid.org/0000-0003-0123-221X)]'
 date: 'Survey Question Overview'
 output:
   pdf_document:
     number_sections: yes
     template: null
     fig_caption: yes
-  html_document:
-    df_print: paged
-fontsize: 11pt
+papersize: a4
+fontsize: 12pt
 geometry: margin=1in
 linestretch: 1
-
 header-includes: 
     \usepackage{mathpazo}
     \usepackage{enumitem}
@@ -24,6 +22,11 @@ header-includes:
 knitr::opts_chunk$set(echo = FALSE, message = FALSE)
 ```
 
+\vfill
+\tableofcontents
+\vfill
+
+\clearpage
 
 # 2018 CES
 
@@ -504,6 +507,10 @@ Complete survey questionnaire can be found here:\newline https://electionstudies
 - 8. *Skipped*
 - 9. *Not Asked*
 
+
+# 2008 - 2012 Swiss Surveys
+
+See supplementary materials and replication data for Colombo, Céline. 2018. "Justifications and Citizen Competence in Direct Democracy: A Multilevel Analysis" *British Journal of Political Science* 48(3): 787-806. Available at https://doi.org/10.1017/S0007123416000090 and https://doi.org/10.7910/DVN/MR8BVX.
 
 # 2019 MTurk Study
 

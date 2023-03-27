@@ -64,7 +64,7 @@ ces2018 %>%
           columnLabels = c("Discursive\nSophistication",
                            "Factual\nKnowledge")) +
   plot_default
-ggsave(here("out/fig1a-corplot_cces2018.png"),width=3.2, height=3.2)
+ggsave(here("out/fig1a-corplot_cces2018.pdf"),width=3.2, height=3.2)
 
 ## 2020 ANES
 anes2020 %>%
@@ -77,7 +77,7 @@ anes2020 %>%
           columnLabels = c("Discursive\nSophistication",
                            "Factual\nKnowledge")) +
   plot_default
-ggsave(here("out/fig1b-corplot_anes2020.png"),width=3.2, height=3.2)
+ggsave(here("out/fig1b-corplot_anes2020.pdf"),width=3.2, height=3.2)
 
 ## 2016 ANES
 anes2016 %>%
@@ -93,7 +93,7 @@ anes2016 %>%
                            "Factual\nKnowledge",
                            "Interviewer\nEvaluation")) +
   plot_default
-ggsave(here("out/fig1c-corplot_anes2016.png"),width=3.2, height=3.2)
+ggsave(here("out/fig1c-corplot_anes2016.pdf"),width=3.2, height=3.2)
 
 ## 2012 ANES
 anes2012 %>%
@@ -108,7 +108,7 @@ anes2012 %>%
                            "Factual\nKnowledge",
                            "Interviewer\nEvaluation")) +
   plot_default
-ggsave(here("out/fig1d-corplot_anes2012.png"),width=3.2, height=3.2)
+ggsave(here("out/fig1d-corplot_anes2012.pdf"),width=3.2, height=3.2)
 
 
 # Figure 2: Effects of political sophistication on turnout, politi --------
@@ -408,7 +408,7 @@ grid.arrange(
          subtitle="Italian Respondents",
          y=NULL, x=NULL),
   ncol=3) %>%
-  ggsave(here("out/fig5-meandiff.png"), plot = ., width=6.5, height=8)
+  ggsave(here("out/fig5-meandiff.pdf"), plot = ., width=6.5, height=8)
 
 
 # Figure 6: The gender gap in political sophistication after contr --------
@@ -485,7 +485,7 @@ tmp2020 <- tibble(estimate = sapply(summary(prep2020)$tables,
 topics2020 <- c(head(tmp2020$topics, 5), tail(tmp2020$topics, 5))
 
 ## Plot gender differences in topic proportions
-png(here("out/fig7-stm_gender.png"), height=5.5, width=6.5, units = "in", res = 400)
+png(here("out/fig7-stm_gender.pdf"), height=5.5, width=6.5, units = "in", res = 400)
 par(mfrow=c(3,1), mar=c(2.2,0.5,2.2,0.5))
 plot.estimateEffect(prep2012, covariate = "female", topics = topics2012, model = anes2012disc$stm,
                     xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,

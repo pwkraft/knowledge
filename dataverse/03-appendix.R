@@ -41,7 +41,7 @@ bind_rows(
   facet_wrap(.~study, ncol = 3, scales = "free") +
   geom_vline(aes(xintercept = wc), colour="red", linetype = "longdash",data = wc_mean) +
   ylab("Number of Respondents") + xlab("Word Count")
-ggsave(here("out/appB1-wc.png"), width = 6, height = 2.5)
+ggsave(here("out/appB1-wc.pdf"), width = 6, height = 2.5)
 
 
 # Figure B.2: Proportion of non-response comparing male and female --------
@@ -70,12 +70,12 @@ bind_rows(
   geom_bar(stat="identity", fill="grey") + geom_errorbar(width=.1) +
   facet_wrap(~study, ncol = 3) + ylab("Average Values") + xlab(NULL) +
   guides(fill="none") + scale_fill_brewer(palette="Paired")
-ggsave("out/appB2-noresponse.png", width = 6, height = 2.5)
+ggsave(here("out/appB2-noresponse.pdf"), width = 6, height = 2.5)
 
 
 # Figure B.3: Estimated topic proportions based on the structural  --------
 
-pdf("out/appB3-stm_prop.pdf", width=12, height=10)
+pdf(here("out/appB3-stm_prop.pdf"), width=12, height=10)
 par(mfrow = c(2,4), mar=c(4.2,0.5,2.5,0.5))
 plot(ces2018disc$stm, n = 5, labeltype = "frex", text.cex = 1,
      main = paste0("2018 CES (k = ", ces2018disc$stm$settings$dim$K,")", collapse = ""))
@@ -105,7 +105,7 @@ ces2018 %>%
           axisLabels = "none",
           columnLabels = c("Size", "Range", "Constraint")) +
   plot_default
-ggsave("out/appB4a-ces20182018_components.png", width = 2.6, height = 2.6)
+ggsave(here("out/appB4a-ces20182018_components.pdf"), width = 2.6, height = 2.6)
 
 ## 2015 YouGov
 yg2015 %>%
@@ -114,7 +114,7 @@ yg2015 %>%
           axisLabels = "none",
           columnLabels = c("Size", "Range", "Constraint")) +
   plot_default
-ggsave("out/appB4b-yg_components.png", width = 2.6, height = 2.6)
+ggsave(here("out/appB4b-yg_components.pdf"), width = 2.6, height = 2.6)
 
 ## 2020 ANES
 anes2020 %>%
@@ -123,7 +123,7 @@ anes2020 %>%
           axisLabels = "none",
           columnLabels = c("Size", "Range", "Constraint")) +
   plot_default
-ggsave("out/appB4c-anes2020_components.png", width = 2.6, height = 2.6)
+ggsave(here("out/appB4c-anes2020_components.pdf"), width = 2.6, height = 2.6)
 
 ## 2016 ANES
 anes2016 %>%
@@ -132,7 +132,7 @@ anes2016 %>%
           axisLabels = "none",
           columnLabels = c("Size", "Range", "Constraint")) +
   plot_default
-ggsave("out/appB4d-anes2016_components.png", width = 2.6, height = 2.6)
+ggsave(here("out/appB4d-anes2016_components.pdf"), width = 2.6, height = 2.6)
 
 ## 2012 ANES
 anes2012 %>%
@@ -141,7 +141,7 @@ anes2012 %>%
           axisLabels = "none",
           columnLabels = c("Size", "Range", "Constraint")) +
   plot_default
-ggsave("out/appB4e-anes2012_components.png", width = 2.6, height = 2.6)
+ggsave(here("out/appB4e-anes2012_components.pdf"), width = 2.6, height = 2.6)
 
 
 ## Swiss - French
@@ -151,7 +151,7 @@ swiss2012_fr %>%
           axisLabels = "none",
           columnLabels = c("Size", "Range", "Constraint")) +
   plot_default
-ggsave("out/appB4f-french_components.png", width = 2.6, height = 2.6)
+ggsave(here("out/appB4f-french_components.pdf"), width = 2.6, height = 2.6)
 
 ## Swiss - German
 swiss2012_de %>%
@@ -160,7 +160,7 @@ swiss2012_de %>%
           axisLabels = "none",
           columnLabels = c("Size", "Range", "Constraint")) +
   plot_default
-ggsave("out/appB4g-german_components.png", width = 2.6, height = 2.6)
+ggsave(here("out/appB4g-german_components.pdf"), width = 2.6, height = 2.6)
 
 ## Swiss - Italian
 swiss2012_it %>%
@@ -169,7 +169,7 @@ swiss2012_it %>%
           axisLabels = "none",
           columnLabels = c("Size", "Range", "Constraint")) +
   plot_default
-ggsave("out/appB4h-italian_components.png", width = 2.6, height = 2.6)
+ggsave(here("out/appB4h-italian_components.pdf"), width = 2.6, height = 2.6)
 
 
 # Figure C.1: PreText analysis of preprocessing decisions of open- --------
@@ -193,7 +193,7 @@ preText_res %>%
   ggplot(aes(x = Coefficient, xmin = Coefficient-2*SE, xmax = Coefficient+2*SE, y = Variable)) +
   geom_point() + geom_errorbarh(height=0) + geom_vline(xintercept = 0) +
   facet_wrap(~study, ncol=2) + labs(y=NULL, x = "Regression Coefficient") + plot_default
-ggsave("out/appC1-pretext.png",width = 6, height = 4.5)
+ggsave(here("out/appC1-pretext.pdf"),width = 6, height = 4.5)
 
 
 # Figure C.2: Robustness of discursive sophistication measure for  --------
@@ -268,7 +268,7 @@ ggplot(plot_df, aes(y = original, x = replication)) +
   labs(y = "Discursive Sophistication (Preferred Specification)",
        x = "Discursive Sophistication (Alternative Specifications)") +
   plot_default
-ggsave("out/appC2-pretext_robustness.png", width=5, height=8.5)
+ggsave(here("out/appC2-pretext_robustness.png"), width=5, height=8.5, dpi = 600)
 
 
 # Figure C.3: Controlling for personality and verbal skills ---------------
@@ -330,7 +330,7 @@ m1cont %>%
   facet_grid(study~dv) +
   labs(x = "Estimated Effect of Discursive Sophistication and Factual Knowledge\n(for an increase from 1 SD below mean to 1 SD above mean)", y = "Independent Variable") +
   plot_default + theme(legend.position = "bottom")
-ggsave("out/appC3-knoweff_robust.pdf", width=6.5, height=3.5)
+ggsave(here("out/appC3-knoweff_robust.pdf"), width=6.5, height=3.5)
 
 
 # Figure C.4: Effects of sophistication on the probability of resp --------
@@ -386,7 +386,7 @@ bind_rows(
        shape = "Sophistication/Knowledge") +
   plot_default +
   theme(legend.position = "bottom")
-ggsave("out/appC4-placements_dk.pdf", width = 6.5, height = 4)
+ggsave(here("out/appC4-placements_dk.pdf"), width = 6.5, height = 4)
 
 
 # Figure C.5: Effects of sophistication on the uncertainty around  --------
@@ -436,7 +436,7 @@ bind_rows(
        shape = "Sophistication/Knowledge") +
   plot_default +
   theme(legend.position = "bottom")
-ggsave("out/appC5-placements.pdf", width = 6.5, height = 4)
+ggsave(here("out/appC5-placements.pdf"), width = 6.5, height = 4)
 
 
 # Figure C.6: Expected probability to vote for the senatorial cand --------
@@ -479,7 +479,7 @@ bind_rows(
   geom_ribbon(alpha=0.6, lwd=.1) + geom_line() +
   ylab("Pr(Ideological Proximity Vote)") + xlab("Value of Independent Variable") +
   scale_fill_brewer(palette = "Dark2")
-ggsave("out/appC6-correct_vote.pdf", width=4, height=2)
+ggsave(here("out/appC6-correct_vote.pdf"), width=4, height=2)
 
 
 # Figure C.7: Average trust in different news outlets as a functio --------
@@ -516,7 +516,7 @@ mturk2019 %>%
   theme(legend.position = "bottom") +
   facet_wrap(~Type+Source, ncol = 5, dir = "h") +
   scale_fill_brewer(palette = "Dark2")
-ggsave("out/appC7-media_trust.pdf", width=6.5, height=4)
+ggsave(here("out/appC7-media_trust.pdf"), width=6.5, height=4)
 
 
 # Table C.1: Logistic regression predicting ideological proximity- --------
@@ -532,7 +532,7 @@ stargazer(m1cv, type="text", align = TRUE, column.sep.width = "-25pt", no.space 
                                "Female", "Age", "Black", "College Degree",
                                "Household Income","Church Attendance","Constant"),
           keep.stat = c("n", "rsq", "aic"), font.size = "footnotesize",
-          out = "out/appC1-correct_vote.tex", label = "tab:correct_vote")
+          out = here("out/appC1-correct_vote.tex"), label = "tab:correct_vote")
 
 
 # Table C.2: Personality, verbal skills, and survey mode as predic --------
@@ -581,7 +581,7 @@ stargazer(m3rob_disc, type="text", align = TRUE, column.sep.width = "-5pt", no.s
                                "Education: Bachelor's Degree", "Education: Graduate Degree",
                                "Household Income", "Church Attendance", "Constant"),
           keep.stat = c("n", "rsq"), font.size = "footnotesize",
-          out = "out/appC2-determinants_rob_disc.tex", label = "tab:determinants_rob_disc")
+          out = here("out/appC2-determinants_rob_disc.tex"), label = "tab:determinants_rob_disc")
 
 
 # Table C.3: Personality, verbal skills, and survey mode as predic --------
@@ -630,4 +630,4 @@ stargazer(m3rob_fact, type="text", align = TRUE, column.sep.width = "-5pt", no.s
                                "Education: Bachelor's Degree", "Education: Graduate Degree",
                                "Household Income", "Church Attendance", "Constant"),
           keep.stat = c("n", "rsq"), font.size = "footnotesize",
-          out = "out/appC3-determinants_rob_fact.tex", label = "tab:determinants_rob_fact")
+          out = here("out/appC3-determinants_rob_fact.tex"), label = "tab:determinants_rob_fact")
