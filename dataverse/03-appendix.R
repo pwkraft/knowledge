@@ -105,7 +105,7 @@ ces2018 %>%
           axisLabels = "none",
           columnLabels = c("Size", "Range", "Constraint")) +
   plot_default
-ggsave(here("out/appB4a-ces20182018_components.pdf"), width = 2.6, height = 2.6)
+ggsave(here("out/appB4a-ces2018_components.pdf"), width = 2.6, height = 2.6)
 
 ## 2015 YouGov
 yg2015 %>%
@@ -114,7 +114,7 @@ yg2015 %>%
           axisLabels = "none",
           columnLabels = c("Size", "Range", "Constraint")) +
   plot_default
-ggsave(here("out/appB4b-yg_components.pdf"), width = 2.6, height = 2.6)
+ggsave(here("out/appB4b-yg2015_components.pdf"), width = 2.6, height = 2.6)
 
 ## 2020 ANES
 anes2020 %>%
