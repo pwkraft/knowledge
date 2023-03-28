@@ -485,18 +485,18 @@ tmp2020 <- tibble(estimate = sapply(summary(prep2020)$tables,
 topics2020 <- c(head(tmp2020$topics, 5), tail(tmp2020$topics, 5))
 
 ## Plot gender differences in topic proportions
-png(here("out/fig7-stm_gender.pdf"), height=5.5, width=6.5, units = "in", res = 400)
+pdf(here("out/fig7-stm_gender.pdf"), height=5.5, width=6.5)
 par(mfrow=c(3,1), mar=c(2.2,0.5,2.2,0.5))
 plot.estimateEffect(prep2012, covariate = "female", topics = topics2012, model = anes2012disc$stm,
-                    xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
+                    xlim = c(-.06,.025), method = "difference", cov.value1 = 1, cov.value2 = 0,
                     labeltype = "frex", n=5, verbose.labels = F, width=50,
                     main = "2012 ANES")
 plot.estimateEffect(prep2016, covariate = "female", topics = topics2016, model = anes2016disc$stm,
-                    xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
+                    xlim = c(-.06,.025), method = "difference", cov.value1 = 1, cov.value2 = 0,
                     labeltype = "frex", n=5, verbose.labels = F, width=50,
                     main = "2016 ANES")
 plot.estimateEffect(prep2020, covariate = "female", topics = topics2020, model = anes2020disc$stm,
-                    xlim = c(-.05,.02), method = "difference", cov.value1 = 1, cov.value2 = 0,
+                    xlim = c(-.06,.025), method = "difference", cov.value1 = 1, cov.value2 = 0,
                     labeltype = "frex", n=5, verbose.labels = F, width=50,
                     main = "2020 ANES")
 dev.off()
