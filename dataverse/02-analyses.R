@@ -152,7 +152,7 @@ m1 %>%
   geom_vline(xintercept = 0, color="grey") +
   geom_point() + geom_errorbarh(height=0) + facet_grid(study~dv) +
   xlab("Estimated Effect of Discursive Sophistication and Factual Knowledge\n(for an increase from 1 SD below mean to 1 SD above mean)") +
-  scale_color_brewer(palette = "Dark2") +
+  scale_color_discrete(type = c("#5e3c99", "#fdb863")) +
   ylab("Independent Variable") + plot_default +
   theme(legend.position = "none") +
   scale_y_discrete(limits=rev)
@@ -184,7 +184,7 @@ bind_rows(
   ggplot(aes(x=ivval, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_default +
   geom_ribbon(alpha=0.6, lwd=.1) + geom_line() +
   ylab("Information Retrieval") + xlab("Value of Independent Variable") +
-  scale_fill_brewer(palette="Dark2")
+  scale_fill_discrete(type = c("#5e3c99", "#fdb863"))
 ggsave(here("out/fig3-yg_disease.pdf"), width=4, height=2)
 
 
@@ -210,7 +210,8 @@ rbind(data.frame(swiss2012_de, language = "German"),
   scale_x_continuous(expand = c(0, 0)) + facet_wrap(~language,ncol=3) +
   geom_text(data=opend_cor, aes(label=cor),size=2,vjust=-9) +
   ylab("Level of Justification") + xlab("Discursive sophistication") +
-  scale_fill_brewer(palette="Dark2") + theme(legend.position = "none")
+  scale_fill_discrete(type = c("#5e3c99", "#fdb863")) +
+  theme(legend.position = "none")
 ggsave(here("out/fig4-swiss_ggridges.pdf"),width=6,height=2)
 
 
@@ -233,7 +234,8 @@ grid.arrange(
     geom_quasirandom(aes(col=Variable)) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) + ylab(NULL) + xlab(NULL) +
-    guides(col="none") + scale_color_brewer(palette="Dark2") +
+    guides(col="none") +
+    scale_color_discrete(type = c("#5e3c99", "#fdb863")) +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 2,
                        comparisons = list(c("Male", "Female")),
@@ -255,7 +257,8 @@ grid.arrange(
     geom_quasirandom(aes(col=Variable)) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) + ylab(NULL) + xlab(NULL) +
-    guides(col="none") + scale_color_brewer(palette="Dark2") +
+    guides(col="none") +
+    scale_color_discrete(type = c("#5e3c99", "#fdb863")) +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 2,
                        comparisons = list(c("Male", "Female")),
@@ -268,7 +271,7 @@ grid.arrange(
     `Measurement Type` = factor(1:2, labels = c("Open-ended", "Conventional"))) %>%
       ggplot(aes(x = `Measurement Type`, fill = `Measurement Type`)) +
       geom_bar() +
-      scale_fill_brewer(palette="Dark2")),
+      scale_fill_discrete(type = c("#5e3c99", "#fdb863"))),
 
   ### 2020 ANES
   anes2020 %>%
@@ -284,7 +287,8 @@ grid.arrange(
     geom_quasirandom(aes(col=Variable)) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) + ylab(NULL) + xlab(NULL) +
-    guides(col="none") + scale_color_brewer(palette="Dark2") +
+    guides(col="none") +
+    scale_color_discrete(type = c("#5e3c99", "#fdb863")) +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 2,
                        comparisons = list(c("Male", "Female")),
@@ -306,7 +310,8 @@ grid.arrange(
     geom_quasirandom(aes(col=Variable)) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) + ylab(NULL) + xlab(NULL) +
-    guides(col="none") + scale_color_brewer(palette="Dark2") +
+    guides(col="none") +
+    scale_color_discrete(type = c("#5e3c99", "#fdb863")) +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 2,
                        comparisons = list(c("Male", "Female")),
@@ -328,7 +333,8 @@ grid.arrange(
     geom_quasirandom(aes(col=Variable)) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) + ylab(NULL) + xlab(NULL) +
-    guides(col="none") + scale_color_brewer(palette="Dark2") +
+    guides(col="none") +
+    scale_color_discrete(type = c("#5e3c99", "#fdb863")) +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 2,
                        comparisons = list(c("Male", "Female")),
@@ -350,7 +356,8 @@ grid.arrange(
     geom_quasirandom(aes(col="Open-ended")) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) +
-    guides(col="none") + scale_color_brewer(palette="Dark2") +
+    guides(col="none") +
+    scale_color_discrete(type = c("#5e3c99", "#fdb863")) +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 1.5,
                        comparisons = list(c("Male", "Female")),
@@ -374,7 +381,8 @@ grid.arrange(
     geom_quasirandom(aes(col="Open-ended")) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) +
-    guides(col="none") + scale_color_brewer(palette="Dark2") +
+    guides(col="none") +
+    scale_color_discrete(type = c("#5e3c99", "#fdb863")) +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 1.5,
                        comparisons = list(c("Male", "Female")),
@@ -398,7 +406,8 @@ grid.arrange(
     geom_quasirandom(aes(col="Open-ended")) +
     stat_summary(fun.data=data_summary, geom="errorbar", width=.5) +
     facet_wrap(~Variable) +
-    guides(col="none") + scale_color_brewer(palette="Dark2") +
+    guides(col="none") +
+    scale_color_discrete(type = c("#5e3c99", "#fdb863")) +
     stat_compare_means(aes(label = ..p.signif..),
                        method = "t.test", label.y = 1.5,
                        comparisons = list(c("Male", "Female")),
@@ -455,7 +464,7 @@ bind_rows(
   geom_errorbarh(aes(xmin=conf.low90, xmax=conf.high90), height=.2) +
   facet_wrap(.~dv) + xlim(-.75, .25) +
   xlab("Estimated Gender Gap") + ylab("Dataset") + plot_default +
-  scale_color_brewer(palette = "Dark2") +
+  scale_color_discrete(type = c("#5e3c99", "#fdb863")) +
   theme(legend.position = "none")
 ggsave(here("out/fig6-determinants.pdf"),width=5,height=3)
 

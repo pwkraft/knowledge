@@ -69,7 +69,7 @@ bind_rows(
   ggplot(aes(y=avg, x=Gender, ymin=cilo, ymax=cihi)) + plot_default +
   geom_bar(stat="identity", fill="grey") + geom_errorbar(width=.1) +
   facet_wrap(~study, ncol = 3) + ylab("Average Values") + xlab(NULL) +
-  guides(fill="none") + scale_fill_brewer(palette="Paired")
+  guides(fill="none") + scale_fill_discrete(type = c("#5e3c99", "#fdb863"))
 ggsave(here("out/appB2-noresponse.pdf"), width = 6, height = 2.5)
 
 
@@ -378,7 +378,7 @@ bind_rows(
                  col = iv), size = 2) +
   geom_text(aes(x = na_mean, label = na_stars), nudge_y = .25, size = 2.5) +
   facet_wrap(~iv) +
-  scale_color_brewer(palette = "Dark2", guide = "none") +
+  scale_color_discrete(type = c("#5e3c99", "#fdb863"), guide = "none") +
   scale_x_continuous(labels = scales::percent) +
   labs(y = NULL,
        x = "'Don't Know' in Ideological Placements (in Percent)",
@@ -429,7 +429,7 @@ bind_rows(
                  col = iv), size = 2) +
   geom_text(aes(x = sd_mean, label = sd_stars), nudge_y = .25, size = 2.5) +
   facet_wrap(~iv) +
-  scale_color_brewer(palette = "Dark2", guide = "none") +
+  scale_color_discrete(type = c("#5e3c99", "#fdb863"), guide = "none") +
   labs(y = NULL,
        x = "Uncertainty in Ideological Placements (in Standard Deviations)",
        col = "Sophistication/Knowledge",
@@ -478,7 +478,7 @@ bind_rows(
   ggplot(aes(x=ivval, y=mean, ymin=cilo,ymax=cihi, lty=Variable, fill=Variable)) + plot_default +
   geom_ribbon(alpha=0.6, lwd=.1) + geom_line() +
   ylab("Pr(Ideological Proximity Vote)") + xlab("Value of Independent Variable") +
-  scale_fill_brewer(palette = "Dark2")
+  scale_fill_discrete(type = c("#5e3c99", "#fdb863"))
 ggsave(here("out/appC6-correct_vote.pdf"), width=4, height=2)
 
 
@@ -515,7 +515,7 @@ mturk2019 %>%
        x = "Value of Independent Variable") +
   theme(legend.position = "bottom") +
   facet_wrap(~Type+Source, ncol = 5, dir = "h") +
-  scale_fill_brewer(palette = "Dark2")
+  scale_fill_discrete(type = c("#5e3c99", "#fdb863"))
 ggsave(here("out/appC7-media_trust.pdf"), width=6.5, height=4)
 
 
